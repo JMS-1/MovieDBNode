@@ -1,0 +1,9 @@
+{
+  "name": "mongo-db-writer",
+  "version": "0.0.0",
+  "description": "MongoDbWriter",
+  "main": "app.js",
+  "author": {
+    "name": "Dr. Jochen Manns"
+  }
+}
