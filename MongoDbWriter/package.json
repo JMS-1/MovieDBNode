@@ -5,5 +5,11 @@
   "main": "app.js",
   "author": {
     "name": "Dr. Jochen Manns"
+  },
+  "dependencies": {
+    "mongodb": "^2.2.24"
+  },
+  "devDependencies": {
+    "typings": "^2.1.0"
   }
 }
