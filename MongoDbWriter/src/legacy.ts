@@ -5,7 +5,7 @@ import { Promise } from '~mongodb~es6-promise';
 
 import * as model from "./model";
 
-export interface IContainer {
+interface IContainer {
     Id: string;
 
     Name: string;
@@ -19,8 +19,24 @@ export interface IContainer {
     ParentLocation: string;
 }
 
-export interface IDump {
+interface IGenre {
+    Id: string;
+
+    Long: string;
+}
+
+interface ILanguage {
+    Id: string;
+
+    Long: string;
+}
+
+interface IDump {
     Containers: IContainer[];
+
+    Genres: IGenre[];
+
+    Languages: ILanguage[];
 }
 
 var _containerId = 0;
@@ -34,6 +50,14 @@ function migrateContainer(old: IContainer): model.IContainer {
         location: old.ParentLocation || null,
         description: old.Description || null
     };
+}
+
+function migrateGenre(old: IGenre): model.IGenre {
+    return { _id: old.Long };
+}
+
+function migrateLanguage(old: ILanguage): model.ILanguage {
+    return { _id: old.Long };
 }
 
 function migrateContainers(old: IContainer[], db: Db): Promise<Db> {
@@ -68,6 +92,34 @@ function migrateContainers(old: IContainer[], db: Db): Promise<Db> {
         .then(result => db);
 }
 
+function migrateGenres(old: IGenre[], db: Db): Promise<Db> {
+    return db
+        .dropCollection(model.genreCollection)
+        .then(success => success, error => null)
+        .then(success => {
+            var containerCollection = db.collection(model.genreCollection);
+
+            var genres = old.map(migrateGenre);
+
+            return containerCollection.insertMany(genres);
+        })
+        .then(result => db);
+}
+
+function migrateLanguages(old: ILanguage[], db: Db): Promise<Db> {
+    return db
+        .dropCollection(model.languageCollection)
+        .then(success => success, error => null)
+        .then(success => {
+            var containerCollection = db.collection(model.languageCollection);
+
+            var languages = old.map(migrateLanguage);
+
+            return containerCollection.insertMany(languages);
+        })
+        .then(result => db);
+}
+
 export function migrate(db: Db): Promise<Db> {
     var promiseFactory: any = global.Promise;
 
@@ -78,9 +130,11 @@ export function migrate(db: Db): Promise<Db> {
             if (error)
                 reject(error);
             else {
-                var dump = JSON.parse(content);
+                var dump: IDump = JSON.parse(content);
 
-                resolve(migrateContainers(dump.Containers || [], db));
+                resolve(migrateContainers(dump.Containers || [], db).then(() =>
+                    migrateGenres(dump.Genres || [], db)).then(() =>
+                        migrateLanguages(dump.Languages || [], db)));
             }
         });
     });

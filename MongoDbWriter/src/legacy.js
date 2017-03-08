@@ -13,6 +13,12 @@ function migrateContainer(old) {
         description: old.Description || null
     };
 }
+function migrateGenre(old) {
+    return { _id: old.Long };
+}
+function migrateLanguage(old) {
+    return { _id: old.Long };
+}
 function migrateContainers(old, db) {
     return db
         .dropCollection(model.containerCollection)
@@ -36,6 +42,28 @@ function migrateContainers(old, db) {
     })
         .then(result => db);
 }
+function migrateGenres(old, db) {
+    return db
+        .dropCollection(model.genreCollection)
+        .then(success => success, error => null)
+        .then(success => {
+        var containerCollection = db.collection(model.genreCollection);
+        var genres = old.map(migrateGenre);
+        return containerCollection.insertMany(genres);
+    })
+        .then(result => db);
+}
+function migrateLanguages(old, db) {
+    return db
+        .dropCollection(model.languageCollection)
+        .then(success => success, error => null)
+        .then(success => {
+        var containerCollection = db.collection(model.languageCollection);
+        var languages = old.map(migrateLanguage);
+        return containerCollection.insertMany(languages);
+    })
+        .then(result => db);
+}
 function migrate(db) {
     var promiseFactory = global.Promise;
     return new promiseFactory((resolve, reject) => {
@@ -45,7 +73,7 @@ function migrate(db) {
                 reject(error);
             else {
                 var dump = JSON.parse(content);
-                resolve(migrateContainers(dump.Containers || [], db));
+                resolve(migrateContainers(dump.Containers || [], db).then(() => migrateGenres(dump.Genres || [], db)).then(() => migrateLanguages(dump.Languages || [], db)));
             }
         });
     });
