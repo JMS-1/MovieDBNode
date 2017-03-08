@@ -124,11 +124,11 @@ var _languageId = 0;
 
 function migrateContainer(old: IContainer): model.IContainer {
     return {
-        parentId: null,
+        container: null,
         name: old.Name,
         type: old.Type,
         _id: ++_containerId,
-        location: old.ParentLocation || null,
+        position: old.ParentLocation || null,
         description: old.Description || null
     };
 }
@@ -147,7 +147,16 @@ function migrateLanguage(old: ILanguage): model.ILanguage {
     };
 }
 
-function migrateRecording(old: IRecording, genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>): model.IRecording {
+function migrateMedia(old: IMedia, containers: IMap<model.IContainer>): model.IMedia {
+    return {
+        type: old.Type,
+        _id: ++_languageId,
+        position: old.Position,
+        container: ((old.Container && containers[old.Container]) || { _id: null })._id
+    };
+}
+
+function migrateRecording(old: IRecording, genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, media: IMap<model.IMedia>): model.IRecording {
     return {
         name: old.Name,
         _id: ++_recordingId,
@@ -156,11 +165,13 @@ function migrateRecording(old: IRecording, genres: IMap<model.IGenre[]>, languag
         description: old.Description || null,
         genres: (genres[old.Id] || []).map(g => g._id),
         languages: (languages[old.Id] || []).map(l => l._id),
+        media: ((old.Media && media[old.Media]) || { _id: null })._id,
     };
 }
 
-function migrateContainers(old: IContainer[], db: Db): Promise<model.IContainer[]> {
+function migrateContainers(old: IContainer[], db: Db): Promise<IMap<model.IContainer>> {
     var containers: model.IContainer[] = [];
+    var containerMap: IMap<model.IContainer> = {};
 
     return db
         .dropCollection(model.containerCollection)
@@ -168,13 +179,12 @@ function migrateContainers(old: IContainer[], db: Db): Promise<model.IContainer[
         .then(success => {
             var containerCollection = db.collection(model.containerCollection);
 
-            var idMap: { [id: string]: model.IContainer; } = {};
             var parentMap: { [id: string]: string; } = {};
 
             for (var oldContainer of old) {
                 var container = migrateContainer(oldContainer);
 
-                idMap[oldContainer.Id] = container;
+                containerMap[oldContainer.Id] = container;
 
                 if (oldContainer.Parent)
                     parentMap[oldContainer.Id] = oldContainer.Parent;
@@ -184,11 +194,11 @@ function migrateContainers(old: IContainer[], db: Db): Promise<model.IContainer[
 
             for (var id in parentMap)
                 if (parentMap.hasOwnProperty(id))
-                    idMap[id].parentId = idMap[parentMap[id]]._id;
+                    containerMap[id].container = containerMap[parentMap[id]]._id;
 
             return containerCollection.insertMany(containers);
         })
-        .then(result => containers);
+        .then(result => containerMap);
 }
 
 function migrateGenres(old: IGenre[], db: Db): Promise<IMap<model.IGenre>> {
@@ -227,8 +237,26 @@ function migrateLanguages(old: ILanguage[], db: Db): Promise<IMap<model.ILanguag
         .then(result => languageMap);
 }
 
-function migrateRecordings(old: IRecording[], genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, db: Db): Promise<model.IRecording[]> {
-    var recordings = old.map(r => migrateRecording(r, genres, languages));
+function migrateMedias(old: IMedia[], containers: IMap<model.IContainer>, db: Db): Promise<IMap<model.IMedia>> {
+    var media: model.IMedia[] = []
+    var mediaMap: IMap<model.IMedia> = {};
+
+    return db
+        .dropCollection(model.mediaCollection)
+        .then(success => success, error => null)
+        .then(success => {
+            var containerCollection = db.collection(model.mediaCollection);
+
+            for (var oldMedia of old)
+                media.push(mediaMap[oldMedia.Id] = migrateMedia(oldMedia, containers));
+
+            return containerCollection.insertMany(media);
+        })
+        .then(result => mediaMap);
+}
+
+function migrateRecordings(old: IRecording[], genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, media: IMap<model.IMedia>, db: Db): Promise<model.IRecording[]> {
+    var recordings = old.map(r => migrateRecording(r, genres, languages, media));
 
     return db
         .dropCollection(model.recordingCollection)
@@ -255,32 +283,33 @@ export function migrate(db: Db): Promise<Db> {
 
                 resolve(migrateContainers(dump.Containers || [], db).then(allContainers =>
                     migrateGenres(dump.Genres || [], db).then(allGenres =>
-                        migrateLanguages(dump.Languages || [], db).then(allLanguages => {
-                            var genreMapping: IMap<model.IGenre[]> = {};
-                            var languageMapping: IMap<model.ILanguage[]> = {};
+                        migrateLanguages(dump.Languages || [], db).then(allLanguages =>
+                            migrateMedias(dump.Media || [], allContainers, db).then(allMedia => {
+                                var genreMapping: IMap<model.IGenre[]> = {};
+                                var languageMapping: IMap<model.ILanguage[]> = {};
 
-                            if (dump.RecordingGenres)
-                                for (var genre of dump.RecordingGenres) {
-                                    var mapping = genreMapping[genre.Recording];
+                                if (dump.RecordingGenres)
+                                    for (var genre of dump.RecordingGenres) {
+                                        var mapping = genreMapping[genre.Recording];
 
-                                    if (!mapping)
-                                        genreMapping[genre.Recording] = mapping = [];
+                                        if (!mapping)
+                                            genreMapping[genre.Recording] = mapping = [];
 
-                                    mapping.push(allGenres[genre.Genre]);
-                                }
+                                        mapping.push(allGenres[genre.Genre]);
+                                    }
 
-                            if (dump.RecordingLanguages)
-                                for (var language of dump.RecordingLanguages) {
-                                    var mapping = languageMapping[language.Recording];
+                                if (dump.RecordingLanguages)
+                                    for (var language of dump.RecordingLanguages) {
+                                        var mapping = languageMapping[language.Recording];
 
-                                    if (!mapping)
-                                        languageMapping[language.Recording] = mapping = [];
+                                        if (!mapping)
+                                            languageMapping[language.Recording] = mapping = [];
 
-                                    mapping.push(allLanguages[language.Language]);
-                                }
+                                        mapping.push(allLanguages[language.Language]);
+                                    }
 
-                            return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, db).then(allRecordings => db);
-                        }))));
+                                return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, allMedia, db).then(allRecordings => db);
+                            })))));
             }
         });
     });

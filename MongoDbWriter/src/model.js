@@ -1,4 +1,5 @@
 "use strict";
+exports.mediaCollection = "media";
 exports.genreCollection = "genres";
 exports.languageCollection = "languages";
 exports.containerCollection = "containers";

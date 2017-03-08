@@ -1,4 +1,5 @@
-﻿export var genreCollection = "genres";
+﻿export var mediaCollection = "media";
+export var genreCollection = "genres";
 export var languageCollection = "languages";
 export var containerCollection = "containers";
 export var recordingCollection = "recordings";
@@ -12,9 +13,9 @@ export interface IContainer {
 
     description?: string;
 
-    parentId?: number;
+    container?: number;
 
-    location?: string;
+    position?: string;
 }
 
 export interface IGenre {
@@ -27,6 +28,22 @@ export interface ILanguage {
     _id: number;
 
     name: string;
+}
+
+export interface ILanguage {
+    _id: number;
+
+    name: string;
+}
+
+export interface IMedia {
+    _id: number;
+
+    type: number;
+
+    container?: number;
+
+    position?: string;
 }
 
 export interface IRecording {

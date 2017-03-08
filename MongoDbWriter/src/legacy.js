@@ -8,11 +8,11 @@ var _genreId = 0;
 var _languageId = 0;
 function migrateContainer(old) {
     return {
-        parentId: null,
+        container: null,
         name: old.Name,
         type: old.Type,
         _id: ++_containerId,
-        location: old.ParentLocation || null,
+        position: old.ParentLocation || null,
         description: old.Description || null
     };
 }
@@ -28,7 +28,15 @@ function migrateLanguage(old) {
         name: old.Long
     };
 }
-function migrateRecording(old, genres, languages) {
+function migrateMedia(old, containers) {
+    return {
+        type: old.Type,
+        _id: ++_languageId,
+        position: old.Position,
+        container: ((old.Container && containers[old.Container]) || { _id: null })._id
+    };
+}
+function migrateRecording(old, genres, languages, media) {
     return {
         name: old.Name,
         _id: ++_recordingId,
@@ -37,30 +45,31 @@ function migrateRecording(old, genres, languages) {
         description: old.Description || null,
         genres: (genres[old.Id] || []).map(g => g._id),
         languages: (languages[old.Id] || []).map(l => l._id),
+        media: ((old.Media && media[old.Media]) || { _id: null })._id,
     };
 }
 function migrateContainers(old, db) {
     var containers = [];
+    var containerMap = {};
     return db
         .dropCollection(model.containerCollection)
         .then(success => success, error => null)
         .then(success => {
         var containerCollection = db.collection(model.containerCollection);
-        var idMap = {};
         var parentMap = {};
         for (var oldContainer of old) {
             var container = migrateContainer(oldContainer);
-            idMap[oldContainer.Id] = container;
+            containerMap[oldContainer.Id] = container;
             if (oldContainer.Parent)
                 parentMap[oldContainer.Id] = oldContainer.Parent;
             containers.push(container);
         }
         for (var id in parentMap)
             if (parentMap.hasOwnProperty(id))
-                idMap[id].parentId = idMap[parentMap[id]]._id;
+                containerMap[id].container = containerMap[parentMap[id]]._id;
         return containerCollection.insertMany(containers);
     })
-        .then(result => containers);
+        .then(result => containerMap);
 }
 function migrateGenres(old, db) {
     var genres = [];
@@ -90,8 +99,22 @@ function migrateLanguages(old, db) {
     })
         .then(result => languageMap);
 }
-function migrateRecordings(old, genres, languages, db) {
-    var recordings = old.map(r => migrateRecording(r, genres, languages));
+function migrateMedias(old, containers, db) {
+    var media = [];
+    var mediaMap = {};
+    return db
+        .dropCollection(model.mediaCollection)
+        .then(success => success, error => null)
+        .then(success => {
+        var containerCollection = db.collection(model.mediaCollection);
+        for (var oldMedia of old)
+            media.push(mediaMap[oldMedia.Id] = migrateMedia(oldMedia, containers));
+        return containerCollection.insertMany(media);
+    })
+        .then(result => mediaMap);
+}
+function migrateRecordings(old, genres, languages, media, db) {
+    var recordings = old.map(r => migrateRecording(r, genres, languages, media));
     return db
         .dropCollection(model.recordingCollection)
         .then(success => success, error => null)
@@ -110,7 +133,7 @@ function migrate(db) {
                 reject(error);
             else {
                 var dump = JSON.parse(content);
-                resolve(migrateContainers(dump.Containers || [], db).then(allContainers => migrateGenres(dump.Genres || [], db).then(allGenres => migrateLanguages(dump.Languages || [], db).then(allLanguages => {
+                resolve(migrateContainers(dump.Containers || [], db).then(allContainers => migrateGenres(dump.Genres || [], db).then(allGenres => migrateLanguages(dump.Languages || [], db).then(allLanguages => migrateMedias(dump.Media || [], allContainers, db).then(allMedia => {
                     var genreMapping = {};
                     var languageMapping = {};
                     if (dump.RecordingGenres)
@@ -127,8 +150,8 @@ function migrate(db) {
                                 languageMapping[language.Recording] = mapping = [];
                             mapping.push(allLanguages[language.Language]);
                         }
-                    return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, db).then(allRecordings => db);
-                }))));
+                    return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, allMedia, db).then(allRecordings => db);
+                })))));
             }
         });
     });
