@@ -261,3 +261,7 @@ __pycache__/
 *.pyc
 /MongoDbWriter/*.js
 /MongoDbWriter/*.js.map
+/MovieDbWebServer/*.js
+/MovieDbWebServer/*.js.map
+/MovieDbWebServer/routes/*.js
+/MovieDbWebServer/routes/*.js.map
