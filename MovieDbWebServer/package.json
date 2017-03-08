@@ -13,6 +13,9 @@
   "dependencies": {
     "debug": "^2.2.0",
     "express": "^4.14.0",
-    "pug": "^2.0.0-beta6"
+    "mongodb": "^2.2.24"
+  },
+  "devDependencies": {
+    "typings": "^2.1.0"
   }
 }
