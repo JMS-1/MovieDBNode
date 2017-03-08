@@ -86,6 +86,7 @@
     <Content Include="public\favicon.ico" />
     <Content Include="typings.json" />
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="database\model.ts" />
     <TypeScriptCompile Include="model\app.ts" />
     <TypeScriptCompile Include="model\protocol.ts" />
     <TypeScriptCompile Include="routes\app.ts" />
@@ -106,6 +107,7 @@
   <ItemGroup>
     <Folder Include="bin\" />
     <Folder Include="model\" />
+    <Folder Include="database\" />
     <Folder Include="public\" />
     <Folder Include="public\Content\" />
     <Folder Include="public\Content\themes\" />

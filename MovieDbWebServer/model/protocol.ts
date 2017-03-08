@@ -1,4 +1,7 @@
 ﻿export interface ILanguageDescription {
+    id: string;
+
+    name: string;
 }
 
 export interface IGenreDescription {
@@ -16,7 +19,7 @@ export interface ApplicationInformation {
     total: number;
 
     languages: ILanguageDescription[];
-    
+
     genres: IGenreDescription[];
 
     series: ISeriesDescription[];
