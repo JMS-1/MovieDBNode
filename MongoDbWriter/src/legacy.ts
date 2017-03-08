@@ -12,11 +12,11 @@ interface IContainer {
 
     Type: number;
 
-    Description: string;
+    Description?: string;
 
-    Parent: string;
+    Parent?: string;
 
-    ParentLocation: string;
+    ParentLocation?: string;
 }
 
 interface IGenre {
@@ -31,12 +31,86 @@ interface ILanguage {
     Long: string;
 }
 
+interface ILink {
+    For: string;
+
+    Url: string;
+
+    Name: string;
+
+    Description?: string;
+
+    Ordinal: number;
+}
+
+interface IMedia {
+    Id: string;
+
+    Type: number;
+
+    Container?: string;
+
+    Position?: string;
+}
+
+interface ISeries {
+    Id: string;
+
+    Name: string;
+
+    Description?: string;
+
+    Parent?: string;
+}
+
+interface IRecording {
+    Id: string;
+
+    Name: string;
+
+    RentTo?: string;
+
+    Created: string;
+
+    Description?: string;
+
+    Media?: string;
+
+    Series?: string;
+
+    HierarchicalName: string;
+}
+
+interface IRecordingGenre {
+    Genre: string;
+
+    Recording: string;
+}
+
+interface IRecordingLanguage {
+    Language: string;
+
+    Recording: string;
+}
+
 interface IDump {
     Containers: IContainer[];
 
     Genres: IGenre[];
 
     Languages: ILanguage[];
+
+    Links: ILink[];
+
+    Media: IMedia[];
+
+    Series: ISeries[];
+
+    Recordings: IRecording[];
+
+    RecordingGenres: IRecordingGenre[];
+
+    RecordingLanguages: IRecordingLanguage[];
 }
 
 var _containerId = 0;

@@ -23,3 +23,23 @@ export interface IGenre {
 export interface ILanguage {
     _id: string;
 }
+
+export interface IRecording {
+    _id: number;
+
+    name: string;
+
+    rentTo?: string;
+
+    created: Date;
+
+    languages: string[];
+
+    genres: string[];
+
+    description?: string;
+
+    media?: number;
+
+    series?: number;
+}
