@@ -86,8 +86,7 @@
     <Content Include="public\favicon.ico" />
     <Content Include="typings.json" />
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="routes\index.ts" />
-    <TypeScriptCompile Include="routes\user.ts" />
+    <TypeScriptCompile Include="routes\movie.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
     <Compile Include="app.js">
       <SubType>Code</SubType>

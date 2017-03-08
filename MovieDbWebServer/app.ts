@@ -1,17 +1,18 @@
 ﻿import * as express from 'express';
 import * as path from 'path';
 
-//import routes from './routes/index';
-//import users from './routes/user';
+import restMovie from './routes/movie';
 
 var app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', routes);
-//app.use('/users', users);
+// REST Endpunkte der Anwendung festlegen.
+app.use('/movie', restMovie);
 
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.log(`'${req.url}' not found`);
+
     var err = new Error('Not Found');
     err['status'] = 404;
     next(err);
