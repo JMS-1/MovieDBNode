@@ -33,6 +33,57 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="public\Scripts\appCode.js" />
+    <Compile Include="public\Scripts\containerEdit.js" />
+    <Compile Include="public\Scripts\controllers.js" />
+    <Compile Include="public\Scripts\genreEdit.js" />
+    <Compile Include="public\Scripts\interfaces.js" />
+    <Compile Include="public\Scripts\jquery-2.1.3.js" />
+    <Compile Include="public\Scripts\jquery-ui-1.11.3.js" />
+    <Compile Include="public\Scripts\languageEdit.js" />
+    <Compile Include="public\Scripts\linkEdit.js" />
+    <Compile Include="public\Scripts\models.js" />
+    <Compile Include="public\Scripts\recEdit.js" />
+    <Compile Include="public\Scripts\recFilter.js" />
+    <Compile Include="public\Scripts\seriesEdit.js" />
+    <Compile Include="public\Scripts\uiHelper.js" />
+    <Compile Include="public\Scripts\views.js" />
+    <Content Include="public\Content\appStyles.css" />
+    <Content Include="public\Content\themes\base\accordion.css" />
+    <Content Include="public\Content\themes\base\all.css" />
+    <Content Include="public\Content\themes\base\autocomplete.css" />
+    <Content Include="public\Content\themes\base\base.css" />
+    <Content Include="public\Content\themes\base\button.css" />
+    <Content Include="public\Content\themes\base\core.css" />
+    <Content Include="public\Content\themes\base\datepicker.css" />
+    <Content Include="public\Content\themes\base\dialog.css" />
+    <Content Include="public\Content\themes\base\draggable.css" />
+    <Content Include="public\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="public\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="public\Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="public\Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="public\Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="public\Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="public\Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="public\Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="public\Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="public\Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="public\Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="public\Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="public\Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="public\Content\themes\base\menu.css" />
+    <Content Include="public\Content\themes\base\progressbar.css" />
+    <Content Include="public\Content\themes\base\resizable.css" />
+    <Content Include="public\Content\themes\base\selectable.css" />
+    <Content Include="public\Content\themes\base\selectmenu.css" />
+    <Content Include="public\Content\themes\base\slider.css" />
+    <Content Include="public\Content\themes\base\sortable.css" />
+    <Content Include="public\Content\themes\base\spinner.css" />
+    <Content Include="public\Content\themes\base\tabs.css" />
+    <Content Include="public\Content\themes\base\theme.css" />
+    <Content Include="public\Content\themes\base\tooltip.css" />
+    <Content Include="public\default.html" />
+    <Content Include="public\favicon.ico" />
     <Content Include="typings.json" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
@@ -48,15 +99,17 @@
       <DependentUpon>app.js</DependentUpon>
     </Content>
     <Content Include="package.json" />
-    <Content Include="public\default.html">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="README.md" />
     <TypeScriptCompile Include="typings\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
     <Folder Include="public\" />
+    <Folder Include="public\Content\" />
+    <Folder Include="public\Content\themes\" />
+    <Folder Include="public\Content\themes\base\" />
+    <Folder Include="public\Content\themes\base\images\" />
+    <Folder Include="public\Scripts\" />
     <Folder Include="routes\" />
     <Folder Include="Scripts\" />
     <Folder Include="Scripts\typings\" />
