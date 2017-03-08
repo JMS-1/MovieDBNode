@@ -1,5 +1,5 @@
-﻿import express = require('express');
-import path = require('path');
+﻿import * as express from 'express';
+import * as path from 'path';
 
 import routes from './routes/index';
 import users from './routes/user';
