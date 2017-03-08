@@ -4,8 +4,9 @@ const fs_1 = require("fs");
 const model = require("./model");
 var _containerId = 0;
 var _recordingId = 0;
-var _genreId = 0;
 var _languageId = 0;
+var _seriesId = 0;
+var _genreId = 0;
 function migrateContainer(old) {
     return {
         container: null,
@@ -13,6 +14,14 @@ function migrateContainer(old) {
         type: old.Type,
         _id: ++_containerId,
         position: old.ParentLocation || null,
+        description: old.Description || null
+    };
+}
+function migrateSeries(old) {
+    return {
+        series: null,
+        name: old.Name,
+        _id: ++_seriesId,
         description: old.Description || null
     };
 }
@@ -36,16 +45,25 @@ function migrateMedia(old, containers) {
         container: ((old.Container && containers[old.Container]) || { _id: null })._id
     };
 }
-function migrateRecording(old, genres, languages, media) {
+function migrateLink(old) {
+    return {
+        url: old.Url,
+        name: old.Name,
+        description: old.Description || null
+    };
+}
+function migrateRecording(old, genres, languages, links, media, series) {
     return {
         name: old.Name,
         _id: ++_recordingId,
+        links: links[old.Id] || [],
         rentTo: old.RentTo || null,
         created: new Date(old.Created),
         description: old.Description || null,
         genres: (genres[old.Id] || []).map(g => g._id),
         languages: (languages[old.Id] || []).map(l => l._id),
         media: ((old.Media && media[old.Media]) || { _id: null })._id,
+        series: ((old.Series && series[old.Series]) || { _id: null })._id
     };
 }
 function migrateContainers(old, db) {
@@ -70,6 +88,29 @@ function migrateContainers(old, db) {
         return containerCollection.insertMany(containers);
     })
         .then(result => containerMap);
+}
+function migrateSerieses(old, db) {
+    var serieses = [];
+    var seriesMap = {};
+    return db
+        .dropCollection(model.seriesCollection)
+        .then(success => success, error => null)
+        .then(success => {
+        var containerCollection = db.collection(model.seriesCollection);
+        var parentMap = {};
+        for (var oldSeries of old) {
+            var series = migrateSeries(oldSeries);
+            seriesMap[oldSeries.Id] = series;
+            if (oldSeries.Parent)
+                parentMap[oldSeries.Id] = oldSeries.Parent;
+            serieses.push(series);
+        }
+        for (var id in parentMap)
+            if (parentMap.hasOwnProperty(id))
+                seriesMap[id].series = seriesMap[parentMap[id]]._id;
+        return containerCollection.insertMany(serieses);
+    })
+        .then(result => seriesMap);
 }
 function migrateGenres(old, db) {
     var genres = [];
@@ -113,8 +154,8 @@ function migrateMedias(old, containers, db) {
     })
         .then(result => mediaMap);
 }
-function migrateRecordings(old, genres, languages, media, db) {
-    var recordings = old.map(r => migrateRecording(r, genres, languages, media));
+function migrateRecordings(old, genres, languages, links, media, series, db) {
+    var recordings = old.map(r => migrateRecording(r, genres, languages, links, media, series));
     return db
         .dropCollection(model.recordingCollection)
         .then(success => success, error => null)
@@ -133,25 +174,33 @@ function migrate(db) {
                 reject(error);
             else {
                 var dump = JSON.parse(content);
-                resolve(migrateContainers(dump.Containers || [], db).then(allContainers => migrateGenres(dump.Genres || [], db).then(allGenres => migrateLanguages(dump.Languages || [], db).then(allLanguages => migrateMedias(dump.Media || [], allContainers, db).then(allMedia => {
+                resolve(migrateContainers(dump.Containers || [], db).then(allContainers => migrateSerieses(dump.Series || [], db).then(allSeries => migrateGenres(dump.Genres || [], db).then(allGenres => migrateLanguages(dump.Languages || [], db).then(allLanguages => migrateMedias(dump.Media || [], allContainers, db).then(allMedia => {
+                    var linkMapping = {};
                     var genreMapping = {};
                     var languageMapping = {};
                     if (dump.RecordingGenres)
                         for (var genre of dump.RecordingGenres) {
-                            var mapping = genreMapping[genre.Recording];
+                            let mapping = genreMapping[genre.Recording];
                             if (!mapping)
                                 genreMapping[genre.Recording] = mapping = [];
                             mapping.push(allGenres[genre.Genre]);
                         }
                     if (dump.RecordingLanguages)
                         for (var language of dump.RecordingLanguages) {
-                            var mapping = languageMapping[language.Recording];
+                            let mapping = languageMapping[language.Recording];
                             if (!mapping)
                                 languageMapping[language.Recording] = mapping = [];
                             mapping.push(allLanguages[language.Language]);
                         }
-                    return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, allMedia, db).then(allRecordings => db);
-                })))));
+                    if (dump.Links)
+                        for (var link of dump.Links) {
+                            let mapping = linkMapping[link.For];
+                            if (!mapping)
+                                linkMapping[link.For] = mapping = [];
+                            mapping[link.Ordinal] = migrateLink(link);
+                        }
+                    return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, linkMapping, allMedia, allSeries, db).then(allRecordings => db);
+                }))))));
             }
         });
     });

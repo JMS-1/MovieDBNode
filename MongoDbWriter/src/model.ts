@@ -1,5 +1,6 @@
 ﻿export var mediaCollection = "media";
 export var genreCollection = "genres";
+export var seriesCollection = "series";
 export var languageCollection = "languages";
 export var containerCollection = "containers";
 export var recordingCollection = "recordings";
@@ -46,6 +47,24 @@ export interface IMedia {
     position?: string;
 }
 
+export interface ILink {
+    url: string;
+
+    name: string;
+
+    description?: string;
+}
+
+export interface ISeries {
+    _id: number;
+
+    name: string;
+
+    description?: string;
+
+    series?: number;
+}
+
 export interface IRecording {
     _id: number;
 
@@ -64,4 +83,6 @@ export interface IRecording {
     media?: number;
 
     series?: number;
+
+    links: ILink[];
 }

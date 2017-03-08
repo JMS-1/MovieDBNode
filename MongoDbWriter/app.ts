@@ -8,7 +8,6 @@ function reportError(error: any): void {
 
 mongo
     .MongoClient
-    .connect("mongodb://localhost:27017/test2")
+    .connect("mongodb://localhost:27017/movieDb")
     .then(db => legacy.migrate(db))
-    .then(db => {
-    }, reportError);
+    .then(db => console.log("Migration finished - Database has been reset!"), reportError);

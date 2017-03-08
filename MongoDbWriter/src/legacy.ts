@@ -119,8 +119,9 @@ interface IDump {
 
 var _containerId = 0;
 var _recordingId = 0;
-var _genreId = 0;
 var _languageId = 0;
+var _seriesId = 0;
+var _genreId = 0;
 
 function migrateContainer(old: IContainer): model.IContainer {
     return {
@@ -129,6 +130,15 @@ function migrateContainer(old: IContainer): model.IContainer {
         type: old.Type,
         _id: ++_containerId,
         position: old.ParentLocation || null,
+        description: old.Description || null
+    };
+}
+
+function migrateSeries(old: ISeries): model.ISeries {
+    return {
+        series: null,
+        name: old.Name,
+        _id: ++_seriesId,
         description: old.Description || null
     };
 }
@@ -156,16 +166,26 @@ function migrateMedia(old: IMedia, containers: IMap<model.IContainer>): model.IM
     };
 }
 
-function migrateRecording(old: IRecording, genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, media: IMap<model.IMedia>): model.IRecording {
+function migrateLink(old: ILink): model.ILink {
+    return {
+        url: old.Url,
+        name: old.Name,
+        description: old.Description || null
+    };
+}
+
+function migrateRecording(old: IRecording, genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, links: IMap<model.ILink[]>, media: IMap<model.IMedia>, series: IMap<model.ISeries>): model.IRecording {
     return {
         name: old.Name,
         _id: ++_recordingId,
+        links: links[old.Id] || [],
         rentTo: old.RentTo || null,
         created: new Date(old.Created),
         description: old.Description || null,
         genres: (genres[old.Id] || []).map(g => g._id),
         languages: (languages[old.Id] || []).map(l => l._id),
         media: ((old.Media && media[old.Media]) || { _id: null })._id,
+        series: ((old.Series && series[old.Series]) || { _id: null })._id
     };
 }
 
@@ -199,6 +219,38 @@ function migrateContainers(old: IContainer[], db: Db): Promise<IMap<model.IConta
             return containerCollection.insertMany(containers);
         })
         .then(result => containerMap);
+}
+
+function migrateSerieses(old: ISeries[], db: Db): Promise<IMap<model.ISeries>> {
+    var serieses: model.ISeries[] = [];
+    var seriesMap: IMap<model.ISeries> = {};
+
+    return db
+        .dropCollection(model.seriesCollection)
+        .then(success => success, error => null)
+        .then(success => {
+            var containerCollection = db.collection(model.seriesCollection);
+
+            var parentMap: { [id: string]: string; } = {};
+
+            for (var oldSeries of old) {
+                var series = migrateSeries(oldSeries);
+
+                seriesMap[oldSeries.Id] = series;
+
+                if (oldSeries.Parent)
+                    parentMap[oldSeries.Id] = oldSeries.Parent;
+
+                serieses.push(series);
+            }
+
+            for (var id in parentMap)
+                if (parentMap.hasOwnProperty(id))
+                    seriesMap[id].series = seriesMap[parentMap[id]]._id;
+
+            return containerCollection.insertMany(serieses);
+        })
+        .then(result => seriesMap);
 }
 
 function migrateGenres(old: IGenre[], db: Db): Promise<IMap<model.IGenre>> {
@@ -255,8 +307,8 @@ function migrateMedias(old: IMedia[], containers: IMap<model.IContainer>, db: Db
         .then(result => mediaMap);
 }
 
-function migrateRecordings(old: IRecording[], genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, media: IMap<model.IMedia>, db: Db): Promise<model.IRecording[]> {
-    var recordings = old.map(r => migrateRecording(r, genres, languages, media));
+function migrateRecordings(old: IRecording[], genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, links: IMap<model.ILink[]>, media: IMap<model.IMedia>, series: IMap<model.ISeries>, db: Db): Promise<model.IRecording[]> {
+    var recordings = old.map(r => migrateRecording(r, genres, languages, links, media, series));
 
     return db
         .dropCollection(model.recordingCollection)
@@ -282,34 +334,46 @@ export function migrate(db: Db): Promise<Db> {
                 var dump: IDump = JSON.parse(content);
 
                 resolve(migrateContainers(dump.Containers || [], db).then(allContainers =>
-                    migrateGenres(dump.Genres || [], db).then(allGenres =>
-                        migrateLanguages(dump.Languages || [], db).then(allLanguages =>
-                            migrateMedias(dump.Media || [], allContainers, db).then(allMedia => {
-                                var genreMapping: IMap<model.IGenre[]> = {};
-                                var languageMapping: IMap<model.ILanguage[]> = {};
+                    migrateSerieses(dump.Series || [], db).then(allSeries =>
+                        migrateGenres(dump.Genres || [], db).then(allGenres =>
+                            migrateLanguages(dump.Languages || [], db).then(allLanguages =>
+                                migrateMedias(dump.Media || [], allContainers, db).then(allMedia => {
+                                    var linkMapping: IMap<model.ILink[]> = {};
+                                    var genreMapping: IMap<model.IGenre[]> = {};
+                                    var languageMapping: IMap<model.ILanguage[]> = {};
 
-                                if (dump.RecordingGenres)
-                                    for (var genre of dump.RecordingGenres) {
-                                        var mapping = genreMapping[genre.Recording];
+                                    if (dump.RecordingGenres)
+                                        for (var genre of dump.RecordingGenres) {
+                                            let mapping = genreMapping[genre.Recording];
 
-                                        if (!mapping)
-                                            genreMapping[genre.Recording] = mapping = [];
+                                            if (!mapping)
+                                                genreMapping[genre.Recording] = mapping = [];
 
-                                        mapping.push(allGenres[genre.Genre]);
-                                    }
+                                            mapping.push(allGenres[genre.Genre]);
+                                        }
 
-                                if (dump.RecordingLanguages)
-                                    for (var language of dump.RecordingLanguages) {
-                                        var mapping = languageMapping[language.Recording];
+                                    if (dump.RecordingLanguages)
+                                        for (var language of dump.RecordingLanguages) {
+                                            let mapping = languageMapping[language.Recording];
 
-                                        if (!mapping)
-                                            languageMapping[language.Recording] = mapping = [];
+                                            if (!mapping)
+                                                languageMapping[language.Recording] = mapping = [];
 
-                                        mapping.push(allLanguages[language.Language]);
-                                    }
+                                            mapping.push(allLanguages[language.Language]);
+                                        }
 
-                                return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, allMedia, db).then(allRecordings => db);
-                            })))));
+                                    if (dump.Links)
+                                        for (var link of dump.Links) {
+                                            let mapping = linkMapping[link.For];
+
+                                            if (!mapping)
+                                                linkMapping[link.For] = mapping = [];
+
+                                            mapping[link.Ordinal] = migrateLink(link);
+                                        }
+
+                                    return migrateRecordings(dump.Recordings || [], genreMapping, languageMapping, linkMapping, allMedia, allSeries, db).then(allRecordings => db);
+                                }))))));
             }
         });
     });
