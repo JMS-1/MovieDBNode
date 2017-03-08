@@ -1,6 +1,7 @@
-﻿export var containerCollection = "containers";
-export var genreCollection = "genres";
+﻿export var genreCollection = "genres";
 export var languageCollection = "languages";
+export var containerCollection = "containers";
+export var recordingCollection = "recordings";
 
 export interface IContainer {
     _id: number;
@@ -17,11 +18,15 @@ export interface IContainer {
 }
 
 export interface IGenre {
-    _id: string;
+    _id: number;
+
+    name: string;
 }
 
 export interface ILanguage {
-    _id: string;
+    _id: number;
+
+    name: string;
 }
 
 export interface IRecording {
@@ -33,9 +38,9 @@ export interface IRecording {
 
     created: Date;
 
-    languages: string[];
+    languages: number[];
 
-    genres: string[];
+    genres: number[];
 
     description?: string;
 
