@@ -1,14 +1,14 @@
 ﻿import * as express from 'express';
 import * as path from 'path';
 
-import restMovie from './routes/movie';
+import restMain from './routes/app';
 
 var app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // REST Endpunkte der Anwendung festlegen.
-app.use('/movie', restMovie);
+app.use('/movie', restMain);
 
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.log(`'${req.url}' not found`);
