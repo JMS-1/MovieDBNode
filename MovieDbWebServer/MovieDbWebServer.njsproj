@@ -116,6 +116,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="database\model.ts" />
+    <TypeScriptCompile Include="routes\db.ts" />
     <TypeScriptCompile Include="routes\protocol.ts" />
     <TypeScriptCompile Include="routes\app.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
