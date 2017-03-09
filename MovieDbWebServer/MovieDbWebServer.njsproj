@@ -33,6 +33,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="database\model.js" />
     <Compile Include="public\Scripts\appCode.js" />
     <Compile Include="public\Scripts\containerEdit.js" />
     <Compile Include="public\Scripts\controllers.js" />
@@ -48,6 +49,9 @@
     <Compile Include="public\Scripts\seriesEdit.js" />
     <Compile Include="public\Scripts\uiHelper.js" />
     <Compile Include="public\Scripts\views.js" />
+    <Compile Include="routes\app.js" />
+    <Compile Include="routes\protocol.js" />
+    <Content Include="database\model.js.map" />
     <Content Include="public\Content\appStyles.css" />
     <Content Include="public\Content\themes\base\accordion.css" />
     <Content Include="public\Content\themes\base\all.css" />
@@ -84,6 +88,8 @@
     <Content Include="public\Content\themes\base\tooltip.css" />
     <Content Include="public\default.html" />
     <Content Include="public\favicon.ico" />
+    <Content Include="routes\app.js.map" />
+    <Content Include="routes\protocol.js.map" />
     <Content Include="typings.json" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="database\model.ts" />

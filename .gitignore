@@ -265,3 +265,5 @@ __pycache__/
 /MovieDbWebServer/*.js.map
 /MovieDbWebServer/routes/*.js
 /MovieDbWebServer/routes/*.js.map
+/MovieDbWebServer/database/*.js
+/MovieDbWebServer/database/*.js.map
