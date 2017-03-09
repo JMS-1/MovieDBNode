@@ -87,8 +87,7 @@
     <Content Include="typings.json" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="database\model.ts" />
-    <TypeScriptCompile Include="model\app.ts" />
-    <TypeScriptCompile Include="model\protocol.ts" />
+    <TypeScriptCompile Include="routes\protocol.ts" />
     <TypeScriptCompile Include="routes\app.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
     <Compile Include="app.js">
@@ -106,7 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
-    <Folder Include="model\" />
     <Folder Include="database\" />
     <Folder Include="public\" />
     <Folder Include="public\Content\" />
