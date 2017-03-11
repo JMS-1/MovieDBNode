@@ -1,8 +1,8 @@
 ﻿import { Router, Request, Response } from 'express';
 import { Collection } from 'mongodb';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, sendJson } from './protocol';
-import { recordingCollection } from '../database/model';
+import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, sendJson } from './protocol';
+import { recordingCollection, IRecording } from '../database/model';
 import { connect } from '../database/db';
 
 const router = Router();
@@ -48,11 +48,19 @@ function query(request?: ISearchRequest): Promise<ISearchInformation> {
                     .then(allLanguages => getCounts(rec, query, "genres")
                         .then(allGenres => <ISearchInformation>{
                             total: total,
-                            recordings: [],
                             page: request.page,
                             size: request.size,
                             genres: allGenres.map(l => <IGenreSearchInformation>{ id: `${l.group}`, count: l.count }),
-                            languages: allLanguages.map(l => <ILanguageSearchInformation>{ id: `${l.group}`, count: l.count })
+                            languages: allLanguages.map(l => <ILanguageSearchInformation>{ id: `${l.group}`, count: l.count }),
+                            recordings: allRecordings.map((r: IRecording) => <ISearchResultInformation>{
+                                series: (r.series === null) ? null : `${r.series}`,
+                                languages: (r.languages || []).map(l => `${l}`),
+                                genres: (r.genres || []).map(g => `${g}`),
+                                createdAsString: r.created.toISOString(),
+                                id: `${r._id}`,
+                                rent: r.rentTo,
+                                title: r.name,
+                            })
                         }))));
     });
 }
