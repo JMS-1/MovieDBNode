@@ -14,7 +14,7 @@ function getLanguages(db: Db): Promise<ILanguageDescription[]> {
             .collection(languageCollection)
             .find<ILanguage>({})
             .sort({ name: 1 })
-            .forEach(l => languages.push({ id: `${l._id}`, name: l.name }), () => {
+            .forEach(l => languages.push({ id: l._id, name: l.name }), () => {
                 setResult(languages);
             });
     });
@@ -28,9 +28,7 @@ function getGenres(db: Db): Promise<IGenreDescription[]> {
             .collection(genreCollection)
             .find<IGenre>({})
             .sort({ name: 1 })
-            .forEach(g => genres.push({ id: `${g._id}`, name: g.name }), () => {
-                setResult(genres);
-            });
+            .forEach(g => genres.push({ id: g._id, name: g.name }), () => setResult(genres));
     });
 }
 
@@ -42,9 +40,7 @@ function getContainers(db: Db): Promise<IContainerDescription[]> {
             .collection(containerCollection)
             .find<IContainer>({})
             .sort({ name: 1 })
-            .forEach(c => containers.push({ id: `${c._id}`, name: c.name }), () => {
-                setResult(containers);
-            });
+            .forEach(c => containers.push({ id: c._id, name: c.name }), () => setResult(containers));
     });
 }
 
@@ -55,7 +51,7 @@ function getSeries(db: Db): Promise<ISeriesDescription[]> {
         db
             .collection(seriesCollection)
             .find<ISeries>({})
-            .forEach(s => series.push({ id: `${s._id}`, name: s.name, parentId: (s.series === null) ? null : `${s.series}`, hierarchicalName: s.name }), () => {
+            .forEach(s => series.push({ id: s._id, name: s.name, parentId: (s.series === null) ? null : `${s.series}`, hierarchicalName: s.name }), () => {
                 var map: { [id: string]: ISeriesDescription } = {}
 
                 series.forEach(s => map[s.id] = s);

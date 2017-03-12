@@ -117,18 +117,12 @@ interface IDump {
     RecordingLanguages: IRecordingLanguage[];
 }
 
-var _containerId = 0;
-var _recordingId = 0;
-var _languageId = 0;
-var _seriesId = 0;
-var _genreId = 0;
-
 function migrateContainer(old: IContainer): model.IContainer {
     return {
-        container: null,
+        _id: old.Id,
         name: old.Name,
         type: old.Type,
-        _id: ++_containerId,
+        container: null,
         position: old.ParentLocation || null,
         description: old.Description || null
     };
@@ -136,31 +130,31 @@ function migrateContainer(old: IContainer): model.IContainer {
 
 function migrateSeries(old: ISeries): model.ISeries {
     return {
+        _id: old.Id,
         series: null,
         name: old.Name,
-        _id: ++_seriesId,
         description: old.Description || null
     };
 }
 
 function migrateGenre(old: IGenre): model.IGenre {
     return {
-        _id: ++_genreId,
-        name: old.Long
+        name: old.Long,
+        _id: old.Id
     };
 }
 
 function migrateLanguage(old: ILanguage): model.ILanguage {
     return {
-        _id: ++_languageId,
-        name: old.Long
+        name: old.Long,
+        _id: old.Id
     };
 }
 
 function migrateMedia(old: IMedia, containers: IMap<model.IContainer>): model.IMedia {
     return {
+        _id: old.Id,
         type: old.Type,
-        _id: ++_languageId,
         position: old.Position,
         container: ((old.Container && containers[old.Container]) || { _id: null })._id
     };
@@ -176,8 +170,8 @@ function migrateLink(old: ILink): model.ILink {
 
 function migrateRecording(old: IRecording, genres: IMap<model.IGenre[]>, languages: IMap<model.ILanguage[]>, links: IMap<model.ILink[]>, media: IMap<model.IMedia>, series: IMap<model.ISeries>): model.IRecording {
     return {
+        _id: old.Id,
         name: old.Name,
-        _id: ++_recordingId,
         links: links[old.Id] || [],
         rentTo: old.RentTo || null,
         created: new Date(old.Created),

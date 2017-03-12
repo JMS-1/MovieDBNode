@@ -1,8 +1,8 @@
 ﻿import { Router, Request, Response } from 'express';
 import { Collection } from 'mongodb';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, sendJson } from './protocol';
-import { recordingCollection, IRecording } from '../database/model';
+import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEdit, ILink, sendJson } from './protocol';
+import { recordingCollection, IRecording, mediaCollection, IMedia } from '../database/model';
 import { connect } from '../database/db';
 
 const router = Router();
@@ -25,7 +25,7 @@ function getCounts(recordings: Collection, query: any, field: string): Promise<I
         .toArray() as Promise<IGroup[]>;
 }
 
-function query(request?: ISearchRequest): Promise<ISearchInformation> {
+function getResults(request?: ISearchRequest): Promise<ISearchInformation> {
     if (!request)
         request = {
             order: "hierarchicalName",
@@ -57,16 +57,46 @@ function query(request?: ISearchRequest): Promise<ISearchInformation> {
                                 languages: (r.languages || []).map(l => `${l}`),
                                 genres: (r.genres || []).map(g => `${g}`),
                                 createdAsString: r.created.toISOString(),
-                                id: `${r._id}`,
                                 rent: r.rentTo,
                                 title: r.name,
+                                id: r._id,
                             })
                         }))));
     });
 }
 
-router.get('/query', (req: Request, res: Response) => query().then(info => sendJson(res, info)));
+router.get('/query', (req: Request, res: Response) => getResults().then(info => sendJson(res, info)));
 
-router.post('/query', (req: Request, res: Response) => query(req["body"]).then(info => sendJson(res, info)));
+router.post('/query', (req: Request, res: Response) => getResults(req["body"]).then(info => sendJson(res, info)));
+
+interface IJoinedRecording extends IRecording {
+    joinedMedia: IMedia[];
+}
+
+router.get('/:id', (req: Request, res: Response) => {
+    connect()
+        .then(db => db.collection(recordingCollection).aggregate([
+            { $match: { _id: req.params["id"] } },
+            { $lookup: { from: mediaCollection, localField: "media", foreignField: "_id", "as": "joinedMedia" } }])
+            .toArray()
+            .then((recordings: IJoinedRecording[]) => {
+                var recording = recordings[0];
+                var media = recording.joinedMedia[0];
+
+                sendJson<IRecordingEdit>(res, {
+                    links: (recording.links || []).map(l => <ILink>{ description: l.description, name: l.name, url: l.url }),
+                    languages: recording.languages || [],
+                    description: recording.description,
+                    genres: recording.genres || [],
+                    container: media.container,
+                    series: recording.series,
+                    location: media.position,
+                    rent: recording.rentTo,
+                    title: recording.name,
+                    mediaType: media.type,
+                    id: recording._id,
+                });
+            }));
+});
 
 export default router;

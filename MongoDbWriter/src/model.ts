@@ -6,7 +6,7 @@ export var containerCollection = "containers";
 export var recordingCollection = "recordings";
 
 export interface IContainer {
-    _id: number;
+    _id: string;
 
     name: string;
 
@@ -14,35 +14,35 @@ export interface IContainer {
 
     description?: string;
 
-    container?: number;
+    container?: string;
 
     position?: string;
 }
 
 export interface IGenre {
-    _id: number;
+    _id: string;
 
     name: string;
 }
 
 export interface ILanguage {
-    _id: number;
+    _id: string;
 
     name: string;
 }
 
 export interface ILanguage {
-    _id: number;
+    _id: string;
 
     name: string;
 }
 
 export interface IMedia {
-    _id: number;
+    _id: string;
 
     type: number;
 
-    container?: number;
+    container?: string;
 
     position?: string;
 }
@@ -56,17 +56,17 @@ export interface ILink {
 }
 
 export interface ISeries {
-    _id: number;
+    _id: string;
 
     name: string;
 
     description?: string;
 
-    series?: number;
+    series?: string;
 }
 
 export interface IRecording {
-    _id: number;
+    _id: string;
 
     name: string;
 
@@ -74,15 +74,15 @@ export interface IRecording {
 
     created: Date;
 
-    languages: number[];
+    languages: string[];
 
-    genres: number[];
+    genres: string[];
 
     description?: string;
 
-    media?: number;
+    media?: string;
 
-    series?: number;
+    series?: string;
 
     links: ILink[];
 }

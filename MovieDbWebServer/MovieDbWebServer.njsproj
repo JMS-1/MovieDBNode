@@ -110,16 +110,15 @@
     <Content Include="public\Content\themes\base\tooltip.css" />
     <Content Include="public\default.html" />
     <Content Include="public\favicon.ico" />
-    <Content Include="routes\db.js.map" />
     <Content Include="typings.json" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="database\db.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="database\model.ts" />
-    <TypeScriptCompile Include="routes\db.ts" />
     <TypeScriptCompile Include="routes\protocol.ts" />
     <TypeScriptCompile Include="routes\app.ts" />
+    <TypeScriptCompile Include="routes\db.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
     <Compile Include="database\model.js">
       <SubType>Code</SubType>
@@ -137,7 +136,14 @@
       <SubType>Content</SubType>
       <DependentUpon>routes\app.js</DependentUpon>
     </Content>
-    <Compile Include="routes\db.js" />
+    <Compile Include="routes\db.js">
+      <SubType>Code</SubType>
+      <DependentUpon>routes\db.ts</DependentUpon>
+    </Compile>
+    <Content Include="routes\db.js.map">
+      <SubType>Content</SubType>
+      <DependentUpon>routes\db.js</DependentUpon>
+    </Content>
     <Compile Include="routes\protocol.js">
       <SubType>Code</SubType>
       <DependentUpon>routes\protocol.ts</DependentUpon>

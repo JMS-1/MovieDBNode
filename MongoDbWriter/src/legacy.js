@@ -2,45 +2,40 @@
 const path_1 = require("path");
 const fs_1 = require("fs");
 const model = require("./model");
-var _containerId = 0;
-var _recordingId = 0;
-var _languageId = 0;
-var _seriesId = 0;
-var _genreId = 0;
 function migrateContainer(old) {
     return {
-        container: null,
+        _id: old.Id,
         name: old.Name,
         type: old.Type,
-        _id: ++_containerId,
+        container: null,
         position: old.ParentLocation || null,
         description: old.Description || null
     };
 }
 function migrateSeries(old) {
     return {
+        _id: old.Id,
         series: null,
         name: old.Name,
-        _id: ++_seriesId,
         description: old.Description || null
     };
 }
 function migrateGenre(old) {
     return {
-        _id: ++_genreId,
-        name: old.Long
+        name: old.Long,
+        _id: old.Id
     };
 }
 function migrateLanguage(old) {
     return {
-        _id: ++_languageId,
-        name: old.Long
+        name: old.Long,
+        _id: old.Id
     };
 }
 function migrateMedia(old, containers) {
     return {
+        _id: old.Id,
         type: old.Type,
-        _id: ++_languageId,
         position: old.Position,
         container: ((old.Container && containers[old.Container]) || { _id: null })._id
     };
@@ -54,8 +49,8 @@ function migrateLink(old) {
 }
 function migrateRecording(old, genres, languages, links, media, series) {
     return {
+        _id: old.Id,
         name: old.Name,
-        _id: ++_recordingId,
         links: links[old.Id] || [],
         rentTo: old.RentTo || null,
         created: new Date(old.Created),
