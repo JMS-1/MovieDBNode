@@ -69,6 +69,7 @@ interface IJoinedRecording extends IRecording {
     joinedMedia: IMedia[];
 }
 
+// Ermittelt zu einer Aufzeichnung alle für die Pflege notwendigen Informationen.
 function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
     return connect()
         .then(db => db.collection(recordingCollection).aggregate([
