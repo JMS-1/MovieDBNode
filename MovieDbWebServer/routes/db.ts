@@ -65,25 +65,21 @@ function getResults(request?: ISearchRequest): Promise<ISearchInformation> {
     });
 }
 
-router.get('/query', (req: Request, res: Response) => getResults().then(info => sendJson(res, info)));
-
-router.post('/query', (req: Request, res: Response) => getResults(req["body"]).then(info => sendJson(res, info)));
-
 interface IJoinedRecording extends IRecording {
     joinedMedia: IMedia[];
 }
 
-router.get('/:id', (req: Request, res: Response) => {
-    connect()
+function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
+    return connect()
         .then(db => db.collection(recordingCollection).aggregate([
-            { $match: { _id: req.params["id"] } },
+            { $match: { _id: id } },
             { $lookup: { from: mediaCollection, localField: "media", foreignField: "_id", "as": "joinedMedia" } }])
             .toArray()
             .then((recordings: IJoinedRecording[]) => {
                 var recording = recordings[0];
                 var media = recording.joinedMedia[0];
 
-                sendJson<IRecordingEdit>(res, {
+                return {
                     links: (recording.links || []).map(l => <ILink>{ description: l.description, name: l.name, url: l.url }),
                     languages: recording.languages || [],
                     description: recording.description,
@@ -95,8 +91,14 @@ router.get('/:id', (req: Request, res: Response) => {
                     title: recording.name,
                     mediaType: media.type,
                     id: recording._id,
-                });
+                };
             }));
-});
+}
+
+router.get('/query', (req: Request, res: Response) => getResults().then(info => sendJson(res, info)));
+
+router.post('/query', (req: Request, res: Response) => getResults(req["body"]).then(info => sendJson(res, info)));
+
+router.get('/:id', (req: Request, res: Response) => getRecordingForEdit(req.params["id"]).then(recording => sendJson(res, recording)));
 
 export default router;
