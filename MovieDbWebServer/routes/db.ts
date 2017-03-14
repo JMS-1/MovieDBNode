@@ -1,7 +1,9 @@
-﻿import { Router, Request, Response } from 'express';
-import { Collection } from 'mongodb';
+﻿import { Collection, FindOneAndReplaceOption } from 'mongodb';
+import { Router, Request, Response } from 'express';
+import { Parsed } from 'body-parser';
+import * as uuid from 'uuid/v4';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEdit, ILink, sendJson } from './protocol';
+import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEditDescription, IRecordingEdit, ILink, sendJson } from './protocol';
 import { recordingCollection, IRecording, mediaCollection, IMedia } from '../database/model';
 import { connect } from '../database/db';
 
@@ -96,10 +98,31 @@ function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
             }));
 }
 
+function setRecordingForEdit(id: string, newData: IRecordingEditDescription): Promise<any> {
+    return connect()
+        .then(db => {
+            var queryMedia = <IMedia>{
+                container: (newData.container || "").trim() || null,
+                position: (newData.location || "").trim() || null,
+                type: newData.mediaType
+            };
+
+            var updateMedia = { $setOnInsert: { ...queryMedia, _id: uuid() } };
+
+            return db.collection(mediaCollection).findOneAndUpdate(queryMedia, updateMedia, <FindOneAndReplaceOption><any>{ upsert: true, returnNewDocument: true }).then(m => {
+            });
+        });
+}
+
 router.get('/query', (req: Request, res: Response) => getResults().then(info => sendJson(res, info)));
 
-router.post('/query', (req: Request, res: Response) => getResults(req["body"]).then(info => sendJson(res, info)));
+router.post('/query', (req: Request & Parsed, res: Response) => getResults(req.body).then(info => sendJson(res, info)));
 
 router.get('/:id', (req: Request, res: Response) => getRecordingForEdit(req.params["id"]).then(recording => sendJson(res, recording)));
+
+router.put('/:id', (req: Request & Parsed, res: Response) => setRecordingForEdit(req.params["id"], req.body).then(() => {
+    res.sendStatus(200);
+    res.end();
+}));
 
 export default router;
