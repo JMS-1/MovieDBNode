@@ -1,4 +1,4 @@
-﻿import { Collection, FindOneAndReplaceOption } from 'mongodb';
+﻿import { Db, Collection, FindOneAndReplaceOption } from 'mongodb';
 import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 import * as uuid from 'uuid/v4';
@@ -99,20 +99,25 @@ async function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
     });
 }
 
+async function getMediaId(database: Db, media: IMedia): Promise<string> {
+    var newId = uuid();
+    var update = { $setOnInsert: { ...media, _id: newId } };
+    var result = await database.collection(mediaCollection).findOneAndUpdate(media, update, { upsert: true });
+    var value: IMedia = result.value;
+
+    return new Promise<string>(setResult => setResult(value ? value._id : newId));
+}
+
 async function setRecordingForEdit(id: string, newData: IRecordingEditDescription): Promise<any> {
     var db = await connect();
 
-    var queryMedia = <IMedia>{
+    var mediaId = await getMediaId(db, <IMedia>{
         container: (newData.container || "").trim() || null,
         position: (newData.location || "").trim() || null,
         type: newData.mediaType
-    };
+    });
 
-    var updateMedia = { $setOnInsert: { ...queryMedia, _id: uuid() } };
-
-    return db
-        .collection(mediaCollection)
-        .findOneAndUpdate(queryMedia, updateMedia, <FindOneAndReplaceOption><any>{ upsert: true, returnNewDocument: true });
+    return new Promise<any>(setResult => setResult(null));
 }
 
 router.get('/query', async (req: Request, res: Response) => sendJson(res, await getResults()));
