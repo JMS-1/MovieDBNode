@@ -6,7 +6,7 @@ import { ApplicationInformation, ILanguageDescription, IGenreDescription, IConta
 import { connect } from '../database/db';
 import { languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, seriesCollection, ISeries, recordingCollection } from '../database/model';
 
-function getLanguages(db: Db): Promise<ILanguageDescription[]> {
+async function getLanguages(db: Db): Promise<ILanguageDescription[]> {
     return new Promise<ILanguageDescription[]>(setResult => {
         var languages: ILanguageDescription[] = [];
 
@@ -20,7 +20,7 @@ function getLanguages(db: Db): Promise<ILanguageDescription[]> {
     });
 }
 
-function getGenres(db: Db): Promise<IGenreDescription[]> {
+async function getGenres(db: Db): Promise<IGenreDescription[]> {
     return new Promise<IGenreDescription[]>(setResult => {
         var genres: IGenreDescription[] = [];
 
@@ -32,7 +32,7 @@ function getGenres(db: Db): Promise<IGenreDescription[]> {
     });
 }
 
-function getContainers(db: Db): Promise<IContainerDescription[]> {
+async function getContainers(db: Db): Promise<IContainerDescription[]> {
     return new Promise<IContainerDescription[]>(setResult => {
         var containers: IContainerDescription[] = [];
 
@@ -44,7 +44,7 @@ function getContainers(db: Db): Promise<IContainerDescription[]> {
     });
 }
 
-function getSeries(db: Db): Promise<ISeriesDescription[]> {
+async function getSeries(db: Db): Promise<ISeriesDescription[]> {
     return new Promise<ISeriesDescription[]>(setResult => {
         var series: ISeriesDescription[] = [];
 
@@ -70,47 +70,39 @@ function getSeries(db: Db): Promise<ISeriesDescription[]> {
     });
 }
 
-function getCount(db: Db): Promise<number> {
-    return new Promise<number>(setResult => {
-        db.collections().then(allCollections => {
-            for (var collection of allCollections)
-                if (collection.collectionName === recordingCollection) {
-                    collection.count({}).then(setResult);
+async function getCount(db: Db): Promise<number> {
+    var allCollections = await db.collections();
 
-                    return;
-                }
+    for (var collection of allCollections)
+        if (collection.collectionName === recordingCollection)
+            return collection.count({});
 
-            setResult(null);
-        });
-    });
+    return new Promise<number>(setResult => setResult(null));
 }
 
-function getInfo(): Promise<ApplicationInformation> {
-    return new Promise<ApplicationInformation>(setResult => connect().then(database => {
-        getLanguages(database).then(allLanguages =>
-            getGenres(database).then(allGenres => {
-                getContainers(database).then(allContainers => {
-                    getSeries(database).then(allSeries => {
-                        getCount(database).then(total => {
-                            setResult({
-                                total: total || 0,
-                                genres: allGenres,
-                                series: allSeries,
-                                empty: total === null,
-                                languages: allLanguages,
-                                containers: allContainers,
-                                seriesSeparator: seriesSeparator,
-                                urlExpression: "https?:\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?"
-                            });
-                        });
-                    });
-                });
-            }))
-    }));
+async function getInfo(): Promise<ApplicationInformation> {
+    var database = await connect();
+    var allLanguages = await getLanguages(database);
+    var allGenres = await getGenres(database);
+    var allContainers = await getContainers(database);
+    var allSeries = await getSeries(database);
+    var total = await getCount(database);
+
+    return new Promise<ApplicationInformation>(setResult =>
+        setResult({
+            total: total || 0,
+            genres: allGenres,
+            series: allSeries,
+            empty: total === null,
+            languages: allLanguages,
+            containers: allContainers,
+            seriesSeparator: seriesSeparator,
+            urlExpression: "https?:\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?"
+        }));
 }
 
 const router = Router();
 
-router.get('/info', (req: Request, res: Response) => getInfo().then(info => sendJson(res, info)));
+router.get('/info', async (req: Request, res: Response) => sendJson(res, await getInfo()));
 
 export default router;
