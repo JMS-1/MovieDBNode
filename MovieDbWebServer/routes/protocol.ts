@@ -137,3 +137,12 @@ export interface IRecordingEdit extends IRecordingEditDescription {
 export function sendJson<TDataType>(res: Response, data: TDataType): Response {
     return res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate').json(data);
 }
+
+export async function sendStatus(res: Response, process: Promise<boolean>): Promise<void> {
+    var success = await process;
+
+    res.sendStatus(success ? 200 : 400);
+    res.end();
+
+    return new Promise<void>(setResult => setResult(undefined));
+}

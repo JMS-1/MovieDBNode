@@ -3,8 +3,8 @@ import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 import * as uuid from 'uuid/v4';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEditDescription, IRecordingEdit, ILink, sendJson } from './protocol';
-import { recordingCollection, IRecording, mediaCollection, IMedia } from '../database/model';
+import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEditDescription, IRecordingEdit, ILink, sendJson, sendStatus } from './protocol';
+import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia } from '../database/model';
 import { connect } from '../database/db';
 
 const router = Router();
@@ -74,7 +74,7 @@ interface IJoinedRecording extends IRecording {
 async function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
     var db = await connect();
 
-    var recordings = await db.collection(recordingCollection).aggregate([
+    var recordings = await db.collection(recordingCollection).aggregate<IJoinedRecording>([
         { $match: { _id: id } },
         { $lookup: { from: mediaCollection, localField: "media", foreignField: "_id", "as": "joinedMedia" } }])
         .toArray();
@@ -108,16 +108,56 @@ async function getMediaId(database: Db, media: IMedia): Promise<string> {
     return new Promise<string>(setResult => setResult(value ? value._id : newId));
 }
 
-async function setRecordingForEdit(id: string, newData: IRecordingEditDescription): Promise<any> {
+async function updateRecording(id: string, newData: IRecordingEditDescription): Promise<boolean> {
+    var db = await connect();
+    var recording = await prepareRecording(db, newData);
+
+    var result = await db.collection(recordingCollection).update({ _id: id }, { $set: recording });
+
+    return new Promise<boolean>(setResult => setResult(result.result.n === 1));
+}
+
+async function createRecording(newData: IRecordingEditDescription): Promise<boolean> {
+    var db = await connect();
+    var recording = await prepareRecording(db, newData);
+
+    recording._id = uuid();
+    recording.created = new Date();
+
+    var result = await db.collection(recordingCollection).insert(recording);
+
+    return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
+}
+
+async function deleteRecording(id: string): Promise<boolean> {
     var db = await connect();
 
-    var mediaId = await getMediaId(db, <IMedia>{
+    var result = await db.collection(recordingCollection).deleteOne({ _id: id });
+
+    return new Promise<boolean>(setResult => setResult(result.deletedCount == 1));
+}
+
+async function prepareRecording(database: Db, newData: IRecordingEditDescription): Promise<IRecording> {
+    var mediaId = await getMediaId(database, <IMedia>{
         container: (newData.container || "").trim() || null,
         position: (newData.location || "").trim() || null,
         type: newData.mediaType
     });
 
-    return new Promise<any>(setResult => setResult(null));
+    return new Promise<IRecording>(setResult => setResult(<IRecording>{
+        description: (newData.description || "").trim() || null,
+        rentTo: (newData.rent || "").trim() || null,
+        name: (newData.title || "").trim() || null,
+        languages: newData.languages || [],
+        series: newData.series || null,
+        genres: newData.genres || [],
+        media: mediaId,
+        links: (newData.links || []).map(l => <IRecordingLink>{
+            description: (l.description || "").trim() || null,
+            name: (l.name || "").trim() || null,
+            url: (l.url || "").trim() || null
+        })
+    }));
 }
 
 router.get('/query', async (req: Request, res: Response) => sendJson(res, await getResults()));
@@ -126,11 +166,10 @@ router.post('/query', async (req: Request & Parsed, res: Response) => sendJson(r
 
 router.get('/:id', async (req: Request, res: Response) => sendJson(res, await getRecordingForEdit(req.params["id"])));
 
-router.put('/:id', async (req: Request & Parsed, res: Response) => {
-    var info = await setRecordingForEdit(req.params["id"], req.body);
+router.delete('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, deleteRecording(req.params["id"])));
 
-    res.sendStatus(200);
-    res.end();
-});
+router.put('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, updateRecording(req.params["id"], req.body)));
+
+router.post('', (req: Request & Parsed, res: Response) => sendStatus(res, createRecording(req.body)));
 
 export default router;
