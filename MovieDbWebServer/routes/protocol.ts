@@ -1,6 +1,7 @@
 ﻿import { Response } from "express";
 
 export var seriesSeparator = ">";
+export var urlMatcher = /https?:\/\/(\w +:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
 export interface ILanguageDescription {
     id: string;

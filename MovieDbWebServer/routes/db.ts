@@ -15,7 +15,7 @@ interface IGroup {
     count: number;
 }
 
-async function getCounts(recordings: Collection, query: any, field: string): Promise<IGroup[]> {
+function getCounts(recordings: Collection, query: any, field: string): Promise<IGroup[]> {
     return recordings
         .aggregate<IGroup>([
             { $match: query },

@@ -74,6 +74,9 @@
     <Compile Include="public\Scripts\seriesEdit.js" />
     <Compile Include="public\Scripts\uiHelper.js" />
     <Compile Include="public\Scripts\views.js" />
+    <Content Include="config.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="public\Content\appStyles.css" />
     <Content Include="public\Content\themes\base\accordion.css" />
     <Content Include="public\Content\themes\base\all.css" />

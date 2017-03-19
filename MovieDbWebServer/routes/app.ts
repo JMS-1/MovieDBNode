@@ -1,12 +1,12 @@
 ﻿import { Db } from 'mongodb';
 import { Router, Request, Response } from 'express';
 
-import { ApplicationInformation, ILanguageDescription, IGenreDescription, IContainerDescription, ISeriesDescription, seriesSeparator, sendJson } from './protocol';
+import { ApplicationInformation, ILanguageDescription, IGenreDescription, IContainerDescription, ISeriesDescription, seriesSeparator, urlMatcher, sendJson } from './protocol';
 
 import { connect } from '../database/db';
 import { languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, seriesCollection, ISeries, recordingCollection } from '../database/model';
 
-async function getLanguages(db: Db): Promise<ILanguageDescription[]> {
+function getLanguages(db: Db): Promise<ILanguageDescription[]> {
     return new Promise<ILanguageDescription[]>(setResult => {
         var languages: ILanguageDescription[] = [];
 
@@ -20,7 +20,7 @@ async function getLanguages(db: Db): Promise<ILanguageDescription[]> {
     });
 }
 
-async function getGenres(db: Db): Promise<IGenreDescription[]> {
+function getGenres(db: Db): Promise<IGenreDescription[]> {
     return new Promise<IGenreDescription[]>(setResult => {
         var genres: IGenreDescription[] = [];
 
@@ -32,7 +32,7 @@ async function getGenres(db: Db): Promise<IGenreDescription[]> {
     });
 }
 
-async function getContainers(db: Db): Promise<IContainerDescription[]> {
+function getContainers(db: Db): Promise<IContainerDescription[]> {
     return new Promise<IContainerDescription[]>(setResult => {
         var containers: IContainerDescription[] = [];
 
@@ -44,7 +44,7 @@ async function getContainers(db: Db): Promise<IContainerDescription[]> {
     });
 }
 
-async function getSeries(db: Db): Promise<ISeriesDescription[]> {
+function getSeries(db: Db): Promise<ISeriesDescription[]> {
     return new Promise<ISeriesDescription[]>(setResult => {
         var series: ISeriesDescription[] = [];
 
@@ -82,9 +82,10 @@ async function getCount(db: Db): Promise<number> {
 
 async function getInfo(): Promise<ApplicationInformation> {
     var database = await connect();
+
+    var allContainers = await getContainers(database);
     var allLanguages = await getLanguages(database);
     var allGenres = await getGenres(database);
-    var allContainers = await getContainers(database);
     var allSeries = await getSeries(database);
     var total = await getCount(database);
 
@@ -96,8 +97,8 @@ async function getInfo(): Promise<ApplicationInformation> {
             empty: total === null,
             languages: allLanguages,
             containers: allContainers,
+            urlExpression: urlMatcher.source,
             seriesSeparator: seriesSeparator,
-            urlExpression: "https?:\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?"
         }));
 }
 
