@@ -3,29 +3,25 @@
 export var seriesSeparator = ">";
 export var urlMatcher = /https?:\/\/(\w +:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
-export interface ILanguageDescription {
+export interface IItemDescription {
     id: string;
 
     name: string;
 }
 
-export interface IGenreDescription {
+export interface ILanguageDescription extends IItemDescription {
 }
 
-export interface ISeriesDescription {
-    id: string;
+export interface IGenreDescription extends IItemDescription {
+}
 
-    name: string;
-
+export interface ISeriesDescription extends IItemDescription {
     parentId?: string;
 
     hierarchicalName: string;
 }
 
-export interface IContainerDescription {
-    id: string;
-
-    name: string;
+export interface IContainerDescription extends IItemDescription {
 }
 
 export interface ApplicationInformation {
@@ -132,6 +128,10 @@ export interface IRecordingEditDescription extends IRecordingDescription {
 
 export interface IRecordingEdit extends IRecordingEditDescription {
     id: string;
+}
+
+export interface IGenreEdit extends IGenreDescription {
+    unused: boolean;
 }
 
 export function sendJson<TDataType>(res: Response, data: TDataType): Response {
