@@ -1,4 +1,4 @@
-﻿import { Db, Collection, FindOneAndReplaceOption } from 'mongodb';
+﻿import { Db, Collection } from 'mongodb';
 import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 import * as uuid from 'uuid/v4';
@@ -112,7 +112,7 @@ async function updateRecording(id: string, newData: IRecordingEditDescription): 
     var db = await connect();
     var recording = await prepareRecording(db, newData);
 
-    var result = await db.collection(recordingCollection).update({ _id: id }, { $set: recording });
+    var result = await db.collection(recordingCollection).updateOne({ _id: id }, { $set: recording });
 
     return new Promise<boolean>(setResult => setResult(result.result.n === 1));
 }
@@ -124,7 +124,7 @@ async function createRecording(newData: IRecordingEditDescription): Promise<bool
     recording._id = uuid();
     recording.created = new Date();
 
-    var result = await db.collection(recordingCollection).insert(recording);
+    var result = await db.collection(recordingCollection).insertOne(recording);
 
     return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
 }
@@ -166,10 +166,10 @@ router.post('/query', async (req: Request & Parsed, res: Response) => sendJson(r
 
 router.get('/:id', async (req: Request, res: Response) => sendJson(res, await getRecordingForEdit(req.params["id"])));
 
-router.delete('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, deleteRecording(req.params["id"])));
+router.delete('/:id', (req: Request, res: Response) => sendStatus(res, deleteRecording(req.params["id"])));
 
 router.put('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, updateRecording(req.params["id"], req.body)));
 
-router.post('', (req: Request & Parsed, res: Response) => sendStatus(res, createRecording(req.body)));
+router.post('/', (req: Request & Parsed, res: Response) => sendStatus(res, createRecording(req.body)));
 
 export default router;

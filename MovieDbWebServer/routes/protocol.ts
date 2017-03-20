@@ -3,25 +3,30 @@
 export var seriesSeparator = ">";
 export var urlMatcher = /https?:\/\/(\w +:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
-export interface IItemDescription {
-    id: string;
-
+export interface INamedItem {
     name: string;
 }
 
-export interface ILanguageDescription extends IItemDescription {
+export interface IIdentifyableItem extends INamedItem {
+    id: string;
 }
 
-export interface IGenreDescription extends IItemDescription {
+export interface IGenreItem extends INamedItem {
 }
 
-export interface ISeriesDescription extends IItemDescription {
+export interface IGenreDescription extends IGenreItem, IIdentifyableItem {
+}
+
+export interface ILanguageDescription extends IIdentifyableItem {
+}
+
+export interface ISeriesDescription extends IIdentifyableItem {
     parentId?: string;
 
     hierarchicalName: string;
 }
 
-export interface IContainerDescription extends IItemDescription {
+export interface IContainerDescription extends IIdentifyableItem {
 }
 
 export interface ApplicationInformation {
