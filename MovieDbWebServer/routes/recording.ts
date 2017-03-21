@@ -7,8 +7,6 @@ import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreS
 import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia } from '../database/model';
 import { connect } from '../database/db';
 
-const router = Router();
-
 interface IGroup {
     group: number;
 
@@ -160,16 +158,11 @@ async function prepareRecording(database: Db, newData: IRecordingEditDescription
     }));
 }
 
-router.get('/query', async (req: Request, res: Response) => sendJson(res, await getResults()));
+export default Router()
+    .get('/query', async (req: Request, res: Response) => sendJson(res, await getResults()))
+    .post('/query', async (req: Request & Parsed, res: Response) => sendJson(res, await getResults(req.body)))
 
-router.post('/query', async (req: Request & Parsed, res: Response) => sendJson(res, await getResults(req.body)));
-
-router.get('/:id', async (req: Request, res: Response) => sendJson(res, await getRecordingForEdit(req.params["id"])));
-
-router.delete('/:id', (req: Request, res: Response) => sendStatus(res, deleteRecording(req.params["id"])));
-
-router.put('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, updateRecording(req.params["id"], req.body)));
-
-router.post('/', (req: Request & Parsed, res: Response) => sendStatus(res, createRecording(req.body)));
-
-export default router;
+    .post('/', (req: Request & Parsed, res: Response) => sendStatus(res, createRecording(req.body)))
+    .get('/:id', async (req: Request, res: Response) => sendJson(res, await getRecordingForEdit(req.params["id"])))
+    .put('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, updateRecording(req.params["id"], req.body)))
+    .delete('/:id', (req: Request, res: Response) => sendStatus(res, deleteRecording(req.params["id"])));

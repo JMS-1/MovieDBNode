@@ -17,7 +17,10 @@ export interface IGenreItem extends INamedItem {
 export interface IGenreDescription extends IGenreItem, IIdentifyableItem {
 }
 
-export interface ILanguageDescription extends IIdentifyableItem {
+export interface ILanguageItem extends INamedItem {
+}
+
+export interface ILanguageDescription extends ILanguageItem, IIdentifyableItem {
 }
 
 export interface ISeriesDescription extends IIdentifyableItem {
@@ -136,6 +139,10 @@ export interface IRecordingEdit extends IRecordingEditDescription {
 }
 
 export interface IGenreEdit extends IGenreDescription {
+    unused: boolean;
+}
+
+export interface ILanguageEdit extends ILanguageDescription {
     unused: boolean;
 }
 

@@ -4,6 +4,7 @@ import * as path from 'path';
 
 import restMain from './routes/app';
 import restGenre from './routes/genre';
+import restLanguage from './routes/language';
 import restDatabase from './routes/recording';
 
 var app = express();
@@ -15,6 +16,7 @@ app.use(parser.json());
 app.use('/movie', restMain);
 app.use('/movie/db', restDatabase);
 app.use('/movie/genre', restGenre);
+app.use('/movie/language', restLanguage);
 
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.log(`'${req.url}' not found`);

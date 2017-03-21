@@ -102,8 +102,5 @@ async function getInfo(): Promise<ApplicationInformation> {
         }));
 }
 
-const router = Router();
-
-router.get('/info', async (req: Request, res: Response) => sendJson(res, await getInfo()));
-
-export default router;
+export default Router()
+    .get('/info', async (req: Request, res: Response) => sendJson(res, await getInfo()));

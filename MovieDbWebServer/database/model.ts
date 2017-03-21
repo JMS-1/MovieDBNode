@@ -31,12 +31,6 @@ export interface ILanguage {
     name: string;
 }
 
-export interface ILanguage {
-    _id: string;
-
-    name: string;
-}
-
 export interface IMedia {
     _id: string;
 

@@ -122,6 +122,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="database\model.ts" />
+    <TypeScriptCompile Include="routes\language.ts" />
     <TypeScriptCompile Include="routes\genre.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

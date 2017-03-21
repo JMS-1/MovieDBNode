@@ -1,6 +1,10 @@
 ﻿import { MongoClient, Db } from 'mongodb';
 import { readFile } from 'fs';
 
+import * as uuid from 'uuid/v4';
+
+import { recordingCollection } from "./model";
+
 export interface IDatabaseConfiguration {
     server: string;
 
@@ -24,3 +28,51 @@ export async function connect(): Promise<Db> {
 
     return MongoClient.connect(`mongodb://${config.mongo.server}:${config.mongo.port}/${config.mongo.database}`);
 }
+
+async function ensureNameIndex(collection: string): Promise<Db> {
+    var db = await connect();
+    var index = await db.collection(collection).createIndex({ name: 1 }, { name: `${collection}_Unique`, unique: true });
+
+    return new Promise<Db>(setResult => setResult(db));
+}
+
+export async function deleteIdentifyableItem(id: string, collection: string): Promise<boolean> {
+    var db = await ensureNameIndex(collection);
+    var result = await db.collection(collection).deleteOne({ _id: id });
+
+    return new Promise<boolean>(setResult => setResult(result.deletedCount === 1));
+}
+
+export async function addNamedItem(item: { name: string }, collection: string): Promise<boolean> {
+    var newItem = { name: item.name, _id: uuid() };
+
+    var db = await ensureNameIndex(collection);
+    var result = await db.collection(collection).insertOne(newItem);
+
+    return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
+}
+
+export async function updateNamedItem(id: string, item: { name: string }, collection: string): Promise<boolean> {
+    var newItem = { name: item.name };
+
+    var db = await ensureNameIndex(collection);
+    var result = await db.collection(collection).updateOne({ _id: id }, { $set: newItem });
+
+    return new Promise<boolean>(setResult => setResult(result.matchedCount === 1));
+}
+
+export async function findNamedItem<TResultType extends { id: string; name: string; unused: boolean; }>(id: string, collection: string, usage: string): Promise<TResultType> {
+    var db = await ensureNameIndex(collection);
+    var item = await db.collection(collection).findOne({ _id: id });
+    var itemUsage = await db.collection(recordingCollection).findOne({ [usage]: { $elemMatch: { $eq: item._id } } });
+
+    return new Promise<TResultType>(setResult => setResult(<TResultType>{
+        id: item._id,
+        name: item.name,
+        unused: !itemUsage
+    }));
+}
+
+
+
+
