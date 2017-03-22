@@ -3,33 +3,21 @@
 export var seriesSeparator = ">";
 export var urlMatcher = /https?:\/\/(\w +:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
-export interface INamedItem {
+export interface IName {
     name: string;
 }
 
-export interface IIdentifyableItem extends INamedItem {
+export interface IUnique {
     id: string;
 }
 
-export interface IGenreItem extends INamedItem {
-}
-
-export interface IGenreDescription extends IGenreItem, IIdentifyableItem {
-}
-
-export interface ILanguageItem extends INamedItem {
-}
-
-export interface ILanguageDescription extends ILanguageItem, IIdentifyableItem {
-}
-
-export interface ISeriesDescription extends IIdentifyableItem {
+export interface ISeriesDescription extends IUnique, IName {
     parentId?: string;
 
     hierarchicalName: string;
 }
 
-export interface IContainerDescription extends IIdentifyableItem {
+export interface IContainerDescription extends IUnique, IName {
 }
 
 export interface ApplicationInformation {
@@ -138,8 +126,20 @@ export interface IRecordingEdit extends IRecordingEditDescription {
     id: string;
 }
 
+export interface IGenreItem extends IName {
+}
+
+export interface IGenreDescription extends IGenreItem, IUnique {
+}
+
 export interface IGenreEdit extends IGenreDescription {
     unused: boolean;
+}
+
+export interface ILanguageItem extends IName {
+}
+
+export interface ILanguageDescription extends ILanguageItem, IUnique {
 }
 
 export interface ILanguageEdit extends ILanguageDescription {
