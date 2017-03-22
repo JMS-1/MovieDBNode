@@ -1,73 +1,18 @@
 ﻿import { Db } from 'mongodb';
 import { Router, Request, Response } from 'express';
 
-import { ApplicationInformation, IUniqueLanguage, IUniqueGenre, IUniqueContainer, ISeriesDescription, seriesSeparator, urlMatcher, sendJson } from './protocol';
+import { ApplicationInformation, IUnique, IName, IUniqueLanguage, IUniqueGenre, IUniqueContainer, ISeriesDescription, getSeries, seriesSeparator, urlMatcher, sendJson } from './protocol';
 
 import { connect } from '../database/db';
-import { languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, seriesCollection, ISeries, recordingCollection } from '../database/model';
+import { languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, recordingCollection } from '../database/model';
 
-function getLanguages(db: Db): Promise<IUniqueLanguage[]> {
-    return new Promise<IUniqueLanguage[]>(setResult => {
-        var languages: IUniqueLanguage[] = [];
+async function getNamedItems<TResultType extends IUnique & IName>(db: Db, collectionName: string): Promise<TResultType[]> {
+    var raw = await db.collection(collectionName).find<ILanguage>().toArray();
+    var all = raw.map(l => <TResultType>{ id: l._id, name: l.name });
 
-        db
-            .collection(languageCollection)
-            .find<ILanguage>({})
-            .sort({ name: 1 })
-            .forEach(l => languages.push({ id: l._id, name: l.name }), () => {
-                setResult(languages);
-            });
-    });
-}
+    all.sort((l, r) => l.name.localeCompare(r.name));
 
-function getGenres(db: Db): Promise<IUniqueGenre[]> {
-    return new Promise<IUniqueGenre[]>(setResult => {
-        var genres: IUniqueGenre[] = [];
-
-        db
-            .collection(genreCollection)
-            .find<IGenre>({})
-            .sort({ name: 1 })
-            .forEach(g => genres.push({ id: g._id, name: g.name }), () => setResult(genres));
-    });
-}
-
-function getContainers(db: Db): Promise<IUniqueContainer[]> {
-    return new Promise<IUniqueContainer[]>(setResult => {
-        var containers: IUniqueContainer[] = [];
-
-        db
-            .collection(containerCollection)
-            .find<IContainer>({})
-            .sort({ name: 1 })
-            .forEach(c => containers.push({ id: c._id, name: c.name }), () => setResult(containers));
-    });
-}
-
-function getSeries(db: Db): Promise<ISeriesDescription[]> {
-    return new Promise<ISeriesDescription[]>(setResult => {
-        var series: ISeriesDescription[] = [];
-
-        db
-            .collection(seriesCollection)
-            .find<ISeries>({})
-            .forEach(s => series.push({ id: s._id, name: s.name, parentId: (s.series === null) ? null : `${s.series}`, hierarchicalName: s.name }), () => {
-                var map: { [id: string]: ISeriesDescription } = {}
-
-                series.forEach(s => map[s.id] = s);
-                series.forEach(s => {
-                    for (var t = s; t.parentId;) {
-                        t = map[t.parentId];
-
-                        s.hierarchicalName = `${t.name} ${seriesSeparator} ${s.hierarchicalName}`;
-                    }
-                });
-
-                series.sort((l, r) => l.hierarchicalName.localeCompare(r.hierarchicalName));
-
-                setResult(series);
-            });
-    });
+    return new Promise<TResultType[]>(setResult => setResult(all));
 }
 
 async function getCount(db: Db): Promise<number> {
@@ -81,13 +26,16 @@ async function getCount(db: Db): Promise<number> {
 }
 
 async function getInfo(): Promise<ApplicationInformation> {
+    var allSeries = await getSeries();
+
     var database = await connect();
 
-    var allContainers = await getContainers(database);
-    var allLanguages = await getLanguages(database);
-    var allGenres = await getGenres(database);
-    var allSeries = await getSeries(database);
+    var allContainers = await getNamedItems<IUniqueContainer>(database, containerCollection);
+    var allLanguages = await getNamedItems<IUniqueLanguage>(database, languageCollection);
+    var allGenres = await getNamedItems<IUniqueGenre>(database, genreCollection);
     var total = await getCount(database);
+
+    await database.close();
 
     return new Promise<ApplicationInformation>(setResult =>
         setResult({

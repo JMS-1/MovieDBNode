@@ -1,4 +1,4 @@
-﻿import { MongoClient, Db } from 'mongodb';
+﻿import { MongoClient, Db, IndexOptions } from 'mongodb';
 import { readFile } from 'fs';
 
 import * as uuid from 'uuid/v4';
@@ -31,8 +31,10 @@ export async function connect(): Promise<Db> {
 }
 
 async function ensureNameIndex(collection: string): Promise<Db> {
+    var options: IndexOptions = { name: `${collection}_Unique`, unique: true };
+
     var db = await connect();
-    var index = await db.collection(collection).createIndex({ name: 1 }, { name: `${collection}_Unique`, unique: true });
+    var index = await db.collection(collection).createIndex({ name: 1 }, options);
 
     return new Promise<Db>(setResult => setResult(db));
 }
@@ -40,6 +42,8 @@ async function ensureNameIndex(collection: string): Promise<Db> {
 export async function deleteName(id: string, collection: string): Promise<boolean> {
     var db = await ensureNameIndex(collection);
     var result = await db.collection(collection).deleteOne({ _id: id });
+
+    await db.close();
 
     return new Promise<boolean>(setResult => setResult(result.deletedCount === 1));
 }
@@ -50,6 +54,8 @@ export async function addName(item: IName, collection: string): Promise<boolean>
     var db = await ensureNameIndex(collection);
     var result = await db.collection(collection).insertOne(newItem);
 
+    await db.close();
+
     return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
 }
 
@@ -58,6 +64,8 @@ export async function updateName(id: string, item: IName, collection: string): P
 
     var db = await ensureNameIndex(collection);
     var result = await db.collection(collection).updateOne({ _id: id }, { $set: newItem });
+
+    await db.close();
 
     return new Promise<boolean>(setResult => setResult(result.matchedCount === 1));
 }
@@ -69,6 +77,8 @@ export async function findName<TResultType extends IName & IUnique, TDatabaseTyp
     var result = <TResultType>{ id: item._id, name: item.name };
 
     await fillUsage(db, result, item);
+
+    await db.close();
 
     return new Promise<TResultType>(setResult => setResult(result));
 }

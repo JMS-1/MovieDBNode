@@ -1,5 +1,8 @@
 ﻿import { Response } from "express";
 
+import { connect } from "../database/db";
+import { seriesCollection, ISeries } from "../database/model";
+
 export var seriesSeparator = ">";
 export var urlMatcher = /https?:\/\/(\w +:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
@@ -183,4 +186,63 @@ export async function sendStatus(res: Response, process: Promise<boolean>): Prom
     res.end();
 
     return new Promise<void>(setResult => setResult(undefined));
+}
+
+async function createSeriesLoader(): Promise<ISeriesDescription[]> {
+    var db = await connect();
+    var dbSeries = await db.collection(seriesCollection).find<ISeries>().toArray();
+
+    await db.close();
+
+    var series = dbSeries.map(s => <ISeriesDescription>{ id: s._id, name: s.name, parentId: (s.series === null) ? null : `${s.series}`, hierarchicalName: s.name });
+
+    var map: { [id: string]: ISeriesDescription } = {}
+
+    series.forEach(s => map[s.id] = s);
+
+    series.forEach(s => {
+        for (var t = s; t.parentId;) {
+            t = map[t.parentId];
+
+            s.hierarchicalName = `${t.name} ${seriesSeparator} ${s.hierarchicalName}`;
+        }
+    });
+
+    series.sort((l, r) => l.hierarchicalName.localeCompare(r.hierarchicalName));
+
+    return new Promise<ISeriesDescription[]>(setResult => setResult(series));
+}
+
+export interface ISeriesMap {
+    [series: string]: ISeriesDescription;
+}
+
+var seriesLoader: Promise<ISeriesDescription[]>;
+var seriesMap: Promise<ISeriesMap>;
+
+export function reloadSeries(): void {
+    seriesLoader = undefined;
+    seriesMap = undefined;
+}
+
+export function getSeries(): Promise<ISeriesDescription[]> {
+    if (!seriesLoader)
+        seriesLoader = createSeriesLoader();
+
+    return seriesLoader;
+}
+
+export function getSeriesMap(): Promise<ISeriesMap> {
+    if (!seriesMap)
+        seriesMap = new Promise<ISeriesMap>(async setResult => {
+            var series = await getSeries();
+
+            var map: ISeriesMap = {};
+
+            series.forEach(s => map[s.id] = s);
+
+            setResult(map);
+        });
+
+    return seriesMap;
 }

@@ -46,6 +46,8 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
     var allLanguages = await getCounts(rec, query, "languages");
     var allGenres = await getCounts(rec, query, "genres");
 
+    await db.close();
+
     return new Promise<ISearchInformation>(setResult => setResult({
         total: total,
         page: request.page,
@@ -76,6 +78,8 @@ async function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
         { $match: { _id: id } },
         { $lookup: { from: mediaCollection, localField: "media", foreignField: "_id", "as": "joinedMedia" } }])
         .toArray();
+
+    await db.close();
 
     return new Promise<IRecordingEdit>(setResult => {
         var recording = recordings[0];
@@ -112,6 +116,8 @@ async function updateRecording(id: string, newData: IRecordingEditDescription): 
 
     var result = await db.collection(recordingCollection).updateOne({ _id: id }, { $set: recording });
 
+    await db.close();
+
     return new Promise<boolean>(setResult => setResult(result.result.n === 1));
 }
 
@@ -124,6 +130,8 @@ async function createRecording(newData: IRecordingEditDescription): Promise<bool
 
     var result = await db.collection(recordingCollection).insertOne(recording);
 
+    await db.close();
+
     return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
 }
 
@@ -131,6 +139,8 @@ async function deleteRecording(id: string): Promise<boolean> {
     var db = await connect();
 
     var result = await db.collection(recordingCollection).deleteOne({ _id: id });
+
+    await db.close();
 
     return new Promise<boolean>(setResult => setResult(result.deletedCount == 1));
 }
