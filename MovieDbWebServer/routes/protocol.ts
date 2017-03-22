@@ -11,13 +11,17 @@ export interface IUnique {
     id: string;
 }
 
+export interface ISimpleUsage {
+    unused: boolean;
+}
+
 export interface ISeriesDescription extends IUnique, IName {
     parentId?: string;
 
     hierarchicalName: string;
 }
 
-export interface IContainerDescription extends IUnique, IName {
+export interface IUniqueContainer extends IUnique, IName {
 }
 
 export interface ApplicationInformation {
@@ -25,13 +29,13 @@ export interface ApplicationInformation {
 
     total: number;
 
-    languages: ILanguageDescription[];
+    languages: IUniqueLanguage[];
 
-    genres: IGenreDescription[];
+    genres: IUniqueGenre[];
 
     series: ISeriesDescription[];
 
-    containers: IContainerDescription[];
+    containers: IUniqueContainer[];
 
     seriesSeparator: string;
 
@@ -129,21 +133,43 @@ export interface IRecordingEdit extends IRecordingEditDescription {
 export interface IGenreItem extends IName {
 }
 
-export interface IGenreDescription extends IGenreItem, IUnique {
+export interface IUniqueGenre extends IGenreItem, IUnique {
 }
 
-export interface IGenreEdit extends IGenreDescription {
-    unused: boolean;
+export interface IGenreEdit extends IUniqueGenre, ISimpleUsage {
 }
 
 export interface ILanguageItem extends IName {
 }
 
-export interface ILanguageDescription extends ILanguageItem, IUnique {
+export interface IUniqueLanguage extends ILanguageItem, IUnique {
 }
 
-export interface ILanguageEdit extends ILanguageDescription {
-    unused: boolean;
+export interface ILanguageEdit extends IUniqueLanguage, ISimpleUsage {
+}
+
+export interface IContainerItem extends IName {
+}
+
+export interface IUniqueContainer extends IContainerItem, IUnique {
+}
+
+export interface IContainerRecording extends IUnique, IName {
+    position: string;
+}
+
+export interface IContainerEdit extends IUniqueContainer {
+    description: string;
+
+    type: number;
+
+    parent?: string;
+
+    location: string;
+
+    children: string[];
+
+    recordings: IContainerRecording[];
 }
 
 export function sendJson<TDataType>(res: Response, data: TDataType): Response {

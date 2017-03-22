@@ -5,11 +5,15 @@ export var languageCollection = "languages";
 export var containerCollection = "containers";
 export var recordingCollection = "recordings";
 
-export interface IContainer {
-    _id: string;
-
+export interface IDbName {
     name: string;
+}
 
+export interface IDbUnique {
+    _id: string;
+}
+
+export interface IContainer extends IDbUnique, IDbName {
     type: number;
 
     description?: string;
@@ -19,19 +23,13 @@ export interface IContainer {
     position?: string;
 }
 
-export interface IGenre {
-    _id: string;
-
-    name: string;
+export interface IGenre extends IDbUnique, IDbName {
 }
 
-export interface ILanguage {
-    _id: string;
-
-    name: string;
+export interface ILanguage extends IDbUnique, IDbName {
 }
 
-export interface IMedia {
+export interface IMedia extends IDbUnique {
     _id: string;
 
     type: number;
@@ -41,29 +39,19 @@ export interface IMedia {
     position?: string;
 }
 
-export interface ILink {
+export interface ILink extends IDbName {
     url: string;
 
-    name: string;
-
     description?: string;
 }
 
-export interface ISeries {
-    _id: string;
-
-    name: string;
-
+export interface ISeries extends IDbUnique, IDbName {
     description?: string;
 
     series?: string;
 }
 
-export interface IRecording {
-    _id: string;
-
-    name: string;
-
+export interface IRecording extends IDbUnique, IDbName {
     rentTo?: string;
 
     created: Date;

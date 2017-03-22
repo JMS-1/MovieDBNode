@@ -3,8 +3,8 @@ import { readFile } from 'fs';
 
 import * as uuid from 'uuid/v4';
 
-import { recordingCollection } from "./model";
-import { IName, IUnique } from "../routes/protocol";
+import { recordingCollection, IDbUnique, IDbName } from "./model";
+import { IName, IUnique, ISimpleUsage } from "../routes/protocol";
 
 export interface IDatabaseConfiguration {
     server: string;
@@ -62,16 +62,21 @@ export async function updateName(id: string, item: IName, collection: string): P
     return new Promise<boolean>(setResult => setResult(result.matchedCount === 1));
 }
 
-export async function findName<TResultType extends IName & IUnique & { unused: boolean; }>(id: string, collection: string, usage: string): Promise<TResultType> {
+export async function findName<TResultType extends IName & IUnique, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, fillUsage: (db: Db, item: TResultType, rawItem: TDatabaseType) => Promise<void>): Promise<TResultType> {
     var db = await ensureNameIndex(collection);
-    var item = await db.collection(collection).findOne({ _id: id });
-    var itemUsage = await db.collection(recordingCollection).findOne({ [usage]: { $elemMatch: { $eq: item._id } } });
+    var item: TDatabaseType = await db.collection(collection).findOne({ _id: id });
 
-    return new Promise<TResultType>(setResult => setResult(<TResultType>{
-        id: item._id,
-        name: item.name,
-        unused: !itemUsage
-    }));
+    var result = <TResultType>{ id: item._id, name: item.name };
+
+    await fillUsage(db, result, item);
+
+    return new Promise<TResultType>(setResult => setResult(result));
+}
+
+export async function findNameWithUnused<TResultType extends IName & IUnique & ISimpleUsage, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, usage: string): Promise<TResultType> {
+    return findName<TResultType, TDatabaseType>(id, collection, async (db, result, item) => {
+        result.unused = !await db.collection(recordingCollection).findOne({ [usage]: { $elemMatch: { $eq: result.id } } });
+    });
 }
 
 

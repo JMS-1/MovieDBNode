@@ -1,14 +1,14 @@
 ﻿import { Db } from 'mongodb';
 import { Router, Request, Response } from 'express';
 
-import { ApplicationInformation, ILanguageDescription, IGenreDescription, IContainerDescription, ISeriesDescription, seriesSeparator, urlMatcher, sendJson } from './protocol';
+import { ApplicationInformation, IUniqueLanguage, IUniqueGenre, IUniqueContainer, ISeriesDescription, seriesSeparator, urlMatcher, sendJson } from './protocol';
 
 import { connect } from '../database/db';
 import { languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, seriesCollection, ISeries, recordingCollection } from '../database/model';
 
-function getLanguages(db: Db): Promise<ILanguageDescription[]> {
-    return new Promise<ILanguageDescription[]>(setResult => {
-        var languages: ILanguageDescription[] = [];
+function getLanguages(db: Db): Promise<IUniqueLanguage[]> {
+    return new Promise<IUniqueLanguage[]>(setResult => {
+        var languages: IUniqueLanguage[] = [];
 
         db
             .collection(languageCollection)
@@ -20,9 +20,9 @@ function getLanguages(db: Db): Promise<ILanguageDescription[]> {
     });
 }
 
-function getGenres(db: Db): Promise<IGenreDescription[]> {
-    return new Promise<IGenreDescription[]>(setResult => {
-        var genres: IGenreDescription[] = [];
+function getGenres(db: Db): Promise<IUniqueGenre[]> {
+    return new Promise<IUniqueGenre[]>(setResult => {
+        var genres: IUniqueGenre[] = [];
 
         db
             .collection(genreCollection)
@@ -32,9 +32,9 @@ function getGenres(db: Db): Promise<IGenreDescription[]> {
     });
 }
 
-function getContainers(db: Db): Promise<IContainerDescription[]> {
-    return new Promise<IContainerDescription[]>(setResult => {
-        var containers: IContainerDescription[] = [];
+function getContainers(db: Db): Promise<IUniqueContainer[]> {
+    return new Promise<IUniqueContainer[]>(setResult => {
+        var containers: IUniqueContainer[] = [];
 
         db
             .collection(containerCollection)
