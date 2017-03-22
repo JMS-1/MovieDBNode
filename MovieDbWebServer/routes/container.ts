@@ -1,7 +1,7 @@
 ﻿import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 
-import { connect, addName, updateName, findName, deleteName } from '../database/db';
+import { addName, updateName, findName, deleteName } from '../database/db';
 import { containerCollection, IContainer, recordingCollection, IRecording, mediaCollection, IMedia, IDbUnique, IDbName } from '../database/model';
 
 import { IContainerItem, IContainerEdit, IContainerRecording, seriesSeparator, getSeriesMap, sendJson, sendStatus } from './protocol';

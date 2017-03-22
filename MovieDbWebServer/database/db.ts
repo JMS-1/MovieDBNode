@@ -24,16 +24,18 @@ async function configurationPromise(): Promise<IConfiguration> {
 
 export var configuration = configurationPromise();
 
-export async function connect(): Promise<Db> {
+export async function connectPromise(): Promise<Db> {
     var config = await configuration;
 
     return MongoClient.connect(`mongodb://${config.mongo.server}:${config.mongo.port}/${config.mongo.database}`);
 }
 
+export var sharedConnection = connectPromise();
+
 async function ensureNameIndex(collection: string): Promise<Db> {
     var options: IndexOptions = { name: `${collection}_Unique`, unique: true };
 
-    var db = await connect();
+    var db = await sharedConnection;
     var index = await db.collection(collection).createIndex({ name: 1 }, options);
 
     return new Promise<Db>(setResult => setResult(db));
@@ -42,8 +44,6 @@ async function ensureNameIndex(collection: string): Promise<Db> {
 export async function deleteName(id: string, collection: string): Promise<boolean> {
     var db = await ensureNameIndex(collection);
     var result = await db.collection(collection).deleteOne({ _id: id });
-
-    await db.close();
 
     return new Promise<boolean>(setResult => setResult(result.deletedCount === 1));
 }
@@ -54,8 +54,6 @@ export async function addName(item: IName, collection: string): Promise<boolean>
     var db = await ensureNameIndex(collection);
     var result = await db.collection(collection).insertOne(newItem);
 
-    await db.close();
-
     return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
 }
 
@@ -64,8 +62,6 @@ export async function updateName(id: string, item: IName, collection: string): P
 
     var db = await ensureNameIndex(collection);
     var result = await db.collection(collection).updateOne({ _id: id }, { $set: newItem });
-
-    await db.close();
 
     return new Promise<boolean>(setResult => setResult(result.matchedCount === 1));
 }
@@ -78,8 +74,6 @@ export async function findName<TResultType extends IName & IUnique, TDatabaseTyp
 
     await fillUsage(db, result, item);
 
-    await db.close();
-
     return new Promise<TResultType>(setResult => setResult(result));
 }
 
@@ -88,7 +82,3 @@ export async function findNameWithUnused<TResultType extends IName & IUnique & I
         result.unused = !await db.collection(recordingCollection).findOne({ [usage]: { $elemMatch: { $eq: result.id } } });
     });
 }
-
-
-
-

@@ -1,7 +1,7 @@
 ﻿import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 
-import { connect, addName, updateName, findNameWithUnused, deleteName } from '../database/db';
+import { addName, updateName, findNameWithUnused, deleteName } from '../database/db';
 import { languageCollection, ILanguage } from '../database/model';
 
 import { ILanguageItem, ILanguageEdit, sendJson, sendStatus } from './protocol';

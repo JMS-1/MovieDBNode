@@ -3,7 +3,7 @@ import { Router, Request, Response } from 'express';
 
 import { ApplicationInformation, IUnique, IName, IUniqueLanguage, IUniqueGenre, IUniqueContainer, ISeriesDescription, getSeries, seriesSeparator, urlMatcher, sendJson } from './protocol';
 
-import { connect } from '../database/db';
+import { sharedConnection } from '../database/db';
 import { languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, recordingCollection } from '../database/model';
 
 async function getNamedItems<TResultType extends IUnique & IName>(db: Db, collectionName: string): Promise<TResultType[]> {
@@ -28,14 +28,12 @@ async function getCount(db: Db): Promise<number> {
 async function getInfo(): Promise<ApplicationInformation> {
     var allSeries = await getSeries();
 
-    var database = await connect();
+    var database = await sharedConnection;
 
     var allContainers = await getNamedItems<IUniqueContainer>(database, containerCollection);
     var allLanguages = await getNamedItems<IUniqueLanguage>(database, languageCollection);
     var allGenres = await getNamedItems<IUniqueGenre>(database, genreCollection);
     var total = await getCount(database);
-
-    await database.close();
 
     return new Promise<ApplicationInformation>(setResult =>
         setResult({

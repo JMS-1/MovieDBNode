@@ -5,7 +5,7 @@ import * as uuid from 'uuid/v4';
 
 import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEditDescription, IRecordingEdit, ILink, sendJson, sendStatus } from './protocol';
 import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia } from '../database/model';
-import { connect } from '../database/db';
+import { sharedConnection } from '../database/db';
 
 interface IGroup {
     group: number;
@@ -39,14 +39,12 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
     var fields = { name: 1, rentTo: 1, genres: 1, series: 1, created: 1, languages: 1 };
     var query = {};
 
-    var db = await connect();
+    var db = await sharedConnection;
     var rec = db.collection(recordingCollection);
     var total = await rec.count(query);
     var allRecordings = await rec.find(query, fields, request.page * request.size, request.size).toArray();
     var allLanguages = await getCounts(rec, query, "languages");
     var allGenres = await getCounts(rec, query, "genres");
-
-    await db.close();
 
     return new Promise<ISearchInformation>(setResult => setResult({
         total: total,
@@ -72,14 +70,12 @@ interface IJoinedRecording extends IRecording {
 
 // Ermittelt zu einer Aufzeichnung alle für die Pflege notwendigen Informationen.
 async function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
-    var db = await connect();
+    var db = await sharedConnection;
 
     var recordings = await db.collection(recordingCollection).aggregate<IJoinedRecording>([
         { $match: { _id: id } },
         { $lookup: { from: mediaCollection, localField: "media", foreignField: "_id", "as": "joinedMedia" } }])
         .toArray();
-
-    await db.close();
 
     return new Promise<IRecordingEdit>(setResult => {
         var recording = recordings[0];
@@ -111,18 +107,16 @@ async function getMediaId(database: Db, media: IMedia): Promise<string> {
 }
 
 async function updateRecording(id: string, newData: IRecordingEditDescription): Promise<boolean> {
-    var db = await connect();
+    var db = await sharedConnection;
     var recording = await prepareRecording(db, newData);
 
     var result = await db.collection(recordingCollection).updateOne({ _id: id }, { $set: recording });
-
-    await db.close();
 
     return new Promise<boolean>(setResult => setResult(result.result.n === 1));
 }
 
 async function createRecording(newData: IRecordingEditDescription): Promise<boolean> {
-    var db = await connect();
+    var db = await sharedConnection;
     var recording = await prepareRecording(db, newData);
 
     recording._id = uuid();
@@ -130,17 +124,13 @@ async function createRecording(newData: IRecordingEditDescription): Promise<bool
 
     var result = await db.collection(recordingCollection).insertOne(recording);
 
-    await db.close();
-
     return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
 }
 
 async function deleteRecording(id: string): Promise<boolean> {
-    var db = await connect();
+    var db = await sharedConnection;
 
     var result = await db.collection(recordingCollection).deleteOne({ _id: id });
-
-    await db.close();
 
     return new Promise<boolean>(setResult => setResult(result.deletedCount == 1));
 }

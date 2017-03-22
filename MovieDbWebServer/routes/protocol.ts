@@ -1,6 +1,6 @@
 ﻿import { Response } from "express";
 
-import { connect } from "../database/db";
+import { sharedConnection } from "../database/db";
 import { seriesCollection, ISeries } from "../database/model";
 
 export var seriesSeparator = ">";
@@ -189,10 +189,8 @@ export async function sendStatus(res: Response, process: Promise<boolean>): Prom
 }
 
 async function createSeriesLoader(): Promise<ISeriesDescription[]> {
-    var db = await connect();
+    var db = await sharedConnection;
     var dbSeries = await db.collection(seriesCollection).find<ISeries>().toArray();
-
-    await db.close();
 
     var series = dbSeries.map(s => <ISeriesDescription>{ id: s._id, name: s.name, parentId: (s.series === null) ? null : `${s.series}`, hierarchicalName: s.name });
 
