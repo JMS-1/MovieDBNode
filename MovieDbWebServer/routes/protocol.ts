@@ -200,6 +200,50 @@ export function reloadSeries(): void {
     seriesMap = undefined;
 }
 
+export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
+    // Konfiguration der Hierarchiverfolgung.
+    var lookup = {
+        connectFromField: "series",
+        from: seriesCollection,
+        connectToField: "_id",
+        startWith: "$series",
+        depthField: "order",
+        as: "hierarchy"
+    };
+
+    // Konfiguration für die erneute Zusammenführung.
+    group = {
+        ...group,
+        _id: "$_id",
+        series: { $first: "$series" },
+        hierarchy: { $push: "$hierarchy.name" }
+    };
+
+    // Konfiguration für die Abbildung auf die Protokollstrukturen.
+    project = {
+        ...project,
+        id: "$_id",
+        hierarchicalName: {
+            $reduce: {
+                input: "$hierarchy",
+                initialValue: "$name",
+                in: { $concat: ["$$this", ` ${seriesSeparator} `, "$$value"] }
+            }
+        }
+    };
+
+    return [
+        // Erst einmal ergänzen wir zu jeder Serie den Kette der übergeordneten Serien.
+        { $graphLookup: lookup },
+        // Da die Ordnung der übergeordneten Serien nicht garantiert ist müssen wir diese explizit sicherstellen.
+        { $unwind: { path: "$hierarchy", preserveNullAndEmptyArrays: true } },
+        { $sort: { "hierarchy.order": 1 } },
+        { $group: group },
+        // Nun können wir die Name der übergeordneten Serien einfach mit dem eigenen Namen kombinieren.
+        { $project: project }
+    ]
+}
+
 export function getSeries(): Promise<ISeriesDescription[]> {
     if (!seriesLoader)
         seriesLoader = new Promise<ISeriesDescription[]>(async setResult => {
@@ -207,44 +251,10 @@ export function getSeries(): Promise<ISeriesDescription[]> {
 
             // Die Serienhierarchie wird vollständig in der Datenbank ausgewertet.
             var series = await db.collection(seriesCollection).aggregate<ISeriesDescription>([
-                // Erst einmal ergänzen wir zu jeder Serie den Kette der übergeordneten Serien.
-                {
-                    $graphLookup: {
-                        connectFromField: "series",
-                        from: seriesCollection,
-                        connectToField: "_id",
-                        startWith: "$series",
-                        depthField: "order",
-                        as: "hierarchy"
-                    }
-                },
-                // Da die Ordnung der übergeordneten Serien nicht garantiert ist müssen wir diese explizit sicherstellen.
-                { $unwind: { path: "$hierarchy", preserveNullAndEmptyArrays: true } },
-                { $sort: { "hierarchy.order": 1 } },
-                {
-                    $group: {
-                        _id: "$_id",
-                        name: { $first: "$name" },
-                        series: { $first: "$series" },
-                        hierarchy: { $push: "$hierarchy.name" }
-                    }
-                },
-                // Nun können wir die Name der übergeordneten Serien einfach mit dem eigenen Namen kombinieren.
-                {
-                    $project: {
-                        name: 1,
-                        id: "$_id",
-                        parentId: "$series",
-                        hierarchicalName: {
-                            $reduce: {
-                                input: "$hierarchy",
-                                initialValue: "$name",
-                                in: { $concat: ["$$this", ` ${seriesSeparator} `, "$$value"] }
-                            }
-                        }
-                    }
-                },
-                // Und dann die Datenbank danach sortieren lassen.
+                // Blendet den hierarchischen Namen in das Ergebnis ein.
+                ...hierarchicalNamePipeline({ name: { $first: "$name" } }, { name: 1, parentId: "$series" }),
+
+                // Dann lassen wir die Datenbank danach sortieren.
                 { $sort: { "hierarchicalName": 1 } }
             ]).toArray();
 

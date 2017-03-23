@@ -3,27 +3,9 @@ import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 import * as uuid from 'uuid/v4';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEditDescription, IRecordingEdit, ILink, sendJson, sendStatus } from './protocol';
-import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia } from '../database/model';
+import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEditDescription, IRecordingEdit, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
+import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia, genreCollection, IGenre, languageCollection, ILanguage } from '../database/model';
 import { sharedConnection } from '../database/db';
-
-interface IGroup {
-    group: number;
-
-    count: number;
-}
-
-function getCounts(recordings: Collection, query: any, field: string): Promise<IGroup[]> {
-    return recordings
-        .aggregate<IGroup>([
-            { $match: query },
-            { $project: { _id: 0, [field]: 1 } },
-            { $unwind: `$${field}` },
-            { $group: { _id: `$${field}`, count: { $sum: 1 } } },
-            { $project: { _id: 0, group: "$_id", count: 1 } }
-        ])
-        .toArray() as Promise<IGroup[]>;
-}
 
 async function getResults(request?: ISearchRequest): Promise<ISearchInformation> {
     if (!request)
@@ -36,31 +18,132 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
             page: 0,
         };
 
-    var fields = { name: 1, rentTo: 1, genres: 1, series: 1, created: 1, languages: 1 };
-    var query = {};
+    var physicalQuery: { rentTo?: any; languages?: any; series?: any; genres?: any; } = {};
+    var transientQuery: { hierarchicalName?: any; } = {};
 
+    // Suche aufbereiten.
+    if (request.rent !== null)
+        if (request.rent)
+            physicalQuery.rentTo = { $ne: null };
+        else
+            physicalQuery.rentTo = null;
+
+    if (request.language)
+        physicalQuery.languages = { $elemMatch: { $eq: request.language } };
+
+    if (request.series.length > 0)
+        physicalQuery.series = { $in: request.series };
+
+    if (request.genres.length > 0)
+        physicalQuery.genres = { $all: request.genres };
+
+    if (request.text) {
+        var pattern = "";
+
+        for (var i = 0; i < request.text.length; i++) {
+            var code = `${request.text.charCodeAt(i).toString(16)}`;
+
+            pattern += `\\x${code}`;
+        }
+
+        transientQuery.hierarchicalName = { $regex: pattern, $options: "i" };
+    }
+
+    // Aggregation vorbereiten.
+    var corePipeline = [
+        // Die angeforderte Einschränkung auf den physikalisch abgelegten Spalten berücksichtigen.
+        { $match: physicalQuery },
+
+        // Den vollständigen Namen ermitteln.
+        ...hierarchicalNamePipeline({
+            name: { $first: "$name" },
+            rentTo: { $first: "$rentTo" },
+            genres: { $first: "$genres" },
+            created: { $first: "$created" },
+            languages: { $first: "$languages" }
+        }, {
+                series: 1,
+                genres: 1,
+                id: "$_id",
+                languages: 1,
+                title: "$name",
+                rent: "$rentTo",
+                createdAsString: { $dateToString: { format: "%Y-%m-%dT%H:%M:%S.%LZ", date: "$created" } }
+            }),
+
+        // Die angeforderte Einschränkung auf den berechneten Spalten berücksichtigen.
+        { $match: transientQuery }
+    ];
+
+    // Abfragen ausführen.
     var db = await sharedConnection;
     var rec = db.collection(recordingCollection);
-    var total = await rec.count(query);
-    var allRecordings = await rec.find(query, fields, request.page * request.size, request.size).toArray();
-    var allLanguages = await getCounts(rec, query, "languages");
-    var allGenres = await getCounts(rec, query, "genres");
+
+    var total = await rec.aggregate<{ count: number; }>([
+        ...corePipeline,
+
+        { $count: "count" }
+    ]).toArray();
+
+    var allRecordings = await rec.aggregate<ISearchResultInformation & { genreInformation: IGenre[]; languageInformation: ILanguage[]; }>([
+        ...corePipeline,
+
+        // Nach dem vollständigen Namen sortieren.
+        { $sort: { hierarchicalName: 1 } },
+
+        // Blättern ausführen.
+        { $skip: request.page * request.size },
+
+        // Seitengröße berücksichtigen.
+        { $limit: request.size },
+
+        // Nachschlagen der vollständigen Informationen zu Sprachen und Kategorien.
+        { $lookup: { from: genreCollection, localField: "genres", foreignField: "_id", "as": "genreInformation" } },
+        { $lookup: { from: languageCollection, localField: "languages", foreignField: "_id", "as": "languageInformation" } },
+
+        // Hierarchischen Namen ausblenden.
+        { $project: { _id: 0, series: 1, id: 1, title: 1, rent: 1, createdAsString: 1, genreInformation: 1, languageInformation: 1 } }
+    ]).toArray();
+
+    allRecordings.forEach(r => {
+        r.languageInformation.sort((l, r) => l.name.localeCompare(r.name));
+        r.genreInformation.sort((l, r) => l.name.localeCompare(r.name));
+
+        r.languages = r.languageInformation.map(r => r._id);
+        r.genres = r.genreInformation.map(r => r._id);
+
+        delete r.languageInformation;
+        delete r.genreInformation;
+    });
+
+    var allGenres = await rec.aggregate<IGenreSearchInformation>([
+        ...corePipeline,
+
+        { $project: { _id: 0, genres: 1 } },
+        { $unwind: `$genres` },
+        { $group: { _id: `$genres`, count: { $sum: 1 } } },
+        { $project: { _id: 0, id: "$_id", count: 1 } }
+    ]).toArray();
+
+    // Da immer nur eine Sprache ausgewählt werden kann wird diese in der Bewertung der Sprachen nicht berücksichtigt.
+    delete physicalQuery.languages;
+
+    var allLanguages = await rec.aggregate<ILanguageSearchInformation>([
+        ...corePipeline,
+
+        { $project: { _id: 0, languages: 1 } },
+        { $unwind: `$languages` },
+        { $group: { _id: `$languages`, count: { $sum: 1 } } },
+        { $project: { _id: 0, id: "$_id", count: 1 } }
+    ]).toArray();
 
     return new Promise<ISearchInformation>(setResult => setResult({
-        total: total,
+        genres: allGenres,
         page: request.page,
         size: request.size,
-        genres: allGenres.map(l => <IGenreSearchInformation>{ id: `${l.group}`, count: l.count }),
-        languages: allLanguages.map(l => <ILanguageSearchInformation>{ id: `${l.group}`, count: l.count }),
-        recordings: allRecordings.map((r: IRecording) => <ISearchResultInformation>{
-            series: (r.series === null) ? null : `${r.series}`,
-            languages: (r.languages || []).map(l => `${l}`),
-            genres: (r.genres || []).map(g => `${g}`),
-            createdAsString: r.created.toISOString(),
-            rent: r.rentTo,
-            title: r.name,
-            id: r._id
-        })
+        languages: allLanguages,
+        recordings: allRecordings,
+        total: total[0] ? total[0].count : 0
     }));
 }
 

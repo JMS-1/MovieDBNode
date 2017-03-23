@@ -9,14 +9,20 @@ export interface IDbName {
     name: string;
 }
 
+export interface IDbDescription {
+    description?: string;
+}
+
 export interface IDbUnique {
     _id: string;
 }
 
-export interface IContainer extends IDbUnique, IDbName {
-    type: number;
+export interface IDbInSeries {
+    series?: string;
+}
 
-    description?: string;
+export interface IContainer extends IDbUnique, IDbName, IDbDescription {
+    type: number;
 
     container?: string;
 
@@ -39,19 +45,14 @@ export interface IMedia extends IDbUnique {
     position?: string;
 }
 
-export interface ILink extends IDbName {
+export interface ILink extends IDbName, IDbDescription {
     url: string;
-
-    description?: string;
 }
 
-export interface ISeries extends IDbUnique, IDbName {
-    description?: string;
-
-    series?: string;
+export interface ISeries extends IDbUnique, IDbName, IDbDescription, IDbInSeries {
 }
 
-export interface IRecording extends IDbUnique, IDbName {
+export interface IRecording extends IDbUnique, IDbName, IDbDescription, IDbInSeries {
     rentTo?: string;
 
     created: Date;
@@ -60,11 +61,8 @@ export interface IRecording extends IDbUnique, IDbName {
 
     genres: string[];
 
-    description?: string;
-
     media?: string;
-
-    series?: string;
 
     links: ILink[];
 }
+
