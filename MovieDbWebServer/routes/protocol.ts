@@ -204,41 +204,49 @@ export function getSeries(): Promise<ISeriesDescription[]> {
     if (!seriesLoader)
         seriesLoader = new Promise<ISeriesDescription[]>(async setResult => {
             var db = await sharedConnection;
-            var dbSeries = await db.collection(seriesCollection).find<ISeries>().toArray();
 
-            var tree = await db.collection(seriesCollection).aggregate<ISeries & { hierarchy: (ISeries & { order: number; })[]; }>([
+            // Die Serienhierarchie wird vollständig in der Datenbank ausgewertet.
+            var series = await db.collection(seriesCollection).aggregate<ISeriesDescription>([
+                // Erst einmal ergänzen wir zu jeder Serie den Kette der übergeordneten Serien.
                 {
                     $graphLookup: {
-                        from: seriesCollection,
-                        startWith: "$series",
                         connectFromField: "series",
+                        from: seriesCollection,
                         connectToField: "_id",
+                        startWith: "$series",
                         depthField: "order",
                         as: "hierarchy"
                     }
                 },
+                // Da die Ordnung der übergeordneten Serien nicht garantiert ist müssen wir diese explizit sicherstellen.
+                { $unwind: { path: "$hierarchy", preserveNullAndEmptyArrays: true } },
+                { $sort: { "hierarchy.order": 1 } },
+                {
+                    $group: {
+                        _id: "$_id",
+                        name: { $first: "$name" },
+                        series: { $first: "$series" },
+                        hierarchy: { $push: "$hierarchy.name" }
+                    }
+                },
+                // Nun können wir die Name der übergeordneten Serien einfach mit dem eigenen Namen kombinieren.
                 {
                     $project: {
-                        _id: 1,
                         name: 1,
-                        series: 1,
-                        hierarchy: { order: 1, name: 1 }
+                        id: "$_id",
+                        parentId: "$series",
+                        hierarchicalName: {
+                            $reduce: {
+                                input: "$hierarchy",
+                                initialValue: "$name",
+                                in: { $concat: ["$$this", ` ${seriesSeparator} `, "$$value"] }
+                            }
+                        }
                     }
-                }
+                },
+                // Und dann die Datenbank danach sortieren lassen.
+                { $sort: { "hierarchicalName": 1 } }
             ]).toArray();
-
-            var series = tree.map(s => {
-                s.hierarchy.sort((l, r) => r.order - l.order);
-
-                return <ISeriesDescription>{
-                    id: s._id,
-                    name: s.name,
-                    parentId: s.series || null,
-                    hierarchicalName: s.hierarchy.map(p => p.name).concat(s.name).join(` ${seriesSeparator} `)
-                };
-            });
-
-            series.sort((l, r) => l.hierarchicalName.localeCompare(r.hierarchicalName));
 
             setResult(series);
         });
