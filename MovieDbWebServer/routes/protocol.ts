@@ -188,29 +188,6 @@ export async function sendStatus(res: Response, process: Promise<boolean>): Prom
     return new Promise<void>(setResult => setResult(undefined));
 }
 
-async function createSeriesLoader(): Promise<ISeriesDescription[]> {
-    var db = await sharedConnection;
-    var dbSeries = await db.collection(seriesCollection).find<ISeries>().toArray();
-
-    var series = dbSeries.map(s => <ISeriesDescription>{ id: s._id, name: s.name, parentId: (s.series === null) ? null : `${s.series}`, hierarchicalName: s.name });
-
-    var map: { [id: string]: ISeriesDescription } = {}
-
-    series.forEach(s => map[s.id] = s);
-
-    series.forEach(s => {
-        for (var t = s; t.parentId;) {
-            t = map[t.parentId];
-
-            s.hierarchicalName = `${t.name} ${seriesSeparator} ${s.hierarchicalName}`;
-        }
-    });
-
-    series.sort((l, r) => l.hierarchicalName.localeCompare(r.hierarchicalName));
-
-    return new Promise<ISeriesDescription[]>(setResult => setResult(series));
-}
-
 export interface ISeriesMap {
     [series: string]: ISeriesDescription;
 }
@@ -225,7 +202,46 @@ export function reloadSeries(): void {
 
 export function getSeries(): Promise<ISeriesDescription[]> {
     if (!seriesLoader)
-        seriesLoader = createSeriesLoader();
+        seriesLoader = new Promise<ISeriesDescription[]>(async setResult => {
+            var db = await sharedConnection;
+            var dbSeries = await db.collection(seriesCollection).find<ISeries>().toArray();
+
+            var tree = await db.collection(seriesCollection).aggregate<ISeries & { hierarchy: (ISeries & { order: number; })[]; }>([
+                {
+                    $graphLookup: {
+                        from: seriesCollection,
+                        startWith: "$series",
+                        connectFromField: "series",
+                        connectToField: "_id",
+                        depthField: "order",
+                        as: "hierarchy"
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        series: 1,
+                        hierarchy: { order: 1, name: 1 }
+                    }
+                }
+            ]).toArray();
+
+            var series = tree.map(s => {
+                s.hierarchy.sort((l, r) => r.order - l.order);
+
+                return <ISeriesDescription>{
+                    id: s._id,
+                    name: s.name,
+                    parentId: s.series || null,
+                    hierarchicalName: s.hierarchy.map(p => p.name).concat(s.name).join(` ${seriesSeparator} `)
+                };
+            });
+
+            series.sort((l, r) => l.hierarchicalName.localeCompare(r.hierarchicalName));
+
+            setResult(series);
+        });
 
     return seriesLoader;
 }
