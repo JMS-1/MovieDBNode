@@ -49,6 +49,9 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
         transientQuery.hierarchicalName = { $regex: pattern, $options: "i" };
     }
 
+    // Sortierung.
+    var sort = (request.order === "date") ? "created" : "hierarchicalName";
+
     // Aggregation vorbereiten.
     var corePipeline = [
         // Die angeforderte Einschränkung auf den physikalisch abgelegten Spalten berücksichtigen.
@@ -65,10 +68,10 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
                 series: 1,
                 genres: 1,
                 id: "$_id",
+                created: 1,
                 languages: 1,
                 title: "$name",
-                rent: "$rentTo",
-                createdAsString: { $dateToString: { format: "%Y-%m-%dT%H:%M:%S.%LZ", date: "$created" } }
+                rent: "$rentTo"
             }),
 
         // Die angeforderte Einschränkung auf den berechneten Spalten berücksichtigen.
@@ -89,7 +92,7 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
         ...corePipeline,
 
         // Nach dem vollständigen Namen sortieren.
-        { $sort: { hierarchicalName: 1 } },
+        { $sort: { [sort]: request.ascending ? +1 : -1 } },
 
         // Blättern ausführen.
         { $skip: request.page * request.size },
@@ -101,8 +104,19 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
         { $lookup: { from: genreCollection, localField: "genres", foreignField: "_id", "as": "genreInformation" } },
         { $lookup: { from: languageCollection, localField: "languages", foreignField: "_id", "as": "languageInformation" } },
 
-        // Hierarchischen Namen ausblenden.
-        { $project: { _id: 0, series: 1, id: 1, title: 1, rent: 1, createdAsString: 1, genreInformation: 1, languageInformation: 1 } }
+        // Hierarchischen Namen sowie die interne Kennung ausblenden und Uhrzeit in Textdarstellung wandeln.
+        {
+            $project: {
+                id: 1,
+                _id: 0,
+                rent: 1,
+                title: 1,
+                series: 1,
+                genreInformation: 1,
+                languageInformation: 1,
+                createdAsString: { $dateToString: { format: "%Y-%m-%dT%H:%M:%S.%LZ", date: "$created" } }
+            }
+        }
     ]).toArray();
 
     allRecordings.forEach(r => {
