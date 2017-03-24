@@ -4,39 +4,40 @@ import { Parsed } from 'body-parser';
 import { addName, updateName, findName, deleteName } from '../database/db';
 import { containerCollection, IContainer, recordingCollection, IRecording, mediaCollection, IMedia, IDbUnique, IDbName } from '../database/model';
 
-import { IContainerItem, IContainerEdit, IContainerRecording, seriesSeparator, getSeriesMap, sendJson, sendStatus } from './protocol';
+import { IContainerItem, IContainerEdit, IContainerRecording, seriesSeparator, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 
 async function findContainer(id: string): Promise<IContainerEdit> {
-    var seriesMap = await getSeriesMap();
-
     return findName<IContainerEdit, IContainer>(id, containerCollection, async (db, result, item) => {
+        // Alle untergeordneten Aufbewahrung auf die einfache Art (find) ermitteln.
         var children: IDbName[] = await db.collection(containerCollection).find({ container: id }, { _id: 0, name: 1 }).sort({ name: 1 }).toArray();
-        var media: { _id: string; position: string; }[] = await db.collection(mediaCollection).find({ container: id }, { _id: 1, position: 1 }).toArray();
-        var recordings: { _id: string; name: string; media: string; series?: string; }[] = await db.collection(recordingCollection).find({ media: { $in: media.map(m => m._id) } }, { name: 1, media: 1, series: 1 }).toArray();
 
-        var mediaMap: { [id: string]: string } = {};
-
-        media.forEach(m => mediaMap[m._id] = m.position);
-
+        // Protokoll füllen.
         result.children = children.map(c => c.name);
         result.parent = item.container || null;
         result.description = item.description;
         result.location = item.position;
         result.type = item.type;
 
-        result.recordings = recordings.map(r => {
-            var series = r.series && seriesMap[r.series];
-
-            return <IContainerRecording>{
-                id: r._id,
-                name: series ? `${series.hierarchicalName} ${seriesSeparator} ${r.name}` : r.name,
-                position: mediaMap[r.media]
-            };
-        });
-
-        result.recordings.sort((l, r) => l.name.localeCompare(r.name));
+        // Die Aufzeichnungen dieser Aufbewahrungen sind etwas kniffeliger.
+        result.recordings = await db.collection(mediaCollection).aggregate<IContainerRecording>([
+            // Suchen wir erst einmal alle zugeordneten Medien.
+            { $match: { container: id } },
+            // Einem Medium einer Aufbewahrung können beliebig viele Aufzeichnungen zugeordnet sein.
+            { $lookup: { from: recordingCollection, localField: "_id", foreignField: "media", as: "recordings" } },
+            // Für jede Aufzeichnung machen wir uns eine Ergebniszeile.
+            { $unwind: "$recordings" },
+            // Dabei konzentrieren wird uns ausschließlcih auf die relevanten Eigenschaften.
+            { $project: { _id: "$recordings._id", name: "$recordings.name", series: "$recordings.series", position: 1 } },
+            // Mit der Hilfsfunktion berechnen wir die vollständigen Namen der Aufzeichnungen.
+            ...hierarchicalNamePipeline({ name: { $first: "$name" }, position: { $first: "$position" }, }, { name: 1, position: 1 }),
+            // Die Ergebnisse können wir dann in das benötigte Protokollformat kürzen.
+            { $project: { id: "$_id", _id: 0, position: 1, name: "$hierarchicalName" } },
+            // Und dann einfach nach dem vollständigen Namen sortieren.
+            { $sort: { name: 1 } }
+        ]).toArray();
     });
 }
 
 export default Router()
-    .get('/:id', async (req: Request, res: Response) => sendJson(res, await findContainer(req.params["id"])));
+    .get('/:id', async (req: Request, res: Response) => sendJson(res, await findContainer(req.params["id"])))
+    .delete('/:id', (req: Request, res: Response) => sendStatus(res, deleteName(req.params["id"], containerCollection)));

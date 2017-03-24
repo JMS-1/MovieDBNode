@@ -188,16 +188,10 @@ export async function sendStatus(res: Response, process: Promise<boolean>): Prom
     return new Promise<void>(setResult => setResult(undefined));
 }
 
-export interface ISeriesMap {
-    [series: string]: ISeriesDescription;
-}
-
 var seriesLoader: Promise<ISeriesDescription[]>;
-var seriesMap: Promise<ISeriesMap>;
 
 export function reloadSeries(): void {
     seriesLoader = undefined;
-    seriesMap = undefined;
 }
 
 export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
@@ -262,19 +256,4 @@ export function getSeries(): Promise<ISeriesDescription[]> {
         });
 
     return seriesLoader;
-}
-
-export function getSeriesMap(): Promise<ISeriesMap> {
-    if (!seriesMap)
-        seriesMap = new Promise<ISeriesMap>(async setResult => {
-            var series = await getSeries();
-
-            var map: ISeriesMap = {};
-
-            series.forEach(s => map[s.id] = s);
-
-            setResult(map);
-        });
-
-    return seriesMap;
 }
