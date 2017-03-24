@@ -161,7 +161,7 @@ export interface IContainerRecording extends IUnique, IName {
     position: string;
 }
 
-export interface IContainerEdit extends IUniqueContainer {
+export interface IContainerData extends IContainerItem {
     description: string;
 
     type: number;
@@ -169,7 +169,9 @@ export interface IContainerEdit extends IUniqueContainer {
     parent?: string;
 
     location: string;
+}
 
+export interface IContainerDetails extends IContainerData, IUnique {
     children: string[];
 
     recordings: IContainerRecording[];
