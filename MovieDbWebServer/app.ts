@@ -4,6 +4,7 @@ import * as path from 'path';
 
 import restMain from './routes/app';
 import restGenre from './routes/genre';
+import restSeries from './routes/series';
 import restLanguage from './routes/language';
 import restDatabase from './routes/recording';
 import restContainer from './routes/container';
@@ -17,6 +18,7 @@ app.use(parser.json());
 app.use('/movie', restMain);
 app.use('/movie/db', restDatabase);
 app.use('/movie/genre', restGenre);
+app.use('/movie/series', restSeries);
 app.use('/movie/language', restLanguage);
 app.use('/movie/container', restContainer);
 
