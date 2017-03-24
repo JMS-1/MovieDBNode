@@ -14,17 +14,17 @@ export interface IUnique {
     id: string;
 }
 
+export interface INamedEntity extends IName, IUnique {
+}
+
 export interface ISimpleUsage {
     unused: boolean;
 }
 
-export interface ISeriesDescription extends IUnique, IName {
+export interface ISeriesDescription extends INamedEntity {
     parentId?: string;
 
     hierarchicalName: string;
-}
-
-export interface IUniqueContainer extends IUnique, IName {
 }
 
 export interface ApplicationInformation {
@@ -32,13 +32,13 @@ export interface ApplicationInformation {
 
     total: number;
 
-    languages: IUniqueLanguage[];
+    languages: INamedEntity[];
 
-    genres: IUniqueGenre[];
+    genres: INamedEntity[];
 
     series: ISeriesDescription[];
 
-    containers: IUniqueContainer[];
+    containers: INamedEntity[];
 
     seriesSeparator: string;
 
@@ -117,7 +117,7 @@ export interface ILink {
     description: string;
 }
 
-export interface IRecordingEditDescription extends IRecordingDescription {
+export interface IRecordingData extends IRecordingDescription {
     description: string;
 
     mediaType: number;
@@ -129,39 +129,21 @@ export interface IRecordingEditDescription extends IRecordingDescription {
     links: ILink[];
 }
 
-export interface IRecordingEdit extends IRecordingEditDescription {
+export interface IRecordingDetails extends IRecordingData {
     id: string;
 }
 
-export interface IGenreItem extends IName {
+export interface IGenreDetails extends INamedEntity, ISimpleUsage {
 }
 
-export interface IUniqueGenre extends IGenreItem, IUnique {
+export interface ILanguageDetails extends INamedEntity, ISimpleUsage {
 }
 
-export interface IGenreEdit extends IUniqueGenre, ISimpleUsage {
-}
-
-export interface ILanguageItem extends IName {
-}
-
-export interface IUniqueLanguage extends ILanguageItem, IUnique {
-}
-
-export interface ILanguageEdit extends IUniqueLanguage, ISimpleUsage {
-}
-
-export interface IContainerItem extends IName {
-}
-
-export interface IUniqueContainer extends IContainerItem, IUnique {
-}
-
-export interface IContainerRecording extends IUnique, IName {
+export interface IContainerRecording extends INamedEntity {
     position: string;
 }
 
-export interface IContainerData extends IContainerItem {
+export interface IContainerData extends IName {
     description: string;
 
     type: number;

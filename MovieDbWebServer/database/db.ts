@@ -4,7 +4,7 @@ import { readFile } from 'fs';
 import * as uuid from 'uuid/v4';
 
 import { recordingCollection, IDbUnique, IDbName } from "./model";
-import { IName, IUnique, ISimpleUsage } from "../routes/protocol";
+import { IName, INamedEntity, ISimpleUsage } from "../routes/protocol";
 
 export interface IDatabaseConfiguration {
     server: string;
@@ -66,7 +66,7 @@ export async function updateEntity(id: string, item: IName, collection: string):
     return new Promise<boolean>(setResult => setResult(result.matchedCount === 1));
 }
 
-export async function findEntity<TResultType extends IName & IUnique, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, fillUsage: (db: Db, item: TResultType, rawItem: TDatabaseType) => Promise<void>): Promise<TResultType> {
+export async function findEntity<TResultType extends INamedEntity, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, fillUsage: (db: Db, item: TResultType, rawItem: TDatabaseType) => Promise<void>): Promise<TResultType> {
     var db = await ensureNameIndex(collection);
     var item: TDatabaseType = await db.collection(collection).findOne({ _id: id });
 
@@ -77,7 +77,7 @@ export async function findEntity<TResultType extends IName & IUnique, TDatabaseT
     return new Promise<TResultType>(setResult => setResult(result));
 }
 
-export async function findEntityWithUnused<TResultType extends IName & IUnique & ISimpleUsage, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, usage: string): Promise<TResultType> {
+export async function findEntityWithUnused<TResultType extends INamedEntity & ISimpleUsage, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, usage: string): Promise<TResultType> {
     return findEntity<TResultType, TDatabaseType>(id, collection, async (db, result, item) => {
         result.unused = !await db.collection(recordingCollection).findOne({ [usage]: { $elemMatch: { $eq: result.id } } });
     });

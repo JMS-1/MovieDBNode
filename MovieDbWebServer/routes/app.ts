@@ -1,18 +1,18 @@
 ﻿import { Db } from 'mongodb';
 import { Router, Request, Response } from 'express';
 
-import { ApplicationInformation, IUnique, IName, IUniqueLanguage, IUniqueGenre, IUniqueContainer, ISeriesDescription, getSeries, seriesSeparator, urlMatcher, sendJson } from './protocol';
+import { ApplicationInformation, INamedEntity, ISeriesDescription, getSeries, seriesSeparator, urlMatcher, sendJson } from './protocol';
 
 import { sharedConnection } from '../database/db';
-import { languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, recordingCollection } from '../database/model';
+import { IDbUnique, IDbName, languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, recordingCollection } from '../database/model';
 
-async function getNamedItems<TResultType extends IUnique & IName>(db: Db, collectionName: string): Promise<TResultType[]> {
-    var raw = await db.collection(collectionName).find<ILanguage>().toArray();
-    var all = raw.map(l => <TResultType>{ id: l._id, name: l.name });
+async function getNamedEntities(db: Db, collectionName: string): Promise<INamedEntity[]> {
+    var raw = await db.collection(collectionName).find<IDbUnique & IDbName>().toArray();
+    var all = raw.map(l => <INamedEntity>{ id: l._id, name: l.name });
 
     all.sort((l, r) => l.name.localeCompare(r.name));
 
-    return new Promise<TResultType[]>(setResult => setResult(all));
+    return new Promise<INamedEntity[]>(setResult => setResult(all));
 }
 
 async function getCount(db: Db): Promise<number> {
@@ -30,9 +30,9 @@ async function getInfo(): Promise<ApplicationInformation> {
 
     var database = await sharedConnection;
 
-    var allContainers = await getNamedItems<IUniqueContainer>(database, containerCollection);
-    var allLanguages = await getNamedItems<IUniqueLanguage>(database, languageCollection);
-    var allGenres = await getNamedItems<IUniqueGenre>(database, genreCollection);
+    var allContainers = await getNamedEntities(database, containerCollection);
+    var allLanguages = await getNamedEntities(database, languageCollection);
+    var allGenres = await getNamedEntities(database, genreCollection);
     var total = await getCount(database);
 
     return new Promise<ApplicationInformation>(setResult =>

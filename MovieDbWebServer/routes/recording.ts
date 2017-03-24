@@ -3,7 +3,7 @@ import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 import * as uuid from 'uuid/v4';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingEditDescription, IRecordingEdit, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
+import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingData, IRecordingDetails, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia, genreCollection, IGenre, languageCollection, ILanguage } from '../database/model';
 import { sharedConnection } from '../database/db';
 
@@ -152,7 +152,7 @@ interface IJoinedRecording extends IRecording {
 }
 
 // Ermittelt zu einer Aufzeichnung alle für die Pflege notwendigen Informationen.
-async function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
+async function getRecordingForEdit(id: string): Promise<IRecordingDetails> {
     var db = await sharedConnection;
 
     var recordings = await db.collection(recordingCollection).aggregate<IJoinedRecording>([
@@ -160,7 +160,7 @@ async function getRecordingForEdit(id: string): Promise<IRecordingEdit> {
         { $lookup: { from: mediaCollection, localField: "media", foreignField: "_id", "as": "joinedMedia" } }])
         .toArray();
 
-    return new Promise<IRecordingEdit>(setResult => {
+    return new Promise<IRecordingDetails>(setResult => {
         var recording = recordings[0];
         var media = recording.joinedMedia[0];
 
@@ -189,7 +189,7 @@ async function getMediaId(database: Db, media: IMedia): Promise<string> {
     return new Promise<string>(setResult => setResult(value ? value._id : newId));
 }
 
-async function updateRecording(id: string, newData: IRecordingEditDescription): Promise<boolean> {
+async function updateRecording(id: string, newData: IRecordingData): Promise<boolean> {
     var db = await sharedConnection;
     var recording = await prepareRecording(db, newData);
 
@@ -198,7 +198,7 @@ async function updateRecording(id: string, newData: IRecordingEditDescription): 
     return new Promise<boolean>(setResult => setResult(result.result.n === 1));
 }
 
-async function createRecording(newData: IRecordingEditDescription): Promise<boolean> {
+async function createRecording(newData: IRecordingData): Promise<boolean> {
     var db = await sharedConnection;
     var recording = await prepareRecording(db, newData);
 
@@ -218,7 +218,7 @@ async function deleteRecording(id: string): Promise<boolean> {
     return new Promise<boolean>(setResult => setResult(result.deletedCount == 1));
 }
 
-async function prepareRecording(database: Db, newData: IRecordingEditDescription): Promise<IRecording> {
+async function prepareRecording(database: Db, newData: IRecordingData): Promise<IRecording> {
     var mediaId = await getMediaId(database, <IMedia>{
         container: (newData.container || "").trim() || null,
         position: (newData.location || "").trim() || null,
