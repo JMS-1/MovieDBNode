@@ -12,9 +12,9 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.17.1",
-    "debug": "^2.2.0",
+    "debug": "^2.6.3",
     "express": "^4.14.0",
-    "mongodb": "^2.2.24",
+    "mongodb": "^2.2.25",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
