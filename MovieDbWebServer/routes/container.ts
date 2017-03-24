@@ -4,10 +4,10 @@ import { Parsed } from 'body-parser';
 
 import * as uuid from 'uuid/v4';
 
-import { sharedConnection, ensureNameIndex, findEntity, deleteEntity } from '../database/db';
-import { containerCollection, IContainer, recordingCollection, IRecording, mediaCollection, IMedia, IDbUnique, IDbName } from '../database/model';
+import { ensureNameIndex, findEntity, deleteEntity } from '../database/db';
+import { containerCollection, IContainer, recordingCollection, IRecording, mediaCollection, IMedia, IDbName } from '../database/model';
 
-import { IContainerDetails, IContainerData, IContainerRecording, seriesSeparator, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
+import { IContainerDetails, IContainerData, IContainerRecording, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 
 async function findContainer(id: string): Promise<IContainerDetails> {
     await ensureNameIndex(containerCollection);
