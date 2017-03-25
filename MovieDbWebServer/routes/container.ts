@@ -4,14 +4,12 @@ import { Parsed } from 'body-parser';
 
 import * as uuid from 'uuid/v4';
 
-import { ensureNameIndex, findEntity, deleteEntity } from '../database/db';
+import { findEntity, addEntity, updateEntity, deleteEntity } from '../database/db';
 import { containerCollection, IContainer, recordingCollection, IRecording, mediaCollection, IMedia, IDbName } from '../database/model';
 
 import { IContainerDetails, IContainerData, IContainerRecordingDetails, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 
 async function findContainer(id: string): Promise<IContainerDetails> {
-    await ensureNameIndex(containerCollection);
-
     return findEntity<IContainerDetails, IContainer>(id, containerCollection, async (db, result, item) => {
         // Alle untergeordneten Aufbewahrung auf die einfache Art (find) ermitteln.
         var children: IDbName[] = await db.collection(containerCollection).find({ container: id }, { _id: 0, name: 1 }).sort({ name: 1 }).toArray();
@@ -43,39 +41,15 @@ async function findContainer(id: string): Promise<IContainerDetails> {
     });
 }
 
-async function addContainer(item: IContainerData): Promise<boolean> {
-    var newItem: IContainer = {
-        description: item.description || null,
-        position: item.location || null,
-        type: parseInt(`${item.type}`),
-        name: item.name || null,
-        container: item.parent,
-        _id: uuid()
-    };
-
-    var db = await ensureNameIndex(containerCollection);
-    var result = await db.collection(containerCollection).insertOne(newItem);
-
-    return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
-}
-
-async function updateContainer(id: string, item: IContainerData): Promise<boolean> {
-    var newItem = <IContainer>{
-        description: item.description || null,
-        position: item.location || null,
-        type: parseInt(`${item.type}`),
-        name: item.name || null,
-        container: item.parent
-    };
-
-    var db = await ensureNameIndex(containerCollection);
-    var result = await db.collection(containerCollection).updateOne({ _id: id }, { $set: newItem });
-
-    return new Promise<boolean>(setResult => setResult(result.matchedCount === 1));
+function augmentContainer(dbItem: IContainer, item: IContainerData): void {
+    dbItem.description = item.description || null;
+    dbItem.position = item.location || null;
+    dbItem.type = parseInt(`${item.type}`);
+    dbItem.container = item.parent;
 }
 
 export default Router()
-    .post('/', (req: Request & Parsed, res: Response) => sendStatus(res, addContainer(req.body)))
+    .post('/', (req: Request & Parsed, res: Response) => sendStatus(res, addEntity(req.body, containerCollection, augmentContainer)))
     .get('/:id', async (req: Request, res: Response) => sendJson(res, await findContainer(req.params["id"])))
-    .put('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, updateContainer(req.params["id"], req.body)))
+    .put('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, updateEntity(req.params["id"], req.body, containerCollection, augmentContainer)))
     .delete('/:id', (req: Request, res: Response) => sendStatus(res, deleteEntity(req.params["id"], containerCollection)));

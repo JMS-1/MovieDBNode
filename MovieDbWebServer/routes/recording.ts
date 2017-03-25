@@ -300,7 +300,7 @@ async function prepareRecording(database: Db, newData: IRecordingData): Promise<
     var mediaId = await getMediaId(database, <IMedia>{
         container: (newData.container || "").trim() || null,
         position: (newData.location || "").trim() || null,
-        type: newData.mediaType
+        type: parseInt(`${newData.mediaType}`)
     });
 
     return new Promise<IRecording>(setResult => setResult(<IRecording>{

@@ -1,4 +1,5 @@
 "use strict";
+// Die Namen unserer Dokumentenarten.
 exports.mediaCollection = "media";
 exports.genreCollection = "genres";
 exports.seriesCollection = "series";
