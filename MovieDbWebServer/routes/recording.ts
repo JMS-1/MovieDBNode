@@ -1,13 +1,16 @@
 ﻿import { Db, Collection } from 'mongodb';
 import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
+
 import * as uuid from 'uuid/v4';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearch, IGenreSearch, IRecordingResult, IRecordingData, IRecordingDetails, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
+import { ISearchRequest, ISearchInformation, IRecordingResult, IRecordingData, IRecordingDetails, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia, genreCollection, IGenre, languageCollection, ILanguage } from '../database/model';
 import { sharedConnection } from '../database/db';
 
+// Führt eine Suche nach Aufzeichnungen durch.
 async function getResults(request?: ISearchRequest): Promise<ISearchInformation> {
+    // Die Suchbedingung ist optional und führt bei Abwesentheit zu einer Voreinstellung.
     if (!request)
         request = {
             order: "hierarchicalName",
@@ -18,24 +21,29 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
             page: 0,
         };
 
-    var physicalQuery: { rentTo?: any; languages?: any; series?: any; genres?: any; } = {};
-    var transientQuery: { hierarchicalName?: any; } = {};
+    // Die Teile der Suchbedingung, die auf den physikalischen Spalten immer ausgeführt werden.
+    var preQuery: { rentTo?: any; series?: any; genres?: any; } = {};
 
-    // Suche aufbereiten.
     if (request.rent !== null)
         if (request.rent)
-            physicalQuery.rentTo = { $ne: null };
+            preQuery.rentTo = { $ne: null };
         else
-            physicalQuery.rentTo = null;
-
-    if (request.language)
-        physicalQuery.languages = { $elemMatch: { $eq: request.language } };
+            preQuery.rentTo = null;
 
     if (request.series.length > 0)
-        physicalQuery.series = { $in: request.series };
+        preQuery.series = { $in: request.series };
 
     if (request.genres.length > 0)
-        physicalQuery.genres = { $all: request.genres };
+        preQuery.genres = { $all: request.genres };
+
+    // Die Einschränkung bezüglich der Sprache wird nicht auf die Bewertung der Sprachen angewendet.
+    var languageQuery: { languages?: any; } = {};
+
+    if (request.language)
+        languageQuery.languages = { $elemMatch: { $eq: request.language } };
+
+    // Die Suchbedingung auf den hierarchischen Namen, der erst einmal zusammengesetzt werden muss.
+    var postQuery: { hierarchicalName?: any; } = {};
 
     if (request.text) {
         var pattern = "";
@@ -46,16 +54,18 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
             pattern += `\\x${code}`;
         }
 
-        transientQuery.hierarchicalName = { $regex: pattern, $options: "i" };
+        postQuery.hierarchicalName = { $regex: pattern, $options: "i" };
     }
 
-    // Sortierung.
+    // Sortierung auswerten - ok, viel können wir da nicht bieten.
     var sort = (request.order === "date") ? "created" : "hierarchicalName";
 
     // Aggregation vorbereiten.
+
+    // - Die Grundeinschränkung, die immer angewendet werden muss und vor allem auch den hierarchischen Namen berechnet.
     var corePipeline = [
         // Die angeforderte Einschränkung auf den physikalisch abgelegten Spalten berücksichtigen.
-        { $match: physicalQuery },
+        { $match: preQuery },
 
         // Den vollständigen Namen ermitteln.
         ...hierarchicalNamePipeline({
@@ -74,21 +84,22 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
             }),
 
         // Die angeforderte Einschränkung auf den berechneten Spalten berücksichtigen.
-        { $match: transientQuery }
+        { $match: postQuery }
     ];
 
-    // Abfragen ausführen.
-    var db = await sharedConnection;
-    var rec = db.collection(recordingCollection);
+    // - Gesamte Anzahl von Aufzeichnungen in der Suchebdingung ermitteln.
+    var totalPipeline = [
+        // Die Sprache muss berücksichtigt werden.
+        { $match: languageQuery },
 
-    var total = await rec.aggregate<{ count: number; }>([
-        ...corePipeline,
-
+        // Einfach nur zählen.
         { $count: "count" }
-    ]).toArray();
+    ];
 
-    var allRecordings = await rec.aggregate<IRecordingResult & { genreInformation: IGenre[]; languageInformation: ILanguage[]; }>([
-        ...corePipeline,
+    // - Den gewünschten Ausschnitt der Ergebnistabelle ermitteln.
+    var tablePipeline = [
+        // Die Sprache muss berücksichtigt werden.
+        { $match: languageQuery },
 
         // Nach dem vollständigen Namen sortieren.
         { $sort: { [sort]: request.ascending ? +1 : -1 } },
@@ -116,7 +127,73 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
                 createdAsString: { $dateToString: { format: "%Y-%m-%dT%H:%M:%S.%LZ", date: "$created" } }
             }
         }
-    ]).toArray();
+    ];
+
+    // - Die Bewertung der Kategorien ermitteln.
+    var genrePipeline = [
+        // Die Sprache muss berücksichtigt werden.
+        { $match: languageQuery },
+
+        // Uns interessieren nur die Kategorien.
+        { $project: { _id: 0, genres: 1 } },
+
+        // Ausgefaltet pro Aufzeichnung.
+        { $unwind: `$genres` },
+
+        // Dann die Aufzeichnungen danach gruppieren.
+        { $group: { _id: `$genres`, count: { $sum: 1 } } },
+
+        // Und das Ergebnis in die Protokollstruktur wandeln.
+        { $project: { _id: 0, id: "$_id", count: 1 } }
+    ];
+
+    // - Die Bewertung der Sprachen ohne die Einschräknung auf die Sprache ermitteln.
+    var languagePipeline = [
+        // Hier interessieren dann nur die Sprachen.
+        { $project: { _id: 0, languages: 1 } },
+
+        // Ausgefaltet pro Aufzeichnung.
+        { $unwind: `$languages` },
+
+        // Dann die Aufzeichnungen danach gruppieren.
+        { $group: { _id: `$languages`, count: { $sum: 1 } } },
+
+        // Und das Ergebnis in die Protokollstruktur wandeln.
+        { $project: { _id: 0, id: "$_id", count: 1 } }
+    ];
+
+    // - Die eigentliche Auswertung verwendet möglichst viele der zum Teil teuren Zwischenergebnisse gleichzeitig.
+    var fullPipeline = [
+        // Erst einmal die Einschränkungen ohne Sprache aber mit dem Einmischen der hierarchischen Namen.
+        ...corePipeline,
+
+        {
+            $facet: {
+                // Bewertung der Sprachen.
+                languages: languagePipeline,
+
+                // Gesamte Anzahl in der Ergebnismenge.
+                total: totalPipeline,
+
+                // Der gewählte Ausschnitt der Ergebnismenge.
+                table: tablePipeline,
+
+                // Bewertung der Kategorien.
+                genres: genrePipeline,
+            }
+        }
+    ];
+
+    // Abfragen ausführen.
+    var db = await sharedConnection;
+    var rec = db.collection(recordingCollection);
+
+    console.time("query");
+    var all = await rec.aggregate(fullPipeline).toArray();
+    console.timeEnd("query");
+
+    // Wir bereiten die Liste der Kategorien und Sprachen der Aufzeichnungen etwas auf, damit der Anwender diese immer in der gleichen Reihenfolge sieht.
+    var allRecordings: (IRecordingResult & { genreInformation: IGenre[]; languageInformation: ILanguage[]; })[] = all[0].table;
 
     allRecordings.forEach(r => {
         r.languageInformation.sort((l, r) => l.name.localeCompare(r.name));
@@ -129,37 +206,20 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
         delete r.genreInformation;
     });
 
-    var allGenres = await rec.aggregate<IGenreSearch>([
-        ...corePipeline,
-
-        { $project: { _id: 0, genres: 1 } },
-        { $unwind: `$genres` },
-        { $group: { _id: `$genres`, count: { $sum: 1 } } },
-        { $project: { _id: 0, id: "$_id", count: 1 } }
-    ]).toArray();
-
-    // Da immer nur eine Sprache ausgewählt werden kann wird diese in der Bewertung der Sprachen nicht berücksichtigt.
-    delete physicalQuery.languages;
-
-    var allLanguages = await rec.aggregate<ILanguageSearch>([
-        ...corePipeline,
-
-        { $project: { _id: 0, languages: 1 } },
-        { $unwind: `$languages` },
-        { $group: { _id: `$languages`, count: { $sum: 1 } } },
-        { $project: { _id: 0, id: "$_id", count: 1 } }
-    ]).toArray();
+    // Antwort an den Client zusammenstellen.
+    var total: { count: number; }[] = all[0].total;
 
     return new Promise<ISearchInformation>(setResult => setResult({
-        genres: allGenres,
         page: request.page,
         size: request.size,
-        languages: allLanguages,
+        genres: all[0].genres,
         recordings: allRecordings,
+        languages: all[0].languages,
         total: total[0] ? total[0].count : 0
     }));
 }
 
+// Daten einer Aufzeichnung mit zusätzlich eingemischten Informationen der Ablage.
 interface IJoinedRecording extends IRecording {
     joinedMedia: IMedia[];
 }
@@ -168,11 +228,16 @@ interface IJoinedRecording extends IRecording {
 async function getRecordingForEdit(id: string): Promise<IRecordingDetails> {
     var db = await sharedConnection;
 
+    // Die eine Aufzeichnung suchen.
     var recordings = await db.collection(recordingCollection).aggregate<IJoinedRecording>([
+        // Einschränkung auf die eine Aufzeichnung.
         { $match: { _id: id } },
+
+        // Und dann noch die Informationen zur Ablage einmischen.
         { $lookup: { from: mediaCollection, localField: "media", foreignField: "_id", "as": "joinedMedia" } }])
         .toArray();
 
+    // Ergebnis in die Protokollstrukturen wandeln.
     return new Promise<IRecordingDetails>(setResult => {
         var recording = recordings[0];
         var media = recording.joinedMedia[0];
