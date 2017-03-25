@@ -3,8 +3,8 @@ import { readFile } from 'fs';
 
 import * as uuid from 'uuid/v4';
 
-import { recordingCollection, IDbUnique, IDbName } from "./model";
-import { IName, INamedEntity, ISimpleUsage } from "../routes/protocol";
+import { recordingCollection, seriesCollection, IDbUnique, IDbName } from "./model";
+import { IName, IDetails, IEditDetails } from "../routes/protocol";
 
 export interface IDatabaseConfiguration {
     server: string;
@@ -33,10 +33,13 @@ export async function connectPromise(): Promise<Db> {
 export var sharedConnection = connectPromise();
 
 export async function ensureNameIndex(collection: string): Promise<Db> {
-    var options: IndexOptions = { name: `${collection}_Unique`, unique: true };
-
     var db = await sharedConnection;
-    var index = await db.collection(collection).createIndex({ name: 1 }, options);
+
+    if (collection !== seriesCollection) {
+        var options: IndexOptions = { name: `${collection}_Unique`, unique: true };
+
+        await db.collection(collection).createIndex({ name: 1 }, options);
+    }
 
     return new Promise<Db>(setResult => setResult(db));
 }
@@ -66,7 +69,7 @@ export async function updateEntity(id: string, item: IName, collection: string):
     return new Promise<boolean>(setResult => setResult(result.matchedCount === 1));
 }
 
-export async function findEntity<TResultType extends INamedEntity, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, fillUsage: (db: Db, item: TResultType, rawItem: TDatabaseType) => Promise<void>): Promise<TResultType> {
+export async function findEntity<TResultType extends IDetails, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, fillUsage: (db: Db, item: TResultType, rawItem: TDatabaseType) => Promise<void>): Promise<TResultType> {
     var db = await ensureNameIndex(collection);
     var item: TDatabaseType = await db.collection(collection).findOne({ _id: id });
 
@@ -77,7 +80,7 @@ export async function findEntity<TResultType extends INamedEntity, TDatabaseType
     return new Promise<TResultType>(setResult => setResult(result));
 }
 
-export async function findEntityWithUnused<TResultType extends INamedEntity & ISimpleUsage, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, usage: string): Promise<TResultType> {
+export async function findEntityWithUnused<TResultType extends IEditDetails, TDatabaseType extends IDbUnique & IDbName>(id: string, collection: string, usage: string): Promise<TResultType> {
     return findEntity<TResultType, TDatabaseType>(id, collection, async (db, result, item) => {
         result.unused = !await db.collection(recordingCollection).findOne({ [usage]: { $elemMatch: { $eq: result.id } } });
     });

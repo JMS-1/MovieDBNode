@@ -7,7 +7,7 @@ import * as uuid from 'uuid/v4';
 import { ensureNameIndex, findEntity, deleteEntity } from '../database/db';
 import { containerCollection, IContainer, recordingCollection, IRecording, mediaCollection, IMedia, IDbName } from '../database/model';
 
-import { IContainerDetails, IContainerData, IContainerRecording, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
+import { IContainerDetails, IContainerData, IContainerRecordingDetails, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 
 async function findContainer(id: string): Promise<IContainerDetails> {
     await ensureNameIndex(containerCollection);
@@ -24,7 +24,7 @@ async function findContainer(id: string): Promise<IContainerDetails> {
         result.type = item.type;
 
         // Die Aufzeichnungen dieser Aufbewahrungen sind etwas kniffeliger.
-        result.recordings = await db.collection(mediaCollection).aggregate<IContainerRecording>([
+        result.recordings = await db.collection(mediaCollection).aggregate<IContainerRecordingDetails>([
             // Suchen wir erst einmal alle zugeordneten Medien.
             { $match: { container: id } },
             // Einem Medium einer Aufbewahrung können beliebig viele Aufzeichnungen zugeordnet sein.

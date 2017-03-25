@@ -3,7 +3,7 @@ import { Router, Request, Response } from 'express';
 import { Parsed } from 'body-parser';
 import * as uuid from 'uuid/v4';
 
-import { ISearchRequest, ISearchInformation, ILanguageSearchInformation, IGenreSearchInformation, ISearchResultInformation, IRecordingData, IRecordingDetails, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
+import { ISearchRequest, ISearchInformation, ILanguageSearch, IGenreSearch, IRecordingResult, IRecordingData, IRecordingDetails, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia, genreCollection, IGenre, languageCollection, ILanguage } from '../database/model';
 import { sharedConnection } from '../database/db';
 
@@ -88,7 +88,7 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
         { $count: "count" }
     ]).toArray();
 
-    var allRecordings = await rec.aggregate<ISearchResultInformation & { genreInformation: IGenre[]; languageInformation: ILanguage[]; }>([
+    var allRecordings = await rec.aggregate<IRecordingResult & { genreInformation: IGenre[]; languageInformation: ILanguage[]; }>([
         ...corePipeline,
 
         // Nach dem vollständigen Namen sortieren.
@@ -130,7 +130,7 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
         delete r.genreInformation;
     });
 
-    var allGenres = await rec.aggregate<IGenreSearchInformation>([
+    var allGenres = await rec.aggregate<IGenreSearch>([
         ...corePipeline,
 
         { $project: { _id: 0, genres: 1 } },
@@ -142,7 +142,7 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
     // Da immer nur eine Sprache ausgewählt werden kann wird diese in der Bewertung der Sprachen nicht berücksichtigt.
     delete physicalQuery.languages;
 
-    var allLanguages = await rec.aggregate<ILanguageSearchInformation>([
+    var allLanguages = await rec.aggregate<ILanguageSearch>([
         ...corePipeline,
 
         { $project: { _id: 0, languages: 1 } },

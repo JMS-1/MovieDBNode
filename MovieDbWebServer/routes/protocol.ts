@@ -6,24 +6,31 @@ import { seriesCollection, ISeries } from "../database/model";
 export var seriesSeparator = ">";
 export var urlMatcher = /https?:\/\/(\w +:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
+// Jede Entitität in der Datenbank hat einen Namen.
 export interface IName {
     name: string;
 }
 
+// Die eindeutige Kennung einer Eigenschaft wird im Allgemeinen nur beim Auslesen benötigt.
 export interface IUnique {
     id: string;
 }
 
-export interface INamedEntity extends IName, IUnique {
+// Name und Identität legen die minimale Beschreibung einer Entität zur Pflege fest.
+export interface IDetails extends IName, IUnique {
 }
 
-export interface ISimpleUsage {
+// In vielen Fällen gibt es eine zusätzliche Information darüber, ob die Entität gelöschte werden darf.
+export interface IEditDetails extends IDetails {
     unused: boolean;
 }
 
-export interface ISeriesDescription extends INamedEntity {
+// Die Informationen zur Auswahl einer Serie im Suchfilter.
+export interface ISeriesFilter extends IDetails {
+    // Die übergeordnete Serie - zur Anzeige des Filters als Baum.
     parentId?: string;
 
+    // Der vollständige Name der Serie.
     hierarchicalName: string;
 }
 
@@ -32,20 +39,20 @@ export interface ApplicationInformation {
 
     total: number;
 
-    languages: INamedEntity[];
+    languages: IDetails[];
 
-    genres: INamedEntity[];
+    genres: IDetails[];
 
-    series: ISeriesDescription[];
+    series: ISeriesFilter[];
 
-    containers: INamedEntity[];
+    containers: IDetails[];
 
     seriesSeparator: string;
 
     urlExpression: string;
 }
 
-export interface IRecordingDescription {
+export interface IRecordingCommonData {
     title: string;
 
     rent: string;
@@ -77,19 +84,19 @@ export interface ISearchRequest {
     text?: string;
 }
 
-export interface IGenreSearchInformation {
+export interface IGenreSearch {
     id: string;
 
     count: number;
 }
 
-export interface ILanguageSearchInformation {
+export interface ILanguageSearch {
     id: string;
 
     count: number;
 }
 
-export interface ISearchResultInformation extends IRecordingDescription {
+export interface IRecordingResult extends IRecordingCommonData {
     id: string;
 
     createdAsString: string;
@@ -102,11 +109,11 @@ export interface ISearchInformation {
 
     total: number;
 
-    recordings: ISearchResultInformation[];
+    recordings: IRecordingResult[];
 
-    genres: IGenreSearchInformation[];
+    genres: IGenreSearch[];
 
-    languages: ILanguageSearchInformation[];
+    languages: ILanguageSearch[];
 }
 
 export interface ILink {
@@ -117,7 +124,7 @@ export interface ILink {
     description: string;
 }
 
-export interface IRecordingData extends IRecordingDescription {
+export interface IRecordingData extends IRecordingCommonData {
     description: string;
 
     mediaType: number;
@@ -133,30 +140,53 @@ export interface IRecordingDetails extends IRecordingData {
     id: string;
 }
 
-export interface IGenreDetails extends INamedEntity, ISimpleUsage {
+export interface IGenreDetails extends IEditDetails {
 }
 
-export interface ILanguageDetails extends INamedEntity, ISimpleUsage {
+export interface ILanguageDetails extends IEditDetails {
 }
 
-export interface IContainerRecording extends INamedEntity {
+// Informationen zu einer Aufzeichnung in einer Aufbewahrung.
+export interface IContainerRecordingDetails extends IDetails {
+    // Die Position der Aufzeichnung in der Aufbewahrung.
     position: string;
 }
 
+// Eckdaten einer Aufbewahrung.
 export interface IContainerData extends IName {
-    description: string;
+    // Beschreibung.
+    description?: string;
 
+    // Art.
     type: number;
 
+    // Übergeordnete Aufbewahrung.
     parent?: string;
 
+    // Standort relativ zur übergeordneten Aufbewahrung.
     location: string;
 }
 
+// Informationen einer Aufbewahrung zur Pflege.
 export interface IContainerDetails extends IContainerData, IUnique {
+    // Die Namen aller untergeordneten Aufbewahrungen.
     children: string[];
 
-    recordings: IContainerRecording[];
+    // Alle Aufzeichnungen in der Aufbewahrung.
+    recordings: IContainerRecordingDetails[];
+}
+
+// Die Eckdaten zur Pflege einer Serie.
+export interface ISeriesData extends IName {
+    // Die übergeorndete Serie.
+    parentId?: string;
+
+    // Die Beschreibung der Serie.
+    description?: string;
+}
+
+// Informationen zur Pflege einer Serie.
+export interface ISeriesDetails extends ISeriesData, IEditDetails {
 }
 
 export function sendJson<TDataType>(res: Response, data: TDataType): Response {
@@ -172,7 +202,7 @@ export async function sendStatus(res: Response, process: Promise<boolean>): Prom
     return new Promise<void>(setResult => setResult(undefined));
 }
 
-var seriesLoader: Promise<ISeriesDescription[]>;
+var seriesLoader: Promise<ISeriesFilter[]>;
 
 export function reloadSeries(): void {
     seriesLoader = undefined;
@@ -222,13 +252,13 @@ export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
     ]
 }
 
-export function getSeries(): Promise<ISeriesDescription[]> {
+export function getSeries(): Promise<ISeriesFilter[]> {
     if (!seriesLoader)
-        seriesLoader = new Promise<ISeriesDescription[]>(async setResult => {
+        seriesLoader = new Promise<ISeriesFilter[]>(async setResult => {
             var db = await sharedConnection;
 
             // Die Serienhierarchie wird vollständig in der Datenbank ausgewertet.
-            var series = await db.collection(seriesCollection).aggregate<ISeriesDescription>([
+            var series = await db.collection(seriesCollection).aggregate<ISeriesFilter>([
                 // Blendet den hierarchischen Namen in das Ergebnis ein.
                 ...hierarchicalNamePipeline({ name: { $first: "$name" } }, { name: 1, parentId: "$series" }),
 

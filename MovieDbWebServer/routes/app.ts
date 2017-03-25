@@ -1,18 +1,18 @@
 ﻿import { Db } from 'mongodb';
 import { Router, Request, Response } from 'express';
 
-import { ApplicationInformation, INamedEntity, ISeriesDescription, getSeries, seriesSeparator, urlMatcher, sendJson } from './protocol';
+import { ApplicationInformation, IDetails, ISeriesFilter, getSeries, seriesSeparator, urlMatcher, sendJson } from './protocol';
 
 import { sharedConnection } from '../database/db';
 import { IDbUnique, IDbName, languageCollection, ILanguage, genreCollection, IGenre, containerCollection, IContainer, recordingCollection } from '../database/model';
 
-async function getNamedEntities(db: Db, collectionName: string): Promise<INamedEntity[]> {
+async function getNamedEntities(db: Db, collectionName: string): Promise<IDetails[]> {
     var raw = await db.collection(collectionName).find<IDbUnique & IDbName>().toArray();
-    var all = raw.map(l => <INamedEntity>{ id: l._id, name: l.name });
+    var all = raw.map(l => <IDetails>{ id: l._id, name: l.name });
 
     all.sort((l, r) => l.name.localeCompare(r.name));
 
-    return new Promise<INamedEntity[]>(setResult => setResult(all));
+    return new Promise<IDetails[]>(setResult => setResult(all));
 }
 
 async function getCount(db: Db): Promise<number> {
