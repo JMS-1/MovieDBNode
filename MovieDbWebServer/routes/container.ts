@@ -34,7 +34,7 @@ async function findContainer(id: string): Promise<IContainerDetails> {
             // Dabei konzentrieren wird uns ausschließlcih auf die relevanten Eigenschaften.
             { $project: { _id: "$recordings._id", name: "$recordings.name", series: "$recordings.series", position: 1 } },
             // Mit der Hilfsfunktion berechnen wir die vollständigen Namen der Aufzeichnungen.
-            ...hierarchicalNamePipeline({ name: { $first: "$name" }, position: { $first: "$position" }, }, { name: 1, position: 1 }),
+            ...hierarchicalNamePipeline({ position: { $first: "$position" }, }, { position: 1 }),
             // Die Ergebnisse können wir dann in das benötigte Protokollformat kürzen.
             { $project: { id: "$_id", _id: 0, position: 1, name: "$hierarchicalName" } },
             // Und dann einfach nach dem vollständigen Namen sortieren.

@@ -59,7 +59,6 @@ async function getResults(request?: ISearchRequest): Promise<ISearchInformation>
 
         // Den vollständigen Namen ermitteln.
         ...hierarchicalNamePipeline({
-            name: { $first: "$name" },
             rentTo: { $first: "$rentTo" },
             genres: { $first: "$genres" },
             created: { $first: "$created" },

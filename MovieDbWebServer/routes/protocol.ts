@@ -217,6 +217,7 @@ export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
     group = {
         ...group,
         _id: "$_id",
+        name: { $first: "$name" },
         series: { $first: "$series" },
         hierarchy: { $push: "$hierarchy.name" }
     };
@@ -252,7 +253,7 @@ export async function getSeries(): Promise<ISeriesFilter[]> {
     // Die Serienhierarchie wird vollständig in der Datenbank ausgewertet.
     var series = await db.collection(seriesCollection).aggregate<ISeriesFilter>([
         // Blendet den hierarchischen Namen in das Ergebnis ein.
-        ...hierarchicalNamePipeline({ name: { $first: "$name" } }, { name: 1, parentId: "$series" }),
+        ...hierarchicalNamePipeline({}, { name: 1, parentId: "$series" }),
 
         // Dann lassen wir die Datenbank danach sortieren.
         { $sort: { "hierarchicalName": 1 } }
