@@ -202,12 +202,6 @@ export async function sendStatus(res: Response, process: Promise<boolean>): Prom
     return new Promise<void>(setResult => setResult(undefined));
 }
 
-var seriesLoader: Promise<ISeriesFilter[]>;
-
-export function reloadSeries(): void {
-    seriesLoader = undefined;
-}
-
 export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
     // Konfiguration der Hierarchiverfolgung.
     var lookup = {
@@ -252,22 +246,17 @@ export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
     ]
 }
 
-export function getSeries(): Promise<ISeriesFilter[]> {
-    if (!seriesLoader)
-        seriesLoader = new Promise<ISeriesFilter[]>(async setResult => {
-            var db = await sharedConnection;
+export async function getSeries(): Promise<ISeriesFilter[]> {
+    var db = await sharedConnection;
 
-            // Die Serienhierarchie wird vollständig in der Datenbank ausgewertet.
-            var series = await db.collection(seriesCollection).aggregate<ISeriesFilter>([
-                // Blendet den hierarchischen Namen in das Ergebnis ein.
-                ...hierarchicalNamePipeline({ name: { $first: "$name" } }, { name: 1, parentId: "$series" }),
+    // Die Serienhierarchie wird vollständig in der Datenbank ausgewertet.
+    var series = await db.collection(seriesCollection).aggregate<ISeriesFilter>([
+        // Blendet den hierarchischen Namen in das Ergebnis ein.
+        ...hierarchicalNamePipeline({ name: { $first: "$name" } }, { name: 1, parentId: "$series" }),
 
-                // Dann lassen wir die Datenbank danach sortieren.
-                { $sort: { "hierarchicalName": 1 } }
-            ]).toArray();
+        // Dann lassen wir die Datenbank danach sortieren.
+        { $sort: { "hierarchicalName": 1 } }
+    ]).toArray();
 
-            setResult(series);
-        });
-
-    return seriesLoader;
+    return new Promise<ISeriesFilter[]>(setResult => setResult(series));
 }
