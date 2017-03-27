@@ -12,7 +12,7 @@ import { containerCollection, IContainer, recordingCollection, IRecording, media
 import { IContainerDetails, IContainerData, IContainerRecordingDetails, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 
 // Ermittelt eine Aufbewahrung.
-async function findContainer(id: string): Promise<IContainerDetails> {
+function findContainer(id: string): Promise<IContainerDetails> {
     return findEntity<IContainerDetails, IContainer>(id, containerCollection, async (db, result, item) => {
         // Alle untergeordneten Aufbewahrung auf die einfache Art (find) ermitteln.
         var children: IDbName[] = await db.collection(containerCollection).find({ container: id }, { _id: 0, name: 1 }).sort({ name: 1 }).toArray();

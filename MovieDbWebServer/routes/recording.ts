@@ -4,9 +4,12 @@ import { Parsed } from 'body-parser';
 
 import * as uuid from 'uuid/v4';
 
-import { ISearchRequest, ISearchInformation, IRecordingResult, IRecordingData, IRecordingDetails, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
-import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia, genreCollection, IGenre, languageCollection, ILanguage } from '../database/model';
+// Datenbankelemente.
 import { sharedConnection } from '../database/db';
+import { recordingCollection, IRecording, ILink as IRecordingLink, mediaCollection, IMedia, genreCollection, IGenre, languageCollection, ILanguage } from '../database/model';
+
+// Protokollstrukturen.
+import { ISearchRequest, ISearchInformation, IRecordingResult, IRecordingData, IRecordingDetails, ILink, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 
 // Führt eine Suche nach Aufzeichnungen durch.
 async function getResults(request?: ISearchRequest): Promise<ISearchInformation> {
@@ -258,51 +261,79 @@ async function getRecordingForEdit(id: string): Promise<IRecordingDetails> {
     });
 }
 
+// Ermittelt eine neue Referenz auf eine Aufbewahrung - eventuell wird eine solche neu angelegt.
 async function getMediaId(database: Db, media: IMedia): Promise<string> {
     var newId = uuid();
+
+    // Wenn keine identische Referenz gefunden wird muss eine neue angelegt werden.
     var update = { $setOnInsert: { ...media, _id: newId } };
+
+    // Das machen wir in einem Schritt.
     var result = await database.collection(mediaCollection).findOneAndUpdate(media, update, { upsert: true });
+
+    // Die möglicherweise existierende Referenz.
     var value: IMedia = result.value;
 
+    // Eindeutige Kennung der neuen oder existierenden Referenz melden.
     return new Promise<string>(setResult => setResult(value ? value._id : newId));
 }
 
+// Aktualisiert eine einzelne Aufzeichnung.
 async function updateRecording(id: string, newData: IRecordingData): Promise<boolean> {
+    // Datenbank ermitteln.
     var db = await sharedConnection;
+
+    // Protokolldaten in ein Dokument wandeln.
     var recording = await prepareRecording(db, newData);
 
+    // Aktualisierung durchführen - alle Daten werden ersetzt.
     var result = await db.collection(recordingCollection).updateOne({ _id: id }, { $set: recording });
 
+    // Erfolg gibt es nur, wenn die Aufzeichnung tatsächlich existierte.
     return new Promise<boolean>(setResult => setResult(result.result.n === 1));
 }
 
+// Erstellt eine neue Aufzeichnung.
 async function createRecording(newData: IRecordingData): Promise<boolean> {
+    // Datenbank ermitteln.
     var db = await sharedConnection;
+
+    // Protokolldaten in ein Dokument wandeln.
     var recording = await prepareRecording(db, newData);
 
+    // Dokument vervollständigen.
     recording._id = uuid();
     recording.created = new Date();
 
+    // Dokument anlegen.
     var result = await db.collection(recordingCollection).insertOne(recording);
 
+    // Erfolg prüfen.
     return new Promise<boolean>(setResult => setResult(result.insertedCount === 1));
 }
 
+// Entfernt eine Aufzeichnung.
 async function deleteRecording(id: string): Promise<boolean> {
+    // Datenbank ermitteln.
     var db = await sharedConnection;
 
+    // Nach Kennung löschen.
     var result = await db.collection(recordingCollection).deleteOne({ _id: id });
 
+    // Ergebnis melden.
     return new Promise<boolean>(setResult => setResult(result.deletedCount == 1));
 }
 
+// Überträgt die Protokolldaten in ein Dokument.
 async function prepareRecording(database: Db, newData: IRecordingData): Promise<IRecording> {
+    // Eindeutige Referenz auf eine Aufbewahrung ermitteln oder neu anlegen.
     var mediaId = await getMediaId(database, <IMedia>{
         container: (newData.container || "").trim() || null,
         position: (newData.location || "").trim() || null,
         type: parseInt(`${newData.mediaType}`)
     });
 
+    // Dokument initialisieren und melden.
     return new Promise<IRecording>(setResult => setResult(<IRecording>{
         description: (newData.description || "").trim() || null,
         rentTo: (newData.rent || "").trim() || null,
@@ -319,10 +350,13 @@ async function prepareRecording(database: Db, newData: IRecordingData): Promise<
     }));
 }
 
+// REST Schnittstelle für Aufzeichnungen.
 export default Router()
+    // Suchen nach Aufzeichnungen.
     .get('/query', async (req: Request, res: Response) => sendJson(res, await getResults()))
     .post('/query', async (req: Request & Parsed, res: Response) => sendJson(res, await getResults(req.body)))
 
+    // Pflege von Aufzeichnungen.
     .post('/', (req: Request & Parsed, res: Response) => sendStatus(res, createRecording(req.body)))
     .get('/:id', async (req: Request, res: Response) => sendJson(res, await getRecordingForEdit(req.params["id"])))
     .put('/:id', (req: Request & Parsed, res: Response) => sendStatus(res, updateRecording(req.params["id"], req.body)))
