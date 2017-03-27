@@ -4,11 +4,14 @@ import { Parsed } from 'body-parser';
 
 import * as uuid from 'uuid/v4';
 
+// Datenbankelemente.
 import { findEntity, addEntity, updateEntity, deleteEntity } from '../database/db';
 import { containerCollection, IContainer, recordingCollection, IRecording, mediaCollection, IMedia, IDbName } from '../database/model';
 
+// Protokollstruktur.
 import { IContainerDetails, IContainerData, IContainerRecordingDetails, hierarchicalNamePipeline, sendJson, sendStatus } from './protocol';
 
+// Ermittelt eine Aufbewahrung.
 async function findContainer(id: string): Promise<IContainerDetails> {
     return findEntity<IContainerDetails, IContainer>(id, containerCollection, async (db, result, item) => {
         // Alle untergeordneten Aufbewahrung auf die einfache Art (find) ermitteln.
@@ -41,6 +44,7 @@ async function findContainer(id: string): Promise<IContainerDetails> {
     });
 }
 
+// Übernimmt die Daten einer Aufzeichnung aus dem Protokoll und überträgt diese in ein Dokument.
 function augmentContainer(dbItem: IContainer, item: IContainerData): void {
     dbItem.description = item.description || null;
     dbItem.position = item.location || null;
@@ -48,6 +52,7 @@ function augmentContainer(dbItem: IContainer, item: IContainerData): void {
     dbItem.container = item.parent;
 }
 
+// REST Schnittstelle zur Pflege der Aufbewahrungen.
 export default Router()
     .post('/', (req: Request & Parsed, res: Response) => sendStatus(res, addEntity(req.body, containerCollection, augmentContainer)))
     .get('/:id', async (req: Request, res: Response) => sendJson(res, await findContainer(req.params["id"])))

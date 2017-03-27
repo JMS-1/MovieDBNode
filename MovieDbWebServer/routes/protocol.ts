@@ -1,10 +1,14 @@
 ﻿import { Response } from "express";
 import { Db } from "mongodb";
 
+// Datenbankelemente.
 import { sharedConnection } from "../database/db";
 import { seriesCollection, ISeries } from "../database/model";
 
+// Trennzeichen zwischen Ebenen der Serien.
 export var seriesSeparator = ">";
+
+// Prüfmuster für Verweise.
 export var urlMatcher = /https?:\/\/(\w +:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
 // Jede Entitität in der Datenbank hat einen Namen.
@@ -35,115 +39,156 @@ export interface ISeriesFilter extends IDetails {
     hierarchicalName: string;
 }
 
+// Beschreibt den aktuellen Datenstand.
 export interface ApplicationInformation {
+    // Gesetzt, wenn die Datenbank noch gar nicht initialisiert wurde.
     empty: boolean;
 
+    // Anzahl von Aufzeichnungen in der Datenbank.
     total: number;
 
+    // Bekannte Sprachen.
     languages: IDetails[];
 
+    // Bekannte Kategorien.
     genres: IDetails[];
 
+    // Bekannte Serien.
     series: ISeriesFilter[];
 
+    // Bekannte Aufbewahrungen.
     containers: IDetails[];
 
+    // Das Trennzeichen zwischen den Ebenen von Serien.
     seriesSeparator: string;
 
+    // Der prüfausdruck für Verweise.
     urlExpression: string;
 }
 
+// Daten einer Aufzeichnung, die immer abgefragt werden - insbesondere auch in der Ergebnistabelle.
 export interface IRecordingCommonData {
+    // Der Name der Aufzeichnung - in einer Tabelle wird der hierarchische Name angezeigt.
     title: string;
 
+    // Der Verleihstand.
     rent: string;
 
+    // Alle Sprachen, in der die Aufzeichnung vorliegt.
     languages: string[];
 
+    // Alle zugeordneten Kategorien.
     genres: string[];
 
+    // Optional die Serie zur Aufzeichnung.
     series?: string;
 }
 
+// Beschreibt eine Suchanfrage.
 export interface ISearchRequest {
+    // Erste anzuzeigende Seitennummer.
     page: number;
 
+    // Anzahl der Aufzeichnungen pro Seite.
     size: number;
 
+    // Eigenschaft, nach der Sortiert werden soll.
     order: string;
 
+    // Sortierordnung.
     ascending: boolean;
 
+    // Zu berücksichtigende Kategorien.
     genres: string[];
 
+    // Optional die zu berücksichtigende Sprache.
     language?: string;
 
+    // Optional die zu berücksichtigende Serie.
     series: string[];
 
+    // Optional eine Ausahl auf den Verleihstand.
     rent?: boolean;
 
+    // Optional eine Inhaltssuche auf den hierarchischen Namen.
     text?: string;
 }
 
-export interface IGenreSearch {
-    id: string;
-
+// Beschreibt eine Kategorie in einem Suchergebnis.
+export interface IGenreSearch extends IUnique {
+    // Anzahl der passenden Aufzeichnungen.
     count: number;
 }
 
-export interface ILanguageSearch {
-    id: string;
-
+// Beschreibt eine Sprache in einem Suchergebnis.
+export interface ILanguageSearch extends IUnique {
+    // Anzahl der passenden Aufzeichnungen.
     count: number;
 }
 
-export interface IRecordingResult extends IRecordingCommonData {
-    id: string;
-
+// Beschreibt eine Aufzeichnung in einem Suchergebnis.
+export interface IRecordingResult extends IRecordingCommonData, IUnique {
+    // Der Zeitpunkt an dem ist Auszeichnung anlegegt wurde - als ISO Zeichenkette.
     createdAsString: string;
 }
 
+// Das Ergebnis einer Suche.
 export interface ISearchInformation {
+    // Die erste angezeigte Seite.
     page: number;
 
+    // Die Anzahl der Aufzeichnungen pro Seite.
     size: number;
 
+    // Die Anzahl aller passender Aufzeichnungen.
     total: number;
 
+    // Die anzuzeigenden Aufzeichnungen.
     recordings: IRecordingResult[];
 
+    // Statistik über die Kategorien.
     genres: IGenreSearch[];
 
+    // Statistik über die Sprachen.
     languages: ILanguageSearch[];
 }
 
-export interface ILink {
-    name: string;
-
+// Beschreibt einen Verweis.
+export interface ILink extends IName {
+    // Der Verweis.
     url: string;
 
-    description: string;
+    // Eine optionale Beschreibung des Verweises.
+    description?: string;
 }
 
+// Beschreibt alle Daten einer Aufzeichnung.
 export interface IRecordingData extends IRecordingCommonData {
-    description: string;
+    // Eine optionale Beschreibung.
+    description?: string;
 
+    // Die Art der Aufbewahrung - dieser Wert kann nur der Client interpretieren.
     mediaType: number;
 
+    // Die Aufbewahrung.
     container?: string;
 
+    // Der Standort in der Aufbewahrung.
     location: string;
 
+    // Alle Verweise zur Aufzeichnung.
     links: ILink[];
 }
 
-export interface IRecordingDetails extends IRecordingData {
-    id: string;
+// Daten zur Pflege einer Aufzeichnung.
+export interface IRecordingDetails extends IRecordingData, IUnique {
 }
 
+// Daten zur Pflege einer Kategorie.
 export interface IGenreDetails extends IEditDetails {
 }
 
+// Daten zur Pflege einer Sprache.
 export interface ILanguageDetails extends IEditDetails {
 }
 
@@ -158,7 +203,7 @@ export interface IContainerData extends IName {
     // Beschreibung.
     description?: string;
 
-    // Art.
+    // Art - wird nur vom Client interpretiert.
     type: number;
 
     // Übergeordnete Aufbewahrung.
@@ -190,19 +235,26 @@ export interface ISeriesData extends IName {
 export interface ISeriesDetails extends ISeriesData, IEditDetails {
 }
 
-export function sendJson<TDataType>(res: Response, data: TDataType): Response {
-    return res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate').json(data);
+// Übermittelt ein Objekt im JSON Format an den Aufrufer.
+export function sendJson<TDataType>(res: Response, data: TDataType): void {
+    // Als dynamische Methode wird hier niemals eine Vorhaltung durchgeführt.
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate').json(data);
 }
 
+// Übermittelt ein Speicherergebnis.
 export async function sendStatus(res: Response, process: Promise<boolean>): Promise<void> {
+    // Speicherung durchführen.
     var success = await process;
 
+    // Ergebnis übermitteln.
     res.sendStatus(success ? 200 : 400);
     res.end();
 
+    // Leerer Rückgabewert um den Compiler glücklich zu machen.
     return new Promise<void>(setResult => setResult(undefined));
 }
 
+// Erweitert eine beliebige Suche um den hierarchischen Namen - die Dokumente müssen lediglich _id, name und series als Eigenschaften besitzen.
 export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
     // Konfiguration der Hierarchiverfolgung.
     var lookup = {
@@ -239,10 +291,12 @@ export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
     return [
         // Erst einmal ergänzen wir zu jeder Serie den Kette der übergeordneten Serien.
         { $graphLookup: lookup },
+
         // Da die Ordnung der übergeordneten Serien nicht garantiert ist müssen wir diese explizit sicherstellen.
         { $unwind: { path: "$hierarchy", preserveNullAndEmptyArrays: true } },
         { $sort: { "hierarchy.order": 1 } },
         { $group: group },
+
         // Nun können wir die Name der übergeordneten Serien einfach mit dem eigenen Namen kombinieren.
         { $project: project }
     ]
