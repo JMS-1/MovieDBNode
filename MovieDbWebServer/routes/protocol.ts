@@ -1,4 +1,5 @@
 ﻿import { Response } from "express";
+import { Db } from "mongodb";
 
 import { sharedConnection } from "../database/db";
 import { seriesCollection, ISeries } from "../database/model";
@@ -245,19 +246,4 @@ export function hierarchicalNamePipeline(group: {}, project: {}): Object[] {
         // Nun können wir die Name der übergeordneten Serien einfach mit dem eigenen Namen kombinieren.
         { $project: project }
     ]
-}
-
-export async function getSeries(): Promise<ISeriesFilter[]> {
-    var db = await sharedConnection;
-
-    // Die Serienhierarchie wird vollständig in der Datenbank ausgewertet.
-    var series = await db.collection(seriesCollection).aggregate<ISeriesFilter>([
-        // Blendet den hierarchischen Namen in das Ergebnis ein.
-        ...hierarchicalNamePipeline({}, { name: 1, parentId: "$series" }),
-
-        // Dann lassen wir die Datenbank danach sortieren.
-        { $sort: { "hierarchicalName": 1 } }
-    ]).toArray();
-
-    return new Promise<ISeriesFilter[]>(setResult => setResult(series));
 }
