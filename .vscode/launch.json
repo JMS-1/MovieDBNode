@@ -1,0 +1,23 @@
+{
+    "compounds": [],
+    "configurations": [
+        {
+            "linux": {
+                "runtimeExecutable": "/snap/bin/chromium"
+            },
+            "name": "Lebenslauf",
+            "port": 29091,
+            "request": "launch",
+            "runtimeArgs": ["--remote-debugging-port=29091", "--new-window"],
+            "sourceMapPathOverrides": {
+                "webpack:///./*": "${workspaceFolder}/*"
+            },
+            "sourceMaps": true,
+            "type": "chrome",
+            "url": "http://localhost:5500",
+            "userDataDir": "${workspaceFolder}/.vscode/chrome",
+            "webRoot": "${workspaceFolder}"
+        }
+    ],
+    "version": "0.2.0"
+}

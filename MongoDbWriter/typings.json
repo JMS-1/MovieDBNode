@@ -1,6 +1,0 @@
-{
-  "name": "mongo-db-writer",
-  "dependencies": {
-    "mongodb": "registry:npm/mongodb#2.1.0+20170211100415"
-  }
-}

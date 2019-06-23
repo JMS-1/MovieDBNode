@@ -1,0 +1,53 @@
+{
+    "TSX": {
+        "prefix": "component",
+        "body": [
+            "import * as React from 'react'",
+            "",
+            "export interface I${2}UiProps {${4}}",
+            "",
+            "export interface I${2}Props {${10}}",
+            "",
+            "export interface I${2}Actions {${5}}",
+            "",
+            "export type T${2}Props = I${2}Props & I${2}UiProps & I${2}Actions",
+            "",
+            "export class C${2:${TM_FILENAME_BASE/(.*)$/${1:/capitalize}/}} extends React.PureComponent<T${2}Props> {",
+            "\trender(): JSX.Element {",
+            "\t\treturn <div className=\"${3:${TM_FILENAME_BASE}}\">${6}</div>",
+            "\t}",
+            "}",
+            ""
+        ],
+        "description": "Component Template",
+        "scope": "typescriptreact"
+    },
+    "Redux": {
+        "prefix": "component",
+        "body": [
+            "import { connect } from 'react-redux'",
+            "import { Action, Dispatch } from 'redux'",
+            "",
+            "import * as local from './${1:${TM_FILENAME_BASE/(.*)Redux$/$1/}}'",
+            "",
+            "function mapStateToProps(state: IClientState, props: local.I${2:${TM_FILENAME_BASE/(.*)Redux$/${1:/capitalize}/}}UiProps): local.I${2}Props {",
+            "\treturn {${3}}",
+            "}",
+            "",
+            "function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.I${2}UiProps): local.I${2}Actions {",
+            "\treturn {${4}}",
+            "}",
+            "",
+            "export const ${2} = connect(mapStateToProps, mapDispatchToProps)(local.C${2})",
+            ""
+        ],
+        "description": "Redux Template",
+        "scope": "typescript"
+    },
+    "SASS": {
+        "prefix": "component",
+        "body": [".${1:${TM_FILENAME_BASE}} {${2}}", ""],
+        "description": "SASS Template",
+        "scope": "scss"
+    }
+}

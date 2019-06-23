@@ -1,7 +1,0 @@
-﻿{
-  "mongo": {
-    "database": "movieDb",
-    "port": 27017,
-    "server": "localhost"
-  }
-}

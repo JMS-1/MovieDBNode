@@ -1,0 +1,20 @@
+import { connect } from 'react-redux'
+import { Action, Dispatch } from 'redux'
+
+import { IClientState } from '../../controller'
+import * as local from './root'
+
+function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.IRootProps {
+    return {
+        title: state.mui.title,
+    }
+}
+
+function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRootUiProps): local.IRootActions {
+    return {}
+}
+
+export const Root = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(local.CRoot)

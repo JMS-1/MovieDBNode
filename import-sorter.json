@@ -1,0 +1,28 @@
+{
+    "generalConfiguration": {
+        "exclude": ["\\.d\\.ts"],
+        "sortOnBeforeSave": true
+    },
+    "importStringConfiguration": {
+        "hasSemicolon": false,
+        "trailingComma": "multiLine"
+    },
+    "sortConfiguration": {
+        "customOrderingRules": {
+            "rules": [
+                {
+                    "orderLevel": 20,
+                    "regex": "^\\./"
+                },
+                {
+                    "orderLevel": 30,
+                    "regex": "^\\.\\./"
+                },
+                {
+                    "orderLevel": 40,
+                    "regex": "^\\.\\.\\./"
+                }
+            ]
+        }
+    }
+}

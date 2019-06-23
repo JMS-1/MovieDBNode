@@ -1,0 +1,51 @@
+﻿const gulp = require('gulp')
+const path = require('path')
+const shell = require('gulp-shell')
+const sass = require('gulp-sass')
+
+const semanticBuild = require('./src/semantic/tasks/build')
+const semanticWatch = require('./src/semantic/tasks/watch')
+
+let watchMode = false
+
+function reportWatchError(err) {
+    if (!watchMode) {
+        throw new Error(err.message)
+    } else {
+        const message = err.message
+        const first = message.indexOf('\n')
+        const second = message.indexOf('\n', first + 1)
+
+        if (first >= 0 && second >= 0) {
+            console.log(
+                `${message.substring(0, first)}(${err.line},${err.column}): error SASS: ${message.substring(
+                    first + 1,
+                    second - first
+                )}`
+            )
+        }
+    }
+}
+
+gulp.on('task_stop', ({ task }) => (watchMode = watchMode || task.indexOf('watch') >= 0))
+
+//
+gulp.task('build-app', shell.task('yarn build-tsx'))
+
+//
+gulp.task('build-sass', () =>
+    gulp
+        .src(path.join(__dirname, 'src/index.scss'))
+        .pipe(sass({ linefeed: 'crlf' }).on('error', reportWatchError))
+        .pipe(gulp.dest(path.join(__dirname, 'dist')))
+)
+
+//
+gulp.task('watch-sass', () => gulp.watch(path.join(__dirname, 'src/**/*.scss'), ['build-sass']))
+
+//
+gulp.task('build-ui', semanticBuild)
+gulp.task('watch-ui', semanticWatch)
+
+//
+gulp.task('build', ['build-sass', 'build-ui', 'build-app'])

@@ -1,0 +1,17 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.tslint": true
+    },
+    "editor.formatOnSave": true,
+    "grunt.autoDetect": "off",
+    "jake.autoDetect": "off",
+    "scss.lint.duplicateProperties": "warning",
+    "scss.lint.emptyRules": "error",
+    "scss.lint.idSelector": "warning",
+    "scss.lint.universalSelector": "warning",
+    "tslint.alwaysShowRuleFailuresAsWarnings": true,
+    "tslint.autoFixOnSave": true,
+    "tslint.suppressWhileTypeErrorsPresent": true,
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "liveServer.settings.root": "/dist"
+}

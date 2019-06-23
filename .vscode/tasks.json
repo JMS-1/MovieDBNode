@@ -1,0 +1,57 @@
+{
+    "tasks": [
+        {
+            "label": "build TSX",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "script": "build-tsx",
+            "type": "npm"
+        },
+        {
+            "label": "build sematic",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "task": "build-ui",
+            "type": "gulp"
+        },
+        {
+            "isBackground": true,
+            "label": "watch TSX",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "script": "watch-tsx",
+            "type": "npm"
+        },
+        {
+            "isBackground": true,
+            "label": "watch semantic",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "task": "watch-ui",
+            "type": "gulp"
+        },
+        {
+            "isBackground": true,
+            "label": "watch SASS",
+            "problemMatcher": "$tsc",
+            "task": "watch-sass",
+            "type": "gulp"
+        },
+        {
+            "label": "build SASS",
+            "problemMatcher": "$tsc",
+            "task": "build-sass",
+            "type": "gulp"
+        },
+        {
+            "dependsOn": ["watch TSX", "watch SASS", "watch semantic"],
+            "group": "build",
+            "label": "watch",
+            "problemMatcher": []
+        },
+        {
+            "group": "build",
+            "label": "build",
+            "problemMatcher": [],
+            "task": "build",
+            "type": "gulp"
+        }
+    ],
+    "version": "2.0.0"
+}
