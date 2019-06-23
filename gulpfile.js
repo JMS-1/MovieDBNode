@@ -3,8 +3,8 @@ const path = require('path')
 const shell = require('gulp-shell')
 const sass = require('gulp-sass')
 
-const semanticBuild = require('./src/semantic/tasks/build')
-const semanticWatch = require('./src/semantic/tasks/watch')
+const semanticBuild = require('./Client/src/semantic/tasks/build')
+const semanticWatch = require('./Client/src/semantic/tasks/watch')
 
 let watchMode = false
 
@@ -30,22 +30,22 @@ function reportWatchError(err) {
 gulp.on('task_stop', ({ task }) => (watchMode = watchMode || task.indexOf('watch') >= 0))
 
 //
-gulp.task('build-app', shell.task('yarn build-tsx'))
+gulp.task('build-app', shell.task('yarn build-client'))
 
 //
 gulp.task('build-sass', () =>
     gulp
-        .src(path.join(__dirname, 'src/index.scss'))
+        .src(path.join(__dirname, 'Client/src/index.scss'))
         .pipe(sass({ linefeed: 'crlf' }).on('error', reportWatchError))
-        .pipe(gulp.dest(path.join(__dirname, 'dist')))
+        .pipe(gulp.dest(path.join(__dirname, 'Server/dist')))
 )
 
 //
-gulp.task('watch-sass', () => gulp.watch(path.join(__dirname, 'src/**/*.scss'), ['build-sass']))
+gulp.task('watch-sass', () => gulp.watch(path.join(__dirname, 'Client/src/**/*.scss'), ['build-sass']))
 
 //
 gulp.task('build-ui', semanticBuild)
 gulp.task('watch-ui', semanticWatch)
 
 //
-gulp.task('build', ['build-sass', 'build-ui', 'build-app'])
+gulp.task('build-client', ['build-sass', 'build-ui', 'build-app'])

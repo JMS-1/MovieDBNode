@@ -3,7 +3,7 @@
         {
             "label": "build TSX",
             "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "script": "build-tsx",
+            "script": "build-client",
             "type": "npm"
         },
         {
@@ -16,7 +16,7 @@
             "isBackground": true,
             "label": "watch TSX",
             "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "script": "watch-tsx",
+            "script": "watch-client",
             "type": "npm"
         },
         {
@@ -47,9 +47,9 @@
         },
         {
             "group": "build",
-            "label": "build",
+            "label": "build Client",
             "problemMatcher": [],
-            "task": "build",
+            "task": "build-client",
             "type": "gulp"
         }
     ],

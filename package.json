@@ -36,8 +36,8 @@
     "main": "index.js",
     "name": "movie-db-neu",
     "scripts": {
-        "build-tsx": "node node_modules/webpack/bin/webpack.js --mode development",
-        "watch-tsx": "node node_modules/webpack/bin/webpack.js --mode development --watch"
+        "build-client": "cd Client && node ../node_modules/webpack/bin/webpack.js --mode development",
+        "watch-client": "cd Client && node ../node_modules/webpack/bin/webpack.js --mode development --watch"
     },
     "version": "1.0.0"
 }
