@@ -1,22 +1,40 @@
 {
-    "compounds": [],
+    "compounds": [
+        {
+            "name": "All",
+            "configurations": ["Client", "Server"]
+        }
+    ],
     "configurations": [
         {
             "linux": {
                 "runtimeExecutable": "/snap/bin/chromium"
             },
-            "name": "Lebenslauf",
+            "name": "Client",
             "port": 29091,
             "request": "launch",
             "runtimeArgs": ["--remote-debugging-port=29091", "--new-window"],
             "sourceMapPathOverrides": {
-                "webpack:///./*": "${workspaceFolder}/*"
+                "webpack:///./*": "${workspaceFolder}/Client/*"
             },
             "sourceMaps": true,
             "type": "chrome",
-            "url": "http://localhost:5500",
+            "url": "http://localhost:29099",
             "userDataDir": "${workspaceFolder}/.vscode/chrome",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}/Server",
+            "name": "Server",
+            "port": 23902,
+            "protocol": "inspector",
+            "request": "launch",
+            "runtimeArgs": ["run-script", "debug-server"],
+            "runtimeExecutable": "npm",
+            "smartStep": true,
+            "sourceMaps": true,
+            "type": "node"
         }
     ],
     "version": "0.2.0"

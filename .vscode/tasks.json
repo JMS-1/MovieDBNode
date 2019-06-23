@@ -40,16 +40,36 @@
             "type": "gulp"
         },
         {
-            "dependsOn": ["watch TSX", "watch SASS", "watch semantic"],
+            "args": ["--watch", "-p", "\"${workspaceFolder}/Server/tsconfig.json\""],
+            "command": "${workspaceFolder}/node_modules/.bin/tsc",
+            "isBackground": true,
+            "label": "watch API",
+            "problemMatcher": "$tsc-watch",
+            "type": "shell"
+        },
+        {
+            "dependsOn": ["watch TSX", "watch SASS", "watch semantic", "watch API"],
             "group": "build",
             "label": "watch",
             "problemMatcher": []
         },
         {
-            "group": "build",
+            "label": "build API",
+            "problemMatcher": [],
+            "task": "build-server",
+            "type": "gulp"
+        },
+        {
             "label": "build Client",
             "problemMatcher": [],
             "task": "build-client",
+            "type": "gulp"
+        },
+        {
+            "group": "build",
+            "label": "build",
+            "problemMatcher": [],
+            "task": "build",
             "type": "gulp"
         }
     ],

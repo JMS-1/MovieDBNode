@@ -1,12 +1,23 @@
 ﻿const gulp = require('gulp')
+const map = require('gulp-sourcemaps')
 const path = require('path')
-const shell = require('gulp-shell')
 const sass = require('gulp-sass')
+const shell = require('gulp-shell')
+const ts = require('gulp-typescript')
 
 const semanticBuild = require('./Client/src/semantic/tasks/build')
 const semanticWatch = require('./Client/src/semantic/tasks/watch')
 
+const config = ts.createProject(path.join(__dirname, 'Server/tsconfig.json'))
+const build = path.join(__dirname, 'Server/build')
+
 let watchMode = false
+
+function ignoreErrorDuringWatch(err) {
+    if (!watchMode) {
+        throw err instanceof Error ? err : new Error(`${err}`)
+    }
+}
 
 function reportWatchError(err) {
     if (!watchMode) {
@@ -49,3 +60,17 @@ gulp.task('watch-ui', semanticWatch)
 
 //
 gulp.task('build-client', ['build-sass', 'build-ui', 'build-app'])
+
+//
+gulp.task('build-server', () =>
+    config
+        .src()
+        .pipe(map.init())
+        .pipe(config())
+        .on('error', ignoreErrorDuringWatch)
+        .js.pipe(map.write('', { sourceRoot: build }))
+        .pipe(gulp.dest(build))
+)
+
+//
+gulp.task('build', ['build-client', 'build-server'])
