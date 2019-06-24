@@ -27,5 +27,4 @@ function validate(object, schema) {
     return validation.validate(schema.$id, object);
 }
 exports.validate = validate;
-
 //# sourceMappingURL=validation.js.map

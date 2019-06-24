@@ -24,5 +24,4 @@ try {
 catch (error) {
     startupError(error);
 }
-
 //# sourceMappingURL=startup.js.map

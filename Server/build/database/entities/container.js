@@ -41,5 +41,4 @@ exports.ContainerSchema = {
     },
     required: ["_id", "name", "type"],
 };
-
 //# sourceMappingURL=container.js.map

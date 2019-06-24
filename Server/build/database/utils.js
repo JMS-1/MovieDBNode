@@ -25,5 +25,4 @@ async function dbConnect() {
     }
 }
 exports.dbConnect = dbConnect;
-
 //# sourceMappingURL=utils.js.map
