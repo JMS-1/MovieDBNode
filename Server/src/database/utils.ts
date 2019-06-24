@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb'
+import { Collection, Db, FilterQuery, MongoClient } from 'mongodb'
 
 import { IValidatableSchema, IValidationError } from 'movie-db-api'
 
@@ -38,10 +38,15 @@ export abstract class CollectionBase<TType> {
 
     abstract readonly schema: IValidatableSchema
 
+    async getCollection(): Promise<Collection<TType>> {
+        const db = await dbConnect()
+
+        return db.collection(this.name)
+    }
+
     async insert(container: TType): Promise<IValidationError[]> {
         try {
-            const db = await dbConnect()
-            const me = await db.collection(this.name)
+            const me = await this.getCollection()
 
             await me.insertOne(container)
 
@@ -65,5 +70,21 @@ export abstract class CollectionBase<TType> {
                 throw error
             }
         }
+    }
+
+    async query(filter?: FilterQuery<TType>, sort?: object, project?: object): Promise<TType[]> {
+        const me = await this.getCollection()
+
+        let query = me.find(filter)
+
+        if (sort) {
+            query = query.sort(sort)
+        }
+
+        if (project) {
+            query = query.project(project)
+        }
+
+        return query.toArray()
     }
 }

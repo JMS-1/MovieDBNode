@@ -30,4 +30,44 @@ declare module 'movie-db-api' {
         Shelf = 3,
         Undefined = 0,
     }
+
+    interface INewContainer {
+        name: string
+        type: containerType
+        description?: string
+        parentId?: string
+        parentLocation?: string
+    }
+
+    interface IContainer extends INewContainer {
+        id: string
+    }
+
+    interface IContainerResponse {
+        containers: IContainer[]
+    }
+
+    interface IAddContainerRequest {
+        container: INewContainer
+    }
+
+    interface IAddContainerResponse {
+        container: IContainer
+    }
+
+    interface IUpdateContainerRequest {
+        container: IContainer
+    }
+
+    interface IUpdateContainerResponse {
+        container: IContainer
+    }
+
+    interface IDeleteContainerRequest {
+        id: string
+    }
+
+    interface IDeleteContainerResponse {
+        id: string
+    }
 }

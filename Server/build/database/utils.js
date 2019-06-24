@@ -28,10 +28,13 @@ async function dbConnect() {
 }
 exports.dbConnect = dbConnect;
 class CollectionBase {
+    async getCollection() {
+        const db = await dbConnect();
+        return db.collection(this.name);
+    }
     async insert(container) {
         try {
-            const db = await dbConnect();
-            const me = await db.collection(this.name);
+            const me = await this.getCollection();
             await me.insertOne(container);
             return undefined;
         }
@@ -52,6 +55,17 @@ class CollectionBase {
                 throw error;
             }
         }
+    }
+    async query(filter, sort, project) {
+        const me = await this.getCollection();
+        let query = me.find(filter);
+        if (sort) {
+            query = query.sort(sort);
+        }
+        if (project) {
+            query = query.project(project);
+        }
+        return query.toArray();
     }
 }
 exports.CollectionBase = CollectionBase;

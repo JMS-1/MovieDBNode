@@ -49,5 +49,34 @@ exports.ContainerSchema = {
     },
     required: ["_id", "name", "type"],
 };
+function toProtocol(container) {
+    return {
+        id: container["_id"],
+        description: container["description"] || undefined,
+        name: container["name"],
+        parentId: container["parentId"] || undefined,
+        parentLocation: container["parentLocation"] || undefined,
+        type: container["type"],
+    };
+}
+exports.toProtocol = toProtocol;
+function toEntity(container, id) {
+    const dbContainer = {
+        ["_id"]: id,
+        ["name"]: container.name,
+        ["type"]: container.type,
+    };
+    if (container.description !== undefined) {
+        dbContainer["description"] = container.description;
+    }
+    if (container.parentId !== undefined) {
+        dbContainer["parentId"] = container.parentId;
+    }
+    if (container.parentLocation !== undefined) {
+        dbContainer["parentLocation"] = container.parentLocation;
+    }
+    return dbContainer;
+}
+exports.toEntity = toEntity;
 
 //# sourceMappingURL=container.js.map

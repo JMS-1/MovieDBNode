@@ -12,6 +12,6 @@ export type TRootProps = IRootProps & IRootUiProps & IRootActions
 
 export class CRoot extends React.PureComponent<TRootProps> {
     render(): JSX.Element {
-        return <div className='vita-root'>{this.props.title}</div>
+        return <div className='movie-db-root'>{this.props.title}</div>
     }
 }

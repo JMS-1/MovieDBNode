@@ -1,4 +1,4 @@
-import { containerType } from 'movie-db-api'
+import { containerType, IContainer } from 'movie-db-api'
 
 import { uniqueId } from './utils'
 
@@ -16,7 +16,7 @@ const enum ContainerFields {
 export interface IDbContainer {
     [ContainerFields._id]: string
     [ContainerFields.name]: string
-    [ContainerFields.type]: number
+    [ContainerFields.type]: containerType
     [ContainerFields.description]?: string
     [ContainerFields.parentId]?: string
     [ContainerFields.parentLocation]?: string
@@ -68,4 +68,37 @@ export const ContainerSchema = {
         },
     },
     required: [ContainerFields._id, ContainerFields.name, ContainerFields.type],
+}
+
+export function toProtocol(container: IDbContainer): IContainer {
+    return {
+        id: container[ContainerFields._id],
+        description: container[ContainerFields.description] || undefined,
+        name: container[ContainerFields.name],
+        parentId: container[ContainerFields.parentId] || undefined,
+        parentLocation: container[ContainerFields.parentLocation] || undefined,
+        type: container[ContainerFields.type],
+    }
+}
+
+export function toEntity(container: IContainer, id: string): IDbContainer {
+    const dbContainer: IDbContainer = {
+        [ContainerFields._id]: id,
+        [ContainerFields.name]: container.name,
+        [ContainerFields.type]: container.type,
+    }
+
+    if (container.description !== undefined) {
+        dbContainer[ContainerFields.description] = container.description
+    }
+
+    if (container.parentId !== undefined) {
+        dbContainer[ContainerFields.parentId] = container.parentId
+    }
+
+    if (container.parentLocation !== undefined) {
+        dbContainer[ContainerFields.parentLocation] = container.parentLocation
+    }
+
+    return dbContainer
 }

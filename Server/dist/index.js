@@ -31424,7 +31424,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
 class CRoot extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'vita-root' }, this.props.title);
+        return React.createElement("div", { className: 'movie-db-root' }, this.props.title);
     }
 }
 exports.CRoot = CRoot;
