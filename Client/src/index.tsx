@@ -4,7 +4,8 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { Root } from './components/root/rootRedux'
-import { history, initializeStore } from './store'
+import { ApplicationActions, ContainerActions } from './controller'
+import { history, initializeStore, ServerApi } from './store'
 
 const store = initializeStore()
 
@@ -16,3 +17,6 @@ render(
     </Provider>,
     document.querySelector('client-root'),
 )
+
+ServerApi.get('container', ContainerActions.load)
+ServerApi.get('schemas', ApplicationActions.loadSchemas)

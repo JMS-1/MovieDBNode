@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
 
-import { IClientState } from '../../controller'
+import { IClientState } from 'movie-db-client'
+
 import * as local from './root'
 
 function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.IRootProps {

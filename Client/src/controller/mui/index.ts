@@ -1,10 +1,10 @@
 import { Action } from 'redux'
 
+import { IMuiState } from 'movie-db-client'
+
 import * as controller from './controller'
-import { IMuiState } from './interfaces'
 
 export * from './actions'
-export * from './interfaces'
 
 export function MuiReducer(state: IMuiState, action: Action): IMuiState {
     if (!state) {

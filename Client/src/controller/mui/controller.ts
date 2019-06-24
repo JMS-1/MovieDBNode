@@ -1,6 +1,6 @@
-import * as interfaces from './interfaces'
+import { IMuiState } from 'movie-db-client'
 
-export function getInitialState(): interfaces.IMuiState {
+export function getInitialState(): IMuiState {
     return {
         title: '[HELLO WORLD]',
     }

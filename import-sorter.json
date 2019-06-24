@@ -16,7 +16,7 @@
                 },
                 {
                     "orderLevel": 30,
-                    "regex": "^(movie-db-api)"
+                    "regex": "^(movie-db-.*)$"
                 },
                 {
                     "orderLevel": 40,
