@@ -25,7 +25,6 @@
         },
         {
             "console": "internalConsole",
-            "cwd": "${workspaceFolder}/Server",
             "env": {
                 "DEBUG": "startup, api",
                 "PORT": "29099"
