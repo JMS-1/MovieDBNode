@@ -26,6 +26,7 @@
         {
             "console": "internalConsole",
             "env": {
+                "DATABASE": "mongodb://localhost:27017/movie-db",
                 "DEBUG": "startup, api",
                 "PORT": "29099"
             },
