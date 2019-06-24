@@ -16,6 +16,6 @@ export async function initializeDatabase(): Promise<void> {
         await db.createCollection(name)
 
         // Immer die Prüfregeln in der Datenbank auf den neuesten Stand bringen.
-        await db.command({ collMod: name, validator: convertToMongo(schema) })
+        await db.command({ collMod: name, validator: { $jsonSchema: convertToMongo(schema) } })
     }
 }

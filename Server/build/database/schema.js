@@ -60,4 +60,5 @@ function convertToMongo(schema) {
     return mapProperties(schema, schemaPropsMapper);
 }
 exports.convertToMongo = convertToMongo;
+
 //# sourceMappingURL=schema.js.map

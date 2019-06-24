@@ -7,4 +7,5 @@ function installApi(app) {
     app.use(getVersion_1.getVersion);
 }
 exports.installApi = installApi;
+
 //# sourceMappingURL=index.js.map

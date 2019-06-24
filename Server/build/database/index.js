@@ -10,7 +10,7 @@ async function initializeDatabase() {
     for (let { schema, name } of collections) {
         validation_1.addSchema(schema);
         await db.createCollection(name);
-        await db.command({ collMod: name, validator: schema_1.convertToMongo(schema) });
+        await db.command({ collMod: name, validator: { $jsonSchema: schema_1.convertToMongo(schema) } });
     }
 }
 exports.initializeDatabase = initializeDatabase;
