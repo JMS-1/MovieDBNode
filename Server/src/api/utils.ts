@@ -1,12 +1,7 @@
 import 'body-parser'
-import * as debug from 'debug'
 import { Request, Response } from 'express'
 
-export const apiError = debug('api')
-
-export function getError(error: any): string {
-    return typeof error === 'string' ? error : error.message || 'failed'
-}
+import { apiError, getError } from '../utils'
 
 export function processApiRequest<TResponse, TRequest = {}>(
     processor: (body?: TRequest) => TResponse | Promise<TResponse>,
@@ -20,7 +15,7 @@ export function processApiRequest<TResponse, TRequest = {}>(
             response.write(message)
             response.sendStatus(400)
         } catch (error) {
-            apiError(message)
+            apiError('unable to process %s: %s', request.originalUrl, message)
         }
     }
 

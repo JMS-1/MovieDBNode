@@ -1,8 +1,8 @@
 {
     "compounds": [
         {
-            "name": "All",
-            "configurations": ["Client", "Server"]
+            "configurations": ["Client", "Server"],
+            "name": "All"
         }
     ],
     "configurations": [
@@ -26,6 +26,10 @@
         {
             "console": "internalConsole",
             "cwd": "${workspaceFolder}/Server",
+            "env": {
+                "DEBUG": "startup, api",
+                "PORT": "29099"
+            },
             "name": "Server",
             "port": 23902,
             "protocol": "inspector",

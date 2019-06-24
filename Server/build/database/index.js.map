@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/database/index.ts"],"names":[],"mappings":";;AAAO,KAAK,UAAU,kBAAkB,KAAmB,CAAC;AAA5D,gDAA4D","sourcesContent":["export async function initializeDatabase(): Promise<void> {}\n"]}

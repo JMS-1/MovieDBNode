@@ -1,21 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("body-parser");
-const debug = require("debug");
-exports.apiError = debug('api');
-function getError(error) {
-    return typeof error === 'string' ? error : error.message || 'failed';
-}
-exports.getError = getError;
+const utils_1 = require("../utils");
 function processApiRequest(processor, request, response) {
     function onError(error) {
-        const message = getError(error);
+        const message = utils_1.getError(error);
         try {
             response.write(message);
             response.sendStatus(400);
         }
         catch (error) {
-            exports.apiError(message);
+            utils_1.apiError('unable to process %s: %s', request.originalUrl, message);
         }
     }
     try {
@@ -37,5 +32,4 @@ function processApiRequest(processor, request, response) {
     }
 }
 exports.processApiRequest = processApiRequest;
-
 //# sourceMappingURL=utils.js.map
