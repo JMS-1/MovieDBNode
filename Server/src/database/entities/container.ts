@@ -57,5 +57,5 @@ export const ContainerSchema = {
             type: 'integer',
         },
     },
-    required: [[ContainerFields._id], [ContainerFields.name], [ContainerFields.type]],
+    required: [ContainerFields._id, ContainerFields.name, ContainerFields.type],
 }

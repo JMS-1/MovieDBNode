@@ -1,27 +1,14 @@
 import * as djv from 'djv'
 
+import { IValidatableSchema, IValidationError, IValidationScope } from 'movie-db-api'
+
 const propReg = /^\[decodeURIComponent\(['"]([^'"]+)['"]\)\]$/
 
 const validation = new djv()
 
-export interface IValidationError {
-    readonly contraint: string
-    readonly property: string
-    readonly message: string
-}
-
-interface IScope {
-    message: string
-    properties?: any
-}
-
-interface ISchema extends IScope {
-    $id: string
-}
-
-export function addSchema<TSchema extends ISchema>(schema: TSchema): void {
+export function addSchema<TSchema extends IValidatableSchema>(schema: TSchema): void {
     function errorHandler(errorType: string): string {
-        let scope: any = schema
+        let scope: IValidationScope = schema
 
         const props = []
 
@@ -46,6 +33,6 @@ export function addSchema<TSchema extends ISchema>(schema: TSchema): void {
     validation.setErrorHandler(undefined)
 }
 
-export function validate<TSchema extends ISchema>(object: any, schema: TSchema): IValidationError[] {
+export function validate<TSchema extends IValidatableSchema>(object: any, schema: TSchema): IValidationError[] {
     return <any>validation.validate(schema.$id, object)
 }

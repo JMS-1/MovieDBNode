@@ -39,6 +39,7 @@ exports.ContainerSchema = {
             type: 'integer',
         },
     },
-    required: [["_id"], ["name"], ["type"]],
+    required: ["_id", "name", "type"],
 };
+
 //# sourceMappingURL=container.js.map

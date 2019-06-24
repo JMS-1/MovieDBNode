@@ -6,4 +6,5 @@ async function initializeDatabase() {
     validation_1.addSchema(container_1.ContainerSchema);
 }
 exports.initializeDatabase = initializeDatabase;
+
 //# sourceMappingURL=index.js.map
