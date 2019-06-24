@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const dataPropsMapper = {
+    enum: copy,
     maxLength: copy,
     message: errorMessage,
     minLength: copy,

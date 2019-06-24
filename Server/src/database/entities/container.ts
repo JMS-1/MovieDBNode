@@ -1,3 +1,5 @@
+import { containerType } from 'movie-db-api'
+
 import { uniqueId } from './utils'
 
 export const collectionName = 'containers'
@@ -55,6 +57,14 @@ export const ContainerSchema = {
         [ContainerFields.type]: {
             message: 'Ablageart fehlt oder ist unzulässig',
             type: 'integer',
+            enum: [
+                containerType.Box,
+                containerType.Disk,
+                containerType.FeatureSet,
+                containerType.Folder,
+                containerType.Shelf,
+                containerType.Undefined,
+            ],
         },
     },
     required: [ContainerFields._id, ContainerFields.name, ContainerFields.type],

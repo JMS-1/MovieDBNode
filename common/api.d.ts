@@ -21,4 +21,13 @@ declare module 'movie-db-api' {
     interface ISchemaResponse {
         container: IValidatableSchema
     }
+
+    const enum containerType {
+        Box = 2,
+        Disk = 4,
+        FeatureSet = 1,
+        Folder = 5,
+        Shelf = 3,
+        Undefined = 0,
+    }
 }

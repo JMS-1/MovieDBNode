@@ -37,6 +37,14 @@ exports.ContainerSchema = {
         ["type"]: {
             message: 'Ablageart fehlt oder ist unzulässig',
             type: 'integer',
+            enum: [
+                2,
+                4,
+                1,
+                5,
+                3,
+                0,
+            ],
         },
     },
     required: ["_id", "name", "type"],

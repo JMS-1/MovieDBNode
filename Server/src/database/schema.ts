@@ -3,6 +3,7 @@ interface IMappers {
 }
 
 const dataPropsMapper: IMappers = {
+    enum: copy,
     maxLength: copy,
     message: errorMessage,
     minLength: copy,

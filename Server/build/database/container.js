@@ -12,6 +12,26 @@ exports.containerCollection = new (class extends utils_1.CollectionBase {
         this.name = container_1.collectionName;
         this.schema = container_1.ContainerSchema;
     }
+    async migrate(sql) {
+        const container = {
+            _id: sql.Id,
+            name: sql.Name || '',
+            type: parseInt(sql.Type, 10),
+        };
+        if (sql.Description) {
+            container.description = sql.Description;
+        }
+        if (sql.Parent) {
+            container.parentId = sql.Parent;
+        }
+        if (sql.ParentLocation) {
+            container.parentLocation = sql.ParentLocation;
+        }
+        const errors = await this.insert(container);
+        if (errors) {
+            throw new Error(JSON.stringify(errors));
+        }
+    }
 })();
 
 //# sourceMappingURL=container.js.map
