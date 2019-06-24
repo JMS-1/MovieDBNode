@@ -14,5 +14,5 @@
         "strictPropertyInitialization": false,
         "target": "es2017"
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx"]
+    "include": ["src/**/*.ts", "src/**/*.tsx", "../common/**/*.d.ts"]
 }

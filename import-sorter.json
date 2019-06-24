@@ -11,16 +11,24 @@
         "customOrderingRules": {
             "rules": [
                 {
-                    "orderLevel": 20,
-                    "regex": "^\\./"
+                    "orderLevel": 0,
+                    "regex": "^~"
                 },
                 {
                     "orderLevel": 30,
-                    "regex": "^\\.\\./"
+                    "regex": "^(movie-db-api)"
                 },
                 {
                     "orderLevel": 40,
-                    "regex": "^\\.\\.\\./"
+                    "regex": "^\\./"
+                },
+                {
+                    "orderLevel": 60,
+                    "regex": "^\\.\\./\\.\\./"
+                },
+                {
+                    "orderLevel": 50,
+                    "regex": "^\\.\\./"
                 }
             ]
         }

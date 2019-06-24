@@ -44,6 +44,11 @@
     normalize-path "^2.0.1"
     through2 "^2.0.3"
 
+"@korzio/djv-draft-04@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@korzio/djv-draft-04/-/djv-draft-04-2.0.1.tgz#2984289426cac5ed622b26a58c3af8584aefbdfe"
+  integrity sha512-MeTVcNsfCIYxK6T7jW1sroC7dBAb4IfLmQe6RoCqlxHN5NFkzNpgdnBPR+/0D2wJDUJHM9s9NQv+ouhxKjvUjg==
+
 "@semantic-ui-react/event-stack@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@semantic-ui-react/event-stack/-/event-stack-3.1.0.tgz#aadbe4a28b0dd7703c5f451640d0fefe66dd9208"
@@ -52,7 +57,7 @@
     exenv "^1.2.2"
     prop-types "^15.6.2"
 
-"@types/body-parser@*":
+"@types/body-parser@*", "@types/body-parser@1.17.0":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.0.tgz#9f5c9d9bd04bb54be32d5eb9fc0d8c974e6cf58c"
   integrity sha512-a2+YeUjPkztKJu5aIF2yArYFQQp8d51wZ7DavSHjFuY1mqVgidGyzEQ41JIVNy82fXj8yPgy2vJmfIywgESW6w==
@@ -66,6 +71,16 @@
   integrity sha512-4r8qa0quOvh7lGD0pre62CAb1oni1OO6ecJLGCezTmhQ8Fz50Arx9RUszryR8KlgK6avuSXvviL6yWyViQABOg==
   dependencies:
     "@types/node" "*"
+
+"@types/debug@4.1.4":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.4.tgz#56eec47706f0fd0b7c694eae2f3172e6b0b769da"
+  integrity sha512-D9MyoQFI7iP5VdpEyPZyjjqIJ8Y8EDNQFIFVLOmeg1rI1xiHOChyUPMPRUVfqFCerxfE+yS3vMyj37F6IdtOoQ==
+
+"@types/djv@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/djv/-/djv-2.1.0.tgz#21bebb9a8704fdc60ca1212aaabc1b024a8c9a1c"
+  integrity sha512-ni4Wubp7rk3Zj/CJNEwYXjajggCccEeNKcb3vJVRPRElvXscigAfucP9lIinbynYPNYadQZ/ZGhHUR77R9oWwg==
 
 "@types/express-serve-static-core@*":
   version "4.16.7"
@@ -1676,6 +1691,13 @@ debug@3.X, debug@^3.2.6:
   dependencies:
     ms "^2.1.1"
 
+debug@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
+  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
+  dependencies:
+    ms "^2.1.1"
+
 decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2, decamelize@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -1834,6 +1856,13 @@ diffie-hellman@^5.0.0:
     bn.js "^4.1.0"
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
+
+djv@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/djv/-/djv-2.1.2.tgz#5bf4344cdd5f7df82764d99a4f0684899d570216"
+  integrity sha512-ltQSINn+7aMTp7pKeQpfZg2ACd/Gy6VrL3LYuT25/plwPBb7xlGOekr463Luqn816AWJLuP7KZQGFct2JICyeA==
+  optionalDependencies:
+    "@korzio/djv-draft-04" "^2.0.1"
 
 domain-browser@^1.1.1:
   version "1.2.0"
