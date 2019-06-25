@@ -18,7 +18,8 @@ body {
 
 .movie-db-container-route {
   display: flex;
-  flex-direction: row; }
+  flex-direction: row;
+  overflow: hidden; }
   .movie-db-container-route > .movie-db-container-tree {
     flex-shrink: 0; }
   .movie-db-container-route > .movie-db-container-details {
@@ -29,5 +30,10 @@ body {
   background: orange; }
 
 .movie-db-container-tree {
-  background: aqua;
-  min-width: 10vw; }
+  background: white;
+  min-width: 10vw;
+  overflow: auto;
+  padding-right: 1em; }
+
+.movie-db-container-tree-level > .ui.label {
+  width: 100%; }

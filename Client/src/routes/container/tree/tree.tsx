@@ -1,6 +1,10 @@
 import * as React from 'react'
 
-export interface IContainerTreeUiProps {}
+import { ContainerNode } from './levelRedux'
+
+export interface IContainerTreeUiProps {
+    detail: string
+}
 
 export interface IContainerTreeProps {}
 
@@ -10,6 +14,10 @@ export type TContainerTreeProps = IContainerTreeProps & IContainerTreeUiProps & 
 
 export class CContainerTree extends React.PureComponent<TContainerTreeProps> {
     render(): JSX.Element {
-        return <div className='movie-db-container-tree'>[TREE]</div>
+        return (
+            <div className='movie-db-container-tree'>
+                <ContainerNode scope='' detail={this.props.detail} />
+            </div>
+        )
     }
 }

@@ -18,10 +18,12 @@ export type TContainerRouteProps = IContainerRouteProps & IContainerRouteUiProps
 
 export class CContainerRoute extends React.PureComponent<TContainerRouteProps> {
     render(): JSX.Element {
+        const { id } = this.props.match.params
+
         return (
             <div className='movie-db-container-route movie-db-route'>
-                <ContainerTree />
-                <ContainerDetails id={this.props.match.params.id} />
+                <ContainerTree detail={id} />
+                <ContainerDetails id={id} />
             </div>
         )
     }

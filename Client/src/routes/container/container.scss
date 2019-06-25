@@ -1,6 +1,7 @@
 .movie-db-container-route {
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 
     > .movie-db-container-tree {
         flex-shrink: 0;

@@ -1,4 +1,8 @@
 .movie-db-container-tree {
-    background: aqua;
+    background: white;
     min-width: 10vw;
+    overflow: auto;
+    padding-right: 1em;
 }
+
+@import './level';
