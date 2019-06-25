@@ -8,11 +8,11 @@ declare module 'movie-db-client' {
     }
 
     const enum applicationActions {
-        load = 'movie-db.application.load-schemas',
+        loadSchema = 'movie-db.application.load-schemas',
     }
 
     interface ILoadSchemas extends Action {
         schemas: ISchemaResponse
-        type: applicationActions.load
+        type: applicationActions.loadSchema
     }
 }

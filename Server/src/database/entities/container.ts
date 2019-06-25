@@ -64,7 +64,7 @@ export const ContainerSchema = {
 
 export function toProtocol(container: IDbContainer): IContainer {
     return {
-        id: container._id,
+        _id: container._id,
         description: container.description || undefined,
         name: container.name,
         parentId: container.parentId || undefined,

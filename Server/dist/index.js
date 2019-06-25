@@ -232,6 +232,12 @@ class ContainerActions {
     static setFilter(filter) {
         return { filter, type: "movie-db.containers.set-filter" };
     }
+    static startEdit(id) {
+        return { id, type: "movie-db.containers.set-select" };
+    }
+    static setProperty(prop, value) {
+        return { prop, value, type: "movie-db.containers.set-prop" };
+    }
 }
 exports.ContainerActions = ContainerActions;
 
@@ -248,15 +254,30 @@ exports.ContainerActions = ContainerActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
+function validateContainer(state) {
+    if (!state.workingCopy || !state.validator) {
+        return state;
+    }
+    return Object.assign({}, state, { validation: validation_1.validate(state.workingCopy, state.validator) });
+}
 function getInitialState() {
     return {
         all: [],
         filter: '',
+        selected: undefined,
+        validation: undefined,
+        validator: undefined,
+        workingCopy: undefined,
     };
 }
 exports.getInitialState = getInitialState;
 function load(state, response) {
-    return Object.assign({}, state, { all: response.containers || [] });
+    state = Object.assign({}, state, { all: response.containers || [] });
+    if (!state.selected || state.workingCopy) {
+        return state;
+    }
+    return validateContainer(Object.assign({}, state, { validation: undefined, workingCopy: state.all.find(c => c._id === state.selected) }));
 }
 exports.load = load;
 function setFilter(state, request) {
@@ -266,6 +287,37 @@ function setFilter(state, request) {
     return Object.assign({}, state, { filter: request.filter });
 }
 exports.setFilter = setFilter;
+function startEdit(state, request) {
+    if (state.selected !== request.id) {
+        state = Object.assign({}, state, { selected: request.id });
+    }
+    if (!request.id) {
+        if (!state.workingCopy) {
+            return state;
+        }
+        return Object.assign({}, state, { workingCopy: undefined, validation: undefined });
+    }
+    if (state.workingCopy && state.workingCopy._id === request.id) {
+        return state;
+    }
+    return validateContainer(Object.assign({}, state, { workingCopy: state.all.find(c => c._id === request.id), validation: undefined }));
+}
+exports.startEdit = startEdit;
+function setProperty(state, request) {
+    const workingCopy = state.workingCopy;
+    if (!workingCopy) {
+        return state;
+    }
+    if (workingCopy[request.prop] === request.value) {
+        return state;
+    }
+    return validateContainer(Object.assign({}, state, { workingCopy: Object.assign({}, workingCopy, { [request.prop]: request.value }) }));
+}
+exports.setProperty = setProperty;
+function loadSchema(state, response) {
+    return validateContainer(Object.assign({}, state, { validator: response.schemas.container }));
+}
+exports.loadSchema = loadSchema;
 
 
 /***/ }),
@@ -295,6 +347,12 @@ function ContainerReducer(state, action) {
             return controller.load(state, action);
         case "movie-db.containers.set-filter":
             return controller.setFilter(state, action);
+        case "movie-db.containers.set-select":
+            return controller.startEdit(state, action);
+        case "movie-db.containers.set-prop":
+            return controller.setProperty(state, action);
+        case "movie-db.application.load-schemas":
+            return controller.loadSchema(state, action);
     }
     return state;
 }
@@ -316,7 +374,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 exports.getContainerMap = reselect_1.createSelector((state) => state.container.all, (all) => {
     const map = {};
-    all.forEach(c => (map[c.id] = c));
+    all.forEach(c => (map[c._id] = c));
     return map;
 });
 function filterChildMap(map, scope, filter, lookup) {
@@ -342,7 +400,7 @@ exports.getContainerChildMap = reselect_1.createSelector((state) => state.contai
         if (!parentInfo) {
             map[parentId] = parentInfo = [];
         }
-        parentInfo.push(container.id);
+        parentInfo.push(container._id);
     }
     if (filter) {
         filterChildMap(map, '', filter.toLocaleLowerCase(), lookup);
@@ -351,7 +409,7 @@ exports.getContainerChildMap = reselect_1.createSelector((state) => state.contai
         children.sort((l, r) => {
             const left = lookup[l];
             const right = lookup[r];
-            return ((left && left.name) || left.id).localeCompare((right && right.name) || right.id);
+            return ((left && left.name) || left._id).localeCompare((right && right.name) || right._id);
         });
     }
     return map;
@@ -454,6 +512,11 @@ __export(__webpack_require__(/*! ./language */ "./Client/src/controller/language
 __export(__webpack_require__(/*! ./media */ "./Client/src/controller/media/index.ts"));
 __export(__webpack_require__(/*! ./mui */ "./Client/src/controller/mui/index.ts"));
 __export(__webpack_require__(/*! ./series */ "./Client/src/controller/series/index.ts"));
+function getError(errors, prop, edit) {
+    const error = errors && errors.find(e => e.property === prop);
+    return error && `${error.message} (${error.constraint})`;
+}
+exports.getError = getError;
 
 
 /***/ }),
@@ -837,12 +900,44 @@ exports.ContainerRoute = react_redux_1.connect(mapStateToProps, mapDispatchToPro
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 class CContainerDetails extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.setName = (ev) => this.props.setProp('name', ev.currentTarget.value);
+        this.setDescription = (ev) => this.props.setProp('description', ev.currentTarget.value);
+        this.setLocation = (ev) => this.props.setProp('parentLocation', ev.currentTarget.value);
+    }
     render() {
         if (this.props.lost) {
             return null;
         }
-        return React.createElement("div", { className: 'movie-db-container-details' }, "[DETAILS]");
+        const { locationError, descriptionError, nameError } = this.props;
+        const inError = locationError || descriptionError || nameError;
+        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: !!inError },
+            React.createElement(semantic_ui_react_1.Form.Field, null,
+                React.createElement("label", null, "[TBD]"),
+                React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.id || '', readOnly: true, disabled: true })),
+            React.createElement(semantic_ui_react_1.Form.Field, { error: !!nameError, required: true },
+                React.createElement("label", null, "[TBD]"),
+                React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setName, value: this.props.name || '' })),
+            nameError && React.createElement(semantic_ui_react_1.Message, { error: true, content: nameError }),
+            React.createElement(semantic_ui_react_1.Form.Field, { error: !!descriptionError },
+                React.createElement("label", null, "[TBD]"),
+                React.createElement(semantic_ui_react_1.TextArea, { input: 'text', onChange: this.setDescription, value: this.props.description || '' })),
+            descriptionError && React.createElement(semantic_ui_react_1.Message, { error: true, content: descriptionError }),
+            React.createElement(semantic_ui_react_1.Form.Field, { error: !!locationError },
+                React.createElement("label", null, "[TBD]"),
+                React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setLocation, value: this.props.location || '' })),
+            locationError && React.createElement(semantic_ui_react_1.Message, { error: true, content: locationError })));
+    }
+    componentWillMount() {
+        this.props.loadDetails(this.props.id);
+    }
+    componentWillReceiveProps(props, context) {
+        if (props.id !== this.props.id) {
+            this.props.loadDetails(props.id);
+        }
     }
 }
 exports.CContainerDetails = CContainerDetails;
@@ -864,13 +959,26 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/container/details/details.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    const container = controller_1.getContainerMap(state)[props.id];
+    const route = state.container;
+    const container = route.workingCopy;
+    const errors = route.validation;
     return {
+        description: container && container.description,
+        descriptionError: controller_1.getError(errors, 'description', container),
+        location: container && container.parentLocation,
+        locationError: controller_1.getError(errors, 'parentLocation', container),
         lost: !container,
+        name: container && container.name,
+        nameError: controller_1.getError(errors, 'name', container),
+        parentId: container && container.parentId,
+        type: container ? container.type : undefined,
     };
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        loadDetails: id => dispatch(controller_1.ContainerActions.startEdit(id)),
+        setProp: (prop, value) => dispatch(controller_1.ContainerActions.setProperty(prop, value)),
+    };
 }
 exports.ContainerDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerDetails);
 
@@ -1119,7 +1227,7 @@ function validate(object, schema) {
     catch (error) {
         return [
             {
-                contraint: 'vaidator',
+                constraint: 'validator',
                 message: typeof error === 'string' ? error : error.message || 'failed',
                 property: '*',
             },
@@ -66990,7 +67098,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

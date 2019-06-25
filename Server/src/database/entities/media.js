@@ -14,7 +14,7 @@ exports.MediaSchema = {
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        container: {
+        containerId: {
             message: 'Ablage ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
@@ -41,8 +41,8 @@ exports.MediaSchema = {
 };
 function toProtocol(media) {
     return {
-        id: media._id,
-        containerId: media.container || undefined,
+        _id: media._id,
+        containerId: media.containerId || undefined,
         position: media.position || undefined,
         type: media.type,
     };
@@ -54,7 +54,7 @@ function toEntity(media, id) {
         type: media.type,
     };
     if (media.containerId) {
-        dbMedia.container = media.containerId;
+        dbMedia.containerId = media.containerId;
     }
     if (media.position) {
         dbMedia.position = media.position;

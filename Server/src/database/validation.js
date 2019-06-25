@@ -30,7 +30,7 @@ function validate(object, schema) {
     catch (error) {
         return [
             {
-                contraint: 'vaidator',
+                constraint: 'validator',
                 message: typeof error === 'string' ? error : error.message || 'failed',
                 property: '*',
             },

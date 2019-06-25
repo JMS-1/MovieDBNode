@@ -16,7 +16,7 @@ export const mediaCollection = new (class extends CollectionBase<IDbMedia> {
         }
 
         if (sql.Container) {
-            media.container = sql.Container
+            media.containerId = sql.Container
         }
 
         if (sql.Position) {

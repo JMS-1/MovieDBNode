@@ -33,7 +33,7 @@ export const LanguageSchema = {
 
 export function toProtocol(language: IDbLanguage): ILanguage {
     return {
-        id: language._id,
+        _id: language._id,
         name: language.name,
     }
 }

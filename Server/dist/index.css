@@ -8,7 +8,6 @@ body {
   margin: 0; }
 
 .movie-db-root {
-  background: beige;
   height: 100%; }
   .movie-db-root > .content {
     width: 100%;
@@ -27,7 +26,8 @@ body {
     flex-basis: 0; }
 
 .movie-db-container-details {
-  background: orange; }
+  padding: 1em;
+  overflow: auto; }
 
 .movie-db-container-tree {
   background: white;

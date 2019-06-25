@@ -13,7 +13,7 @@ declare module 'movie-db-api' {
     }
 
     interface IValidationError {
-        readonly contraint: string
+        readonly constraint: string
         readonly message: string
         readonly property: string
     }
@@ -54,7 +54,7 @@ declare module 'movie-db-api' {
     }
 
     interface IContainer extends INewContainer {
-        id: string
+        _id: string
     }
 
     interface IContainerResponse {
@@ -90,7 +90,7 @@ declare module 'movie-db-api' {
     }
 
     interface IGenre extends INewGenre {
-        id: string
+        _id: string
     }
 
     interface INewLanguage {
@@ -98,7 +98,7 @@ declare module 'movie-db-api' {
     }
 
     interface ILanguage extends INewLanguage {
-        id: string
+        _id: string
     }
 
     interface INewMedia {
@@ -108,7 +108,7 @@ declare module 'movie-db-api' {
     }
 
     interface IMedia extends INewMedia {
-        id: string
+        _id: string
     }
 
     interface INewSeries {
@@ -118,7 +118,7 @@ declare module 'movie-db-api' {
     }
 
     interface ISeries extends INewSeries {
-        id: string
+        _id: string
     }
 
     interface IGenreResponse {

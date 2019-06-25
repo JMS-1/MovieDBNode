@@ -59,7 +59,7 @@ class CollectionBase {
             try {
                 return (validation_1.validate(container, this.schema) || [
                     {
-                        contraint: 'database',
+                        constraint: 'database',
                         message: utils_1.getError(error),
                         property: '*',
                     },

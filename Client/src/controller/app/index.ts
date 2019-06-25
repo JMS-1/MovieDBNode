@@ -12,7 +12,7 @@ export function ApplicationReducer(state: IApplicationState, action: IAction): I
     }
 
     switch (action.type) {
-        case applicationActions.load:
+        case applicationActions.loadSchema:
             return controller.loadSchemas(state, action)
     }
 

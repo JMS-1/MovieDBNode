@@ -16,10 +16,10 @@ export const getContainerMap = createSelector(
     (all): IContainerMap => {
         const map: IContainerMap = {}
 
-        all.forEach(c => (map[c.id] = c))
+        all.forEach(c => (map[c._id] = c))
 
         return map
-    },
+    }
 )
 
 function filterChildMap(map: IContainerChildMap, scope: string, filter: string, lookup: IContainerMap): void {
@@ -63,7 +63,7 @@ export const getContainerChildMap = createSelector(
                 map[parentId] = parentInfo = []
             }
 
-            parentInfo.push(container.id)
+            parentInfo.push(container._id)
         }
 
         if (filter) {
@@ -75,10 +75,10 @@ export const getContainerChildMap = createSelector(
                 const left = lookup[l]
                 const right = lookup[r]
 
-                return ((left && left.name) || left.id).localeCompare((right && right.name) || right.id)
+                return ((left && left.name) || left._id).localeCompare((right && right.name) || right._id)
             })
         }
 
         return map
-    },
+    }
 )

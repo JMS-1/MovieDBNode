@@ -35,7 +35,7 @@ exports.SeriesSchema = {
 };
 function toProtocol(series) {
     return {
-        id: series._id,
+        _id: series._id,
         description: series.description || undefined,
         name: series.name,
         parentId: series.parentId || undefined,

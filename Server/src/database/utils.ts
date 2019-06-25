@@ -76,7 +76,7 @@ export abstract class CollectionBase<TType extends { _id: string }> {
                 return (
                     validate(container, this.schema) || [
                         {
-                            contraint: 'database',
+                            constraint: 'database',
                             message: getError(error),
                             property: '*',
                         },

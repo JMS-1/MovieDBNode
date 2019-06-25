@@ -19,7 +19,7 @@ exports.mediaCollection = new (class extends utils_1.CollectionBase {
             type: parseInt(sql.Type, 10),
         };
         if (sql.Container) {
-            media.container = sql.Container;
+            media.containerId = sql.Container;
         }
         if (sql.Position) {
             media.position = sql.Position;

@@ -33,7 +33,7 @@ export const GenreSchema = {
 
 export function toProtocol(genre: IDbGenre): IGenre {
     return {
-        id: genre._id,
+        _id: genre._id,
         name: genre.name,
     }
 }

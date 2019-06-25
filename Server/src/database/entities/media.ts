@@ -6,7 +6,7 @@ export const collectionName = 'medias'
 
 export interface IDbMedia {
     _id: string
-    container?: string
+    containerId?: string
     position?: string
     type: mediaType
 }
@@ -23,7 +23,7 @@ export const MediaSchema = {
             pattern: uniqueId,
             type: 'string',
         },
-        container: {
+        containerId: {
             message: 'Ablage ist ungültig',
             pattern: uniqueId,
             type: 'string',
@@ -51,8 +51,8 @@ export const MediaSchema = {
 
 export function toProtocol(media: IDbMedia): IMedia {
     return {
-        id: media._id,
-        containerId: media.container || undefined,
+        _id: media._id,
+        containerId: media.containerId || undefined,
         position: media.position || undefined,
         type: media.type,
     }
@@ -65,7 +65,7 @@ export function toEntity(media: INewMedia, id: string): IDbMedia {
     }
 
     if (media.containerId) {
-        dbMedia.container = media.containerId
+        dbMedia.containerId = media.containerId
     }
 
     if (media.position) {

@@ -25,7 +25,7 @@ exports.GenreSchema = {
 };
 function toProtocol(genre) {
     return {
-        id: genre._id,
+        _id: genre._id,
         name: genre.name,
     };
 }
