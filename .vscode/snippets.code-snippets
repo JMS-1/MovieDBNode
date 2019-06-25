@@ -28,6 +28,8 @@
             "import { connect } from 'react-redux'",
             "import { Action, Dispatch } from 'redux'",
             "",
+            "import { IClientState } from 'movie-db-client'",
+            "",
             "import * as local from './${1:${TM_FILENAME_BASE/(.*)Redux$/$1/}}'",
             "",
             "function mapStateToProps(state: IClientState, props: local.I${2:${TM_FILENAME_BASE/(.*)Redux$/${1:/capitalize}/}}UiProps): local.I${2}Props {",

@@ -31563,9 +31563,13 @@ module.exports = function(originalModule) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
+const react_router_1 = __webpack_require__(/*! react-router */ "../node_modules/react-router/esm/react-router.js");
+const containerRedux_1 = __webpack_require__(/*! ../../routes/container/containerRedux */ "./src/routes/container/containerRedux.ts");
 class CRoot extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-root' }, this.props.title);
+        return (React.createElement("div", { className: 'movie-db-root' },
+            React.createElement("div", { className: 'content' },
+                React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }))));
     }
 }
 exports.CRoot = CRoot;
@@ -31586,9 +31590,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "../node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./root */ "./src/components/root/root.tsx");
 function mapStateToProps(state, props) {
-    return {
-        title: state.mui.title,
-    };
+    return {};
 }
 function mapDispatchToProps(dispatch, props) {
     return {};
@@ -32151,19 +32153,68 @@ const React = __webpack_require__(/*! react */ "../node_modules/react/index.js")
 const react_dom_1 = __webpack_require__(/*! react-dom */ "../node_modules/react-dom/index.js");
 const react_redux_1 = __webpack_require__(/*! react-redux */ "../node_modules/react-redux/es/index.js");
 const rootRedux_1 = __webpack_require__(/*! ./components/root/rootRedux */ "./src/components/root/rootRedux.ts");
-const controller_1 = __webpack_require__(/*! ./controller */ "./src/controller/index.ts");
+const controller = __webpack_require__(/*! ./controller */ "./src/controller/index.ts");
 const genre_1 = __webpack_require__(/*! ./controller/genre */ "./src/controller/genre/index.ts");
 const store_1 = __webpack_require__(/*! ./store */ "./src/store.ts");
 const store = store_1.initializeStore();
 react_dom_1.render(React.createElement(react_redux_1.Provider, { store: store },
     React.createElement(connected_react_router_1.ConnectedRouter, { history: store_1.history },
         React.createElement(rootRedux_1.Root, null))), document.querySelector('client-root'));
-store_1.ServerApi.get('container', controller_1.ContainerActions.load);
+store_1.ServerApi.get('container', controller.ContainerActions.load);
 store_1.ServerApi.get('genre', genre_1.GenreActions.load);
-store_1.ServerApi.get('language', controller_1.LanguageActions.load);
-store_1.ServerApi.get('media', controller_1.MediaActions.load);
-store_1.ServerApi.get('schemas', controller_1.ApplicationActions.loadSchemas);
-store_1.ServerApi.get('series', controller_1.SeriesActions.load);
+store_1.ServerApi.get('language', controller.LanguageActions.load);
+store_1.ServerApi.get('media', controller.MediaActions.load);
+store_1.ServerApi.get('schemas', controller.ApplicationActions.loadSchemas);
+store_1.ServerApi.get('series', controller.SeriesActions.load);
+const css = document.querySelector('head > link[rel="stylesheet"][href="index.css"]');
+document.addEventListener('keydown', (ev) => ev.ctrlKey && ev.key === 'F12' && (css.href = css.href));
+
+
+/***/ }),
+
+/***/ "./src/routes/container/container.tsx":
+/*!********************************************!*\
+  !*** ./src/routes/container/container.tsx ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
+class CContainerRoute extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-container-route movie-db-route' },
+            "[CONTAINER ",
+            this.props.match.params.id,
+            "]");
+    }
+}
+exports.CContainerRoute = CContainerRoute;
+
+
+/***/ }),
+
+/***/ "./src/routes/container/containerRedux.ts":
+/*!************************************************!*\
+  !*** ./src/routes/container/containerRedux.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "../node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./container */ "./src/routes/container/container.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.ContainerRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerRoute);
 
 
 /***/ }),

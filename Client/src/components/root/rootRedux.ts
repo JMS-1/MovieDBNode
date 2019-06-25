@@ -6,9 +6,7 @@ import { IClientState } from 'movie-db-client'
 import * as local from './root'
 
 function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.IRootProps {
-    return {
-        title: state.mui.title,
-    }
+    return {}
 }
 
 function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRootUiProps): local.IRootActions {

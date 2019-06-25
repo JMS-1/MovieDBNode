@@ -4,9 +4,7 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { Root } from './components/root/rootRedux'
-import {
-    ApplicationActions, ContainerActions, LanguageActions, MediaActions, SeriesActions,
-} from './controller'
+import * as controller from './controller'
 import { GenreActions } from './controller/genre'
 import { history, initializeStore, ServerApi } from './store'
 
@@ -21,9 +19,15 @@ render(
     document.querySelector('client-root'),
 )
 
-ServerApi.get('container', ContainerActions.load)
+ServerApi.get('container', controller.ContainerActions.load)
 ServerApi.get('genre', GenreActions.load)
-ServerApi.get('language', LanguageActions.load)
-ServerApi.get('media', MediaActions.load)
-ServerApi.get('schemas', ApplicationActions.loadSchemas)
-ServerApi.get('series', SeriesActions.load)
+ServerApi.get('language', controller.LanguageActions.load)
+ServerApi.get('media', controller.MediaActions.load)
+ServerApi.get('schemas', controller.ApplicationActions.loadSchemas)
+ServerApi.get('series', controller.SeriesActions.load)
+
+// Kleine Hilfe zum Styling während der Entwicklung.
+
+const css: HTMLLinkElement = document.querySelector('head > link[rel="stylesheet"][href="index.css"]')
+
+document.addEventListener('keydown', (ev: KeyboardEvent) => ev.ctrlKey && ev.key === 'F12' && (css.href = css.href))
