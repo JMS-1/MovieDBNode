@@ -1,5 +1,6 @@
 import { collectionName, ContainerSchema, IDbContainer } from './entities/container'
 import { CollectionBase } from './utils'
+import { validate } from './validation'
 
 export * from './entities/container'
 
@@ -8,7 +9,7 @@ export const containerCollection = new (class extends CollectionBase<IDbContaine
 
     readonly schema = ContainerSchema
 
-    async migrate(sql: any): Promise<void> {
+    fromSql(sql: any): void {
         const container: IDbContainer = {
             _id: sql.Id,
             name: sql.Name || '',
@@ -27,10 +28,12 @@ export const containerCollection = new (class extends CollectionBase<IDbContaine
             container.parentLocation = sql.ParentLocation
         }
 
-        const errors = await this.insert(container)
+        const errors = validate(container, this.schema)
 
         if (errors) {
             throw new Error(JSON.stringify(errors))
         }
+
+        this.cacheMigrated(container)
     }
 })()

@@ -31,7 +31,8 @@ export async function runMigration(): Promise<void> {
             continue
         }
 
-        const collection = collections[<keyof typeof collections>insert[1]]
+        const table = <keyof typeof collections>insert[1]
+        const collection = collections[table]
 
         if (!collection) {
             continue
@@ -57,6 +58,6 @@ export async function runMigration(): Promise<void> {
                     : value
         }
 
-        await collection.migrate(row)
+        await collection.fromSql(row)
     }
 }

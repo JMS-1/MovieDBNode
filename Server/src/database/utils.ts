@@ -33,10 +33,24 @@ export async function dbConnect(): Promise<Db> {
     }
 }
 
-export abstract class CollectionBase<TType> {
+export abstract class CollectionBase<TType extends { _id: string }> {
     abstract readonly name: string
 
     abstract readonly schema: IValidatableSchema
+
+    private _migrationMap: { [id: string]: TType }
+
+    protected cacheMigrated(item: TType): void {
+        if (!this._migrationMap) {
+            this._migrationMap = {}
+        }
+
+        if (this._migrationMap[item._id]) {
+            throw new Error(`duplicated identifier '${item._id}`)
+        }
+
+        this._migrationMap[item._id] = item
+    }
 
     async getCollection(): Promise<Collection<TType>> {
         const db = await dbConnect()

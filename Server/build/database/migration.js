@@ -24,7 +24,8 @@ async function runMigration() {
         if (!insert) {
             continue;
         }
-        const collection = collections[insert[1]];
+        const table = insert[1];
+        const collection = collections[table];
         if (!collection) {
             continue;
         }
@@ -43,7 +44,7 @@ async function runMigration() {
                         ? value.substr(2, value.length - 3).replace(doubleQuote, "'")
                         : value;
         }
-        await collection.migrate(row);
+        await collection.fromSql(row);
     }
 }
 exports.runMigration = runMigration;
