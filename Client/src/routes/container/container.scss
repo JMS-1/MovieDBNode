@@ -1,3 +1,16 @@
 .movie-db-container-route {
-    background: beige;
+    display: flex;
+    flex-direction: row;
+
+    > .movie-db-container-tree {
+        flex-shrink: 0;
+    }
+
+    > .movie-db-container-details {
+        flex-grow: 1;
+        flex-basis: 0;
+    }
 }
+
+@import 'details/details';
+@import 'tree/tree';

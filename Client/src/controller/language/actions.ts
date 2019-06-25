@@ -1,8 +1,8 @@
-import { ILanguage } from 'movie-db-api'
+import { ILanguageResponse } from 'movie-db-api'
 import { ILoadLanguages, languageActions } from 'movie-db-client'
 
 export class LanguageActions {
-    static load(languages: ILanguage[]): ILoadLanguages {
-        return { languages, type: languageActions.load }
+    static load(response: ILanguageResponse): ILoadLanguages {
+        return { languages: response.languages, type: languageActions.load }
     }
 }

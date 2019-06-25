@@ -1,8 +1,8 @@
-import { IGenre } from 'movie-db-api'
+import { IGenreResponse } from 'movie-db-api'
 import { genreActions, ILoadGenres } from 'movie-db-client'
 
 export class GenreActions {
-    static load(genres: IGenre[]): ILoadGenres {
-        return { genres, type: genreActions.load }
+    static load(response: IGenreResponse): ILoadGenres {
+        return { genres: response.genres, type: genreActions.load }
     }
 }

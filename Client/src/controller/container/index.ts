@@ -3,6 +3,7 @@ import { containerActions, IContainerState, ILoadContainers } from 'movie-db-cli
 import * as controller from './controller'
 
 export * from './actions'
+export * from './selectors'
 
 type IAction = ILoadContainers
 

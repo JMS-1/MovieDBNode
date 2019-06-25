@@ -30049,6 +30049,142 @@ if ( true && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed
 
 /***/ }),
 
+/***/ "../node_modules/reselect/es/index.js":
+/*!********************************************!*\
+  !*** ../node_modules/reselect/es/index.js ***!
+  \********************************************/
+/*! exports provided: defaultMemoize, createSelectorCreator, createSelector, createStructuredSelector */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultMemoize", function() { return defaultMemoize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSelectorCreator", function() { return createSelectorCreator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSelector", function() { return createSelector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createStructuredSelector", function() { return createStructuredSelector; });
+function defaultEqualityCheck(a, b) {
+  return a === b;
+}
+
+function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
+  if (prev === null || next === null || prev.length !== next.length) {
+    return false;
+  }
+
+  // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+  var length = prev.length;
+  for (var i = 0; i < length; i++) {
+    if (!equalityCheck(prev[i], next[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function defaultMemoize(func) {
+  var equalityCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultEqualityCheck;
+
+  var lastArgs = null;
+  var lastResult = null;
+  // we reference arguments instead of spreading them for performance reasons
+  return function () {
+    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+      // apply arguments instead of spreading for performance.
+      lastResult = func.apply(null, arguments);
+    }
+
+    lastArgs = arguments;
+    return lastResult;
+  };
+}
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep;
+    }).join(', ');
+    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptions[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var recomputations = 0;
+    var resultFunc = funcs.pop();
+    var dependencies = getDependencies(funcs);
+
+    var memoizedResultFunc = memoize.apply(undefined, [function () {
+      recomputations++;
+      // apply arguments instead of spreading for performance.
+      return resultFunc.apply(null, arguments);
+    }].concat(memoizeOptions));
+
+    // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+    var selector = memoize(function () {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        params.push(dependencies[i].apply(null, arguments));
+      }
+
+      // apply arguments instead of spreading for performance.
+      return memoizedResultFunc.apply(null, params);
+    });
+
+    selector.resultFunc = resultFunc;
+    selector.dependencies = dependencies;
+    selector.recomputations = function () {
+      return recomputations;
+    };
+    selector.resetRecomputations = function () {
+      return recomputations = 0;
+    };
+    return selector;
+  };
+}
+
+var createSelector = createSelectorCreator(defaultMemoize);
+
+function createStructuredSelector(selectors) {
+  var selectorCreator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : createSelector;
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+  }
+  var objectKeys = Object.keys(selectors);
+  return selectorCreator(objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+}
+
+/***/ }),
+
 /***/ "../node_modules/resolve-pathname/index.js":
 /*!*************************************************!*\
   !*** ../node_modules/resolve-pathname/index.js ***!
@@ -31692,8 +31828,8 @@ exports.ApplicationReducer = ApplicationReducer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class ContainerActions {
-    static load(containers) {
-        return { containers, type: "movie-db.containers.load" };
+    static load(response) {
+        return { containers: response.containers, type: "movie-db.containers.load" };
     }
 }
 exports.ContainerActions = ContainerActions;
@@ -31740,6 +31876,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const controller = __webpack_require__(/*! ./controller */ "./src/controller/container/controller.ts");
 __export(__webpack_require__(/*! ./actions */ "./src/controller/container/actions.ts"));
+__export(__webpack_require__(/*! ./selectors */ "./src/controller/container/selectors.ts"));
 function ContainerReducer(state, action) {
     if (!state) {
         state = controller.getInitialState();
@@ -31755,6 +31892,26 @@ exports.ContainerReducer = ContainerReducer;
 
 /***/ }),
 
+/***/ "./src/controller/container/selectors.ts":
+/*!***********************************************!*\
+  !*** ./src/controller/container/selectors.ts ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const reselect_1 = __webpack_require__(/*! reselect */ "../node_modules/reselect/es/index.js");
+exports.getContainerMap = reselect_1.createSelector((state) => state.container.all, (all) => {
+    const map = {};
+    all.forEach(c => (map[c.id] = c));
+    return map;
+});
+
+
+/***/ }),
+
 /***/ "./src/controller/genre/actions.ts":
 /*!*****************************************!*\
   !*** ./src/controller/genre/actions.ts ***!
@@ -31766,8 +31923,8 @@ exports.ContainerReducer = ContainerReducer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class GenreActions {
-    static load(genres) {
-        return { genres, type: "movie-db.genres.load" };
+    static load(response) {
+        return { genres: response.genres, type: "movie-db.genres.load" };
     }
 }
 exports.GenreActions = GenreActions;
@@ -31864,8 +32021,8 @@ __export(__webpack_require__(/*! ./series */ "./src/controller/series/index.ts")
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class LanguageActions {
-    static load(languages) {
-        return { languages, type: "movie-db.languages.load" };
+    static load(response) {
+        return { languages: response.languages, type: "movie-db.languages.load" };
     }
 }
 exports.LanguageActions = LanguageActions;
@@ -31938,8 +32095,8 @@ exports.LanguageReducer = LanguageReducer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class MediaActions {
-    static load(media) {
-        return { media, type: "movie-db.media.load" };
+    static load(response) {
+        return { media: response.media, type: "movie-db.media.load" };
     }
 }
 exports.MediaActions = MediaActions;
@@ -32075,8 +32232,8 @@ exports.MuiReducer = MuiReducer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class SeriesActions {
-    static load(series) {
-        return { series, type: "movie-db.series.load" };
+    static load(response) {
+        return { series: response.series, type: "movie-db.series.load" };
     }
 }
 exports.SeriesActions = SeriesActions;
@@ -32183,12 +32340,13 @@ document.addEventListener('keydown', (ev) => ev.ctrlKey && ev.key === 'F12' && (
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
+const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./src/routes/container/details/detailsRedux.ts");
+const treeRedux_1 = __webpack_require__(/*! ./tree/treeRedux */ "./src/routes/container/tree/treeRedux.ts");
 class CContainerRoute extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-container-route movie-db-route' },
-            "[CONTAINER ",
-            this.props.match.params.id,
-            "]");
+        return (React.createElement("div", { className: 'movie-db-container-route movie-db-route' },
+            React.createElement(treeRedux_1.ContainerTree, null),
+            React.createElement(detailsRedux_1.ContainerDetails, { id: this.props.match.params.id })));
     }
 }
 exports.CContainerRoute = CContainerRoute;
@@ -32215,6 +32373,101 @@ function mapDispatchToProps(dispatch, props) {
     return {};
 }
 exports.ContainerRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerRoute);
+
+
+/***/ }),
+
+/***/ "./src/routes/container/details/details.tsx":
+/*!**************************************************!*\
+  !*** ./src/routes/container/details/details.tsx ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
+class CContainerDetails extends React.PureComponent {
+    render() {
+        if (this.props.lost) {
+            return null;
+        }
+        return React.createElement("div", { className: 'movie-db-container-details' }, "[DETAILS]");
+    }
+}
+exports.CContainerDetails = CContainerDetails;
+
+
+/***/ }),
+
+/***/ "./src/routes/container/details/detailsRedux.ts":
+/*!******************************************************!*\
+  !*** ./src/routes/container/details/detailsRedux.ts ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "../node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./details */ "./src/routes/container/details/details.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./src/controller/index.ts");
+function mapStateToProps(state, props) {
+    const container = controller_1.getContainerMap(state)[props.id];
+    return {
+        lost: !container,
+    };
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.ContainerDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerDetails);
+
+
+/***/ }),
+
+/***/ "./src/routes/container/tree/tree.tsx":
+/*!********************************************!*\
+  !*** ./src/routes/container/tree/tree.tsx ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
+class CContainerTree extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-container-tree' }, "[TREE]");
+    }
+}
+exports.CContainerTree = CContainerTree;
+
+
+/***/ }),
+
+/***/ "./src/routes/container/tree/treeRedux.ts":
+/*!************************************************!*\
+  !*** ./src/routes/container/tree/treeRedux.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "../node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./tree */ "./src/routes/container/tree/tree.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerTree);
 
 
 /***/ }),

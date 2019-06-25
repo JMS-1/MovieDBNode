@@ -17,4 +17,17 @@ body {
       height: 100%; }
 
 .movie-db-container-route {
-  background: beige; }
+  display: flex;
+  flex-direction: row; }
+  .movie-db-container-route > .movie-db-container-tree {
+    flex-shrink: 0; }
+  .movie-db-container-route > .movie-db-container-details {
+    flex-grow: 1;
+    flex-basis: 0; }
+
+.movie-db-container-details {
+  background: orange; }
+
+.movie-db-container-tree {
+  background: aqua;
+  min-width: 10vw; }
