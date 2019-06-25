@@ -83,4 +83,5 @@ class CollectionBase {
     }
 }
 exports.CollectionBase = CollectionBase;
+
 //# sourceMappingURL=utils.js.map

@@ -33,4 +33,5 @@ exports.SeriesSchema = {
     },
     required: ['_id', 'name'],
 };
+
 //# sourceMappingURL=series.js.map

@@ -119,4 +119,5 @@ exports.RecordingSchema = {
     },
     required: ['_id', 'name', 'created', 'media', 'genres', 'languages', 'links'],
 };
+
 //# sourceMappingURL=recording.js.map

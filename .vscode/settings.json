@@ -12,5 +12,9 @@
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
     "tslint.autoFixOnSave": true,
     "tslint.suppressWhileTypeErrorsPresent": true,
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "files.exclude": {
+        "Server/src/**/*.js": true,
+        "Server/src/**/*.js.map": true
+    }
 }

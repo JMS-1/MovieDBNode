@@ -12,4 +12,5 @@ function installApi(app) {
     app.use('/api', apiRoute);
 }
 exports.installApi = installApi;
+
 //# sourceMappingURL=index.js.map

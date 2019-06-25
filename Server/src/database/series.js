@@ -31,4 +31,5 @@ exports.seriesCollection = new (class extends utils_1.CollectionBase {
         this.cacheMigrated(series);
     }
 })();
+
 //# sourceMappingURL=series.js.map

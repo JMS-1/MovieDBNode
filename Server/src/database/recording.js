@@ -41,4 +41,5 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         this.cacheMigrated(recording);
     }
 })();
+
 //# sourceMappingURL=recording.js.map

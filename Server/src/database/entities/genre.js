@@ -23,4 +23,5 @@ exports.GenreSchema = {
     },
     required: ['_id', 'name'],
 };
+
 //# sourceMappingURL=genre.js.map

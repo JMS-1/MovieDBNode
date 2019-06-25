@@ -26,4 +26,5 @@ async function initializeDatabase() {
     }
 }
 exports.initializeDatabase = initializeDatabase;
+
 //# sourceMappingURL=index.js.map

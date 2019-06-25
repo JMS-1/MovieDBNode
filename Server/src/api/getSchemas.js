@@ -16,4 +16,5 @@ exports.getSchema = express_1.Router().get('/schemas', (request, response, next)
     recording: recording_1.RecordingSchema,
     series: series_1.SeriesSchema,
 }), request, response));
+
 //# sourceMappingURL=getSchemas.js.map

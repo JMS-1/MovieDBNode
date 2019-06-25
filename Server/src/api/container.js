@@ -10,4 +10,5 @@ exports.containerApi = express_1.Router().use('/container', express_1.Router().g
         containers: containers.map(container_2.toProtocol),
     };
 }, request, response)));
+
 //# sourceMappingURL=container.js.map

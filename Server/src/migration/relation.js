@@ -43,4 +43,5 @@ class RelationCollection {
     }
 }
 exports.RelationCollection = RelationCollection;
+
 //# sourceMappingURL=relation.js.map

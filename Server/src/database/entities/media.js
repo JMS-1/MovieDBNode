@@ -39,4 +39,5 @@ exports.MediaSchema = {
     },
     required: ['_id', 'type'],
 };
+
 //# sourceMappingURL=media.js.map

@@ -23,4 +23,5 @@ exports.LanguageSchema = {
     },
     required: ['_id', 'name'],
 };
+
 //# sourceMappingURL=language.js.map

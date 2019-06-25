@@ -25,4 +25,5 @@ exports.genreCollection = new (class extends utils_1.CollectionBase {
         this.cacheMigrated(genre);
     }
 })();
+
 //# sourceMappingURL=genre.js.map

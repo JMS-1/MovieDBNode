@@ -31,4 +31,5 @@ exports.linkCollection = new (class extends utils_1.CollectionBase {
         return Promise.resolve(undefined);
     }
 })();
+
 //# sourceMappingURL=links.js.map

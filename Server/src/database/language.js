@@ -25,4 +25,5 @@ exports.languageCollection = new (class extends utils_1.CollectionBase {
         this.cacheMigrated(language);
     }
 })();
+
 //# sourceMappingURL=language.js.map
