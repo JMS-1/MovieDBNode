@@ -1,0 +1,1 @@
+{"version":3,"file":"utils.js","sourceRoot":"","sources":["utils.ts"],"names":[],"mappings":";;AAAa,QAAA,QAAQ,GAAG,+EAA+E,CAAA;AAE1F,QAAA,OAAO,GAAG,8CAA8C,CAAA","sourcesContent":["export const uniqueId = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'\n\nexport const isoDate = '^\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}Z$'\n"]}

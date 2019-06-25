@@ -9,7 +9,7 @@ const semanticBuild = require('./Client/src/semantic/tasks/build')
 const semanticWatch = require('./Client/src/semantic/tasks/watch')
 
 const config = ts.createProject(path.join(__dirname, 'Server/tsconfig.json'))
-const build = path.join(__dirname, 'Server/build')
+const build = path.join(__dirname, 'Server/src')
 
 let watchMode = false
 
