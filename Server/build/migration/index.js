@@ -9,6 +9,7 @@ const container_1 = require("../database/container");
 const genre_1 = require("../database/genre");
 const language_1 = require("../database/language");
 const media_1 = require("../database/media");
+const recording_1 = require("../database/recording");
 const series_1 = require("../database/series");
 const validation_1 = require("../database/validation");
 const readFile = util_1.promisify(fs.readFile);
@@ -34,6 +35,7 @@ async function runMigration() {
         Media: media_1.mediaCollection,
         RecordingGenres: genreLinks,
         RecordingLanguages: languageLinks,
+        Recordings: recording_1.recordingCollection,
         Series: series_1.seriesCollection,
     };
     const path = path_1.join(__dirname, '../../../legacy/all.sql');

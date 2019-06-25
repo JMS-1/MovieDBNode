@@ -9,6 +9,7 @@ import { containerCollection } from '../database/container'
 import { genreCollection } from '../database/genre'
 import { languageCollection } from '../database/language'
 import { mediaCollection } from '../database/media'
+import { recordingCollection } from '../database/recording'
 import { seriesCollection } from '../database/series'
 import { addSchema } from '../database/validation'
 
@@ -39,6 +40,7 @@ export async function runMigration(): Promise<void> {
         Media: mediaCollection,
         RecordingGenres: genreLinks,
         RecordingLanguages: languageLinks,
+        Recordings: recordingCollection,
         Series: seriesCollection,
     }
 

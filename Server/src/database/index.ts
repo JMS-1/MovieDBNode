@@ -2,15 +2,23 @@ import { containerCollection } from './container'
 import { genreCollection } from './genre'
 import { languageCollection } from './language'
 import { mediaCollection } from './media'
+import { recordingCollection } from './recording'
 import { convertToMongo } from './schema'
 import { seriesCollection } from './series'
 import { dbConnect } from './utils'
 import { addSchema } from './validation'
 
 export async function initializeDatabase(): Promise<void> {
-    const db = await dbConnect()
+    const collections = [
+        containerCollection,
+        genreCollection,
+        languageCollection,
+        mediaCollection,
+        recordingCollection,
+        seriesCollection,
+    ]
 
-    const collections = [containerCollection, seriesCollection, genreCollection, languageCollection, mediaCollection]
+    const db = await dbConnect()
 
     for (let { schema, name } of collections) {
         // Interne Prüfumgebung initialisieren.
