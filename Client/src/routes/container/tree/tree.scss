@@ -3,6 +3,11 @@
     min-width: 10vw;
     overflow: auto;
     padding-right: 1em;
+
+    > .ui.input {
+        margin: 10px 0 0 6px;
+        width: calc(100% - 6px);
+    }
 }
 
 @import './level';

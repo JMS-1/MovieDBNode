@@ -65997,7 +65997,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!**************************************************************!*\
   !*** ../node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \**************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79140,6 +79140,9 @@ class ContainerActions {
     static load(response) {
         return { containers: response.containers, type: "movie-db.containers.load" };
     }
+    static setFilter(filter) {
+        return { filter, type: "movie-db.containers.set-filter" };
+    }
 }
 exports.ContainerActions = ContainerActions;
 
@@ -79159,6 +79162,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function getInitialState() {
     return {
         all: [],
+        filter: '',
     };
 }
 exports.getInitialState = getInitialState;
@@ -79166,6 +79170,13 @@ function load(state, response) {
     return Object.assign({}, state, { all: response.containers || [] });
 }
 exports.load = load;
+function setFilter(state, request) {
+    if (request.filter === state.filter) {
+        return state;
+    }
+    return Object.assign({}, state, { filter: request.filter });
+}
+exports.setFilter = setFilter;
 
 
 /***/ }),
@@ -79193,6 +79204,8 @@ function ContainerReducer(state, action) {
     switch (action.type) {
         case "movie-db.containers.load":
             return controller.load(state, action);
+        case "movie-db.containers.set-filter":
+            return controller.setFilter(state, action);
     }
     return state;
 }
@@ -79217,7 +79230,22 @@ exports.getContainerMap = reselect_1.createSelector((state) => state.container.a
     all.forEach(c => (map[c.id] = c));
     return map;
 });
-exports.getContainerChildMap = reselect_1.createSelector((state) => state.container.all, exports.getContainerMap, (all, lookup) => {
+function filterChildMap(map, scope, filter, lookup) {
+    const children = map[scope] || [];
+    for (let child of children) {
+        filterChildMap(map, child, filter, lookup);
+    }
+    map[scope] = children.filter(c => map[c]);
+    if (map[scope].length > 0) {
+        return;
+    }
+    const self = lookup[scope];
+    const name = self && self.name && self.name.toLocaleLowerCase();
+    if (!name || name.indexOf(filter) < 0) {
+        delete map[scope];
+    }
+}
+exports.getContainerChildMap = reselect_1.createSelector((state) => state.container.all, (state) => state.container.filter, exports.getContainerMap, (all, filter, lookup) => {
     const map = {};
     for (let container of all) {
         const parentId = container.parentId || '';
@@ -79226,6 +79254,9 @@ exports.getContainerChildMap = reselect_1.createSelector((state) => state.contai
             map[parentId] = parentInfo = [];
         }
         parentInfo.push(container.id);
+    }
+    if (filter) {
+        filterChildMap(map, '', filter.toLocaleLowerCase(), lookup);
     }
     for (let children of Object.values(map)) {
         children.sort((l, r) => {
@@ -79843,10 +79874,16 @@ function mapDispatchToProps(dispatch, props) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "../node_modules/semantic-ui-react/dist/es/index.js");
 const levelRedux_1 = __webpack_require__(/*! ./levelRedux */ "./src/routes/container/tree/levelRedux.tsx");
 class CContainerTree extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.setFilter = (ev) => this.props.setFilter(ev.currentTarget.value);
+    }
     render() {
         return (React.createElement("div", { className: 'movie-db-container-tree' },
+            React.createElement(semantic_ui_react_1.Input, { onChange: this.setFilter, placeholder: '[TBD]', value: this.props.filter }),
             React.createElement(levelRedux_1.ContainerNode, { scope: '', detail: this.props.detail })));
     }
 }
@@ -79867,11 +79904,17 @@ exports.CContainerTree = CContainerTree;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "../node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./tree */ "./src/routes/container/tree/tree.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    const route = state.container;
+    return {
+        filter: route.filter,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        setFilter: filter => dispatch(controller_1.ContainerActions.setFilter(filter)),
+    };
 }
 exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerTree);
 

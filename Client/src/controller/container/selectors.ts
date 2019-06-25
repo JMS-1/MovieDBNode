@@ -22,10 +22,36 @@ export const getContainerMap = createSelector(
     },
 )
 
+function filterChildMap(map: IContainerChildMap, scope: string, filter: string, lookup: IContainerMap): void {
+    // Das wird Bottom-Up gemacht
+    const children = map[scope] || []
+
+    for (let child of children) {
+        filterChildMap(map, child, filter, lookup)
+    }
+
+    // Eventuell wurden Einträge entfernt.
+    map[scope] = children.filter(c => map[c])
+
+    // Aber wir haben noch Kinder, dann ist nichts zu tun.
+    if (map[scope].length > 0) {
+        return
+    }
+
+    // Wenn auch unser Name nicht zum Filter passt verschwinden wird.
+    const self = lookup[scope]
+    const name = self && self.name && self.name.toLocaleLowerCase()
+
+    if (!name || name.indexOf(filter) < 0) {
+        delete map[scope]
+    }
+}
+
 export const getContainerChildMap = createSelector(
     (state: IClientState) => state.container.all,
+    (state: IClientState) => state.container.filter,
     getContainerMap,
-    (all, lookup): IContainerChildMap => {
+    (all, filter, lookup): IContainerChildMap => {
         const map: IContainerChildMap = {}
 
         for (let container of all) {
@@ -38,6 +64,10 @@ export const getContainerChildMap = createSelector(
             }
 
             parentInfo.push(container.id)
+        }
+
+        if (filter) {
+            filterChildMap(map, '', filter.toLocaleLowerCase(), lookup)
         }
 
         for (let children of Object.values(map)) {

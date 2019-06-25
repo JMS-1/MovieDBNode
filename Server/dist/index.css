@@ -34,6 +34,9 @@ body {
   min-width: 10vw;
   overflow: auto;
   padding-right: 1em; }
+  .movie-db-container-tree > .ui.input {
+    margin: 10px 0 0 6px;
+    width: calc(100% - 6px); }
 
 .movie-db-container-tree-level > .ui.label {
   width: 100%; }
