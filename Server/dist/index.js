@@ -1076,11 +1076,14 @@ const levelRedux_1 = __webpack_require__(/*! ./levelRedux */ "./Client/src/route
 class CContainerTree extends React.PureComponent {
     constructor() {
         super(...arguments);
+        this.clearFilter = () => this.props.setFilter('');
         this.setFilter = (ev) => this.props.setFilter(ev.currentTarget.value);
     }
     render() {
         return (React.createElement("div", { className: 'movie-db-container-tree' },
-            React.createElement(semantic_ui_react_1.Input, { onChange: this.setFilter, placeholder: '[TBD]', value: this.props.filter }),
+            React.createElement(semantic_ui_react_1.Input, { onChange: this.setFilter, placeholder: '[TBD]', value: this.props.filter, icon: true },
+                React.createElement("input", null),
+                React.createElement(semantic_ui_react_1.Icon, { name: 'close', link: true, onClick: this.clearFilter })),
             React.createElement(levelRedux_1.ContainerNode, { scope: '', detail: this.props.detail })));
     }
 }
