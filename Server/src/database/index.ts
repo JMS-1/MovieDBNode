@@ -1,12 +1,13 @@
 import { containerCollection } from './container'
 import { convertToMongo } from './schema'
+import { seriesCollection } from './series'
 import { dbConnect } from './utils'
 import { addSchema } from './validation'
 
 export async function initializeDatabase(): Promise<void> {
     const db = await dbConnect()
 
-    const collections = [containerCollection]
+    const collections = [containerCollection, seriesCollection]
 
     for (let { schema, name } of collections) {
         // Interne Prüfumgebung initialisieren.

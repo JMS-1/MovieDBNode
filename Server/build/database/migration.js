@@ -4,6 +4,7 @@ const fs = require("fs");
 const path_1 = require("path");
 const util_1 = require("util");
 const container_1 = require("./container");
+const series_1 = require("./series");
 const readFile = util_1.promisify(fs.readFile);
 const temp = '\ufeff';
 const doubleQuote = /''/g;
@@ -15,6 +16,7 @@ const tempOn = /,/g;
 async function runMigration() {
     const collections = {
         Containers: container_1.containerCollection,
+        Series: series_1.seriesCollection,
     };
     const path = path_1.join(__dirname, '../../../legacy/all.sql');
     const all = await readFile(path);
