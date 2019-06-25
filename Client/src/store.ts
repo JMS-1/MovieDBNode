@@ -4,7 +4,7 @@ import { Action, applyMiddleware, combineReducers, createStore, Store } from 're
 
 import { IClientState } from 'movie-db-client'
 
-import { ApplicationReducer, ContainerReducer, MuiReducer } from './controller'
+import * as controller from './controller'
 
 export const history = createHashHistory({ hashType: 'hashbang' })
 
@@ -13,10 +13,14 @@ let store: Store<IClientState>
 export function initializeStore(): Store<IClientState> {
     store = createStore(
         combineReducers<IClientState>({
-            application: ApplicationReducer,
-            container: ContainerReducer,
-            mui: MuiReducer,
+            application: controller.ApplicationReducer,
+            container: controller.ContainerReducer,
+            genre: controller.GenreReducer,
+            language: controller.LanguageReducer,
+            media: controller.MediaReducer,
+            mui: controller.MuiReducer,
             router: connectRouter(history),
+            series: controller.SeriesReducer,
         }),
         applyMiddleware(routerMiddleware(history)),
     )

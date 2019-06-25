@@ -20,6 +20,19 @@
             "type": "npm"
         },
         {
+            "label": "start server",
+            "options": {
+                "env": {
+                    "DATABASE": "mongodb://localhost:27017/movie-db",
+                    "DEBUG": "startup, api",
+                    "PORT": "29099"
+                }
+            },
+            "problemMatcher": [],
+            "script": "start-server",
+            "type": "npm"
+        },
+        {
             "isBackground": true,
             "label": "watch semantic",
             "problemMatcher": ["$awesometsc", "$awesomets-lint"],

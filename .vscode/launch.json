@@ -25,11 +25,7 @@
         },
         {
             "console": "internalConsole",
-            "env": {
-                "DATABASE": "mongodb://localhost:27017/movie-db",
-                "DEBUG": "startup, api",
-                "PORT": "29099"
-            },
+            "envFile": "${workspaceFolder}/.vscode/.env",
             "name": "Server",
             "port": 23902,
             "protocol": "inspector",

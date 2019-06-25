@@ -4,7 +4,10 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { Root } from './components/root/rootRedux'
-import { ApplicationActions, ContainerActions } from './controller'
+import {
+    ApplicationActions, ContainerActions, LanguageActions, MediaActions, SeriesActions,
+} from './controller'
+import { GenreActions } from './controller/genre'
 import { history, initializeStore, ServerApi } from './store'
 
 const store = initializeStore()
@@ -19,4 +22,8 @@ render(
 )
 
 ServerApi.get('container', ContainerActions.load)
+ServerApi.get('genre', GenreActions.load)
+ServerApi.get('language', LanguageActions.load)
+ServerApi.get('media', MediaActions.load)
 ServerApi.get('schemas', ApplicationActions.loadSchemas)
+ServerApi.get('series', SeriesActions.load)

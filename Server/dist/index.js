@@ -31753,6 +31753,80 @@ exports.ContainerReducer = ContainerReducer;
 
 /***/ }),
 
+/***/ "./src/controller/genre/actions.ts":
+/*!*****************************************!*\
+  !*** ./src/controller/genre/actions.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class GenreActions {
+    static load(genres) {
+        return { genres, type: "movie-db.genres.load" };
+    }
+}
+exports.GenreActions = GenreActions;
+
+
+/***/ }),
+
+/***/ "./src/controller/genre/controller.ts":
+/*!********************************************!*\
+  !*** ./src/controller/genre/controller.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getInitialState() {
+    return {
+        all: [],
+    };
+}
+exports.getInitialState = getInitialState;
+function load(state, response) {
+    return Object.assign({}, state, { all: response.genres || [] });
+}
+exports.load = load;
+
+
+/***/ }),
+
+/***/ "./src/controller/genre/index.ts":
+/*!***************************************!*\
+  !*** ./src/controller/genre/index.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const controller = __webpack_require__(/*! ./controller */ "./src/controller/genre/controller.ts");
+__export(__webpack_require__(/*! ./actions */ "./src/controller/genre/actions.ts"));
+function GenreReducer(state, action) {
+    if (!state) {
+        state = controller.getInitialState();
+    }
+    switch (action.type) {
+        case "movie-db.genres.load":
+            return controller.load(state, action);
+    }
+    return state;
+}
+exports.GenreReducer = GenreReducer;
+
+
+/***/ }),
+
 /***/ "./src/controller/index.ts":
 /*!*********************************!*\
   !*** ./src/controller/index.ts ***!
@@ -31768,7 +31842,159 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(/*! ./app */ "./src/controller/app/index.ts"));
 __export(__webpack_require__(/*! ./container */ "./src/controller/container/index.ts"));
+__export(__webpack_require__(/*! ./genre */ "./src/controller/genre/index.ts"));
+__export(__webpack_require__(/*! ./language */ "./src/controller/language/index.ts"));
+__export(__webpack_require__(/*! ./media */ "./src/controller/media/index.ts"));
 __export(__webpack_require__(/*! ./mui */ "./src/controller/mui/index.ts"));
+__export(__webpack_require__(/*! ./series */ "./src/controller/series/index.ts"));
+
+
+/***/ }),
+
+/***/ "./src/controller/language/actions.ts":
+/*!********************************************!*\
+  !*** ./src/controller/language/actions.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class LanguageActions {
+    static load(languages) {
+        return { languages, type: "movie-db.languages.load" };
+    }
+}
+exports.LanguageActions = LanguageActions;
+
+
+/***/ }),
+
+/***/ "./src/controller/language/controller.ts":
+/*!***********************************************!*\
+  !*** ./src/controller/language/controller.ts ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getInitialState() {
+    return {
+        all: [],
+    };
+}
+exports.getInitialState = getInitialState;
+function load(state, response) {
+    return Object.assign({}, state, { all: response.languages || [] });
+}
+exports.load = load;
+
+
+/***/ }),
+
+/***/ "./src/controller/language/index.ts":
+/*!******************************************!*\
+  !*** ./src/controller/language/index.ts ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const controller = __webpack_require__(/*! ./controller */ "./src/controller/language/controller.ts");
+__export(__webpack_require__(/*! ./actions */ "./src/controller/language/actions.ts"));
+function LanguageReducer(state, action) {
+    if (!state) {
+        state = controller.getInitialState();
+    }
+    switch (action.type) {
+        case "movie-db.languages.load":
+            return controller.load(state, action);
+    }
+    return state;
+}
+exports.LanguageReducer = LanguageReducer;
+
+
+/***/ }),
+
+/***/ "./src/controller/media/actions.ts":
+/*!*****************************************!*\
+  !*** ./src/controller/media/actions.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class MediaActions {
+    static load(media) {
+        return { media, type: "movie-db.media.load" };
+    }
+}
+exports.MediaActions = MediaActions;
+
+
+/***/ }),
+
+/***/ "./src/controller/media/controller.ts":
+/*!********************************************!*\
+  !*** ./src/controller/media/controller.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getInitialState() {
+    return {
+        all: [],
+    };
+}
+exports.getInitialState = getInitialState;
+function load(state, response) {
+    return Object.assign({}, state, { all: response.media || [] });
+}
+exports.load = load;
+
+
+/***/ }),
+
+/***/ "./src/controller/media/index.ts":
+/*!***************************************!*\
+  !*** ./src/controller/media/index.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const controller = __webpack_require__(/*! ./controller */ "./src/controller/media/controller.ts");
+__export(__webpack_require__(/*! ./actions */ "./src/controller/media/actions.ts"));
+function MediaReducer(state, action) {
+    if (!state) {
+        state = controller.getInitialState();
+    }
+    switch (action.type) {
+        case "movie-db.media.load":
+            return controller.load(state, action);
+    }
+    return state;
+}
+exports.MediaReducer = MediaReducer;
 
 
 /***/ }),
@@ -31836,6 +32062,80 @@ exports.MuiReducer = MuiReducer;
 
 /***/ }),
 
+/***/ "./src/controller/series/actions.ts":
+/*!******************************************!*\
+  !*** ./src/controller/series/actions.ts ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class SeriesActions {
+    static load(series) {
+        return { series, type: "movie-db.series.load" };
+    }
+}
+exports.SeriesActions = SeriesActions;
+
+
+/***/ }),
+
+/***/ "./src/controller/series/controller.ts":
+/*!*********************************************!*\
+  !*** ./src/controller/series/controller.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getInitialState() {
+    return {
+        all: [],
+    };
+}
+exports.getInitialState = getInitialState;
+function load(state, response) {
+    return Object.assign({}, state, { all: response.series || [] });
+}
+exports.load = load;
+
+
+/***/ }),
+
+/***/ "./src/controller/series/index.ts":
+/*!****************************************!*\
+  !*** ./src/controller/series/index.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const controller = __webpack_require__(/*! ./controller */ "./src/controller/series/controller.ts");
+__export(__webpack_require__(/*! ./actions */ "./src/controller/series/actions.ts"));
+function SeriesReducer(state, action) {
+    if (!state) {
+        state = controller.getInitialState();
+    }
+    switch (action.type) {
+        case "movie-db.series.load":
+            return controller.load(state, action);
+    }
+    return state;
+}
+exports.SeriesReducer = SeriesReducer;
+
+
+/***/ }),
+
 /***/ "./src/index.tsx":
 /*!***********************!*\
   !*** ./src/index.tsx ***!
@@ -31852,13 +32152,18 @@ const react_dom_1 = __webpack_require__(/*! react-dom */ "../node_modules/react-
 const react_redux_1 = __webpack_require__(/*! react-redux */ "../node_modules/react-redux/es/index.js");
 const rootRedux_1 = __webpack_require__(/*! ./components/root/rootRedux */ "./src/components/root/rootRedux.ts");
 const controller_1 = __webpack_require__(/*! ./controller */ "./src/controller/index.ts");
+const genre_1 = __webpack_require__(/*! ./controller/genre */ "./src/controller/genre/index.ts");
 const store_1 = __webpack_require__(/*! ./store */ "./src/store.ts");
 const store = store_1.initializeStore();
 react_dom_1.render(React.createElement(react_redux_1.Provider, { store: store },
     React.createElement(connected_react_router_1.ConnectedRouter, { history: store_1.history },
         React.createElement(rootRedux_1.Root, null))), document.querySelector('client-root'));
 store_1.ServerApi.get('container', controller_1.ContainerActions.load);
+store_1.ServerApi.get('genre', genre_1.GenreActions.load);
+store_1.ServerApi.get('language', controller_1.LanguageActions.load);
+store_1.ServerApi.get('media', controller_1.MediaActions.load);
 store_1.ServerApi.get('schemas', controller_1.ApplicationActions.loadSchemas);
+store_1.ServerApi.get('series', controller_1.SeriesActions.load);
 
 
 /***/ }),
@@ -31876,15 +32181,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "../node_modules/connected-react-router/esm/index.js");
 const history_1 = __webpack_require__(/*! history */ "../node_modules/history/esm/history.js");
 const redux_1 = __webpack_require__(/*! redux */ "../node_modules/redux/es/redux.js");
-const controller_1 = __webpack_require__(/*! ./controller */ "./src/controller/index.ts");
+const controller = __webpack_require__(/*! ./controller */ "./src/controller/index.ts");
 exports.history = history_1.createHashHistory({ hashType: 'hashbang' });
 let store;
 function initializeStore() {
     store = redux_1.createStore(redux_1.combineReducers({
-        application: controller_1.ApplicationReducer,
-        container: controller_1.ContainerReducer,
-        mui: controller_1.MuiReducer,
+        application: controller.ApplicationReducer,
+        container: controller.ContainerReducer,
+        genre: controller.GenreReducer,
+        language: controller.LanguageReducer,
+        media: controller.MediaReducer,
+        mui: controller.MuiReducer,
         router: connected_react_router_1.connectRouter(exports.history),
+        series: controller.SeriesReducer,
     }), redux_1.applyMiddleware(connected_react_router_1.routerMiddleware(exports.history)));
     return store;
 }

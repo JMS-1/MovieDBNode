@@ -1,3 +1,7 @@
 export * from './app'
 export * from './container'
+export * from './genre'
+export * from './language'
+export * from './media'
 export * from './mui'
+export * from './series'
