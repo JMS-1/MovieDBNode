@@ -2,10 +2,13 @@ import * as fs from 'fs'
 import { join } from 'path'
 import { promisify } from 'util'
 
-import { containerCollection } from './container'
-import { genreCollection } from './genre'
-import { languageCollection } from './language'
-import { seriesCollection } from './series'
+import { LinkCollection, LinkSchema } from './link'
+
+import { containerCollection } from '../database/container'
+import { genreCollection } from '../database/genre'
+import { languageCollection } from '../database/language'
+import { seriesCollection } from '../database/series'
+import { addSchema } from '../database/validation'
 
 const readFile = promisify(fs.readFile)
 
@@ -18,11 +21,19 @@ const normReg = /(N'([^']|'')*')/g
 const tempOff = new RegExp(temp, 'g')
 const tempOn = /,/g
 
+const genreLinks = new (class extends LinkCollection {})('Genre')
+
+const languageLinks = new (class extends LinkCollection {})('Language')
+
 export async function runMigration(): Promise<void> {
+    addSchema(LinkSchema)
+
     const collections = {
         Containers: containerCollection,
         Genres: genreCollection,
         Languages: languageCollection,
+        RecordingGenres: genreLinks,
+        RecordingLanguages: languageLinks,
         Series: seriesCollection,
     }
 

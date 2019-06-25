@@ -5,7 +5,7 @@ const express = require("express");
 const path_1 = require("path");
 const api_1 = require("./api");
 const database_1 = require("./database");
-const migration_1 = require("./database/migration");
+const migration_1 = require("./migration");
 const utils_1 = require("./utils");
 async function startup() {
     await database_1.initializeDatabase();
