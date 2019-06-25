@@ -20,6 +20,11 @@ declare module 'movie-db-api' {
 
     interface ISchemaResponse {
         container: IValidatableSchema
+        genre: IValidatableSchema
+        language: IValidatableSchema
+        media: IValidatableSchema
+        recording: IValidatableSchema
+        series: IValidatableSchema
     }
 
     const enum containerType {
