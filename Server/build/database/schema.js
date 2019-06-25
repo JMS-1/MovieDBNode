@@ -1,13 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const dataPropsMapper = {
+    additionalProperties: copy,
     enum: copy,
     items: arrayElements,
     maxLength: copy,
     message: errorMessage,
     minLength: copy,
     pattern: copy,
+    properties: subObject,
+    required: copy,
     type: dataType,
+    uniqueItems: copy,
 };
 const schemaPropsMapper = {
     $id: discard,

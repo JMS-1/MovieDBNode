@@ -25,7 +25,7 @@ const genreLinks = new (class extends relation_1.RelationCollection {
 const languageLinks = new (class extends relation_1.RelationCollection {
 })('Language');
 async function runMigration() {
-    validation_1.addSchema(links_1.LinkSchema);
+    validation_1.addSchema(recording_1.LinkSchema);
     validation_1.addSchema(relation_1.RelationSchema);
     const collections = {
         Containers: container_1.containerCollection,
@@ -73,10 +73,10 @@ async function runMigration() {
         const recording = recordings[link.from];
         const genre = genre_1.genreCollection.migrationMap[link.to];
         if (!recording) {
-            throw new Error(`recording ${link.from} no found`);
+            throw new Error(`recording ${link.from} not found`);
         }
         if (!genre) {
-            throw new Error(`genre ${link.to} no found`);
+            throw new Error(`genre ${link.to} not found`);
         }
         recording.genres.push(genre._id);
     }
@@ -84,20 +84,34 @@ async function runMigration() {
         const recording = recordings[link.from];
         const language = language_1.languageCollection.migrationMap[link.to];
         if (!recording) {
-            throw new Error(`recording ${link.from} no found`);
+            throw new Error(`recording ${link.from} not found`);
         }
         if (!language) {
-            throw new Error(`language ${link.to} no found`);
+            throw new Error(`language ${link.to} not found`);
         }
         recording.languages.push(language._id);
     }
-    for (let id in recordings) {
-        if (recordings.hasOwnProperty(id)) {
-            const test = validation_1.validate(recordings[id], recording_1.recordingCollection.schema);
-            if (test) {
-                throw new Error(JSON.stringify(test));
-            }
+    for (let link of Object.values(links_1.linkCollection.migrationMap)) {
+        const recording = recordings[link.for];
+        if (!recording) {
+            throw new Error(`recording ${link.for} not found`);
         }
+        if (recording.links[link.ordinal]) {
+            throw new Error(`duplicate link ordinal in recording ${link.for}`);
+        }
+        recording.links[link.ordinal] = { name: link.name, url: link.url };
+        if (link.description) {
+            recording.links[link.ordinal].description = link.description;
+        }
+    }
+    for (let recording of Object.values(recordings)) {
+        const test = validation_1.validate(recording, recording_1.recordingCollection.schema);
+        if (test) {
+            throw new Error(JSON.stringify(test));
+        }
+    }
+    for (let collection of Object.values(collections)) {
+        await collection.migrate();
     }
 }
 exports.runMigration = runMigration;

@@ -1,6 +1,12 @@
 import { isoDate, uniqueId } from './utils'
 
-export const collectionName = 'Recordings'
+export const collectionName = 'recordings'
+
+export interface IDbLink {
+    description?: string
+    name: string
+    url: string
+}
 
 export interface IDbRecording {
     _id: string
@@ -8,10 +14,53 @@ export interface IDbRecording {
     description?: string
     genres: string[]
     languages: string[]
+    links: IDbLink[]
     media: string
     name: string
     rentTo?: string
     series?: string
+}
+
+export const LinkSchema = {
+    $schema: 'http://json-schema.org/schema#',
+    $id: 'http://psimarron.net/schemas/movie-db/migrate/link.json',
+    additionalProperties: false,
+    type: 'object',
+    message: 'Verweis unvollständig',
+    properties: {
+        _id: {
+            message: 'Eindeutige Kennung fehlt oder ist ungültig',
+            pattern: uniqueId,
+            type: 'string',
+        },
+        description: {
+            maxLength: 2000,
+            message: 'Beschreibung ist zu lang',
+            type: 'string',
+        },
+        for: {
+            message: 'Aufzeichnungskennung fehlt oder ist ungültig',
+            pattern: uniqueId,
+            type: 'string',
+        },
+        name: {
+            maxLength: 100,
+            message: 'Name nicht angegeben oder zu lang',
+            minLength: 1,
+            type: 'string',
+        },
+        ordinal: {
+            message: 'Anordnung fehlt oder ist ungültig',
+            minimum: 0,
+            type: 'integer',
+        },
+        url: {
+            maxLength: 2000,
+            message: 'Verweis ist zu lang',
+            type: 'string',
+        },
+    },
+    required: ['_id', 'name', 'for', 'url', 'ordinal'],
 }
 
 export const RecordingSchema = {
@@ -37,21 +86,33 @@ export const RecordingSchema = {
             type: 'string',
         },
         genres: {
-            message: 'Genres sind ungültig',
-            type: 'array',
             items: {
                 message: 'Genre ist ungültig',
                 pattern: uniqueId,
                 type: 'string',
             },
+            message: 'Genres sind ungültig',
+            type: 'array',
+            uniqueItems: true,
         },
         languages: {
+            items: { message: 'Sprache ist ungültig', pattern: uniqueId, type: 'string' },
             message: 'Sprachen sind ungültig',
             type: 'array',
+            uniqueItems: true,
+        },
+        links: {
+            message: 'Verweise sind ungültig',
+            type: 'array',
             items: {
-                message: 'Sprache ist ungültig',
-                pattern: uniqueId,
-                type: 'string',
+                type: LinkSchema.type,
+                message: LinkSchema.message,
+                properties: {
+                    description: LinkSchema.properties.description,
+                    name: LinkSchema.properties.name,
+                    url: LinkSchema.properties.url,
+                },
+                required: ['name', 'url'],
             },
         },
         media: {
@@ -76,5 +137,5 @@ export const RecordingSchema = {
             type: 'string',
         },
     },
-    required: ['_id', 'name', 'created', 'media', 'genres', 'languages'],
+    required: ['_id', 'name', 'created', 'media', 'genres', 'languages', 'links'],
 }

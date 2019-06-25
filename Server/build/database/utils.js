@@ -37,6 +37,11 @@ class CollectionBase {
         }
         this.migrationMap[item._id] = item;
     }
+    async migrate() {
+        for (let item of Object.values(this.migrationMap)) {
+            await this.insert(item);
+        }
+    }
     async getCollection() {
         const db = await dbConnect();
         return db.collection(this.name);

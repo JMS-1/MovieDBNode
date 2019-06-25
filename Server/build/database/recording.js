@@ -21,6 +21,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             created: (date && `${date[1]}Z`) || sql.Created,
             genres: [],
             languages: [],
+            links: [],
             media: sql.Media,
             name: sql.Name,
         };

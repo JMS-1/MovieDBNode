@@ -4,13 +4,12 @@ import { join } from 'path'
 
 import { installApi } from './api'
 import { initializeDatabase } from './database'
-import { runMigration } from './migration'
 import { getError } from './utils'
 
 async function startup(): Promise<void> {
     await initializeDatabase()
 
-    await runMigration()
+    //await runMigration()
 
     const app = express()
 

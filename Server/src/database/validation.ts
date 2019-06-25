@@ -34,5 +34,15 @@ export function addSchema<TSchema extends IValidatableSchema>(schema: TSchema): 
 }
 
 export function validate<TSchema extends IValidatableSchema>(object: any, schema: TSchema): IValidationError[] {
-    return <any>validation.validate(schema.$id, object)
+    try {
+        return <any>validation.validate(schema.$id, object)
+    } catch (error) {
+        return [
+            {
+                contraint: 'vaidator',
+                message: typeof error === 'string' ? error : error.message || 'failed',
+                property: '*',
+            },
+        ]
+    }
 }

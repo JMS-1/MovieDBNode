@@ -46,4 +46,8 @@ export class RelationCollection {
 
         this.migrated.push(relation)
     }
+
+    migrate(): Promise<void> {
+        return Promise.resolve<void>(undefined)
+    }
 }

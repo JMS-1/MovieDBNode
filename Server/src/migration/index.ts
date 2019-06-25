@@ -2,14 +2,14 @@ import * as fs from 'fs'
 import { join } from 'path'
 import { promisify } from 'util'
 
-import { linkCollection, LinkSchema } from './links'
+import { linkCollection } from './links'
 import { RelationCollection, RelationSchema } from './relation'
 
 import { containerCollection } from '../database/container'
 import { genreCollection } from '../database/genre'
 import { languageCollection } from '../database/language'
 import { mediaCollection } from '../database/media'
-import { recordingCollection } from '../database/recording'
+import { LinkSchema, recordingCollection } from '../database/recording'
 import { seriesCollection } from '../database/series'
 import { addSchema, validate } from '../database/validation'
 
@@ -92,11 +92,11 @@ export async function runMigration(): Promise<void> {
         const genre = genreCollection.migrationMap[link.to]
 
         if (!recording) {
-            throw new Error(`recording ${link.from} no found`)
+            throw new Error(`recording ${link.from} not found`)
         }
 
         if (!genre) {
-            throw new Error(`genre ${link.to} no found`)
+            throw new Error(`genre ${link.to} not found`)
         }
 
         recording.genres.push(genre._id)
@@ -107,23 +107,43 @@ export async function runMigration(): Promise<void> {
         const language = languageCollection.migrationMap[link.to]
 
         if (!recording) {
-            throw new Error(`recording ${link.from} no found`)
+            throw new Error(`recording ${link.from} not found`)
         }
 
         if (!language) {
-            throw new Error(`language ${link.to} no found`)
+            throw new Error(`language ${link.to} not found`)
         }
 
         recording.languages.push(language._id)
     }
 
-    for (let id in recordings) {
-        if (recordings.hasOwnProperty(id)) {
-            const test = validate(recordings[id], recordingCollection.schema)
+    for (let link of Object.values(linkCollection.migrationMap)) {
+        const recording = recordings[link.for]
 
-            if (test) {
-                throw new Error(JSON.stringify(test))
-            }
+        if (!recording) {
+            throw new Error(`recording ${link.for} not found`)
         }
+
+        if (recording.links[link.ordinal]) {
+            throw new Error(`duplicate link ordinal in recording ${link.for}`)
+        }
+
+        recording.links[link.ordinal] = { name: link.name, url: link.url }
+
+        if (link.description) {
+            recording.links[link.ordinal].description = link.description
+        }
+    }
+
+    for (let recording of Object.values(recordings)) {
+        const test = validate(recording, recordingCollection.schema)
+
+        if (test) {
+            throw new Error(JSON.stringify(test))
+        }
+    }
+
+    for (let collection of Object.values(collections)) {
+        await collection.migrate()
     }
 }

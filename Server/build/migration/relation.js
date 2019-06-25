@@ -38,6 +38,9 @@ class RelationCollection {
         }
         this.migrated.push(relation);
     }
+    migrate() {
+        return Promise.resolve(undefined);
+    }
 }
 exports.RelationCollection = RelationCollection;
 

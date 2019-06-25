@@ -24,7 +24,18 @@ function addSchema(schema) {
 }
 exports.addSchema = addSchema;
 function validate(object, schema) {
-    return validation.validate(schema.$id, object);
+    try {
+        return validation.validate(schema.$id, object);
+    }
+    catch (error) {
+        return [
+            {
+                contraint: 'vaidator',
+                message: typeof error === 'string' ? error : error.message || 'failed',
+                property: '*',
+            },
+        ];
+    }
 }
 exports.validate = validate;
 

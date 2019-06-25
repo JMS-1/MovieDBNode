@@ -3,13 +3,17 @@ interface IMappers {
 }
 
 const dataPropsMapper: IMappers = {
+    additionalProperties: copy,
     enum: copy,
     items: arrayElements,
     maxLength: copy,
     message: errorMessage,
     minLength: copy,
     pattern: copy,
+    properties: subObject,
+    required: copy,
     type: dataType,
+    uniqueItems: copy,
 }
 
 const schemaPropsMapper: IMappers = {

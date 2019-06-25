@@ -48,6 +48,12 @@ export abstract class CollectionBase<TType extends { _id: string }> {
         this.migrationMap[item._id] = item
     }
 
+    async migrate(): Promise<void> {
+        for (let item of Object.values(this.migrationMap)) {
+            await this.insert(item)
+        }
+    }
+
     async getCollection(): Promise<Collection<TType>> {
         const db = await dbConnect()
 
