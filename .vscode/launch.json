@@ -35,6 +35,15 @@
             "smartStep": true,
             "sourceMaps": true,
             "type": "node"
+        },
+        {
+            "console": "externalTerminal",
+            "envFile": "${workspaceFolder}/.vscode/.env",
+            "name": "Start Server",
+            "request": "launch",
+            "runtimeArgs": ["run-script", "start-server"],
+            "runtimeExecutable": "npm",
+            "type": "node"
         }
     ],
     "version": "0.2.0"
