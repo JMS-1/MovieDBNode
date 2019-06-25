@@ -1,3 +1,5 @@
+import { INewSeries, ISeries } from 'movie-db-api'
+
 import { uniqueId } from './utils'
 
 export const collectionName = 'series'
@@ -39,4 +41,30 @@ export const SeriesSchema = {
         },
     },
     required: ['_id', 'name'],
+}
+
+export function toProtocol(series: IDbSeries): ISeries {
+    return {
+        id: series._id,
+        description: series.description || undefined,
+        name: series.name,
+        parentId: series.parentId || undefined,
+    }
+}
+
+export function toEntity(series: INewSeries, id: string): IDbSeries {
+    const dbSeries: IDbSeries = {
+        _id: id,
+        name: series.name,
+    }
+
+    if (series.description) {
+        dbSeries.description = series.description
+    }
+
+    if (series.parentId) {
+        dbSeries.parentId = series.parentId
+    }
+
+    return dbSeries
 }

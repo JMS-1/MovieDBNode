@@ -1,3 +1,5 @@
+import { IGenre, INewGenre } from 'movie-db-api'
+
 import { uniqueId } from './utils'
 
 export const collectionName = 'genres'
@@ -27,4 +29,20 @@ export const GenreSchema = {
         },
     },
     required: ['_id', 'name'],
+}
+
+export function toProtocol(genre: IDbGenre): IGenre {
+    return {
+        id: genre._id,
+        name: genre.name,
+    }
+}
+
+export function toEntity(container: INewGenre, id: string): IDbGenre {
+    const dbGenre: IDbGenre = {
+        _id: id,
+        name: container.name,
+    }
+
+    return dbGenre
 }

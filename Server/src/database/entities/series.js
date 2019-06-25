@@ -33,5 +33,28 @@ exports.SeriesSchema = {
     },
     required: ['_id', 'name'],
 };
+function toProtocol(series) {
+    return {
+        id: series._id,
+        description: series.description || undefined,
+        name: series.name,
+        parentId: series.parentId || undefined,
+    };
+}
+exports.toProtocol = toProtocol;
+function toEntity(series, id) {
+    const dbSeries = {
+        _id: id,
+        name: series.name,
+    };
+    if (series.description) {
+        dbSeries.description = series.description;
+    }
+    if (series.parentId) {
+        dbSeries.parentId = series.parentId;
+    }
+    return dbSeries;
+}
+exports.toEntity = toEntity;
 
 //# sourceMappingURL=series.js.map

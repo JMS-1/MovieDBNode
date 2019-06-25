@@ -1,3 +1,5 @@
+import { ILanguage, INewLanguage } from 'movie-db-api'
+
 import { uniqueId } from './utils'
 
 export const collectionName = 'languages'
@@ -27,4 +29,20 @@ export const LanguageSchema = {
         },
     },
     required: ['_id', 'name'],
+}
+
+export function toProtocol(language: IDbLanguage): ILanguage {
+    return {
+        id: language._id,
+        name: language.name,
+    }
+}
+
+export function toEntity(language: INewLanguage, id: string): IDbLanguage {
+    const dbLanguage: IDbLanguage = {
+        _id: id,
+        name: language.name,
+    }
+
+    return dbLanguage
 }

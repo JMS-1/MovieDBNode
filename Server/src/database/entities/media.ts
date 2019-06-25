@@ -1,4 +1,4 @@
-import { mediaType } from 'movie-db-api'
+import { IMedia, INewMedia, mediaType } from 'movie-db-api'
 
 import { uniqueId } from './utils'
 
@@ -47,4 +47,30 @@ export const MediaSchema = {
         },
     },
     required: ['_id', 'type'],
+}
+
+export function toProtocol(media: IDbMedia): IMedia {
+    return {
+        id: media._id,
+        containerId: media.container || undefined,
+        position: media.position || undefined,
+        type: media.type,
+    }
+}
+
+export function toEntity(media: INewMedia, id: string): IDbMedia {
+    const dbMedia: IDbMedia = {
+        _id: id,
+        type: media.type,
+    }
+
+    if (media.containerId) {
+        dbMedia.container = media.containerId
+    }
+
+    if (media.position) {
+        dbMedia.position = media.position
+    }
+
+    return dbMedia
 }

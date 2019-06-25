@@ -23,5 +23,20 @@ exports.LanguageSchema = {
     },
     required: ['_id', 'name'],
 };
+function toProtocol(language) {
+    return {
+        id: language._id,
+        name: language.name,
+    };
+}
+exports.toProtocol = toProtocol;
+function toEntity(language, id) {
+    const dbLanguage = {
+        _id: id,
+        name: language.name,
+    };
+    return dbLanguage;
+}
+exports.toEntity = toEntity;
 
 //# sourceMappingURL=language.js.map

@@ -23,5 +23,20 @@ exports.GenreSchema = {
     },
     required: ['_id', 'name'],
 };
+function toProtocol(genre) {
+    return {
+        id: genre._id,
+        name: genre.name,
+    };
+}
+exports.toProtocol = toProtocol;
+function toEntity(container, id) {
+    const dbGenre = {
+        _id: id,
+        name: container.name,
+    };
+    return dbGenre;
+}
+exports.toEntity = toEntity;
 
 //# sourceMappingURL=genre.js.map

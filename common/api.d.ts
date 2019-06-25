@@ -84,4 +84,56 @@ declare module 'movie-db-api' {
     interface IDeleteContainerResponse {
         id: string
     }
+
+    interface INewGenre {
+        name: string
+    }
+
+    interface IGenre extends INewGenre {
+        id: string
+    }
+
+    interface INewLanguage {
+        name: string
+    }
+
+    interface ILanguage extends INewLanguage {
+        id: string
+    }
+
+    interface INewMedia {
+        containerId?: string
+        position?: string
+        type: mediaType
+    }
+
+    interface IMedia extends INewMedia {
+        id: string
+    }
+
+    interface INewSeries {
+        name: string
+        description?: string
+        parentId?: string
+    }
+
+    interface ISeries extends INewSeries {
+        id: string
+    }
+
+    interface IGenreResponse {
+        genres: IGenre[]
+    }
+
+    interface ILanguageResponse {
+        languages: ILanguage[]
+    }
+
+    interface IMediaResponse {
+        media: IMedia[]
+    }
+
+    interface ISeriesResponse {
+        series: ISeries[]
+    }
 }

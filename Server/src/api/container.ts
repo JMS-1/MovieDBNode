@@ -4,8 +4,7 @@ import { IContainerResponse } from 'movie-db-api'
 
 import { processApiRequest } from './utils'
 
-import { containerCollection } from '../database/container'
-import { toProtocol } from '../database/entities/container'
+import { containerCollection, toProtocol } from '../database/container'
 
 export const containerApi = Router().use(
     '/container',

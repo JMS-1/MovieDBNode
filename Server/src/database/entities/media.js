@@ -39,5 +39,28 @@ exports.MediaSchema = {
     },
     required: ['_id', 'type'],
 };
+function toProtocol(media) {
+    return {
+        id: media._id,
+        containerId: media.container || undefined,
+        position: media.position || undefined,
+        type: media.type,
+    };
+}
+exports.toProtocol = toProtocol;
+function toEntity(media, id) {
+    const dbMedia = {
+        _id: id,
+        type: media.type,
+    };
+    if (media.containerId) {
+        dbMedia.container = media.containerId;
+    }
+    if (media.position) {
+        dbMedia.position = media.position;
+    }
+    return dbMedia;
+}
+exports.toEntity = toEntity;
 
 //# sourceMappingURL=media.js.map

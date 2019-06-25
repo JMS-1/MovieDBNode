@@ -1,4 +1,4 @@
-import { containerType, IContainer } from 'movie-db-api'
+import { containerType, IContainer, INewContainer } from 'movie-db-api'
 
 import { uniqueId } from './utils'
 
@@ -73,7 +73,7 @@ export function toProtocol(container: IDbContainer): IContainer {
     }
 }
 
-export function toEntity(container: IContainer, id: string): IDbContainer {
+export function toEntity(container: INewContainer, id: string): IDbContainer {
     const dbContainer: IDbContainer = {
         _id: id,
         name: container.name,
