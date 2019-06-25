@@ -4,6 +4,7 @@ interface IMappers {
 
 const dataPropsMapper: IMappers = {
     enum: copy,
+    items: arrayElements,
     maxLength: copy,
     message: errorMessage,
     minLength: copy,
@@ -16,7 +17,7 @@ const schemaPropsMapper: IMappers = {
     $schema: discard,
     additionalProperties: copy,
     message: errorMessage,
-    properties: recurse,
+    properties: subObject,
     required: copy,
     type: dataType,
 }
@@ -29,6 +30,7 @@ function copy(value: any, target: any, prop: string): void {
 
 function dataType(value: string, target: any, prop: string): void {
     switch (value) {
+        case 'array':
         case 'object':
         case 'string':
             target.bsonType = value
@@ -45,7 +47,7 @@ function errorMessage(value: string, target: any, prop: string): void {
     target.description = value
 }
 
-function recurse(value: any, target: any, prop: string): void {
+function subObject(value: any, target: any, prop: string): void {
     target.properties = {}
 
     for (let prop in value) {
@@ -53,6 +55,10 @@ function recurse(value: any, target: any, prop: string): void {
             target.properties[prop] = mapProperties(value[prop], dataPropsMapper)
         }
     }
+}
+
+function arrayElements(value: any, target: any, prop: string): void {
+    target.items = mapProperties(value, dataPropsMapper)
 }
 
 function mapProperties(object: any, mappers: IMappers): any {

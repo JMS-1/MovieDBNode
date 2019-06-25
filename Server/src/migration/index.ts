@@ -11,7 +11,7 @@ import { languageCollection } from '../database/language'
 import { mediaCollection } from '../database/media'
 import { recordingCollection } from '../database/recording'
 import { seriesCollection } from '../database/series'
-import { addSchema } from '../database/validation'
+import { addSchema, validate } from '../database/validation'
 
 const readFile = promisify(fs.readFile)
 
@@ -83,5 +83,47 @@ export async function runMigration(): Promise<void> {
         }
 
         await collection.fromSql(row)
+    }
+
+    const recordings = recordingCollection.migrationMap
+
+    for (let link of genreLinks.migrated) {
+        const recording = recordings[link.from]
+        const genre = genreCollection.migrationMap[link.to]
+
+        if (!recording) {
+            throw new Error(`recording ${link.from} no found`)
+        }
+
+        if (!genre) {
+            throw new Error(`genre ${link.to} no found`)
+        }
+
+        recording.genres.push(genre._id)
+    }
+
+    for (let link of languageLinks.migrated) {
+        const recording = recordings[link.from]
+        const language = languageCollection.migrationMap[link.to]
+
+        if (!recording) {
+            throw new Error(`recording ${link.from} no found`)
+        }
+
+        if (!language) {
+            throw new Error(`language ${link.to} no found`)
+        }
+
+        recording.languages.push(language._id)
+    }
+
+    for (let id in recordings) {
+        if (recordings.hasOwnProperty(id)) {
+            const test = validate(recordings[id], recordingCollection.schema)
+
+            if (test) {
+                throw new Error(JSON.stringify(test))
+            }
+        }
     }
 }

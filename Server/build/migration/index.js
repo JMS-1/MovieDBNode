@@ -68,6 +68,37 @@ async function runMigration() {
         }
         await collection.fromSql(row);
     }
+    const recordings = recording_1.recordingCollection.migrationMap;
+    for (let link of genreLinks.migrated) {
+        const recording = recordings[link.from];
+        const genre = genre_1.genreCollection.migrationMap[link.to];
+        if (!recording) {
+            throw new Error(`recording ${link.from} no found`);
+        }
+        if (!genre) {
+            throw new Error(`genre ${link.to} no found`);
+        }
+        recording.genres.push(genre._id);
+    }
+    for (let link of languageLinks.migrated) {
+        const recording = recordings[link.from];
+        const language = language_1.languageCollection.migrationMap[link.to];
+        if (!recording) {
+            throw new Error(`recording ${link.from} no found`);
+        }
+        if (!language) {
+            throw new Error(`language ${link.to} no found`);
+        }
+        recording.languages.push(language._id);
+    }
+    for (let id in recordings) {
+        if (recordings.hasOwnProperty(id)) {
+            const test = validation_1.validate(recordings[id], recording_1.recordingCollection.schema);
+            if (test) {
+                throw new Error(JSON.stringify(test));
+            }
+        }
+    }
 }
 exports.runMigration = runMigration;
 

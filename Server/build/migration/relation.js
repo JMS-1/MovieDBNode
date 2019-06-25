@@ -9,23 +9,23 @@ exports.RelationSchema = {
     type: 'object',
     message: 'Verweis unvollständig',
     properties: {
-        ["from"]: {
+        from: {
             message: 'Quellkennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["to"]: {
+        to: {
             message: 'Zielkennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
     },
-    required: ["from", "to"],
+    required: ['from', 'to'],
 };
 class RelationCollection {
     constructor(_other) {
         this._other = _other;
-        this._migrated = [];
+        this.migrated = [];
     }
     fromSql(sql) {
         const relation = {
@@ -36,7 +36,7 @@ class RelationCollection {
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }
-        this._migrated.push(relation);
+        this.migrated.push(relation);
     }
 }
 exports.RelationCollection = RelationCollection;

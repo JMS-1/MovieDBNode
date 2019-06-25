@@ -9,33 +9,33 @@ exports.ContainerSchema = {
     type: 'object',
     message: 'Ablage unvollständig',
     properties: {
-        ["_id"]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["description"]: {
+        description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
             type: 'string',
         },
-        ["name"]: {
+        name: {
             maxLength: 50,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
-        ["parentId"]: {
+        parentId: {
             message: 'Übergeordnete Ablage ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["parentLocation"]: {
+        parentLocation: {
             maxLength: 100,
             message: 'Ablagebezeichnung zu lang',
             type: 'string',
         },
-        ["type"]: {
+        type: {
             message: 'Ablageart fehlt oder ist unzulässig',
             type: 'integer',
             enum: [
@@ -48,33 +48,33 @@ exports.ContainerSchema = {
             ],
         },
     },
-    required: ["_id", "name", "type"],
+    required: ['_id', 'name', 'type'],
 };
 function toProtocol(container) {
     return {
-        id: container["_id"],
-        description: container["description"] || undefined,
-        name: container["name"],
-        parentId: container["parentId"] || undefined,
-        parentLocation: container["parentLocation"] || undefined,
-        type: container["type"],
+        id: container._id,
+        description: container.description || undefined,
+        name: container.name,
+        parentId: container.parentId || undefined,
+        parentLocation: container.parentLocation || undefined,
+        type: container.type,
     };
 }
 exports.toProtocol = toProtocol;
 function toEntity(container, id) {
     const dbContainer = {
-        ["_id"]: id,
-        ["name"]: container.name,
-        ["type"]: container.type,
+        _id: id,
+        name: container.name,
+        type: container.type,
     };
     if (container.description !== undefined) {
-        dbContainer["description"] = container.description;
+        dbContainer.description = container.description;
     }
     if (container.parentId !== undefined) {
-        dbContainer["parentId"] = container.parentId;
+        dbContainer.parentId = container.parentId;
     }
     if (container.parentLocation !== undefined) {
-        dbContainer["parentLocation"] = container.parentLocation;
+        dbContainer.parentLocation = container.parentLocation;
     }
     return dbContainer;
 }

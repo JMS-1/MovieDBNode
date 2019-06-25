@@ -1,14 +1,9 @@
 import { uniqueId } from '../database/entities/utils'
 import { validate } from '../database/validation'
 
-const enum RelationFields {
-    from = 'from',
-    to = 'to',
-}
-
 export interface IRelation {
-    [RelationFields.from]: string
-    [RelationFields.to]: string
+    from: string
+    to: string
 }
 
 export const RelationSchema = {
@@ -18,22 +13,22 @@ export const RelationSchema = {
     type: 'object',
     message: 'Verweis unvollständig',
     properties: {
-        [RelationFields.from]: {
+        from: {
             message: 'Quellkennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [RelationFields.to]: {
+        to: {
             message: 'Zielkennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
     },
-    required: [RelationFields.from, RelationFields.to],
+    required: ['from', 'to'],
 }
 
 export class RelationCollection {
-    private readonly _migrated: IRelation[] = []
+    readonly migrated: IRelation[] = []
 
     constructor(private readonly _other: string) {}
 
@@ -49,6 +44,6 @@ export class RelationCollection {
             throw new Error(JSON.stringify(errors))
         }
 
-        this._migrated.push(relation)
+        this.migrated.push(relation)
     }
 }

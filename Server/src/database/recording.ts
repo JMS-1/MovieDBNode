@@ -17,6 +17,8 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         const recording: IDbRecording = {
             _id: sql.Id,
             created: (date && `${date[1]}Z`) || sql.Created,
+            genres: [],
+            languages: [],
             media: sql.Media,
             name: sql.Name,
         }

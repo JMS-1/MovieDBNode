@@ -9,22 +9,22 @@ exports.MediaSchema = {
     type: 'object',
     message: 'Medium unvollständig',
     properties: {
-        ["_id"]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["container"]: {
+        container: {
             message: 'Ablage ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["position"]: {
+        position: {
             maxLength: 100,
             message: 'Standort zu lang',
             type: 'string',
         },
-        ["type"]: {
+        type: {
             message: 'Medienart fehlt oder ist unzulässig',
             type: 'integer',
             enum: [
@@ -37,7 +37,7 @@ exports.MediaSchema = {
             ],
         },
     },
-    required: ["_id", "type"],
+    required: ['_id', 'type'],
 };
 
 //# sourceMappingURL=media.js.map

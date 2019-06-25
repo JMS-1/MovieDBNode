@@ -2,14 +2,9 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'languages'
 
-const enum LanguageFields {
-    _id = '_id',
-    name = 'name',
-}
-
 export interface IDbLanguage {
-    [LanguageFields._id]: string
-    [LanguageFields.name]: string
+    _id: string
+    name: string
 }
 
 export const LanguageSchema = {
@@ -19,17 +14,17 @@ export const LanguageSchema = {
     type: 'object',
     message: 'Sprache unvollständig',
     properties: {
-        [LanguageFields._id]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [LanguageFields.name]: {
+        name: {
             maxLength: 100,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
     },
-    required: [LanguageFields._id, LanguageFields.name],
+    required: ['_id', 'name'],
 }

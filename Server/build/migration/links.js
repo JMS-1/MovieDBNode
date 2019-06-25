@@ -11,39 +11,39 @@ exports.LinkSchema = {
     type: 'object',
     message: 'Verweis unvollständig',
     properties: {
-        ["_id"]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["description"]: {
+        description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
             type: 'string',
         },
-        ["for"]: {
+        for: {
             message: 'Aufzeichnungskennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["name"]: {
+        name: {
             maxLength: 100,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
-        ["ordinal"]: {
+        ordinal: {
             message: 'Anordnung fehlt oder ist ungültig',
             minimum: 0,
             type: 'integer',
         },
-        ["url"]: {
+        url: {
             maxLength: 2000,
             message: 'Verweis ist zu lang',
             type: 'string',
         },
     },
-    required: ["_id", "name", "for", "url", "ordinal"],
+    required: ['_id', 'name', 'for', 'url', 'ordinal'],
 };
 exports.linkCollection = new (class extends utils_2.CollectionBase {
     constructor() {

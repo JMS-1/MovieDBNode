@@ -4,18 +4,11 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'medias'
 
-const enum MediaFields {
-    _id = '_id',
-    container = 'container',
-    position = 'position',
-    type = 'type',
-}
-
 export interface IDbMedia {
-    [MediaFields._id]: string
-    [MediaFields.container]?: string
-    [MediaFields.position]?: string
-    [MediaFields.type]: mediaType
+    _id: string
+    container?: string
+    position?: string
+    type: mediaType
 }
 
 export const MediaSchema = {
@@ -25,22 +18,22 @@ export const MediaSchema = {
     type: 'object',
     message: 'Medium unvollständig',
     properties: {
-        [MediaFields._id]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [MediaFields.container]: {
+        container: {
             message: 'Ablage ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [MediaFields.position]: {
+        position: {
             maxLength: 100,
             message: 'Standort zu lang',
             type: 'string',
         },
-        [MediaFields.type]: {
+        type: {
             message: 'Medienart fehlt oder ist unzulässig',
             type: 'integer',
             enum: [
@@ -53,5 +46,5 @@ export const MediaSchema = {
             ],
         },
     },
-    required: [MediaFields._id, MediaFields.type],
+    required: ['_id', 'type'],
 }

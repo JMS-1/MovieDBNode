@@ -28,14 +28,14 @@ async function dbConnect() {
 }
 exports.dbConnect = dbConnect;
 class CollectionBase {
+    constructor() {
+        this.migrationMap = {};
+    }
     cacheMigrated(item) {
-        if (!this._migrationMap) {
-            this._migrationMap = {};
-        }
-        if (this._migrationMap[item._id]) {
+        if (this.migrationMap[item._id]) {
             throw new Error(`duplicated identifier '${item._id}`);
         }
-        this._migrationMap[item._id] = item;
+        this.migrationMap[item._id] = item;
     }
     async getCollection() {
         const db = await dbConnect();

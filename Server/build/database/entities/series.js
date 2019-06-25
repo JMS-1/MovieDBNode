@@ -9,29 +9,29 @@ exports.SeriesSchema = {
     type: 'object',
     message: 'Serie unvollständig',
     properties: {
-        ["_id"]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["description"]: {
+        description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
             type: 'string',
         },
-        ["name"]: {
+        name: {
             maxLength: 50,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
-        ["parentId"]: {
+        parentId: {
             message: 'Übergeordnete Serie ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
     },
-    required: ["_id", "name"],
+    required: ['_id', 'name'],
 };
 
 //# sourceMappingURL=series.js.map

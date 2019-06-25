@@ -9,44 +9,62 @@ exports.RecordingSchema = {
     type: 'object',
     message: 'Aufzeichnung unvollständig',
     properties: {
-        ["_id"]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["created"]: {
+        created: {
             message: 'Zeitpunkt fehlt oder ist ungültig',
             pattern: utils_1.isoDate,
             type: 'string',
         },
-        ["description"]: {
+        description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
             type: 'string',
         },
-        ["media"]: {
+        genres: {
+            message: 'Genres sind ungültig',
+            type: 'array',
+            items: {
+                message: 'Genre ist ungültig',
+                pattern: utils_1.uniqueId,
+                type: 'string',
+            },
+        },
+        languages: {
+            message: 'Sprachen sind ungültig',
+            type: 'array',
+            items: {
+                message: 'Sprache ist ungültig',
+                pattern: utils_1.uniqueId,
+                type: 'string',
+            },
+        },
+        media: {
             message: 'Medium fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["name"]: {
+        name: {
             maxLength: 200,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
-        ["rentTo"]: {
+        rentTo: {
             maxLength: 200,
             message: 'Verleiher zu lang',
             type: 'string',
         },
-        ["series"]: {
+        series: {
             message: 'Serie ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
     },
-    required: ["_id", "name", "created", "media"],
+    required: ['_id', 'name', 'created', 'media', 'genres', 'languages'],
 };
 
 //# sourceMappingURL=recording.js.map

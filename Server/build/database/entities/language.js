@@ -9,19 +9,19 @@ exports.LanguageSchema = {
     type: 'object',
     message: 'Sprache unvollständig',
     properties: {
-        ["_id"]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: utils_1.uniqueId,
             type: 'string',
         },
-        ["name"]: {
+        name: {
             maxLength: 100,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
     },
-    required: ["_id", "name"],
+    required: ['_id', 'name'],
 };
 
 //# sourceMappingURL=language.js.map

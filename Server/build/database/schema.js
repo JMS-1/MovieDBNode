@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const dataPropsMapper = {
     enum: copy,
+    items: arrayElements,
     maxLength: copy,
     message: errorMessage,
     minLength: copy,
@@ -13,7 +14,7 @@ const schemaPropsMapper = {
     $schema: discard,
     additionalProperties: copy,
     message: errorMessage,
-    properties: recurse,
+    properties: subObject,
     required: copy,
     type: dataType,
 };
@@ -23,6 +24,7 @@ function copy(value, target, prop) {
 }
 function dataType(value, target, prop) {
     switch (value) {
+        case 'array':
         case 'object':
         case 'string':
             target.bsonType = value;
@@ -37,13 +39,16 @@ function dataType(value, target, prop) {
 function errorMessage(value, target, prop) {
     target.description = value;
 }
-function recurse(value, target, prop) {
+function subObject(value, target, prop) {
     target.properties = {};
     for (let prop in value) {
         if (value.hasOwnProperty(prop)) {
             target.properties[prop] = mapProperties(value[prop], dataPropsMapper);
         }
     }
+}
+function arrayElements(value, target, prop) {
+    target.items = mapProperties(value, dataPropsMapper);
 }
 function mapProperties(object, mappers) {
     const mongo = {};

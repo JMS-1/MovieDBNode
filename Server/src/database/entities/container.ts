@@ -4,22 +4,13 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'containers'
 
-const enum ContainerFields {
-    _id = '_id',
-    name = 'name',
-    type = 'type',
-    description = 'description',
-    parentId = 'parentId',
-    parentLocation = 'parentLocation',
-}
-
 export interface IDbContainer {
-    [ContainerFields._id]: string
-    [ContainerFields.name]: string
-    [ContainerFields.type]: containerType
-    [ContainerFields.description]?: string
-    [ContainerFields.parentId]?: string
-    [ContainerFields.parentLocation]?: string
+    _id: string
+    name: string
+    type: containerType
+    description?: string
+    parentId?: string
+    parentLocation?: string
 }
 
 export const ContainerSchema = {
@@ -29,33 +20,33 @@ export const ContainerSchema = {
     type: 'object',
     message: 'Ablage unvollständig',
     properties: {
-        [ContainerFields._id]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [ContainerFields.description]: {
+        description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
             type: 'string',
         },
-        [ContainerFields.name]: {
+        name: {
             maxLength: 50,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
-        [ContainerFields.parentId]: {
+        parentId: {
             message: 'Übergeordnete Ablage ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [ContainerFields.parentLocation]: {
+        parentLocation: {
             maxLength: 100,
             message: 'Ablagebezeichnung zu lang',
             type: 'string',
         },
-        [ContainerFields.type]: {
+        type: {
             message: 'Ablageart fehlt oder ist unzulässig',
             type: 'integer',
             enum: [
@@ -68,37 +59,37 @@ export const ContainerSchema = {
             ],
         },
     },
-    required: [ContainerFields._id, ContainerFields.name, ContainerFields.type],
+    required: ['_id', 'name', 'type'],
 }
 
 export function toProtocol(container: IDbContainer): IContainer {
     return {
-        id: container[ContainerFields._id],
-        description: container[ContainerFields.description] || undefined,
-        name: container[ContainerFields.name],
-        parentId: container[ContainerFields.parentId] || undefined,
-        parentLocation: container[ContainerFields.parentLocation] || undefined,
-        type: container[ContainerFields.type],
+        id: container._id,
+        description: container.description || undefined,
+        name: container.name,
+        parentId: container.parentId || undefined,
+        parentLocation: container.parentLocation || undefined,
+        type: container.type,
     }
 }
 
 export function toEntity(container: IContainer, id: string): IDbContainer {
     const dbContainer: IDbContainer = {
-        [ContainerFields._id]: id,
-        [ContainerFields.name]: container.name,
-        [ContainerFields.type]: container.type,
+        _id: id,
+        name: container.name,
+        type: container.type,
     }
 
     if (container.description !== undefined) {
-        dbContainer[ContainerFields.description] = container.description
+        dbContainer.description = container.description
     }
 
     if (container.parentId !== undefined) {
-        dbContainer[ContainerFields.parentId] = container.parentId
+        dbContainer.parentId = container.parentId
     }
 
     if (container.parentLocation !== undefined) {
-        dbContainer[ContainerFields.parentLocation] = container.parentLocation
+        dbContainer.parentLocation = container.parentLocation
     }
 
     return dbContainer

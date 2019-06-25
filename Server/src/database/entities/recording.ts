@@ -2,24 +2,16 @@ import { isoDate, uniqueId } from './utils'
 
 export const collectionName = 'Recordings'
 
-const enum RecordingFields {
-    _id = '_id',
-    created = 'created',
-    description = 'description',
-    media = 'media',
-    name = 'name',
-    rentTo = 'rentTo',
-    series = 'series',
-}
-
 export interface IDbRecording {
-    [RecordingFields._id]: string
-    [RecordingFields.created]: string
-    [RecordingFields.description]?: string
-    [RecordingFields.media]: string
-    [RecordingFields.name]: string
-    [RecordingFields.rentTo]?: string
-    [RecordingFields.series]?: string
+    _id: string
+    created: string
+    description?: string
+    genres: string[]
+    languages: string[]
+    media: string
+    name: string
+    rentTo?: string
+    series?: string
 }
 
 export const RecordingSchema = {
@@ -29,42 +21,60 @@ export const RecordingSchema = {
     type: 'object',
     message: 'Aufzeichnung unvollständig',
     properties: {
-        [RecordingFields._id]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [RecordingFields.created]: {
+        created: {
             message: 'Zeitpunkt fehlt oder ist ungültig',
             pattern: isoDate,
             type: 'string',
         },
-        [RecordingFields.description]: {
+        description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
             type: 'string',
         },
-        [RecordingFields.media]: {
+        genres: {
+            message: 'Genres sind ungültig',
+            type: 'array',
+            items: {
+                message: 'Genre ist ungültig',
+                pattern: uniqueId,
+                type: 'string',
+            },
+        },
+        languages: {
+            message: 'Sprachen sind ungültig',
+            type: 'array',
+            items: {
+                message: 'Sprache ist ungültig',
+                pattern: uniqueId,
+                type: 'string',
+            },
+        },
+        media: {
             message: 'Medium fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [RecordingFields.name]: {
+        name: {
             maxLength: 200,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
-        [RecordingFields.rentTo]: {
+        rentTo: {
             maxLength: 200,
             message: 'Verleiher zu lang',
             type: 'string',
         },
-        [RecordingFields.series]: {
+        series: {
             message: 'Serie ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
     },
-    required: [RecordingFields._id, RecordingFields.name, RecordingFields.created, RecordingFields.media],
+    required: ['_id', 'name', 'created', 'media', 'genres', 'languages'],
 }

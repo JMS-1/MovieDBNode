@@ -19,6 +19,8 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         const recording = {
             _id: sql.Id,
             created: (date && `${date[1]}Z`) || sql.Created,
+            genres: [],
+            languages: [],
             media: sql.Media,
             name: sql.Name,
         };

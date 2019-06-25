@@ -2,14 +2,9 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'genres'
 
-const enum GenreFields {
-    _id = '_id',
-    name = 'name',
-}
-
 export interface IDbGenre {
-    [GenreFields._id]: string
-    [GenreFields.name]: string
+    _id: string
+    name: string
 }
 
 export const GenreSchema = {
@@ -19,17 +14,17 @@ export const GenreSchema = {
     type: 'object',
     message: 'Genre unvollständig',
     properties: {
-        [GenreFields._id]: {
+        _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [GenreFields.name]: {
+        name: {
             maxLength: 100,
             message: 'Name nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
     },
-    required: [GenreFields._id, GenreFields.name],
+    required: ['_id', 'name'],
 }
