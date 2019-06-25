@@ -2,11 +2,12 @@ import * as fs from 'fs'
 import { join } from 'path'
 import { promisify } from 'util'
 
-import { LinkCollection, LinkSchema } from './link'
+import { RelationCollection, RelationSchema } from './relation'
 
 import { containerCollection } from '../database/container'
 import { genreCollection } from '../database/genre'
 import { languageCollection } from '../database/language'
+import { mediaCollection } from '../database/media'
 import { seriesCollection } from '../database/series'
 import { addSchema } from '../database/validation'
 
@@ -21,17 +22,18 @@ const normReg = /(N'([^']|'')*')/g
 const tempOff = new RegExp(temp, 'g')
 const tempOn = /,/g
 
-const genreLinks = new (class extends LinkCollection {})('Genre')
+const genreLinks = new (class extends RelationCollection {})('Genre')
 
-const languageLinks = new (class extends LinkCollection {})('Language')
+const languageLinks = new (class extends RelationCollection {})('Language')
 
 export async function runMigration(): Promise<void> {
-    addSchema(LinkSchema)
+    addSchema(RelationSchema)
 
     const collections = {
         Containers: containerCollection,
         Genres: genreCollection,
         Languages: languageCollection,
+        Media: mediaCollection,
         RecordingGenres: genreLinks,
         RecordingLanguages: languageLinks,
         Series: seriesCollection,

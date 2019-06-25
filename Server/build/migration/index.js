@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const path_1 = require("path");
 const util_1 = require("util");
-const link_1 = require("./link");
+const relation_1 = require("./relation");
 const container_1 = require("../database/container");
 const genre_1 = require("../database/genre");
 const language_1 = require("../database/language");
+const media_1 = require("../database/media");
 const series_1 = require("../database/series");
 const validation_1 = require("../database/validation");
 const readFile = util_1.promisify(fs.readFile);
@@ -17,16 +18,17 @@ const insertReg = /^INSERT \[dbo\]\.\[([^\]]+)\] \(([^\)]+)\) VALUES \((.+)\)$/;
 const normReg = /(N'([^']|'')*')/g;
 const tempOff = new RegExp(temp, 'g');
 const tempOn = /,/g;
-const genreLinks = new (class extends link_1.LinkCollection {
+const genreLinks = new (class extends relation_1.RelationCollection {
 })('Genre');
-const languageLinks = new (class extends link_1.LinkCollection {
+const languageLinks = new (class extends relation_1.RelationCollection {
 })('Language');
 async function runMigration() {
-    validation_1.addSchema(link_1.LinkSchema);
+    validation_1.addSchema(relation_1.RelationSchema);
     const collections = {
         Containers: container_1.containerCollection,
         Genres: genre_1.genreCollection,
         Languages: language_1.languageCollection,
+        Media: media_1.mediaCollection,
         RecordingGenres: genreLinks,
         RecordingLanguages: languageLinks,
         Series: series_1.seriesCollection,

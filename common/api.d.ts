@@ -31,6 +31,15 @@ declare module 'movie-db-api' {
         Undefined = 0,
     }
 
+    const enum mediaType {
+        BluRay = 5,
+        DVD = 4,
+        RecordedDVD = 3,
+        SuperVideoCD = 2,
+        Undefined = 0,
+        VideoCD = 1,
+    }
+
     interface INewContainer {
         name: string
         type: containerType

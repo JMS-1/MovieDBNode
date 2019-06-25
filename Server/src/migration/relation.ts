@@ -1,54 +1,54 @@
 import { uniqueId } from '../database/entities/utils'
 import { validate } from '../database/validation'
 
-const enum LinkFields {
+const enum RelationFields {
     from = 'from',
     to = 'to',
 }
 
-export interface ILink {
-    [LinkFields.from]: string
-    [LinkFields.to]: string
+export interface IRelation {
+    [RelationFields.from]: string
+    [RelationFields.to]: string
 }
 
-export const LinkSchema = {
+export const RelationSchema = {
     $schema: 'http://json-schema.org/schema#',
-    $id: 'http://psimarron.net/schemas/movie-db/migrate/link.json',
+    $id: 'http://psimarron.net/schemas/movie-db/migrate/relation.json',
     additionalProperties: false,
     type: 'object',
     message: 'Verweis unvollständig',
     properties: {
-        [LinkFields.from]: {
+        [RelationFields.from]: {
             message: 'Quellkennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
-        [LinkFields.to]: {
+        [RelationFields.to]: {
             message: 'Zielkennung fehlt oder ist ungültig',
             pattern: uniqueId,
             type: 'string',
         },
     },
-    required: [LinkFields.from, LinkFields.to],
+    required: [RelationFields.from, RelationFields.to],
 }
 
-export class LinkCollection {
-    private readonly _migrated: ILink[] = []
+export class RelationCollection {
+    private readonly _migrated: IRelation[] = []
 
     constructor(private readonly _other: string) {}
 
     fromSql(sql: any): void {
-        const link: ILink = {
+        const relation: IRelation = {
             from: sql.Recording,
             to: sql[this._other],
         }
 
-        const errors = validate(link, LinkSchema)
+        const errors = validate(relation, RelationSchema)
 
         if (errors) {
             throw new Error(JSON.stringify(errors))
         }
 
-        this._migrated.push(link)
+        this._migrated.push(relation)
     }
 }
