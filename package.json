@@ -51,10 +51,10 @@
     "main": "Server/build/startup.ts",
     "name": "movie-db-neu",
     "scripts": {
-        "build-client": "cd Client && node ../node_modules/webpack/bin/webpack.js --mode development",
+        "build-client": "node node_modules/webpack/bin/webpack.js --mode development",
         "debug-server": "node --inspect-brk=23902 Server/src/startup",
         "start-server": "node Server/src/startup",
-        "watch-client": "cd Client && node ../node_modules/webpack/bin/webpack.js --mode development --watch"
+        "watch-client": "node node_modules/webpack/bin/webpack.js --mode development --watch"
     },
     "version": "1.0.0"
 }
