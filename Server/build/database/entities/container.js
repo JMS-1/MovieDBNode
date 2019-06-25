@@ -5,6 +5,7 @@ exports.collectionName = 'containers';
 exports.ContainerSchema = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/container.json',
+    additionalProperties: false,
     type: 'object',
     message: 'Ablage unvollständig',
     properties: {

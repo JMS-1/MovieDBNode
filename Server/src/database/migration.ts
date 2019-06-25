@@ -3,6 +3,8 @@ import { join } from 'path'
 import { promisify } from 'util'
 
 import { containerCollection } from './container'
+import { genreCollection } from './genre'
+import { languageCollection } from './language'
 import { seriesCollection } from './series'
 
 const readFile = promisify(fs.readFile)
@@ -19,6 +21,8 @@ const tempOn = /,/g
 export async function runMigration(): Promise<void> {
     const collections = {
         Containers: containerCollection,
+        Genres: genreCollection,
+        Languages: languageCollection,
         Series: seriesCollection,
     }
 

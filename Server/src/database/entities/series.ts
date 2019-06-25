@@ -19,6 +19,7 @@ export interface IDbSeries {
 export const SeriesSchema = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/series.json',
+    additionalProperties: false,
     type: 'object',
     message: 'Serie unvollständig',
     properties: {

@@ -11,6 +11,7 @@ const dataPropsMapper = {
 const schemaPropsMapper = {
     $id: discard,
     $schema: discard,
+    additionalProperties: copy,
     message: errorMessage,
     properties: recurse,
     required: copy,
