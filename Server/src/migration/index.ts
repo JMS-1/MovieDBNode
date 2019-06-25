@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import { join } from 'path'
 import { promisify } from 'util'
 
+import { linkCollection, LinkSchema } from './links'
 import { RelationCollection, RelationSchema } from './relation'
 
 import { containerCollection } from '../database/container'
@@ -27,12 +28,14 @@ const genreLinks = new (class extends RelationCollection {})('Genre')
 const languageLinks = new (class extends RelationCollection {})('Language')
 
 export async function runMigration(): Promise<void> {
+    addSchema(LinkSchema)
     addSchema(RelationSchema)
 
     const collections = {
         Containers: containerCollection,
         Genres: genreCollection,
         Languages: languageCollection,
+        Links: linkCollection,
         Media: mediaCollection,
         RecordingGenres: genreLinks,
         RecordingLanguages: languageLinks,

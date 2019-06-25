@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const path_1 = require("path");
 const util_1 = require("util");
+const links_1 = require("./links");
 const relation_1 = require("./relation");
 const container_1 = require("../database/container");
 const genre_1 = require("../database/genre");
@@ -23,11 +24,13 @@ const genreLinks = new (class extends relation_1.RelationCollection {
 const languageLinks = new (class extends relation_1.RelationCollection {
 })('Language');
 async function runMigration() {
+    validation_1.addSchema(links_1.LinkSchema);
     validation_1.addSchema(relation_1.RelationSchema);
     const collections = {
         Containers: container_1.containerCollection,
         Genres: genre_1.genreCollection,
         Languages: language_1.languageCollection,
+        Links: links_1.linkCollection,
         Media: media_1.mediaCollection,
         RecordingGenres: genreLinks,
         RecordingLanguages: languageLinks,
