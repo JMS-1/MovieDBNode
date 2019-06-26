@@ -14,5 +14,6 @@ declare module 'movie-db-client' {
             readonly noParent: string
             readonly types: { readonly [type in containerType]: IContainerTypeMui }
         }
+        readonly error: string
     }
 }

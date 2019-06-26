@@ -8,12 +8,12 @@ export * from './media'
 export * from './mui'
 export * from './series'
 
-export function getError<TType, TProp extends keyof TType>(
+export function getErrors<TType, TProp extends keyof TType>(
     errors: IValidationError[],
     prop: TProp,
     edit: TType,
-): string {
-    const error = errors && errors.find(e => e.property === prop)
+): string[] {
+    const list = errors && errors.filter(e => e.property === prop)
 
-    return error && `${error.message} (${error.constraint})`
+    return list && list.length > 0 && list.map(e => `${e.message} (${e.constraint})`)
 }

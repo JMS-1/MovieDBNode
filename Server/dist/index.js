@@ -86,6 +86,59 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./Client/src/components/message/message.tsx":
+/*!***************************************************!*\
+  !*** ./Client/src/components/message/message.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+class CReportError extends React.PureComponent {
+    render() {
+        const { errors } = this.props;
+        if (!errors) {
+            return null;
+        }
+        return (React.createElement(semantic_ui_react_1.Message, { className: 'movie-db-input-message', error: true },
+            React.createElement(semantic_ui_react_1.Header, null, this.props.title),
+            React.createElement("ul", null, errors.map((e, i) => (React.createElement("li", { key: i }, e))))));
+    }
+}
+exports.CReportError = CReportError;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/message/messageRedux.ts":
+/*!*******************************************************!*\
+  !*** ./Client/src/components/message/messageRedux.ts ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./message */ "./Client/src/components/message/message.tsx");
+function mapStateToProps(state, props) {
+    return {
+        title: state.mui.error,
+    };
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.ReportError = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CReportError);
+
+
+/***/ }),
+
 /***/ "./Client/src/components/root/root.tsx":
 /*!*********************************************!*\
   !*** ./Client/src/components/root/root.tsx ***!
@@ -146,17 +199,18 @@ exports.Root = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const messageRedux_1 = __webpack_require__(/*! ../message/messageRedux */ "./Client/src/components/message/messageRedux.ts");
 class CTextInput extends React.PureComponent {
     constructor() {
         super(...arguments);
         this.setValue = (ev) => this.props.setValue(this.props.prop, ev.currentTarget.value);
     }
     render() {
-        const { error } = this.props;
-        return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-input-text', error: !!error, required: this.props.required },
+        const { errors } = this.props;
+        return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-input-text', error: errors && errors.length > 0, required: this.props.required },
             React.createElement("label", null, this.props.label),
             this.props.textarea ? (React.createElement(semantic_ui_react_1.TextArea, { input: 'text', onChange: this.setValue, value: this.props.value || '' })) : (React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setValue, value: this.props.value || '' })),
-            error && React.createElement(semantic_ui_react_1.Message, { error: true, content: error })));
+            React.createElement(messageRedux_1.ReportError, { errors: errors })));
     }
 }
 exports.CTextInput = CTextInput;
@@ -183,7 +237,7 @@ class CContainerTextInput extends local.CTextInput {
         const edit = controller_1.getContainerEdit(state);
         const value = edit && edit[props.prop];
         return {
-            error: controller_1.getError(route.validation, props.prop, edit),
+            errors: controller_1.getErrors(route.validation, props.prop, edit),
             label: state.mui.container.edit[props.prop],
             value: typeof value === 'string' ? value : undefined,
         };
@@ -591,11 +645,11 @@ __export(__webpack_require__(/*! ./language */ "./Client/src/controller/language
 __export(__webpack_require__(/*! ./media */ "./Client/src/controller/media/index.ts"));
 __export(__webpack_require__(/*! ./mui */ "./Client/src/controller/mui/index.ts"));
 __export(__webpack_require__(/*! ./series */ "./Client/src/controller/series/index.ts"));
-function getError(errors, prop, edit) {
-    const error = errors && errors.find(e => e.property === prop);
-    return error && `${error.message} (${error.constraint})`;
+function getErrors(errors, prop, edit) {
+    const list = errors && errors.filter(e => e.property === prop);
+    return list && list.length > 0 && list.map(e => `${e.message} (${e.constraint})`);
 }
-exports.getError = getError;
+exports.getErrors = getErrors;
 
 
 /***/ }),
@@ -814,6 +868,7 @@ function getInitialState() {
                 },
             },
         },
+        error: 'Bitte Eingaben kontrollieren',
     };
 }
 exports.getInitialState = getInitialState;
@@ -1016,6 +1071,7 @@ exports.ContainerRoute = react_redux_1.connect(mapStateToProps, mapDispatchToPro
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const messageRedux_1 = __webpack_require__(/*! ../../../components/message/messageRedux */ "./Client/src/components/message/messageRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CContainerDetails extends React.PureComponent {
     constructor() {
@@ -1028,7 +1084,6 @@ class CContainerDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { typeError } = this.props;
         return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: this.props.hasError },
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.idLabel),
@@ -1040,7 +1095,7 @@ class CContainerDetails extends React.PureComponent {
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.typeLabel),
                 React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: this.props.type }),
-                typeError && React.createElement(semantic_ui_react_1.Message, { error: true }, typeError)),
+                React.createElement(messageRedux_1.ReportError, { errors: this.props.typeErrors })),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' })));
     }
@@ -1085,7 +1140,7 @@ function mapStateToProps(state, props) {
             mui.noParent,
         parentLabel: emui.parentId,
         type: container ? container.type : undefined,
-        typeError: controller.getError(errors, 'type', container),
+        typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
         typeOptions: controller.getContainerTypeOptions(state),
     };
@@ -67202,7 +67257,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

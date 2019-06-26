@@ -40,5 +40,6 @@ export function getInitialState(): IMuiState {
                 },
             },
         },
+        error: 'Bitte Eingaben kontrollieren',
     }
 }

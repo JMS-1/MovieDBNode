@@ -1,5 +1,7 @@
 import * as React from 'react'
-import { Form, Input, Message, TextArea } from 'semantic-ui-react'
+import { Form, Input, TextArea } from 'semantic-ui-react'
+
+import { ReportError } from '../message/messageRedux'
 
 export interface ITextInputUiProps<TItem> {
     prop: keyof TItem
@@ -8,7 +10,7 @@ export interface ITextInputUiProps<TItem> {
 }
 
 export interface ITextInputProps {
-    error: string
+    errors: string[]
     label: string
     value: string
 }
@@ -21,17 +23,21 @@ export type TTextInputProps<TItem> = ITextInputProps & ITextInputUiProps<TItem> 
 
 export class CTextInput<TItem> extends React.PureComponent<TTextInputProps<TItem>> {
     render(): JSX.Element {
-        const { error } = this.props
+        const { errors } = this.props
 
         return (
-            <Form.Field className='movie-db-input-text' error={!!error} required={this.props.required}>
+            <Form.Field
+                className='movie-db-input-text'
+                error={errors && errors.length > 0}
+                required={this.props.required}
+            >
                 <label>{this.props.label}</label>
                 {this.props.textarea ? (
                     <TextArea input='text' onChange={this.setValue} value={this.props.value || ''} />
                 ) : (
                     <Input input='text' onChange={this.setValue} value={this.props.value || ''} />
                 )}
-                {error && <Message error content={error} />}
+                <ReportError errors={errors} />
             </Form.Field>
         )
     }

@@ -23,7 +23,7 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
             mui.noParent,
         parentLabel: emui.parentId,
         type: container ? container.type : undefined,
-        typeError: controller.getError(errors, 'type', container),
+        typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
         typeOptions: controller.getContainerTypeOptions(state),
     }

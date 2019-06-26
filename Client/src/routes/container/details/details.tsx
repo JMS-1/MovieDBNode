@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { Dropdown, DropdownProps, Form, Input, Message } from 'semantic-ui-react'
+import { Dropdown, DropdownProps, Form, Input } from 'semantic-ui-react'
 
 import { containerType, IContainer } from 'movie-db-api'
 import { IIconSelectOption } from 'movie-db-client'
 
+import { ReportError } from '../../../components/message/messageRedux'
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
 
 export interface IContainerDetailsUiProps {
@@ -17,7 +18,7 @@ export interface IContainerDetailsProps {
     parent: string
     parentLabel: string
     type: containerType
-    typeError: string
+    typeErrors: string[]
     typeLabel: string
     typeOptions: IIconSelectOption<containerType>[]
 }
@@ -34,8 +35,6 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
         if (this.props.lost) {
             return null
         }
-
-        const { typeError } = this.props
 
         return (
             <Form className='movie-db-container-details' error={this.props.hasError}>
@@ -56,7 +55,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                         selection
                         value={this.props.type}
                     />
-                    {typeError && <Message error>{typeError}</Message>}
+                    <ReportError errors={this.props.typeErrors} />
                 </Form.Field>
                 <ContainerTextInput prop='description' textarea />
                 <ContainerTextInput prop='parentLocation' />
