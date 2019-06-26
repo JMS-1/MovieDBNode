@@ -1383,7 +1383,7 @@ class ServerApi {
                 xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             }
             xhr.responseType = 'json';
-            xhr.send(data);
+            xhr.send(data && JSON.stringify(data));
         }
         catch (error) {
             store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)));

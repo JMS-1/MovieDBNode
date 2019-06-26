@@ -22,7 +22,7 @@ export function initializeStore(): Store<IClientState> {
             router: connectRouter(history),
             series: controller.SeriesReducer,
         }),
-        applyMiddleware(routerMiddleware(history)),
+        applyMiddleware(routerMiddleware(history))
     )
 
     return store
@@ -56,7 +56,7 @@ export class ServerApi {
 
             xhr.responseType = 'json'
 
-            xhr.send(data)
+            xhr.send(data && JSON.stringify(data))
         } catch (error) {
             store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)))
         }
