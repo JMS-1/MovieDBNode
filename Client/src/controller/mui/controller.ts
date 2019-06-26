@@ -3,6 +3,7 @@ import { IMuiState } from 'movie-db-client'
 
 export function getInitialState(): IMuiState {
     return {
+        cancel: 'Abbrechen',
         container: {
             edit: {
                 _id: 'Eindeutige Kennung',
@@ -41,5 +42,6 @@ export function getInitialState(): IMuiState {
             },
         },
         error: 'Bitte Eingaben kontrollieren',
+        save: 'Speichern',
     }
 }

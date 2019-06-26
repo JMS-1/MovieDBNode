@@ -15,7 +15,8 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
     const errors = route.validation
 
     return {
-        edit: container,
+        cancelLabel: state.mui.cancel,
+        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
@@ -23,6 +24,8 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
             controller.getFullContainerName(container && container.parentId, controller.getContainerMap(state)) ||
             mui.noParent,
         parentLabel: emui.parentId,
+        saveLabel: state.mui.save,
+        type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
         typeOptions: controller.getContainerTypeOptions(state),
@@ -34,7 +37,9 @@ function mapDispatchToProps(
     props: local.IContainerDetailsUiProps,
 ): local.IContainerDetailsActions {
     return {
+        cancel: () => dispatch(controller.ContainerActions.cancelEdit()),
         loadDetails: id => dispatch(controller.ContainerActions.select(id)),
+        save: () => dispatch(controller.ContainerActions.save()),
         setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
     }
 }

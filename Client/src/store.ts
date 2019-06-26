@@ -22,7 +22,7 @@ export function initializeStore(): Store<IClientState> {
             router: connectRouter(history),
             series: controller.SeriesReducer,
         }),
-        applyMiddleware(routerMiddleware(history))
+        applyMiddleware(routerMiddleware(history)),
     )
 
     return store
@@ -34,32 +34,36 @@ function getMessage(error: any): string {
 
 export class ServerApi {
     private static process(webMethod: string, method: string, data: any, process: (data: any) => Action): void {
-        store.dispatch(controller.ApplicationActions.beginWebRequest())
+        window.setTimeout(() => {
+            store.dispatch(controller.ApplicationActions.beginWebRequest())
 
-        try {
-            const xhr = new XMLHttpRequest()
+            try {
+                const xhr = new XMLHttpRequest()
 
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    store.dispatch(controller.ApplicationActions.endWebRequest(undefined))
-                    store.dispatch(process(xhr.response))
-                } else {
-                    store.dispatch(controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`))
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        store.dispatch(controller.ApplicationActions.endWebRequest(undefined))
+                        store.dispatch(process(xhr.response))
+                    } else {
+                        store.dispatch(
+                            controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`),
+                        )
+                    }
                 }
+
+                xhr.open(method, `api/${webMethod}`)
+
+                if (data) {
+                    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+                }
+
+                xhr.responseType = 'json'
+
+                xhr.send(data && JSON.stringify(data))
+            } catch (error) {
+                store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)))
             }
-
-            xhr.open(method, `api/${webMethod}`)
-
-            if (data) {
-                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-            }
-
-            xhr.responseType = 'json'
-
-            xhr.send(data && JSON.stringify(data))
-        } catch (error) {
-            store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)))
-        }
+        }, 0)
     }
 
     static get(method: string, process: (data: any) => Action): void {

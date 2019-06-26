@@ -6,27 +6,30 @@ import { IIconSelectOption } from 'movie-db-client'
 
 import { ReportError } from '../../../components/message/messageRedux'
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
-import { ContainerActions } from '../../../controller'
-import { ServerApi } from '../../../store'
 
 export interface IContainerDetailsUiProps {
     id: string
 }
 
 export interface IContainerDetailsProps {
-    edit: IContainer
+    cancelLabel: string
+    hasChanges: boolean
     hasError: boolean
     idLabel: string
     lost: boolean
     parent: string
     parentLabel: string
+    saveLabel: string
+    type: containerType
     typeErrors: string[]
     typeLabel: string
     typeOptions: IIconSelectOption<containerType>[]
 }
 
 export interface IContainerDetailsActions {
+    cancel(): void
     loadDetails(id: string): void
+    save(): void
     setProp<TProp extends keyof IContainer>(prop: TProp, value: IContainer[TProp]): void
 }
 
@@ -38,7 +41,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
             return null
         }
 
-        const { edit } = this.props
+        const { hasChanges } = this.props
 
         return (
             <Form className='movie-db-container-details' error={this.props.hasError}>
@@ -57,23 +60,22 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                         onChange={this.setType}
                         options={this.props.typeOptions}
                         selection
-                        value={edit && edit.type}
+                        value={this.props.type}
                     />
                     <ReportError errors={this.props.typeErrors} />
                 </Form.Field>
                 <ContainerTextInput prop='description' textarea />
                 <ContainerTextInput prop='parentLocation' />
                 <Button.Group>
-                    <Button color='red' onClick={this.onSave}>
-                        [SAVE]
+                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
+                        {this.props.cancelLabel}
+                    </Button>
+                    <Button color='red' onClick={this.props.save} disabled={!hasChanges}>
+                        {this.props.saveLabel}
                     </Button>
                 </Button.Group>
             </Form>
         )
-    }
-
-    private readonly onSave = (): void => {
-        ServerApi.put(`container/${this.props.id}`, this.props.edit, ContainerActions.saveDone)
     }
 
     private readonly setType = (ev: React.SyntheticEvent<HTMLElement>, props: DropdownProps): void => {

@@ -4,6 +4,7 @@ import { addSchema } from '../../validation'
 
 export function getInitialState(): local.IApplicationState {
     return {
+        busySince: 0,
         errors: [],
         requests: 0,
         schemas: undefined,
@@ -26,7 +27,7 @@ export function beginWebRequest(
     state: local.IApplicationState,
     request: local.IStartWebRequest,
 ): local.IApplicationState {
-    return { ...state, requests: state.requests + 1 }
+    return { ...state, requests: state.requests + 1, busySince: state.requests ? state.busySince : Date.now() }
 }
 
 export function endWebRequest(state: local.IApplicationState, request: local.IDoneWebRequest): local.IApplicationState {

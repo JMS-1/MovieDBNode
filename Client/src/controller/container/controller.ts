@@ -1,6 +1,9 @@
 import * as api from 'movie-db-api'
 import * as local from 'movie-db-client'
 
+import { ContainerActions } from './actions'
+
+import { ServerApi } from '../../store'
 import { validate } from '../../validation'
 
 function validateContainer(state: local.IContainerState): local.IContainerState {
@@ -34,7 +37,7 @@ export function setFilter(state: local.IContainerState, request: local.ISetConta
     return { ...state, filter: request.filter }
 }
 
-export function select(state: local.IContainerState, request: local.IContainerSelect): local.IContainerState {
+export function select(state: local.IContainerState, request: local.ISelectContainer): local.IContainerState {
     if (state.selected === request.id) {
         return state
     }
@@ -78,4 +81,20 @@ export function saveDone(state: local.IContainerState, response: local.IContaine
     }
 
     return { ...state, all, selected: _id, workingCopy: undefined, validation: undefined }
+}
+
+export function cancelEdit(state: local.IContainerState, request: local.ICancelContainerEdit): local.IContainerState {
+    if (!state.workingCopy) {
+        return state
+    }
+
+    return { ...state, validation: undefined, workingCopy: undefined }
+}
+
+export function startSave(state: local.IContainerState, request: local.ISaveContainer): local.IContainerState {
+    if (state.workingCopy) {
+        ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, ContainerActions.saveDone)
+    }
+
+    return state
 }

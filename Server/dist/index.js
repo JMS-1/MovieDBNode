@@ -180,8 +180,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./root */ "./Client/src/components/root/root.tsx");
 function mapStateToProps(state, props) {
+    const busy = Date.now() - state.application.busySince;
+    const requests = state.application.requests;
     return {
-        busy: state.application.requests > 0,
+        busy: requests > 1 || (requests > 0 && busy >= 250),
     };
 }
 function mapDispatchToProps(dispatch, props) {
@@ -297,6 +299,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
 function getInitialState() {
     return {
+        busySince: 0,
         errors: [],
         requests: 0,
         schemas: undefined,
@@ -314,7 +317,7 @@ function loadSchemas(state, response) {
 }
 exports.loadSchemas = loadSchemas;
 function beginWebRequest(state, request) {
-    return Object.assign({}, state, { requests: state.requests + 1 });
+    return Object.assign({}, state, { requests: state.requests + 1, busySince: state.requests ? state.busySince : Date.now() });
 }
 exports.beginWebRequest = beginWebRequest;
 function endWebRequest(state, request) {
@@ -388,6 +391,12 @@ class ContainerActions {
     static saveDone(response) {
         return { container: response.container, errors: response.errors, type: "movie-db.containers.save-done" };
     }
+    static cancelEdit() {
+        return { type: "movie-db.containers.cancel-edit" };
+    }
+    static save() {
+        return { type: "movie-db.containers.save" };
+    }
 }
 exports.ContainerActions = ContainerActions;
 
@@ -404,6 +413,8 @@ exports.ContainerActions = ContainerActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/container/actions.ts");
+const store_1 = __webpack_require__(/*! ../../store */ "./Client/src/store.ts");
 const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
 function validateContainer(state) {
     if (!state.workingCopy || !state.validator) {
@@ -468,6 +479,20 @@ function saveDone(state, response) {
     return Object.assign({}, state, { all, selected: _id, workingCopy: undefined, validation: undefined });
 }
 exports.saveDone = saveDone;
+function cancelEdit(state, request) {
+    if (!state.workingCopy) {
+        return state;
+    }
+    return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
+}
+exports.cancelEdit = cancelEdit;
+function startSave(state, request) {
+    if (state.workingCopy) {
+        store_1.ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, actions_1.ContainerActions.saveDone);
+    }
+    return state;
+}
+exports.startSave = startSave;
 
 
 /***/ }),
@@ -505,6 +530,10 @@ function ContainerReducer(state, action) {
             return controller.saveDone(state, action);
         case "movie-db.application.load-schemas":
             return controller.loadSchema(state, action);
+        case "movie-db.containers.save":
+            return controller.startSave(state, action);
+        case "movie-db.containers.cancel-edit":
+            return controller.cancelEdit(state, action);
     }
     return state;
 }
@@ -877,6 +906,7 @@ exports.MuiActions = MuiActions;
 Object.defineProperty(exports, "__esModule", { value: true });
 function getInitialState() {
     return {
+        cancel: 'Abbrechen',
         container: {
             edit: {
                 _id: 'Eindeutige Kennung',
@@ -915,6 +945,7 @@ function getInitialState() {
             },
         },
         error: 'Bitte Eingaben kontrollieren',
+        save: 'Speichern',
     };
 }
 exports.getInitialState = getInitialState;
@@ -1119,14 +1150,9 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const messageRedux_1 = __webpack_require__(/*! ../../../components/message/messageRedux */ "./Client/src/components/message/messageRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
-const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
-const store_1 = __webpack_require__(/*! ../../../store */ "./Client/src/store.ts");
 class CContainerDetails extends React.PureComponent {
     constructor() {
         super(...arguments);
-        this.onSave = () => {
-            store_1.ServerApi.put(`container/${this.props.id}`, this.props.edit, controller_1.ContainerActions.saveDone);
-        };
         this.setType = (ev, props) => {
             this.props.setProp('type', props.value);
         };
@@ -1135,7 +1161,7 @@ class CContainerDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { edit } = this.props;
+        const { hasChanges } = this.props;
         return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: this.props.hasError },
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.idLabel),
@@ -1146,12 +1172,13 @@ class CContainerDetails extends React.PureComponent {
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'name', required: true }),
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.typeLabel),
-                React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: edit && edit.type }),
+                React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: this.props.type }),
                 React.createElement(messageRedux_1.ReportError, { errors: this.props.typeErrors })),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' }),
             React.createElement(semantic_ui_react_1.Button.Group, null,
-                React.createElement(semantic_ui_react_1.Button, { color: 'red', onClick: this.onSave }, "[SAVE]"))));
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+                React.createElement(semantic_ui_react_1.Button, { color: 'red', onClick: this.props.save, disabled: !hasChanges }, this.props.saveLabel))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);
@@ -1187,13 +1214,16 @@ function mapStateToProps(state, props) {
     const container = controller.getContainerEdit(state);
     const errors = route.validation;
     return {
-        edit: container,
+        cancelLabel: state.mui.cancel,
+        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
         parent: controller.getFullContainerName(container && container.parentId, controller.getContainerMap(state)) ||
             mui.noParent,
         parentLabel: emui.parentId,
+        saveLabel: state.mui.save,
+        type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
         typeOptions: controller.getContainerTypeOptions(state),
@@ -1201,7 +1231,9 @@ function mapStateToProps(state, props) {
 }
 function mapDispatchToProps(dispatch, props) {
     return {
+        cancel: () => dispatch(controller.ContainerActions.cancelEdit()),
         loadDetails: id => dispatch(controller.ContainerActions.select(id)),
+        save: () => dispatch(controller.ContainerActions.save()),
         setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
     };
 }
@@ -1366,28 +1398,30 @@ function getMessage(error) {
 }
 class ServerApi {
     static process(webMethod, method, data, process) {
-        store.dispatch(controller.ApplicationActions.beginWebRequest());
-        try {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    store.dispatch(controller.ApplicationActions.endWebRequest(undefined));
-                    store.dispatch(process(xhr.response));
+        window.setTimeout(() => {
+            store.dispatch(controller.ApplicationActions.beginWebRequest());
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        store.dispatch(controller.ApplicationActions.endWebRequest(undefined));
+                        store.dispatch(process(xhr.response));
+                    }
+                    else {
+                        store.dispatch(controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`));
+                    }
+                };
+                xhr.open(method, `api/${webMethod}`);
+                if (data) {
+                    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                 }
-                else {
-                    store.dispatch(controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`));
-                }
-            };
-            xhr.open(method, `api/${webMethod}`);
-            if (data) {
-                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                xhr.responseType = 'json';
+                xhr.send(data && JSON.stringify(data));
             }
-            xhr.responseType = 'json';
-            xhr.send(data && JSON.stringify(data));
-        }
-        catch (error) {
-            store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)));
-        }
+            catch (error) {
+                store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)));
+            }
+        }, 0);
     }
     static get(method, process) {
         ServerApi.process(method, 'GET', undefined, process);

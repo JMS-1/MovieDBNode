@@ -9,11 +9,13 @@ declare module 'movie-db-client' {
     }
 
     interface IMuiState {
+        readonly cancel: string
         readonly container: {
             readonly edit: IItemMui<IContainer>
             readonly noParent: string
             readonly types: { readonly [type in containerType]: IContainerTypeMui }
         }
         readonly error: string
+        readonly save: string
     }
 }

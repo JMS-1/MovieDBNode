@@ -13,9 +13,11 @@ declare module 'movie-db-client' {
     }
 
     const enum containerActions {
+        cancel = 'movie-db.containers.cancel-edit',
         filter = 'movie-db.containers.set-filter',
         load = 'movie-db.containers.load',
-        save = 'movie-db.containers.save-done',
+        save = 'movie-db.containers.save',
+        saveDone = 'movie-db.containers.save-done',
         select = 'movie-db.containers.select',
         setProp = 'movie-db.containers.set-prop',
     }
@@ -36,7 +38,7 @@ declare module 'movie-db-client' {
         value: api.IContainer[TProp]
     }
 
-    interface IContainerSelect extends Action {
+    interface ISelectContainer extends Action {
         id: string
         type: containerActions.select
     }
@@ -44,6 +46,14 @@ declare module 'movie-db-client' {
     interface IContainerSaved extends Action {
         container: api.IContainer
         errors: api.IValidationError[]
+        type: containerActions.saveDone
+    }
+
+    interface ICancelContainerEdit extends Action {
+        type: containerActions.cancel
+    }
+
+    interface ISaveContainer extends Action {
         type: containerActions.save
     }
 }

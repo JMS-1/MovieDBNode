@@ -4,6 +4,7 @@ declare module 'movie-db-client' {
     import { ISchemaResponse } from 'movie-db-api'
 
     interface IApplicationState {
+        readonly busySince: number
         readonly errors: string[]
         readonly requests: number
         readonly schemas: ISchemaResponse

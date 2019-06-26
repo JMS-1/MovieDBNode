@@ -10,7 +10,7 @@ export class ContainerActions {
         return { filter, type: local.containerActions.filter }
     }
 
-    static select(id: string): local.IContainerSelect {
+    static select(id: string): local.ISelectContainer {
         return { id, type: local.containerActions.select }
     }
 
@@ -22,6 +22,14 @@ export class ContainerActions {
     }
 
     static saveDone(response: api.IUpdateContainerResponse): local.IContainerSaved {
-        return { container: response.container, errors: response.errors, type: local.containerActions.save }
+        return { container: response.container, errors: response.errors, type: local.containerActions.saveDone }
+    }
+
+    static cancelEdit(): local.ICancelContainerEdit {
+        return { type: local.containerActions.cancel }
+    }
+
+    static save(): local.ISaveContainer {
+        return { type: local.containerActions.save }
     }
 }
