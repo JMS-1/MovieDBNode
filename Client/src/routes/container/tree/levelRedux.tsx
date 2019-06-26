@@ -18,11 +18,12 @@ export const ContainerNode = connect(
 function mapStateToProps(state: IClientState, props: local.IContainerNodeUiProps): local.IContainerNodeProps {
     const container = getContainerMap(state)[props.scope]
     const list = getContainerChildMap(state)[props.scope] || noChildren
+    const type = state.mui.container.types[container && container.type]
 
     return {
         list: list.map(id => <ContainerNode key={id} scope={id} detail={props.detail} />),
         name: (container && container.name) || props.scope,
-        type: container ? container.type : undefined,
+        type: (type && type.icon) || 'help',
     }
 }
 

@@ -5,24 +5,27 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './details'
 
-import {
-    ContainerActions, getContainerEdit, getContainerMap, getFullContainerName,
-} from '../../../controller'
+import * as controller from '../../../controller'
 
 function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiProps): local.IContainerDetailsProps {
     const mui = state.mui.container
     const emui = mui.edit
     const route = state.container
-    const container = getContainerEdit(state)
+    const container = controller.getContainerEdit(state)
     const errors = route.validation
 
     return {
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
-        parent: getFullContainerName(container && container.parentId, getContainerMap(state)) || mui.noParent,
+        parent:
+            controller.getFullContainerName(container && container.parentId, controller.getContainerMap(state)) ||
+            mui.noParent,
         parentLabel: emui.parentId,
         type: container ? container.type : undefined,
+        typeError: controller.getError(errors, 'type', container),
+        typeLabel: emui.type,
+        typeOptions: controller.getContainerTypeOptions(state),
     }
 }
 
@@ -31,8 +34,8 @@ function mapDispatchToProps(
     props: local.IContainerDetailsUiProps,
 ): local.IContainerDetailsActions {
     return {
-        loadDetails: id => dispatch(ContainerActions.select(id)),
-        setProp: (prop, value) => dispatch(ContainerActions.setProperty(prop, value)),
+        loadDetails: id => dispatch(controller.ContainerActions.select(id)),
+        setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
     }
 }
 

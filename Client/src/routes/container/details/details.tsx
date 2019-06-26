@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { Form, Input } from 'semantic-ui-react'
+import { Dropdown, DropdownProps, Form, Input, Message } from 'semantic-ui-react'
 
 import { containerType, IContainer } from 'movie-db-api'
+import { IIconSelectOption } from 'movie-db-client'
 
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
 
@@ -16,6 +17,9 @@ export interface IContainerDetailsProps {
     parent: string
     parentLabel: string
     type: containerType
+    typeError: string
+    typeLabel: string
+    typeOptions: IIconSelectOption<containerType>[]
 }
 
 export interface IContainerDetailsActions {
@@ -31,6 +35,8 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
             return null
         }
 
+        const { typeError } = this.props
+
         return (
             <Form className='movie-db-container-details' error={this.props.hasError}>
                 <Form.Field>
@@ -42,10 +48,24 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     <Input input='text' value={this.props.parent || ''} readOnly disabled />
                 </Form.Field>
                 <ContainerTextInput prop='name' required />
+                <Form.Field>
+                    <label>{this.props.typeLabel}</label>
+                    <Dropdown
+                        onChange={this.setType}
+                        options={this.props.typeOptions}
+                        selection
+                        value={this.props.type}
+                    />
+                    {typeError && <Message error>{typeError}</Message>}
+                </Form.Field>
                 <ContainerTextInput prop='description' textarea />
                 <ContainerTextInput prop='parentLocation' />
             </Form>
         )
+    }
+
+    private readonly setType = (ev: React.SyntheticEvent<HTMLElement>, props: DropdownProps): void => {
+        this.props.setProp('type', props.value as number)
     }
 
     componentWillMount(): void {

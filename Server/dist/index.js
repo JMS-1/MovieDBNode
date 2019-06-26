@@ -479,6 +479,20 @@ function getFullContainerName(id, map) {
     return container.name;
 }
 exports.getFullContainerName = getFullContainerName;
+const optionOrder = [
+    5,
+    1,
+    2,
+    4,
+    3,
+    0,
+];
+exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui.container.types, (mui) => optionOrder.map(c => ({
+    icon: { name: mui[c].icon },
+    key: c,
+    text: mui[c].title,
+    value: c,
+})));
 
 
 /***/ }),
@@ -773,6 +787,32 @@ function getInitialState() {
                 type: 'Art der Ablage',
             },
             noParent: '(keine)',
+            types: {
+                [2]: {
+                    icon: 'zip',
+                    title: 'Große Box',
+                },
+                [4]: {
+                    icon: 'hdd',
+                    title: 'Festplatte',
+                },
+                [1]: {
+                    icon: 'briefcase',
+                    title: 'Kleine Box',
+                },
+                [5]: {
+                    icon: 'folder',
+                    title: 'Dateiordner',
+                },
+                [3]: {
+                    icon: 'building',
+                    title: 'Schrank',
+                },
+                [0]: {
+                    icon: 'help',
+                    title: 'Unbekannt',
+                },
+            },
         },
     };
 }
@@ -978,10 +1018,17 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CContainerDetails extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.setType = (ev, props) => {
+            this.props.setProp('type', props.value);
+        };
+    }
     render() {
         if (this.props.lost) {
             return null;
         }
+        const { typeError } = this.props;
         return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: this.props.hasError },
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.idLabel),
@@ -990,6 +1037,10 @@ class CContainerDetails extends React.PureComponent {
                 React.createElement("label", null, this.props.parentLabel),
                 React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.parent || '', readOnly: true, disabled: true })),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'name', required: true }),
+            React.createElement(semantic_ui_react_1.Form.Field, null,
+                React.createElement("label", null, this.props.typeLabel),
+                React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: this.props.type }),
+                typeError && React.createElement(semantic_ui_react_1.Message, { error: true }, typeError)),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' })));
     }
@@ -1019,26 +1070,30 @@ exports.CContainerDetails = CContainerDetails;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/container/details/details.tsx");
-const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+const controller = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
     const mui = state.mui.container;
     const emui = mui.edit;
     const route = state.container;
-    const container = controller_1.getContainerEdit(state);
+    const container = controller.getContainerEdit(state);
     const errors = route.validation;
     return {
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
-        parent: controller_1.getFullContainerName(container && container.parentId, controller_1.getContainerMap(state)) || mui.noParent,
+        parent: controller.getFullContainerName(container && container.parentId, controller.getContainerMap(state)) ||
+            mui.noParent,
         parentLabel: emui.parentId,
         type: container ? container.type : undefined,
+        typeError: controller.getError(errors, 'type', container),
+        typeLabel: emui.type,
+        typeOptions: controller.getContainerTypeOptions(state),
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
-        loadDetails: id => dispatch(controller_1.ContainerActions.select(id)),
-        setProp: (prop, value) => dispatch(controller_1.ContainerActions.setProperty(prop, value)),
+        loadDetails: id => dispatch(controller.ContainerActions.select(id)),
+        setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
     };
 }
 exports.ContainerDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerDetails);
@@ -1063,25 +1118,9 @@ class CContainerNode extends React.PureComponent {
         const { name, scope } = this.props;
         return (React.createElement(semantic_ui_react_1.List, { className: 'movie-db-container-tree-level' },
             name && (React.createElement(semantic_ui_react_1.Label, { as: 'a', active: scope === this.props.detail, href: `#/container/${scope}` },
-                React.createElement(semantic_ui_react_1.Icon, { name: this.icon }),
+                React.createElement(semantic_ui_react_1.Icon, { name: this.props.type }),
                 name)),
             this.props.list));
-    }
-    get icon() {
-        switch (this.props.type) {
-            case 2:
-                return 'zip';
-            case 4:
-                return 'hdd';
-            case 1:
-                return 'briefcase';
-            case 5:
-                return 'folder';
-            case 3:
-                return 'building';
-            default:
-                return 'help';
-        }
     }
 }
 exports.CContainerNode = CContainerNode;
@@ -1108,10 +1147,11 @@ exports.ContainerNode = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 function mapStateToProps(state, props) {
     const container = controller_1.getContainerMap(state)[props.scope];
     const list = controller_1.getContainerChildMap(state)[props.scope] || noChildren;
+    const type = state.mui.container.types[container && container.type];
     return {
         list: list.map(id => React.createElement(exports.ContainerNode, { key: id, scope: id, detail: props.detail })),
         name: (container && container.name) || props.scope,
-        type: container ? container.type : undefined,
+        type: (type && type.icon) || 'help',
     };
 }
 function mapDispatchToProps(dispatch, props) {

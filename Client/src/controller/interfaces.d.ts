@@ -1,4 +1,6 @@
 declare module 'movie-db-client' {
+    import { SemanticICONS } from 'semantic-ui-react'
+
     import { RouterState } from 'connected-react-router'
 
     interface IClientState {
@@ -17,5 +19,12 @@ declare module 'movie-db-client' {
     const enum Separators {
         Container = ' > ',
         Series = ' > ',
+    }
+
+    interface IIconSelectOption<TValue> {
+        readonly icon: { name: SemanticICONS }
+        readonly key: TValue
+        readonly text: string
+        readonly value: TValue
     }
 }

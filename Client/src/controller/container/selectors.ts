@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 
-import { IContainer } from 'movie-db-api'
-import { IClientState, Separators } from 'movie-db-client'
+import { containerType, IContainer } from 'movie-db-api'
+import { IClientState, IIconSelectOption, Separators } from 'movie-db-client'
 
 export interface IContainerMap {
     [id: string]: IContainer
@@ -105,3 +105,26 @@ export function getFullContainerName(id: string, map: IContainerMap): string {
 
     return container.name
 }
+
+const optionOrder: containerType[] = [
+    containerType.Folder,
+    containerType.FeatureSet,
+    containerType.Box,
+    containerType.Disk,
+    containerType.Shelf,
+    containerType.Undefined,
+]
+
+export const getContainerTypeOptions = createSelector(
+    (state: IClientState) => state.mui.container.types,
+    (mui): IIconSelectOption<containerType>[] =>
+        optionOrder.map(
+            c =>
+                <IIconSelectOption<containerType>>{
+                    icon: { name: mui[c].icon },
+                    key: c,
+                    text: mui[c].title,
+                    value: c,
+                },
+        ),
+)
