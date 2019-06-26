@@ -3,7 +3,7 @@ import * as local from 'movie-db-client'
 
 export class ContainerActions {
     static load(response: api.IContainerResponse): local.ILoadContainers {
-        return { containers: response.containers, type: local.containerActions.load }
+        return { list: response.containers, type: local.containerActions.load }
     }
 
     static setFilter(filter: string): local.ISetContainerTreeFilter {
@@ -16,13 +16,13 @@ export class ContainerActions {
 
     static setProperty<TProp extends keyof api.IContainer>(
         prop: TProp,
-        value: api.IContainer[TProp],
+        value: api.IContainer[TProp]
     ): local.ISetContainerProperty<TProp> {
         return { prop, value, type: local.containerActions.setProp }
     }
 
     static saveDone(response: api.IUpdateContainerResponse): local.IContainerSaved {
-        return { container: response.container, errors: response.errors, type: local.containerActions.saveDone }
+        return { item: response.container, errors: response.errors, type: local.containerActions.saveDone }
     }
 
     static cancelEdit(): local.ICancelContainerEdit {

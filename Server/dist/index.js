@@ -369,7 +369,7 @@ __export(__webpack_require__(/*! ./controller */ "./Client/src/controller/app/co
 Object.defineProperty(exports, "__esModule", { value: true });
 class ContainerActions {
     static load(response) {
-        return { containers: response.containers, type: "movie-db.containers.load" };
+        return { list: response.containers, type: "movie-db.containers.load" };
     }
     static setFilter(filter) {
         return { filter, type: "movie-db.containers.set-filter" };
@@ -381,7 +381,7 @@ class ContainerActions {
         return { prop, value, type: "movie-db.containers.set-prop" };
     }
     static saveDone(response) {
-        return { container: response.container, errors: response.errors, type: "movie-db.containers.save-done" };
+        return { item: response.container, errors: response.errors, type: "movie-db.containers.save-done" };
     }
     static cancelEdit() {
         return { type: "movie-db.containers.cancel-edit" };
@@ -408,14 +408,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/container/actions.ts");
 const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
 const store_1 = __webpack_require__(/*! ../../store */ "./Client/src/store.ts");
-const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
-function validateContainer(state) {
-    if (!state.workingCopy || !state.validator) {
-        return state;
+const controller = new (class extends controller_1.EditController {
+    constructor() {
+        super(...arguments);
+        this.schema = 'container';
     }
-    return Object.assign({}, state, { validation: validation_1.validate(state.workingCopy, state.validator) });
-}
-const controller = new (class extends controller_1.Controller {
     getReducerMap() {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
@@ -429,60 +426,13 @@ const controller = new (class extends controller_1.Controller {
         };
     }
     getInitialState() {
-        return {
-            all: [],
-            filter: '',
-            selected: undefined,
-            validation: undefined,
-            validator: undefined,
-            workingCopy: undefined,
-        };
-    }
-    load(state, response) {
-        return Object.assign({}, state, { all: response.containers || [], validation: undefined });
+        return Object.assign({}, super.getInitialState(), { filter: '' });
     }
     setFilter(state, request) {
         if (request.filter === state.filter) {
             return state;
         }
         return Object.assign({}, state, { filter: request.filter });
-    }
-    select(state, request) {
-        if (state.selected === request.id) {
-            return state;
-        }
-        return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
-    }
-    setProperty(state, request) {
-        const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected);
-        if (!workingCopy) {
-            return state;
-        }
-        if (workingCopy[request.prop] === request.value) {
-            return state;
-        }
-        return validateContainer(Object.assign({}, state, { workingCopy: Object.assign({}, workingCopy, { [request.prop]: request.value }) }));
-    }
-    loadSchema(state, response) {
-        return validateContainer(Object.assign({}, state, { validator: response.schemas.container }));
-    }
-    saveDone(state, response) {
-        if (response.errors) {
-            return Object.assign({}, state, { validation: response.errors });
-        }
-        const { _id } = response.container;
-        const all = [...state.all];
-        const index = all.findIndex(c => c._id === _id);
-        if (index >= 0) {
-            all[index] = response.container;
-        }
-        return Object.assign({}, state, { all, selected: _id, workingCopy: undefined, validation: undefined });
-    }
-    cancelEdit(state, request) {
-        if (!state.workingCopy) {
-            return state;
-        }
-        return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
     }
     startSave(state, request) {
         if (state.workingCopy) {
@@ -610,6 +560,7 @@ exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const validation_1 = __webpack_require__(/*! ../validation */ "./Client/src/validation.ts");
 class Controller {
     constructor() {
         this.reducer = (state, action) => {
@@ -634,6 +585,64 @@ class Controller {
     }
 }
 exports.Controller = Controller;
+class EditController extends Controller {
+    getInitialState() {
+        return {
+            all: [],
+            selected: undefined,
+            validation: undefined,
+            validator: undefined,
+            workingCopy: undefined,
+        };
+    }
+    validateItem(state) {
+        if (!state.workingCopy || !state.validator) {
+            return state;
+        }
+        return Object.assign({}, state, { validation: validation_1.validate(state.workingCopy, state.validator) });
+    }
+    load(state, response) {
+        return Object.assign({}, state, { all: response.list || [], validation: undefined });
+    }
+    select(state, request) {
+        if (state.selected === request.id) {
+            return state;
+        }
+        return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
+    }
+    setProperty(state, request) {
+        const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected);
+        if (!workingCopy) {
+            return state;
+        }
+        if (workingCopy[request.prop] === request.value) {
+            return state;
+        }
+        return this.validateItem(Object.assign({}, state, { workingCopy: Object.assign({}, workingCopy, { [request.prop]: request.value }) }));
+    }
+    loadSchema(state, response) {
+        return this.validateItem(Object.assign({}, state, { validator: response.schemas[this.schema] }));
+    }
+    cancelEdit(state, request) {
+        if (!state.workingCopy) {
+            return state;
+        }
+        return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
+    }
+    saveDone(state, response) {
+        if (response.errors) {
+            return Object.assign({}, state, { validation: response.errors });
+        }
+        const { _id } = response.item;
+        const all = [...state.all];
+        const index = all.findIndex(c => c._id === _id);
+        if (index >= 0) {
+            all[index] = response.item;
+        }
+        return Object.assign({}, state, { all, selected: _id, workingCopy: undefined, validation: undefined });
+    }
+}
+exports.EditController = EditController;
 
 
 /***/ }),
@@ -1157,8 +1166,8 @@ class CContainerDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges } = this.props;
-        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: this.props.hasError },
+        const { hasChanges, hasError } = this.props;
+        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: hasError },
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.idLabel),
                 React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.id || '', readOnly: true, disabled: true })),
@@ -1174,7 +1183,7 @@ class CContainerDetails extends React.PureComponent {
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' }),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: !hasChanges }, this.props.saveLabel))));
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);

@@ -41,10 +41,10 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
             return null
         }
 
-        const { hasChanges } = this.props
+        const { hasChanges, hasError } = this.props
 
         return (
-            <Form className='movie-db-container-details' error={this.props.hasError}>
+            <Form className='movie-db-container-details' error={hasError}>
                 <Form.Field>
                     <label>{this.props.idLabel}</label>
                     <Input input='text' value={this.props.id || ''} readOnly disabled />
@@ -70,7 +70,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
                     </Button>
-                    <Button onClick={this.props.save} disabled={!hasChanges}>
+                    <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
                         {this.props.saveLabel}
                     </Button>
                 </Button.Group>

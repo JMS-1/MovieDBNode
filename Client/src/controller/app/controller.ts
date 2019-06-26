@@ -1,13 +1,13 @@
 import * as local from 'movie-db-client'
 
-import { Controller, IActionHandlerMap } from '../controller'
+import { Controller } from '../controller'
 
 import { addSchema } from '../../validation'
 
 type TApplicationActions = local.ILoadSchemas | local.IStartWebRequest | local.IDoneWebRequest
 
 const controller = new (class extends Controller<TApplicationActions, local.IApplicationState> {
-    protected getReducerMap(): IActionHandlerMap<TApplicationActions, local.IApplicationState> {
+    protected getReducerMap(): local.IActionHandlerMap<TApplicationActions, local.IApplicationState> {
         return {
             [local.applicationActions.endReq]: this.endWebRequest,
             [local.applicationActions.loadSchema]: this.loadSchemas,

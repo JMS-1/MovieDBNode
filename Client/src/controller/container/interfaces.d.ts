@@ -3,13 +3,8 @@ declare module 'movie-db-client' {
 
     import * as api from 'movie-db-api'
 
-    interface IContainerState {
-        readonly all: api.IContainer[]
+    interface IContainerState extends IEditState<api.IContainer> {
         readonly filter: string
-        readonly selected: string
-        readonly validation: api.IValidationError[]
-        readonly validator: api.IValidatableSchema
-        readonly workingCopy: api.IContainer
     }
 
     const enum containerActions {
@@ -22,8 +17,7 @@ declare module 'movie-db-client' {
         setProp = 'movie-db.containers.set-prop',
     }
 
-    interface ILoadContainers extends Action {
-        containers: api.IContainer[]
+    interface ILoadContainers extends IGenericLoad<api.IContainer> {
         type: containerActions.load
     }
 
@@ -32,24 +26,20 @@ declare module 'movie-db-client' {
         type: containerActions.filter
     }
 
-    interface ISetContainerProperty<TProp extends keyof api.IContainer> extends Action {
-        prop: TProp
+    interface ISetContainerProperty<TProp extends keyof api.IContainer>
+        extends ISetGenericProperty<api.IContainer, TProp> {
         type: containerActions.setProp
-        value: api.IContainer[TProp]
     }
 
-    interface ISelectContainer extends Action {
-        id: string
+    interface ISelectContainer extends IGenericSelect {
         type: containerActions.select
     }
 
-    interface IContainerSaved extends Action {
-        container: api.IContainer
-        errors: api.IValidationError[]
+    interface IContainerSaved extends IGenericSaveDone<api.IContainer> {
         type: containerActions.saveDone
     }
 
-    interface ICancelContainerEdit extends Action {
+    interface ICancelContainerEdit extends IGenericCancelEdit {
         type: containerActions.cancel
     }
 

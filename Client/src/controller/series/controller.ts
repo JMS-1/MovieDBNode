@@ -1,6 +1,6 @@
-import { ILoadSeries, ISeriesState, seriesActions } from 'movie-db-client'
+import { IActionHandlerMap, ILoadSeries, ISeriesState, seriesActions } from 'movie-db-client'
 
-import { Controller, IActionHandlerMap } from '../controller'
+import { Controller } from '../controller'
 
 type TSeriesActions = ILoadSeries
 

@@ -1,6 +1,6 @@
-import { ILoadMedia, IMediaState, mediaActions } from 'movie-db-client'
+import { IActionHandlerMap, ILoadMedia, IMediaState, mediaActions } from 'movie-db-client'
 
-import { Controller, IActionHandlerMap } from '../controller'
+import { Controller } from '../controller'
 
 type TMediaActions = ILoadMedia
 

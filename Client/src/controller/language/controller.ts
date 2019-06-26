@@ -1,11 +1,11 @@
 import * as local from 'movie-db-client'
 
-import { Controller, IActionHandlerMap } from '../controller'
+import { Controller } from '../controller'
 
 type TLanguageActions = local.ILoadLanguages
 
 const controller = new (class extends Controller<TLanguageActions, local.ILanguageState> {
-    protected getReducerMap(): IActionHandlerMap<TLanguageActions, local.ILanguageState> {
+    protected getReducerMap(): local.IActionHandlerMap<TLanguageActions, local.ILanguageState> {
         return {
             [local.languageActions.load]: this.load,
         }

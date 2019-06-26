@@ -1,11 +1,11 @@
 import * as local from 'movie-db-client'
 
-import { Controller, IActionHandlerMap } from '../controller'
+import { Controller } from '../controller'
 
 type TGenreActions = local.ILoadGenres
 
 const controller = new (class extends Controller<TGenreActions, local.IGenreState> {
-    protected getReducerMap(): IActionHandlerMap<TGenreActions, local.IGenreState> {
+    protected getReducerMap(): local.IActionHandlerMap<TGenreActions, local.IGenreState> {
         return {
             [local.genreActions.load]: this.load,
         }
