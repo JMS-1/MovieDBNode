@@ -414,6 +414,7 @@ exports.ContainerActions = ContainerActions;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/container/actions.ts");
+const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
 const store_1 = __webpack_require__(/*! ../../store */ "./Client/src/store.ts");
 const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
 function validateContainer(state) {
@@ -422,77 +423,83 @@ function validateContainer(state) {
     }
     return Object.assign({}, state, { validation: validation_1.validate(state.workingCopy, state.validator) });
 }
-function getInitialState() {
-    return {
-        all: [],
-        filter: '',
-        selected: undefined,
-        validation: undefined,
-        validator: undefined,
-        workingCopy: undefined,
-    };
-}
-exports.getInitialState = getInitialState;
-function load(state, response) {
-    return Object.assign({}, state, { all: response.containers || [], validation: undefined });
-}
-exports.load = load;
-function setFilter(state, request) {
-    if (request.filter === state.filter) {
+const controller = new (class extends controller_1.Controller {
+    getReducerMap() {
+        return {
+            ["movie-db.application.load-schemas"]: this.loadSchema,
+            ["movie-db.containers.cancel-edit"]: this.cancelEdit,
+            ["movie-db.containers.set-filter"]: this.setFilter,
+            ["movie-db.containers.load"]: this.load,
+            ["movie-db.containers.save"]: this.startSave,
+            ["movie-db.containers.save-done"]: this.saveDone,
+            ["movie-db.containers.select"]: this.select,
+            ["movie-db.containers.set-prop"]: this.setProperty,
+        };
+    }
+    getInitialState() {
+        return {
+            all: [],
+            filter: '',
+            selected: undefined,
+            validation: undefined,
+            validator: undefined,
+            workingCopy: undefined,
+        };
+    }
+    load(state, response) {
+        return Object.assign({}, state, { all: response.containers || [], validation: undefined });
+    }
+    setFilter(state, request) {
+        if (request.filter === state.filter) {
+            return state;
+        }
+        return Object.assign({}, state, { filter: request.filter });
+    }
+    select(state, request) {
+        if (state.selected === request.id) {
+            return state;
+        }
+        return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
+    }
+    setProperty(state, request) {
+        const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected);
+        if (!workingCopy) {
+            return state;
+        }
+        if (workingCopy[request.prop] === request.value) {
+            return state;
+        }
+        return validateContainer(Object.assign({}, state, { workingCopy: Object.assign({}, workingCopy, { [request.prop]: request.value }) }));
+    }
+    loadSchema(state, response) {
+        return validateContainer(Object.assign({}, state, { validator: response.schemas.container }));
+    }
+    saveDone(state, response) {
+        if (response.errors) {
+            return Object.assign({}, state, { validation: response.errors });
+        }
+        const { _id } = response.container;
+        const all = [...state.all];
+        const index = all.findIndex(c => c._id === _id);
+        if (index >= 0) {
+            all[index] = response.container;
+        }
+        return Object.assign({}, state, { all, selected: _id, workingCopy: undefined, validation: undefined });
+    }
+    cancelEdit(state, request) {
+        if (!state.workingCopy) {
+            return state;
+        }
+        return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
+    }
+    startSave(state, request) {
+        if (state.workingCopy) {
+            store_1.ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, actions_1.ContainerActions.saveDone);
+        }
         return state;
     }
-    return Object.assign({}, state, { filter: request.filter });
-}
-exports.setFilter = setFilter;
-function select(state, request) {
-    if (state.selected === request.id) {
-        return state;
-    }
-    return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
-}
-exports.select = select;
-function setProperty(state, request) {
-    const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected);
-    if (!workingCopy) {
-        return state;
-    }
-    if (workingCopy[request.prop] === request.value) {
-        return state;
-    }
-    return validateContainer(Object.assign({}, state, { workingCopy: Object.assign({}, workingCopy, { [request.prop]: request.value }) }));
-}
-exports.setProperty = setProperty;
-function loadSchema(state, response) {
-    return validateContainer(Object.assign({}, state, { validator: response.schemas.container }));
-}
-exports.loadSchema = loadSchema;
-function saveDone(state, response) {
-    if (response.errors) {
-        return Object.assign({}, state, { validation: response.errors });
-    }
-    const { _id } = response.container;
-    const all = [...state.all];
-    const index = all.findIndex(c => c._id === _id);
-    if (index >= 0) {
-        all[index] = response.container;
-    }
-    return Object.assign({}, state, { all, selected: _id, workingCopy: undefined, validation: undefined });
-}
-exports.saveDone = saveDone;
-function cancelEdit(state, request) {
-    if (!state.workingCopy) {
-        return state;
-    }
-    return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
-}
-exports.cancelEdit = cancelEdit;
-function startSave(state, request) {
-    if (state.workingCopy) {
-        store_1.ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, actions_1.ContainerActions.saveDone);
-    }
-    return state;
-}
-exports.startSave = startSave;
+})();
+exports.ContainerReducer = controller.reducer;
 
 
 /***/ }),
@@ -510,34 +517,9 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller = __webpack_require__(/*! ./controller */ "./Client/src/controller/container/controller.ts");
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/container/actions.ts"));
+__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/container/controller.ts"));
 __export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/container/selectors.ts"));
-function ContainerReducer(state, action) {
-    if (!state) {
-        state = controller.getInitialState();
-    }
-    switch (action.type) {
-        case "movie-db.containers.load":
-            return controller.load(state, action);
-        case "movie-db.containers.set-filter":
-            return controller.setFilter(state, action);
-        case "movie-db.containers.select":
-            return controller.select(state, action);
-        case "movie-db.containers.set-prop":
-            return controller.setProperty(state, action);
-        case "movie-db.containers.save-done":
-            return controller.saveDone(state, action);
-        case "movie-db.application.load-schemas":
-            return controller.loadSchema(state, action);
-        case "movie-db.containers.save":
-            return controller.startSave(state, action);
-        case "movie-db.containers.cancel-edit":
-            return controller.cancelEdit(state, action);
-    }
-    return state;
-}
-exports.ContainerReducer = ContainerReducer;
 
 
 /***/ }),
@@ -622,6 +604,44 @@ exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui
     text: mui[c].title,
     value: c,
 })));
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/controller.ts":
+/*!*********************************************!*\
+  !*** ./Client/src/controller/controller.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class Controller {
+    constructor() {
+        this.reducer = (state, action) => {
+            if (!state) {
+                state = this.getInitialState();
+            }
+            if (!this._reducerMap) {
+                this._reducerMap = this.getReducerMap();
+                for (let prop in this._reducerMap) {
+                    if (this._reducerMap.hasOwnProperty(prop)) {
+                        const type = prop;
+                        this._reducerMap[type] = this._reducerMap[type].bind(this);
+                    }
+                }
+            }
+            const handler = this._reducerMap[action.type];
+            if (handler) {
+                return handler(state, action);
+            }
+            return state;
+        };
+    }
+}
+exports.Controller = Controller;
 
 
 /***/ }),
@@ -1178,7 +1198,7 @@ class CContainerDetails extends React.PureComponent {
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' }),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { color: 'red', onClick: this.props.save, disabled: !hasChanges }, this.props.saveLabel))));
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: !hasChanges }, this.props.saveLabel))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);

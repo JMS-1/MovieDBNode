@@ -70,7 +70,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
                     </Button>
-                    <Button color='red' onClick={this.props.save} disabled={!hasChanges}>
+                    <Button onClick={this.props.save} disabled={!hasChanges}>
                         {this.props.saveLabel}
                     </Button>
                 </Button.Group>
