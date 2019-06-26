@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 
 import { IContainer } from 'movie-db-api'
-import { IClientState } from 'movie-db-client'
+import { IClientState, Separators } from 'movie-db-client'
 
 export interface IContainerMap {
     [id: string]: IContainer
@@ -19,7 +19,7 @@ export const getContainerMap = createSelector(
         all.forEach(c => (map[c._id] = c))
 
         return map
-    }
+    },
 )
 
 function filterChildMap(map: IContainerChildMap, scope: string, filter: string, lookup: IContainerMap): void {
@@ -80,5 +80,28 @@ export const getContainerChildMap = createSelector(
         }
 
         return map
-    }
+    },
 )
+
+export const getContainerEdit = createSelector(
+    (state: IClientState) => state.container.workingCopy,
+    (state: IClientState) => state.container.selected,
+    getContainerMap,
+    (edit, selected, map): IContainer => edit || map[selected],
+)
+
+export function getFullContainerName(id: string, map: IContainerMap): string {
+    const container = map[id]
+
+    if (!container) {
+        return ''
+    }
+
+    const parent = getFullContainerName(container.parentId, map)
+
+    if (parent) {
+        return `${parent}${Separators.Container}${container.name}`
+    }
+
+    return container.name
+}

@@ -5,22 +5,23 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './details'
 
-import { ContainerActions, getContainerMap, getError } from '../../../controller'
+import {
+    ContainerActions, getContainerEdit, getContainerMap, getFullContainerName,
+} from '../../../controller'
 
 function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiProps): local.IContainerDetailsProps {
+    const mui = state.mui.container
+    const emui = mui.edit
     const route = state.container
-    const container = route.workingCopy || getContainerMap(state)[route.selected]
+    const container = getContainerEdit(state)
     const errors = route.validation
 
     return {
-        description: container && container.description,
-        descriptionError: getError(errors, 'description', container),
-        location: container && container.parentLocation,
-        locationError: getError(errors, 'parentLocation', container),
+        hasError: errors && errors.length > 0,
+        idLabel: emui._id,
         lost: !container,
-        name: container && container.name,
-        nameError: getError(errors, 'name', container),
-        parent: container && container.parentId,
+        parent: getFullContainerName(container && container.parentId, getContainerMap(state)) || mui.noParent,
+        parentLabel: emui.parentId,
         type: container ? container.type : undefined,
     }
 }

@@ -1,0 +1,42 @@
+import * as React from 'react'
+import { Form, Input, Message, TextArea } from 'semantic-ui-react'
+
+export interface ITextInputUiProps<TItem> {
+    prop: keyof TItem
+    required?: boolean
+    textarea?: boolean
+}
+
+export interface ITextInputProps {
+    error: string
+    label: string
+    value: string
+}
+
+export interface ITextInputActions<TItem> {
+    setValue(prop: keyof TItem, value: string): void
+}
+
+export type TTextInputProps<TItem> = ITextInputProps & ITextInputUiProps<TItem> & ITextInputActions<TItem>
+
+export class CTextInput<TItem> extends React.PureComponent<TTextInputProps<TItem>> {
+    render(): JSX.Element {
+        const { error } = this.props
+
+        return (
+            <Form.Field className='movie-db-input-text' error={!!error} required={this.props.required}>
+                <label>{this.props.label}</label>
+                {this.props.textarea ? (
+                    <TextArea input='text' onChange={this.setValue} value={this.props.value || ''} />
+                ) : (
+                    <Input input='text' onChange={this.setValue} value={this.props.value || ''} />
+                )}
+                {error && <Message error content={error} />}
+            </Form.Field>
+        )
+    }
+
+    private readonly setValue = (
+        ev: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>,
+    ): void => this.props.setValue(this.props.prop, ev.currentTarget.value)
+}

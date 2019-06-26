@@ -1,5 +1,10 @@
 declare module 'movie-db-client' {
+    import { IContainer } from 'movie-db-api'
+
     interface IMuiState {
-        readonly title: string
+        readonly container: {
+            readonly edit: IItemMui<IContainer>
+            readonly noParent: string
+        }
     }
 }

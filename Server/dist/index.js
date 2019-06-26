@@ -134,6 +134,71 @@ exports.Root = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.
 
 /***/ }),
 
+/***/ "./Client/src/components/textInput/textInput.tsx":
+/*!*******************************************************!*\
+  !*** ./Client/src/components/textInput/textInput.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+class CTextInput extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.setValue = (ev) => this.props.setValue(this.props.prop, ev.currentTarget.value);
+    }
+    render() {
+        const { error } = this.props;
+        return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-input-text', error: !!error, required: this.props.required },
+            React.createElement("label", null, this.props.label),
+            this.props.textarea ? (React.createElement(semantic_ui_react_1.TextArea, { input: 'text', onChange: this.setValue, value: this.props.value || '' })) : (React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setValue, value: this.props.value || '' })),
+            error && React.createElement(semantic_ui_react_1.Message, { error: true, content: error })));
+    }
+}
+exports.CTextInput = CTextInput;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/textInput/textInputRedux.ts":
+/*!***********************************************************!*\
+  !*** ./Client/src/components/textInput/textInputRedux.ts ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./textInput */ "./Client/src/components/textInput/textInput.tsx");
+const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
+class CContainerTextInput extends local.CTextInput {
+    static mapProps(state, props) {
+        const route = state.container;
+        const edit = controller_1.getContainerEdit(state);
+        const value = edit && edit[props.prop];
+        return {
+            error: controller_1.getError(route.validation, props.prop, edit),
+            label: state.mui.container.edit[props.prop],
+            value: typeof value === 'string' ? value : undefined,
+        };
+    }
+    static mapActions(dispatch, props) {
+        return {
+            setValue: (prop, value) => dispatch(controller_1.ContainerActions.setProperty(prop, value)),
+        };
+    }
+}
+exports.ContainerTextInput = react_redux_1.connect(CContainerTextInput.mapProps, CContainerTextInput.mapActions)(CContainerTextInput);
+
+
+/***/ }),
+
 /***/ "./Client/src/controller/app/actions.ts":
 /*!**********************************************!*\
   !*** ./Client/src/controller/app/actions.ts ***!
@@ -401,6 +466,19 @@ exports.getContainerChildMap = reselect_1.createSelector((state) => state.contai
     }
     return map;
 });
+exports.getContainerEdit = reselect_1.createSelector((state) => state.container.workingCopy, (state) => state.container.selected, exports.getContainerMap, (edit, selected, map) => edit || map[selected]);
+function getFullContainerName(id, map) {
+    const container = map[id];
+    if (!container) {
+        return '';
+    }
+    const parent = getFullContainerName(container.parentId, map);
+    if (parent) {
+        return `${parent}${" > "}${container.name}`;
+    }
+    return container.name;
+}
+exports.getFullContainerName = getFullContainerName;
 
 
 /***/ }),
@@ -685,7 +763,17 @@ exports.MuiActions = MuiActions;
 Object.defineProperty(exports, "__esModule", { value: true });
 function getInitialState() {
     return {
-        title: '[HELLO WORLD]',
+        container: {
+            edit: {
+                _id: 'Eindeutige Kennung',
+                description: 'Beschreibung',
+                name: 'Name',
+                parentId: 'Übergeordnete Ablage',
+                parentLocation: 'Position in der übergeordneten Ablage',
+                type: 'Art der Ablage',
+            },
+            noParent: '(keine)',
+        },
     };
 }
 exports.getInitialState = getInitialState;
@@ -888,38 +976,22 @@ exports.ContainerRoute = react_redux_1.connect(mapStateToProps, mapDispatchToPro
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CContainerDetails extends React.PureComponent {
-    constructor() {
-        super(...arguments);
-        this.setName = (ev) => this.props.setProp('name', ev.currentTarget.value);
-        this.setDescription = (ev) => this.props.setProp('description', ev.currentTarget.value);
-        this.setLocation = (ev) => this.props.setProp('parentLocation', ev.currentTarget.value);
-    }
     render() {
         if (this.props.lost) {
             return null;
         }
-        const { locationError, descriptionError, nameError } = this.props;
-        const inError = locationError || descriptionError || nameError;
-        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: !!inError },
+        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: this.props.hasError },
             React.createElement(semantic_ui_react_1.Form.Field, null,
-                React.createElement("label", null, "[TBD]"),
+                React.createElement("label", null, this.props.idLabel),
                 React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.id || '', readOnly: true, disabled: true })),
             React.createElement(semantic_ui_react_1.Form.Field, null,
-                React.createElement("label", null, "[TBD]"),
+                React.createElement("label", null, this.props.parentLabel),
                 React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.parent || '', readOnly: true, disabled: true })),
-            React.createElement(semantic_ui_react_1.Form.Field, { error: !!nameError, required: true },
-                React.createElement("label", null, "[TBD]"),
-                React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setName, value: this.props.name || '' })),
-            nameError && React.createElement(semantic_ui_react_1.Message, { error: true, content: nameError }),
-            React.createElement(semantic_ui_react_1.Form.Field, { error: !!descriptionError },
-                React.createElement("label", null, "[TBD]"),
-                React.createElement(semantic_ui_react_1.TextArea, { input: 'text', onChange: this.setDescription, value: this.props.description || '' })),
-            descriptionError && React.createElement(semantic_ui_react_1.Message, { error: true, content: descriptionError }),
-            React.createElement(semantic_ui_react_1.Form.Field, { error: !!locationError },
-                React.createElement("label", null, "[TBD]"),
-                React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setLocation, value: this.props.location || '' })),
-            locationError && React.createElement(semantic_ui_react_1.Message, { error: true, content: locationError })));
+            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'name', required: true }),
+            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
+            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' })));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);
@@ -949,18 +1021,17 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/container/details/details.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
+    const mui = state.mui.container;
+    const emui = mui.edit;
     const route = state.container;
-    const container = route.workingCopy || controller_1.getContainerMap(state)[route.selected];
+    const container = controller_1.getContainerEdit(state);
     const errors = route.validation;
     return {
-        description: container && container.description,
-        descriptionError: controller_1.getError(errors, 'description', container),
-        location: container && container.parentLocation,
-        locationError: controller_1.getError(errors, 'parentLocation', container),
+        hasError: errors && errors.length > 0,
+        idLabel: emui._id,
         lost: !container,
-        name: container && container.name,
-        nameError: controller_1.getError(errors, 'name', container),
-        parent: container && container.parentId,
+        parent: controller_1.getFullContainerName(container && container.parentId, controller_1.getContainerMap(state)) || mui.noParent,
+        parentLabel: emui.parentId,
         type: container ? container.type : undefined,
     };
 }

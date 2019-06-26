@@ -11,4 +11,11 @@ declare module 'movie-db-client' {
         readonly router: RouterState
         readonly series: ISeriesState
     }
+
+    type IItemMui<TItem> = Required<{ [prop in keyof TItem]: string }>
+
+    const enum Separators {
+        Container = ' > ',
+        Series = ' > ',
+    }
 }
