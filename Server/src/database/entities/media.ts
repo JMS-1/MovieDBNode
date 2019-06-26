@@ -1,12 +1,12 @@
 import { IMedia, INewMedia, mediaType } from 'movie-db-api'
 
-import { uniqueId } from './utils'
+import { ISchema, uniqueId } from './utils'
 
 export const collectionName = 'medias'
 
 export interface IDbMedia extends IMedia {}
 
-export const MediaSchema = {
+export const MediaSchema: ISchema<IDbMedia> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/media.json',
     additionalProperties: false,

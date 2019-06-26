@@ -9,7 +9,7 @@ import { containerCollection } from '../database/container'
 import { genreCollection } from '../database/genre'
 import { languageCollection } from '../database/language'
 import { mediaCollection } from '../database/media'
-import { LinkSchema, recordingCollection } from '../database/recording'
+import { recordingCollection } from '../database/recording'
 import { seriesCollection } from '../database/series'
 import { addSchema, validate } from '../database/validation'
 
@@ -29,7 +29,7 @@ const genreLinks = new (class extends RelationCollection {})('Genre')
 const languageLinks = new (class extends RelationCollection {})('Language')
 
 export async function runMigration(): Promise<void> {
-    addSchema(LinkSchema)
+    addSchema(linkCollection.schema)
     addSchema(RelationSchema)
 
     const collections = {

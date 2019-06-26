@@ -1,12 +1,12 @@
 import { INewSeries, ISeries } from 'movie-db-api'
 
-import { uniqueId } from './utils'
+import { ISchema, uniqueId } from './utils'
 
 export const collectionName = 'series'
 
 export interface IDbSeries extends ISeries {}
 
-export const SeriesSchema = {
+export const SeriesSchema: ISchema<IDbSeries> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/series.json',
     additionalProperties: false,

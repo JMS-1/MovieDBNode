@@ -1,22 +1,65 @@
 import { v4 as uuid } from 'uuid'
 
-import { IDbLink, LinkSchema } from '../database/recording'
+import { ISchema, uniqueId } from '../database/entities/utils'
+import { IDbLink } from '../database/recording'
 import { CollectionBase } from '../database/utils'
 import { validate } from '../database/validation'
 
-export interface ILink extends IDbLink {
+export interface IMigrateLink extends IDbLink {
     _id: string
     for: string
     ordinal: number
 }
 
-export const linkCollection = new (class extends CollectionBase<ILink> {
+const MigrateLinkSchema: ISchema<IMigrateLink> = {
+    $schema: 'http://json-schema.org/schema#',
+    $id: 'http://psimarron.net/schemas/movie-db/migrate/link.json',
+    additionalProperties: false,
+    type: 'object',
+    message: 'Verweis unvollständig',
+    properties: {
+        _id: {
+            message: 'Eindeutige Kennung fehlt oder ist ungültig',
+            pattern: uniqueId,
+            type: 'string',
+        },
+        description: {
+            maxLength: 2000,
+            message: 'Beschreibung ist zu lang',
+            type: 'string',
+        },
+        for: {
+            message: 'Aufzeichnungskennung fehlt oder ist ungültig',
+            pattern: uniqueId,
+            type: 'string',
+        },
+        name: {
+            maxLength: 100,
+            message: 'Name nicht angegeben oder zu lang',
+            minLength: 1,
+            type: 'string',
+        },
+        ordinal: {
+            message: 'Anordnung fehlt oder ist ungültig',
+            minimum: 0,
+            type: 'integer',
+        },
+        url: {
+            maxLength: 2000,
+            message: 'Verweis ist zu lang',
+            type: 'string',
+        },
+    },
+    required: ['_id', 'name', 'for', 'url', 'ordinal'],
+}
+
+export const linkCollection = new (class extends CollectionBase<IMigrateLink> {
     readonly name = 'n/a'
 
-    readonly schema = LinkSchema
+    readonly schema = MigrateLinkSchema
 
     fromSql(sql: any): void {
-        const link: ILink = {
+        const link: IMigrateLink = {
             _id: uuid(),
             for: sql.For,
             name: sql.Name || '',

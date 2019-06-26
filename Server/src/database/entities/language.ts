@@ -1,12 +1,12 @@
 import { ILanguage, INewLanguage } from 'movie-db-api'
 
-import { uniqueId } from './utils'
+import { ISchema, uniqueId } from './utils'
 
 export const collectionName = 'languages'
 
 export interface IDbLanguage extends ILanguage {}
 
-export const LanguageSchema = {
+export const LanguageSchema: ISchema<IDbLanguage> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/language.json',
     additionalProperties: false,

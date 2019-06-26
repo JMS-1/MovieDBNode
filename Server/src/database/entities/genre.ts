@@ -1,12 +1,12 @@
 import { IGenre, INewGenre } from 'movie-db-api'
 
-import { uniqueId } from './utils'
+import { ISchema, uniqueId } from './utils'
 
 export const collectionName = 'genres'
 
 export interface IDbGenre extends IGenre {}
 
-export const GenreSchema = {
+export const GenreSchema: ISchema<IDbGenre> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/genre.json',
     additionalProperties: false,

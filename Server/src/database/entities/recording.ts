@@ -1,4 +1,4 @@
-import { isoDate, uniqueId } from './utils'
+import { IObjectFieldSchema, ISchema, isoDate, uniqueId } from './utils'
 
 export const collectionName = 'recordings'
 
@@ -21,26 +21,13 @@ export interface IDbRecording {
     series?: string
 }
 
-export const LinkSchema = {
-    $schema: 'http://json-schema.org/schema#',
-    $id: 'http://psimarron.net/schemas/movie-db/migrate/link.json',
-    additionalProperties: false,
+const LinkSubSchema: IObjectFieldSchema<IDbLink> = {
     type: 'object',
     message: 'Verweis unvollständig',
     properties: {
-        _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: uniqueId,
-            type: 'string',
-        },
         description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
-            type: 'string',
-        },
-        for: {
-            message: 'Aufzeichnungskennung fehlt oder ist ungültig',
-            pattern: uniqueId,
             type: 'string',
         },
         name: {
@@ -49,21 +36,16 @@ export const LinkSchema = {
             minLength: 1,
             type: 'string',
         },
-        ordinal: {
-            message: 'Anordnung fehlt oder ist ungültig',
-            minimum: 0,
-            type: 'integer',
-        },
         url: {
             maxLength: 2000,
             message: 'Verweis ist zu lang',
             type: 'string',
         },
     },
-    required: ['_id', 'name', 'for', 'url', 'ordinal'],
+    required: ['name', 'url'],
 }
 
-export const RecordingSchema = {
+export const RecordingSchema: ISchema<IDbRecording> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/recording.json',
     additionalProperties: false,
@@ -96,24 +78,19 @@ export const RecordingSchema = {
             uniqueItems: true,
         },
         languages: {
-            items: { message: 'Sprache ist ungültig', pattern: uniqueId, type: 'string' },
+            items: {
+                message: 'Sprache ist ungültig',
+                pattern: uniqueId,
+                type: 'string',
+            },
             message: 'Sprachen sind ungültig',
             type: 'array',
             uniqueItems: true,
         },
         links: {
+            items: LinkSubSchema,
             message: 'Verweise sind ungültig',
             type: 'array',
-            items: {
-                type: LinkSchema.type,
-                message: LinkSchema.message,
-                properties: {
-                    description: LinkSchema.properties.description,
-                    name: LinkSchema.properties.name,
-                    url: LinkSchema.properties.url,
-                },
-                required: ['name', 'url'],
-            },
         },
         media: {
             message: 'Medium fehlt oder ist ungültig',

@@ -1,12 +1,12 @@
 import { containerType, IContainer, INewContainer } from 'movie-db-api'
 
-import { uniqueId } from './utils'
+import { ISchema, uniqueId } from './utils'
 
 export const collectionName = 'containers'
 
 export interface IDbContainer extends IContainer {}
 
-export const ContainerSchema = {
+export const ContainerSchema: ISchema<IDbContainer> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/container.json',
     additionalProperties: false,
