@@ -1,11 +1,25 @@
-import { IGenreState, ILoadGenres } from 'movie-db-client'
+import * as local from 'movie-db-client'
 
-export function getInitialState(): IGenreState {
-    return {
-        all: [],
+import { Controller, IActionHandlerMap } from '../controller'
+
+type TGenreActions = local.ILoadGenres
+
+const controller = new (class extends Controller<TGenreActions, local.IGenreState> {
+    protected getReducerMap(): IActionHandlerMap<TGenreActions, local.IGenreState> {
+        return {
+            [local.genreActions.load]: this.load,
+        }
     }
-}
 
-export function load(state: IGenreState, response: ILoadGenres): IGenreState {
-    return { ...state, all: response.genres || [] }
-}
+    protected getInitialState(): local.IGenreState {
+        return {
+            all: [],
+        }
+    }
+
+    private load(state: local.IGenreState, response: local.ILoadGenres): local.IGenreState {
+        return { ...state, all: response.genres || [] }
+    }
+})()
+
+export const GenreReducer = controller.reducer

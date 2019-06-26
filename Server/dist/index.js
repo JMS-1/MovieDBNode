@@ -296,37 +296,44 @@ exports.ApplicationActions = ApplicationActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
 const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
-function getInitialState() {
-    return {
-        busySince: 0,
-        errors: [],
-        requests: 0,
-        schemas: undefined,
-    };
-}
-exports.getInitialState = getInitialState;
-function loadSchemas(state, response) {
-    const schemas = response.schemas;
-    for (let schema in schemas) {
-        if (schemas.hasOwnProperty(schema)) {
-            validation_1.addSchema(schemas[schema]);
+const controller = new (class extends controller_1.Controller {
+    getReducerMap() {
+        return {
+            ["movie-db.application.end-request"]: this.endWebRequest,
+            ["movie-db.application.load-schemas"]: this.loadSchemas,
+            ["movie-db.application.begin-request"]: this.beginWebRequest,
+        };
+    }
+    getInitialState() {
+        return {
+            busySince: 0,
+            errors: [],
+            requests: 0,
+            schemas: undefined,
+        };
+    }
+    loadSchemas(state, response) {
+        const schemas = response.schemas;
+        for (let schema in schemas) {
+            if (schemas.hasOwnProperty(schema)) {
+                validation_1.addSchema(schemas[schema]);
+            }
         }
+        return Object.assign({}, state, { schemas });
     }
-    return Object.assign({}, state, { schemas });
-}
-exports.loadSchemas = loadSchemas;
-function beginWebRequest(state, request) {
-    return Object.assign({}, state, { requests: state.requests + 1, busySince: state.requests ? state.busySince : Date.now() });
-}
-exports.beginWebRequest = beginWebRequest;
-function endWebRequest(state, request) {
-    if (request.error) {
-        state = Object.assign({}, state, { errors: [...state.errors, request.error] });
+    beginWebRequest(state, request) {
+        return Object.assign({}, state, { requests: state.requests + 1, busySince: state.requests ? state.busySince : Date.now() });
     }
-    return Object.assign({}, state, { requests: state.requests - 1 });
-}
-exports.endWebRequest = endWebRequest;
+    endWebRequest(state, request) {
+        if (request.error) {
+            state = Object.assign({}, state, { errors: [...state.errors, request.error] });
+        }
+        return Object.assign({}, state, { requests: state.requests - 1 });
+    }
+})();
+exports.ApplicationReducer = controller.reducer;
 
 
 /***/ }),
@@ -344,23 +351,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller = __webpack_require__(/*! ./controller */ "./Client/src/controller/app/controller.ts");
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/app/actions.ts"));
-function ApplicationReducer(state, action) {
-    if (!state) {
-        state = controller.getInitialState();
-    }
-    switch (action.type) {
-        case "movie-db.application.load-schemas":
-            return controller.loadSchemas(state, action);
-        case "movie-db.application.begin-request":
-            return controller.beginWebRequest(state, action);
-        case "movie-db.application.end-request":
-            return controller.endWebRequest(state, action);
-    }
-    return state;
-}
-exports.ApplicationReducer = ApplicationReducer;
+__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/app/controller.ts"));
 
 
 /***/ }),
@@ -676,16 +668,23 @@ exports.GenreActions = GenreActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getInitialState() {
-    return {
-        all: [],
-    };
-}
-exports.getInitialState = getInitialState;
-function load(state, response) {
-    return Object.assign({}, state, { all: response.genres || [] });
-}
-exports.load = load;
+const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
+const controller = new (class extends controller_1.Controller {
+    getReducerMap() {
+        return {
+            ["movie-db.genres.load"]: this.load,
+        };
+    }
+    getInitialState() {
+        return {
+            all: [],
+        };
+    }
+    load(state, response) {
+        return Object.assign({}, state, { all: response.genres || [] });
+    }
+})();
+exports.GenreReducer = controller.reducer;
 
 
 /***/ }),
@@ -703,19 +702,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller = __webpack_require__(/*! ./controller */ "./Client/src/controller/genre/controller.ts");
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/genre/actions.ts"));
-function GenreReducer(state, action) {
-    if (!state) {
-        state = controller.getInitialState();
-    }
-    switch (action.type) {
-        case "movie-db.genres.load":
-            return controller.load(state, action);
-    }
-    return state;
-}
-exports.GenreReducer = GenreReducer;
+__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/genre/controller.ts"));
 
 
 /***/ }),
@@ -779,16 +767,23 @@ exports.LanguageActions = LanguageActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getInitialState() {
-    return {
-        all: [],
-    };
-}
-exports.getInitialState = getInitialState;
-function load(state, response) {
-    return Object.assign({}, state, { all: response.languages || [] });
-}
-exports.load = load;
+const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
+const controller = new (class extends controller_1.Controller {
+    getReducerMap() {
+        return {
+            ["movie-db.languages.load"]: this.load,
+        };
+    }
+    getInitialState() {
+        return {
+            all: [],
+        };
+    }
+    load(state, response) {
+        return Object.assign({}, state, { all: response.languages || [] });
+    }
+})();
+exports.LanguageReducer = controller.reducer;
 
 
 /***/ }),
@@ -806,19 +801,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller = __webpack_require__(/*! ./controller */ "./Client/src/controller/language/controller.ts");
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/language/actions.ts"));
-function LanguageReducer(state, action) {
-    if (!state) {
-        state = controller.getInitialState();
-    }
-    switch (action.type) {
-        case "movie-db.languages.load":
-            return controller.load(state, action);
-    }
-    return state;
-}
-exports.LanguageReducer = LanguageReducer;
+__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/language/controller.ts"));
 
 
 /***/ }),
@@ -853,16 +837,23 @@ exports.MediaActions = MediaActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getInitialState() {
-    return {
-        all: [],
-    };
-}
-exports.getInitialState = getInitialState;
-function load(state, response) {
-    return Object.assign({}, state, { all: response.media || [] });
-}
-exports.load = load;
+const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
+const controller = new (class extends controller_1.Controller {
+    getReducerMap() {
+        return {
+            ["movie-db.media.load"]: this.load,
+        };
+    }
+    getInitialState() {
+        return {
+            all: [],
+        };
+    }
+    load(state, response) {
+        return Object.assign({}, state, { all: response.media || [] });
+    }
+})();
+exports.MediaReducer = controller.reducer;
 
 
 /***/ }),
@@ -880,19 +871,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller = __webpack_require__(/*! ./controller */ "./Client/src/controller/media/controller.ts");
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/media/actions.ts"));
-function MediaReducer(state, action) {
-    if (!state) {
-        state = controller.getInitialState();
-    }
-    switch (action.type) {
-        case "movie-db.media.load":
-            return controller.load(state, action);
-    }
-    return state;
-}
-exports.MediaReducer = MediaReducer;
+__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/media/controller.ts"));
 
 
 /***/ }),
@@ -1029,16 +1009,23 @@ exports.SeriesActions = SeriesActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getInitialState() {
-    return {
-        all: [],
-    };
-}
-exports.getInitialState = getInitialState;
-function load(state, response) {
-    return Object.assign({}, state, { all: response.series || [] });
-}
-exports.load = load;
+const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
+const controller = new (class extends controller_1.Controller {
+    getReducerMap() {
+        return {
+            ["movie-db.series.load"]: this.load,
+        };
+    }
+    getInitialState() {
+        return {
+            all: [],
+        };
+    }
+    load(state, response) {
+        return Object.assign({}, state, { all: response.series || [] });
+    }
+})();
+exports.SeriesReducer = controller.reducer;
 
 
 /***/ }),
@@ -1056,19 +1043,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller = __webpack_require__(/*! ./controller */ "./Client/src/controller/series/controller.ts");
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/series/actions.ts"));
-function SeriesReducer(state, action) {
-    if (!state) {
-        state = controller.getInitialState();
-    }
-    switch (action.type) {
-        case "movie-db.series.load":
-            return controller.load(state, action);
-    }
-    return state;
-}
-exports.SeriesReducer = SeriesReducer;
+__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/series/controller.ts"));
 
 
 /***/ }),

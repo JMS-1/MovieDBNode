@@ -1,11 +1,25 @@
-import { ILoadSeries, ISeriesState } from 'movie-db-client'
+import { ILoadSeries, ISeriesState, seriesActions } from 'movie-db-client'
 
-export function getInitialState(): ISeriesState {
-    return {
-        all: [],
+import { Controller, IActionHandlerMap } from '../controller'
+
+type TSeriesActions = ILoadSeries
+
+const controller = new (class extends Controller<TSeriesActions, ISeriesState> {
+    protected getReducerMap(): IActionHandlerMap<TSeriesActions, ISeriesState> {
+        return {
+            [seriesActions.load]: this.load,
+        }
     }
-}
 
-export function load(state: ISeriesState, response: ILoadSeries): ISeriesState {
-    return { ...state, all: response.series || [] }
-}
+    protected getInitialState(): ISeriesState {
+        return {
+            all: [],
+        }
+    }
+
+    private load(state: ISeriesState, response: ILoadSeries): ISeriesState {
+        return { ...state, all: response.series || [] }
+    }
+})()
+
+export const SeriesReducer = controller.reducer

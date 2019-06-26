@@ -1,11 +1,25 @@
-import { ILoadMedia, IMediaState } from 'movie-db-client'
+import { ILoadMedia, IMediaState, mediaActions } from 'movie-db-client'
 
-export function getInitialState(): IMediaState {
-    return {
-        all: [],
+import { Controller, IActionHandlerMap } from '../controller'
+
+type TMediaActions = ILoadMedia
+
+const controller = new (class extends Controller<TMediaActions, IMediaState> {
+    protected getReducerMap(): IActionHandlerMap<TMediaActions, IMediaState> {
+        return {
+            [mediaActions.load]: this.load,
+        }
     }
-}
 
-export function load(state: IMediaState, response: ILoadMedia): IMediaState {
-    return { ...state, all: response.media || [] }
-}
+    protected getInitialState(): IMediaState {
+        return {
+            all: [],
+        }
+    }
+
+    private load(state: IMediaState, response: ILoadMedia): IMediaState {
+        return { ...state, all: response.media || [] }
+    }
+})()
+
+export const MediaReducer = controller.reducer

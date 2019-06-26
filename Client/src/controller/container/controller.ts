@@ -16,7 +16,7 @@ function validateContainer(state: local.IContainerState): local.IContainerState 
     return { ...state, validation: validate(state.workingCopy, state.validator) }
 }
 
-export type TContainerActions =
+type TContainerActions =
     | local.ICancelContainerEdit
     | local.IContainerSaved
     | local.ILoadContainers
@@ -73,7 +73,7 @@ const controller = new (class extends Controller<TContainerActions, local.IConta
 
     private setProperty<TProp extends keyof api.IContainer>(
         state: local.IContainerState,
-        request: local.ISetContainerProperty<TProp>
+        request: local.ISetContainerProperty<TProp>,
     ): local.IContainerState {
         const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected)
 
