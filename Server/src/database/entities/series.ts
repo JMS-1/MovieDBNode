@@ -4,12 +4,7 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'series'
 
-export interface IDbSeries {
-    _id: string
-    name: string
-    description?: string
-    parentId?: string
-}
+export interface IDbSeries extends ISeries {}
 
 export const SeriesSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -44,12 +39,7 @@ export const SeriesSchema = {
 }
 
 export function toProtocol(series: IDbSeries): ISeries {
-    return {
-        _id: series._id,
-        description: series.description || undefined,
-        name: series.name,
-        parentId: series.parentId || undefined,
-    }
+    return series
 }
 
 export function toEntity(series: INewSeries, id: string): IDbSeries {

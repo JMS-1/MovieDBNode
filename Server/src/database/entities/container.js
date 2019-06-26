@@ -51,14 +51,7 @@ exports.ContainerSchema = {
     required: ['_id', 'name', 'type'],
 };
 function toProtocol(container) {
-    return {
-        _id: container._id,
-        description: container.description || undefined,
-        name: container.name,
-        parentId: container.parentId || undefined,
-        parentLocation: container.parentLocation || undefined,
-        type: container.type,
-    };
+    return container;
 }
 exports.toProtocol = toProtocol;
 function toEntity(container, id) {

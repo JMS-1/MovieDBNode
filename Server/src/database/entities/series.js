@@ -34,12 +34,7 @@ exports.SeriesSchema = {
     required: ['_id', 'name'],
 };
 function toProtocol(series) {
-    return {
-        _id: series._id,
-        description: series.description || undefined,
-        name: series.name,
-        parentId: series.parentId || undefined,
-    };
+    return series;
 }
 exports.toProtocol = toProtocol;
 function toEntity(series, id) {

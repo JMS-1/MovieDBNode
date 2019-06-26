@@ -4,14 +4,7 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'containers'
 
-export interface IDbContainer {
-    _id: string
-    name: string
-    type: containerType
-    description?: string
-    parentId?: string
-    parentLocation?: string
-}
+export interface IDbContainer extends IContainer {}
 
 export const ContainerSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -63,14 +56,7 @@ export const ContainerSchema = {
 }
 
 export function toProtocol(container: IDbContainer): IContainer {
-    return {
-        _id: container._id,
-        description: container.description || undefined,
-        name: container.name,
-        parentId: container.parentId || undefined,
-        parentLocation: container.parentLocation || undefined,
-        type: container.type,
-    }
+    return container
 }
 
 export function toEntity(container: INewContainer, id: string): IDbContainer {

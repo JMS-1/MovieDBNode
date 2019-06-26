@@ -40,12 +40,7 @@ exports.MediaSchema = {
     required: ['_id', 'type'],
 };
 function toProtocol(media) {
-    return {
-        _id: media._id,
-        containerId: media.containerId || undefined,
-        position: media.position || undefined,
-        type: media.type,
-    };
+    return media;
 }
 exports.toProtocol = toProtocol;
 function toEntity(media, id) {

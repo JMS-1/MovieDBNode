@@ -4,10 +4,7 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'languages'
 
-export interface IDbLanguage {
-    _id: string
-    name: string
-}
+export interface IDbLanguage extends ILanguage {}
 
 export const LanguageSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -32,10 +29,7 @@ export const LanguageSchema = {
 }
 
 export function toProtocol(language: IDbLanguage): ILanguage {
-    return {
-        _id: language._id,
-        name: language.name,
-    }
+    return language
 }
 
 export function toEntity(language: INewLanguage, id: string): IDbLanguage {

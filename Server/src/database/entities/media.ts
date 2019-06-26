@@ -4,12 +4,7 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'medias'
 
-export interface IDbMedia {
-    _id: string
-    containerId?: string
-    position?: string
-    type: mediaType
-}
+export interface IDbMedia extends IMedia {}
 
 export const MediaSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -50,12 +45,7 @@ export const MediaSchema = {
 }
 
 export function toProtocol(media: IDbMedia): IMedia {
-    return {
-        _id: media._id,
-        containerId: media.containerId || undefined,
-        position: media.position || undefined,
-        type: media.type,
-    }
+    return media
 }
 
 export function toEntity(media: INewMedia, id: string): IDbMedia {

@@ -24,10 +24,7 @@ exports.GenreSchema = {
     required: ['_id', 'name'],
 };
 function toProtocol(genre) {
-    return {
-        _id: genre._id,
-        name: genre.name,
-    };
+    return genre;
 }
 exports.toProtocol = toProtocol;
 function toEntity(container, id) {

@@ -4,10 +4,7 @@ import { uniqueId } from './utils'
 
 export const collectionName = 'genres'
 
-export interface IDbGenre {
-    _id: string
-    name: string
-}
+export interface IDbGenre extends IGenre {}
 
 export const GenreSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -32,10 +29,7 @@ export const GenreSchema = {
 }
 
 export function toProtocol(genre: IDbGenre): IGenre {
-    return {
-        _id: genre._id,
-        name: genre.name,
-    }
+    return genre
 }
 
 export function toEntity(container: INewGenre, id: string): IDbGenre {
