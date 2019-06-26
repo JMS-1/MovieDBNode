@@ -15,7 +15,7 @@ export interface IContainerDetailsProps {
     lost: boolean
     name: string
     nameError: string
-    parentId: string
+    parent: string
     type: containerType
 }
 
@@ -40,6 +40,10 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                 <Form.Field>
                     <label>[TBD]</label>
                     <Input input='text' value={this.props.id || ''} readOnly disabled />
+                </Form.Field>
+                <Form.Field>
+                    <label>[TBD]</label>
+                    <Input input='text' value={this.props.parent || ''} readOnly disabled />
                 </Form.Field>
                 <Form.Field error={!!nameError} required>
                     <label>[TBD]</label>

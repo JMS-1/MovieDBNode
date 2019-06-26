@@ -15,7 +15,7 @@ declare module 'movie-db-client' {
     const enum containerActions {
         filter = 'movie-db.containers.set-filter',
         load = 'movie-db.containers.load',
-        setEdit = 'movie-db.containers.set-select',
+        select = 'movie-db.containers.select',
         setProp = 'movie-db.containers.set-prop',
     }
 
@@ -35,8 +35,8 @@ declare module 'movie-db-client' {
         value: api.IContainer[TProp]
     }
 
-    interface ISetContainerStartEdit extends Action {
+    interface IContainerSelect extends Action {
         id: string
-        type: containerActions.setEdit
+        type: containerActions.select
     }
 }

@@ -232,8 +232,8 @@ class ContainerActions {
     static setFilter(filter) {
         return { filter, type: "movie-db.containers.set-filter" };
     }
-    static startEdit(id) {
-        return { id, type: "movie-db.containers.set-select" };
+    static select(id) {
+        return { id, type: "movie-db.containers.select" };
     }
     static setProperty(prop, value) {
         return { prop, value, type: "movie-db.containers.set-prop" };
@@ -273,11 +273,7 @@ function getInitialState() {
 }
 exports.getInitialState = getInitialState;
 function load(state, response) {
-    state = Object.assign({}, state, { all: response.containers || [] });
-    if (!state.selected || state.workingCopy) {
-        return state;
-    }
-    return validateContainer(Object.assign({}, state, { validation: undefined, workingCopy: state.all.find(c => c._id === state.selected) }));
+    return Object.assign({}, state, { all: response.containers || [], validation: undefined });
 }
 exports.load = load;
 function setFilter(state, request) {
@@ -287,24 +283,15 @@ function setFilter(state, request) {
     return Object.assign({}, state, { filter: request.filter });
 }
 exports.setFilter = setFilter;
-function startEdit(state, request) {
-    if (state.selected !== request.id) {
-        state = Object.assign({}, state, { selected: request.id });
-    }
-    if (!request.id) {
-        if (!state.workingCopy) {
-            return state;
-        }
-        return Object.assign({}, state, { workingCopy: undefined, validation: undefined });
-    }
-    if (state.workingCopy && state.workingCopy._id === request.id) {
+function select(state, request) {
+    if (state.selected === request.id) {
         return state;
     }
-    return validateContainer(Object.assign({}, state, { workingCopy: state.all.find(c => c._id === request.id), validation: undefined }));
+    return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
 }
-exports.startEdit = startEdit;
+exports.select = select;
 function setProperty(state, request) {
-    const workingCopy = state.workingCopy;
+    const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected);
     if (!workingCopy) {
         return state;
     }
@@ -347,8 +334,8 @@ function ContainerReducer(state, action) {
             return controller.load(state, action);
         case "movie-db.containers.set-filter":
             return controller.setFilter(state, action);
-        case "movie-db.containers.set-select":
-            return controller.startEdit(state, action);
+        case "movie-db.containers.select":
+            return controller.select(state, action);
         case "movie-db.containers.set-prop":
             return controller.setProperty(state, action);
         case "movie-db.application.load-schemas":
@@ -918,6 +905,9 @@ class CContainerDetails extends React.PureComponent {
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, "[TBD]"),
                 React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.id || '', readOnly: true, disabled: true })),
+            React.createElement(semantic_ui_react_1.Form.Field, null,
+                React.createElement("label", null, "[TBD]"),
+                React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.parent || '', readOnly: true, disabled: true })),
             React.createElement(semantic_ui_react_1.Form.Field, { error: !!nameError, required: true },
                 React.createElement("label", null, "[TBD]"),
                 React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setName, value: this.props.name || '' })),
@@ -960,7 +950,7 @@ const local = __webpack_require__(/*! ./details */ "./Client/src/routes/containe
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
     const route = state.container;
-    const container = route.workingCopy;
+    const container = route.workingCopy || controller_1.getContainerMap(state)[route.selected];
     const errors = route.validation;
     return {
         description: container && container.description,
@@ -970,13 +960,13 @@ function mapStateToProps(state, props) {
         lost: !container,
         name: container && container.name,
         nameError: controller_1.getError(errors, 'name', container),
-        parentId: container && container.parentId,
+        parent: container && container.parentId,
         type: container ? container.type : undefined,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
-        loadDetails: id => dispatch(controller_1.ContainerActions.startEdit(id)),
+        loadDetails: id => dispatch(controller_1.ContainerActions.select(id)),
         setProp: (prop, value) => dispatch(controller_1.ContainerActions.setProperty(prop, value)),
     };
 }
@@ -67101,7 +67091,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

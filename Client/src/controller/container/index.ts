@@ -6,10 +6,10 @@ export * from './actions'
 export * from './selectors'
 
 type IAction =
+    | local.IContainerSelect
     | local.ILoadContainers
     | local.ILoadSchemas
     | local.ISetContainerProperty<any>
-    | local.ISetContainerStartEdit
     | local.ISetContainerTreeFilter
 
 export function ContainerReducer(state: local.IContainerState, action: IAction): local.IContainerState {
@@ -22,8 +22,8 @@ export function ContainerReducer(state: local.IContainerState, action: IAction):
             return controller.load(state, action)
         case local.containerActions.filter:
             return controller.setFilter(state, action)
-        case local.containerActions.setEdit:
-            return controller.startEdit(state, action)
+        case local.containerActions.select:
+            return controller.select(state, action)
         case local.containerActions.setProp:
             return controller.setProperty(state, action)
         case local.applicationActions.loadSchema:

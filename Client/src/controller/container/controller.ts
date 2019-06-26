@@ -23,17 +23,7 @@ export function getInitialState(): local.IContainerState {
 }
 
 export function load(state: local.IContainerState, response: local.ILoadContainers): local.IContainerState {
-    state = { ...state, all: response.containers || [] }
-
-    if (!state.selected || state.workingCopy) {
-        return state
-    }
-
-    return validateContainer({
-        ...state,
-        validation: undefined,
-        workingCopy: state.all.find(c => c._id === state.selected),
-    })
+    return { ...state, all: response.containers || [], validation: undefined }
 }
 
 export function setFilter(state: local.IContainerState, request: local.ISetContainerTreeFilter): local.IContainerState {
@@ -44,35 +34,19 @@ export function setFilter(state: local.IContainerState, request: local.ISetConta
     return { ...state, filter: request.filter }
 }
 
-export function startEdit(state: local.IContainerState, request: local.ISetContainerStartEdit): local.IContainerState {
-    if (state.selected !== request.id) {
-        state = { ...state, selected: request.id }
-    }
-
-    if (!request.id) {
-        if (!state.workingCopy) {
-            return state
-        }
-
-        return { ...state, workingCopy: undefined, validation: undefined }
-    }
-
-    if (state.workingCopy && state.workingCopy._id === request.id) {
+export function select(state: local.IContainerState, request: local.IContainerSelect): local.IContainerState {
+    if (state.selected === request.id) {
         return state
     }
 
-    return validateContainer({
-        ...state,
-        workingCopy: state.all.find(c => c._id === request.id),
-        validation: undefined,
-    })
+    return { ...state, selected: request.id, validation: undefined, workingCopy: undefined }
 }
 
 export function setProperty<TProp extends keyof api.IContainer>(
     state: local.IContainerState,
-    request: local.ISetContainerProperty<TProp>
+    request: local.ISetContainerProperty<TProp>,
 ): local.IContainerState {
-    const workingCopy = state.workingCopy
+    const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected)
 
     if (!workingCopy) {
         return state

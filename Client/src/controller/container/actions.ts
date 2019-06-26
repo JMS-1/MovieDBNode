@@ -10,8 +10,8 @@ export class ContainerActions {
         return { filter, type: local.containerActions.filter }
     }
 
-    static startEdit(id: string): local.ISetContainerStartEdit {
-        return { id, type: local.containerActions.setEdit }
+    static select(id: string): local.IContainerSelect {
+        return { id, type: local.containerActions.select }
     }
 
     static setProperty<TProp extends keyof api.IContainer>(
