@@ -46,7 +46,9 @@ export class ServerApi {
                         store.dispatch(process(xhr.response))
                     } else {
                         store.dispatch(
-                            controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`),
+                            controller.ApplicationActions.endWebRequest(
+                                `${webMethod}: ${xhr.statusText || `HTTP ${xhr.status}`}`,
+                            ),
                         )
                     }
                 }
@@ -61,7 +63,7 @@ export class ServerApi {
 
                 xhr.send(data && JSON.stringify(data))
             } catch (error) {
-                store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)))
+                store.dispatch(controller.ApplicationActions.endWebRequest(`${webMethod}: ${getMessage(error)}`))
             }
         }, 0)
     }

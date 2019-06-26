@@ -7,7 +7,7 @@ import * as local from './message'
 
 function mapStateToProps(state: IClientState, props: local.IReportErrorUiProps): local.IReportErrorProps {
     return {
-        title: state.mui.error,
+        title: state.mui.validationError,
     }
 }
 
@@ -17,5 +17,5 @@ function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IReportErro
 
 export const ReportError = connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(local.CReportError)

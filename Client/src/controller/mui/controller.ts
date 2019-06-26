@@ -41,7 +41,8 @@ export function getInitialState(): IMuiState {
                 },
             },
         },
-        error: 'Bitte Eingaben kontrollieren',
         save: 'Speichern',
+        validationError: 'Bitte Eingaben kontrollieren',
+        webError: 'Server-Zugriff fehlgeschlagen',
     }
 }

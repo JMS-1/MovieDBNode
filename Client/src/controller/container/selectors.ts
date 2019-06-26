@@ -3,12 +3,40 @@ import { createSelector } from 'reselect'
 import { containerType, IContainer } from 'movie-db-api'
 import { IClientState, IIconSelectOption, Separators } from 'movie-db-client'
 
+export interface IContainerInfo {
+    name: string
+    raw: IContainer
+}
+
 export interface IContainerMap {
-    [id: string]: IContainer
+    [id: string]: IContainerInfo
 }
 
 export interface IContainerChildMap {
     [id: string]: string[]
+}
+
+function getFullContainerName(id: string, map: IContainerMap): string {
+    const info = map[id]
+
+    if (!info) {
+        return ''
+    }
+
+    if (info.name) {
+        return info.name
+    }
+
+    const container = info.raw
+    const parent = getFullContainerName(container.parentId, map)
+
+    if (parent) {
+        info.name = `${parent}${Separators.Container}${container.name}`
+    } else {
+        info.name = container.name
+    }
+
+    return info.name
 }
 
 export const getContainerMap = createSelector(
@@ -16,7 +44,11 @@ export const getContainerMap = createSelector(
     (all): IContainerMap => {
         const map: IContainerMap = {}
 
-        all.forEach(c => (map[c._id] = c))
+        all.forEach(c => (map[c._id] = { raw: c, name: undefined }))
+
+        for (let container of Object.values(map)) {
+            getFullContainerName(container.raw._id, map)
+        }
 
         return map
     },
@@ -40,7 +72,7 @@ function filterChildMap(map: IContainerChildMap, scope: string, filter: string, 
 
     // Wenn auch unser Name nicht zum Filter passt verschwinden wird.
     const self = lookup[scope]
-    const name = self && self.name && self.name.toLocaleLowerCase()
+    const name = self && self.raw.name && self.raw.name.toLocaleLowerCase()
 
     if (!name || name.indexOf(filter) < 0) {
         delete map[scope]
@@ -75,7 +107,9 @@ export const getContainerChildMap = createSelector(
                 const left = lookup[l]
                 const right = lookup[r]
 
-                return ((left && left.name) || left._id).localeCompare((right && right.name) || right._id)
+                return ((left && left.raw.name) || left.raw._id).localeCompare(
+                    (right && right.raw.name) || right.raw._id,
+                )
             })
         }
 
@@ -87,24 +121,8 @@ export const getContainerEdit = createSelector(
     (state: IClientState) => state.container.workingCopy,
     (state: IClientState) => state.container.selected,
     getContainerMap,
-    (edit, selected, map): IContainer => edit || map[selected],
+    (edit, selected, map): IContainer => edit || (map[selected] && map[selected].raw),
 )
-
-export function getFullContainerName(id: string, map: IContainerMap): string {
-    const container = map[id]
-
-    if (!container) {
-        return ''
-    }
-
-    const parent = getFullContainerName(container.parentId, map)
-
-    if (parent) {
-        return `${parent}${Separators.Container}${container.name}`
-    }
-
-    return container.name
-}
 
 const optionOrder: containerType[] = [
     containerType.Folder,

@@ -24,11 +24,11 @@ export class CReportError extends React.PureComponent<TReportErrorProps> {
         return (
             <Message className='movie-db-input-message' error>
                 <Header>{this.props.title}</Header>
-                <ul>
+                <Message.List>
                     {errors.map((e, i) => (
-                        <li key={i}>{e}</li>
+                        <Message.Item key={i}>{e}</Message.Item>
                     ))}
-                </ul>
+                </Message.List>
             </Message>
         )
     }

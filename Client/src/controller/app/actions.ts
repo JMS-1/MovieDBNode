@@ -13,4 +13,8 @@ export class ApplicationActions {
     static endWebRequest(error: string): local.IDoneWebRequest {
         return { error, type: local.applicationActions.endReq }
     }
+
+    static clearErrors(): local.IClearWebRequestErrors {
+        return { type: local.applicationActions.resetErrors }
+    }
 }

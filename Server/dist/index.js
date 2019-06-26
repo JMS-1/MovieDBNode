@@ -106,7 +106,7 @@ class CReportError extends React.PureComponent {
         }
         return (React.createElement(semantic_ui_react_1.Message, { className: 'movie-db-input-message', error: true },
             React.createElement(semantic_ui_react_1.Header, null, this.props.title),
-            React.createElement("ul", null, errors.map((e, i) => (React.createElement("li", { key: i }, e))))));
+            React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e))))));
     }
 }
 exports.CReportError = CReportError;
@@ -128,7 +128,7 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./message */ "./Client/src/components/message/message.tsx");
 function mapStateToProps(state, props) {
     return {
-        title: state.mui.error,
+        title: state.mui.validationError,
     };
 }
 function mapDispatchToProps(dispatch, props) {
@@ -155,9 +155,13 @@ const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node
 const containerRedux_1 = __webpack_require__(/*! ../../routes/container/containerRedux */ "./Client/src/routes/container/containerRedux.ts");
 class CRoot extends React.PureComponent {
     render() {
+        const { errors, busy } = this.props;
         return (React.createElement("div", { className: 'movie-db-root' },
-            React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: this.props.busy },
-                React.createElement(semantic_ui_react_1.Loader, null)),
+            React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: busy || errors.length > 0 },
+                React.createElement(semantic_ui_react_1.Loader, { inverted: true, size: 'massive', disabled: !busy }),
+                React.createElement(semantic_ui_react_1.Message, { negative: true, hidden: errors.length < 1, onDismiss: this.props.clearErrors },
+                    React.createElement(semantic_ui_react_1.Header, null, this.props.title),
+                    React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
             React.createElement("div", { className: 'content' },
                 React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }))));
     }
@@ -179,15 +183,21 @@ exports.CRoot = CRoot;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./root */ "./Client/src/components/root/root.tsx");
+const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    const busy = Date.now() - state.application.busySince;
-    const requests = state.application.requests;
+    const route = state.application;
+    const busy = Date.now() - route.busySince;
+    const requests = route.requests;
     return {
         busy: requests > 1 || (requests > 0 && busy >= 250),
+        errors: route.errors,
+        title: state.mui.webError,
     };
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        clearErrors: () => dispatch(controller_1.ApplicationActions.clearErrors()),
+    };
 }
 exports.Root = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRoot);
 
@@ -280,6 +290,9 @@ class ApplicationActions {
     static endWebRequest(error) {
         return { error, type: "movie-db.application.end-request" };
     }
+    static clearErrors() {
+        return { type: "movie-db.application.clear-errors" };
+    }
 }
 exports.ApplicationActions = ApplicationActions;
 
@@ -303,6 +316,7 @@ const controller = new (class extends controller_1.Controller {
         return {
             ["movie-db.application.end-request"]: this.endWebRequest,
             ["movie-db.application.load-schemas"]: this.loadSchemas,
+            ["movie-db.application.clear-errors"]: this.clearErrors,
             ["movie-db.application.begin-request"]: this.beginWebRequest,
         };
     }
@@ -322,6 +336,12 @@ const controller = new (class extends controller_1.Controller {
             }
         }
         return Object.assign({}, state, { schemas });
+    }
+    clearErrors(state, request) {
+        if (state.errors.length < 1) {
+            return state;
+        }
+        return Object.assign({}, state, { errors: [] });
     }
     beginWebRequest(state, request) {
         return Object.assign({}, state, { requests: state.requests + 1, busySince: state.requests ? state.busySince : Date.now() });
@@ -477,9 +497,30 @@ __export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/contain
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+function getFullContainerName(id, map) {
+    const info = map[id];
+    if (!info) {
+        return '';
+    }
+    if (info.name) {
+        return info.name;
+    }
+    const container = info.raw;
+    const parent = getFullContainerName(container.parentId, map);
+    if (parent) {
+        info.name = `${parent}${" > "}${container.name}`;
+    }
+    else {
+        info.name = container.name;
+    }
+    return info.name;
+}
 exports.getContainerMap = reselect_1.createSelector((state) => state.container.all, (all) => {
     const map = {};
-    all.forEach(c => (map[c._id] = c));
+    all.forEach(c => (map[c._id] = { raw: c, name: undefined }));
+    for (let container of Object.values(map)) {
+        getFullContainerName(container.raw._id, map);
+    }
     return map;
 });
 function filterChildMap(map, scope, filter, lookup) {
@@ -492,7 +533,7 @@ function filterChildMap(map, scope, filter, lookup) {
         return;
     }
     const self = lookup[scope];
-    const name = self && self.name && self.name.toLocaleLowerCase();
+    const name = self && self.raw.name && self.raw.name.toLocaleLowerCase();
     if (!name || name.indexOf(filter) < 0) {
         delete map[scope];
     }
@@ -514,24 +555,12 @@ exports.getContainerChildMap = reselect_1.createSelector((state) => state.contai
         children.sort((l, r) => {
             const left = lookup[l];
             const right = lookup[r];
-            return ((left && left.name) || left._id).localeCompare((right && right.name) || right._id);
+            return ((left && left.raw.name) || left.raw._id).localeCompare((right && right.raw.name) || right.raw._id);
         });
     }
     return map;
 });
-exports.getContainerEdit = reselect_1.createSelector((state) => state.container.workingCopy, (state) => state.container.selected, exports.getContainerMap, (edit, selected, map) => edit || map[selected]);
-function getFullContainerName(id, map) {
-    const container = map[id];
-    if (!container) {
-        return '';
-    }
-    const parent = getFullContainerName(container.parentId, map);
-    if (parent) {
-        return `${parent}${" > "}${container.name}`;
-    }
-    return container.name;
-}
-exports.getFullContainerName = getFullContainerName;
+exports.getContainerEdit = reselect_1.createSelector((state) => state.container.workingCopy, (state) => state.container.selected, exports.getContainerMap, (edit, selected, map) => edit || (map[selected] && map[selected].raw));
 const optionOrder = [
     5,
     1,
@@ -953,8 +982,9 @@ function getInitialState() {
                 },
             },
         },
-        error: 'Bitte Eingaben kontrollieren',
         save: 'Speichern',
+        validationError: 'Bitte Eingaben kontrollieren',
+        webError: 'Server-Zugriff fehlgeschlagen',
     };
 }
 exports.getInitialState = getInitialState;
@@ -1217,6 +1247,7 @@ function mapStateToProps(state, props) {
     const emui = mui.edit;
     const route = state.container;
     const container = controller.getContainerEdit(state);
+    const parent = controller.getContainerMap(state)[container && container.parentId];
     const errors = route.validation;
     return {
         cancelLabel: state.mui.cancel,
@@ -1224,8 +1255,7 @@ function mapStateToProps(state, props) {
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
-        parent: controller.getFullContainerName(container && container.parentId, controller.getContainerMap(state)) ||
-            mui.noParent,
+        parent: (parent && parent.name) || mui.noParent,
         parentLabel: emui.parentId,
         saveLabel: state.mui.save,
         type: container ? container.type : undefined,
@@ -1293,10 +1323,10 @@ exports.ContainerNode = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 function mapStateToProps(state, props) {
     const container = controller_1.getContainerMap(state)[props.scope];
     const list = controller_1.getContainerChildMap(state)[props.scope] || noChildren;
-    const type = state.mui.container.types[container && container.type];
+    const type = state.mui.container.types[container && container.raw.type];
     return {
         list: list.map(id => React.createElement(exports.ContainerNode, { key: id, scope: id, detail: props.detail })),
-        name: (container && container.name) || props.scope,
+        name: (container && container.raw.name) || props.scope,
         type: (type && type.icon) || 'help',
     };
 }
@@ -1413,7 +1443,7 @@ class ServerApi {
                         store.dispatch(process(xhr.response));
                     }
                     else {
-                        store.dispatch(controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`));
+                        store.dispatch(controller.ApplicationActions.endWebRequest(`${webMethod}: ${xhr.statusText || `HTTP ${xhr.status}`}`));
                     }
                 };
                 xhr.open(method, `api/${webMethod}`);
@@ -1424,7 +1454,7 @@ class ServerApi {
                 xhr.send(data && JSON.stringify(data));
             }
             catch (error) {
-                store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)));
+                store.dispatch(controller.ApplicationActions.endWebRequest(`${webMethod}: ${getMessage(error)}`));
             }
         }, 0);
     }

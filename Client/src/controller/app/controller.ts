@@ -4,13 +4,18 @@ import { Controller } from '../controller'
 
 import { addSchema } from '../../validation'
 
-type TApplicationActions = local.ILoadSchemas | local.IStartWebRequest | local.IDoneWebRequest
+type TApplicationActions =
+    | local.IClearWebRequestErrors
+    | local.IDoneWebRequest
+    | local.ILoadSchemas
+    | local.IStartWebRequest
 
 const controller = new (class extends Controller<TApplicationActions, local.IApplicationState> {
     protected getReducerMap(): local.IActionHandlerMap<TApplicationActions, local.IApplicationState> {
         return {
             [local.applicationActions.endReq]: this.endWebRequest,
             [local.applicationActions.loadSchema]: this.loadSchemas,
+            [local.applicationActions.resetErrors]: this.clearErrors,
             [local.applicationActions.startReq]: this.beginWebRequest,
         }
     }
@@ -34,6 +39,17 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
         }
 
         return { ...state, schemas }
+    }
+
+    private clearErrors(
+        state: local.IApplicationState,
+        request: local.IClearWebRequestErrors,
+    ): local.IApplicationState {
+        if (state.errors.length < 1) {
+            return state
+        }
+
+        return { ...state, errors: [] }
     }
 
     private beginWebRequest(state: local.IApplicationState, request: local.IStartWebRequest): local.IApplicationState {
