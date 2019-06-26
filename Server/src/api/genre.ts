@@ -11,14 +11,14 @@ export const genreApi = Router().use(
     Router().get('/', (request, response, next) =>
         processApiRequest(
             async () => {
-                const genres = await genreCollection.query()
+                const genres = await genreCollection.find()
 
                 return <IGenreResponse>{
                     genres: genres.map(toProtocol),
                 }
             },
             request,
-            response,
-        ),
-    ),
+            response
+        )
+    )
 )

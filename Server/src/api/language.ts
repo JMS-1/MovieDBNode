@@ -11,14 +11,14 @@ export const languageApi = Router().use(
     Router().get('/', (request, response, next) =>
         processApiRequest(
             async () => {
-                const languages = await languageCollection.query()
+                const languages = await languageCollection.find()
 
                 return <ILanguageResponse>{
                     languages: languages.map(toProtocol),
                 }
             },
             request,
-            response,
-        ),
-    ),
+            response
+        )
+    )
 )

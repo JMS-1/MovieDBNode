@@ -50,7 +50,7 @@ export abstract class CollectionBase<TType extends { _id: string }> {
 
     async migrate(): Promise<void> {
         for (let item of Object.values(this.migrationMap)) {
-            await this.insert(item)
+            await this.insertOne(item)
         }
     }
 
@@ -60,7 +60,7 @@ export abstract class CollectionBase<TType extends { _id: string }> {
         return db.collection(this.name)
     }
 
-    async insert(container: TType): Promise<IValidationError[]> {
+    async insertOne(container: TType): Promise<IValidationError[]> {
         try {
             const me = await this.getCollection()
 
@@ -84,7 +84,7 @@ export abstract class CollectionBase<TType extends { _id: string }> {
         }
     }
 
-    async update(container: TType): Promise<IValidationError[]> {
+    async findOneAndReplace(container: TType): Promise<IValidationError[]> {
         try {
             const me = await this.getCollection()
             const updated = await me.findOneAndReplace({ _id: container._id }, container)
@@ -111,7 +111,7 @@ export abstract class CollectionBase<TType extends { _id: string }> {
         }
     }
 
-    async query(filter?: FilterQuery<TType>, sort?: object, project?: object): Promise<TType[]> {
+    async find(filter?: FilterQuery<TType>, sort?: object, project?: object): Promise<TType[]> {
         const me = await this.getCollection()
 
         let query = me.find(filter)

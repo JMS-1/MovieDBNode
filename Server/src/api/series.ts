@@ -11,14 +11,14 @@ export const seriesApi = Router().use(
     Router().get('/', (request, response, next) =>
         processApiRequest(
             async () => {
-                const series = await seriesCollection.query()
+                const series = await seriesCollection.find()
 
                 return <ISeriesResponse>{
                     series: series.map(toProtocol),
                 }
             },
             request,
-            response,
-        ),
-    ),
+            response
+        )
+    )
 )

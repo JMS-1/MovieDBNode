@@ -5,7 +5,7 @@ const utils_1 = require("./utils");
 const container_1 = require("../database/container");
 exports.containerApi = express_1.Router().use('/container', express_1.Router()
     .get('/', (request, response, next) => utils_1.processApiRequest(async () => {
-    const containers = await container_1.containerCollection.query();
+    const containers = await container_1.containerCollection.find();
     return {
         containers: containers.map(container_1.toProtocol),
     };
@@ -14,7 +14,7 @@ exports.containerApi = express_1.Router().use('/container', express_1.Router()
     const container = container_1.toEntity(req, request.params.id);
     return {
         container: container_1.toProtocol(container),
-        errors: await container_1.containerCollection.update(container),
+        errors: await container_1.containerCollection.findOneAndReplace(container),
     };
 }, request, response)));
 

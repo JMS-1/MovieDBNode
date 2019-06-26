@@ -1464,6 +1464,9 @@ class ServerApi {
     static put(method, data, process) {
         ServerApi.process(method, 'PUT', data, process);
     }
+    static post(method, data, process) {
+        ServerApi.process(method, 'POST', data, process);
+    }
 }
 exports.ServerApi = ServerApi;
 

@@ -39,14 +39,14 @@ class CollectionBase {
     }
     async migrate() {
         for (let item of Object.values(this.migrationMap)) {
-            await this.insert(item);
+            await this.insertOne(item);
         }
     }
     async getCollection() {
         const db = await dbConnect();
         return db.collection(this.name);
     }
-    async insert(container) {
+    async insertOne(container) {
         try {
             const me = await this.getCollection();
             await me.insertOne(container);
@@ -66,7 +66,7 @@ class CollectionBase {
             }
         }
     }
-    async update(container) {
+    async findOneAndReplace(container) {
         try {
             const me = await this.getCollection();
             const updated = await me.findOneAndReplace({ _id: container._id }, container);
@@ -89,7 +89,7 @@ class CollectionBase {
             }
         }
     }
-    async query(filter, sort, project) {
+    async find(filter, sort, project) {
         const me = await this.getCollection();
         let query = me.find(filter);
         if (sort) {

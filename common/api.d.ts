@@ -135,4 +135,29 @@ declare module 'movie-db-api' {
     interface ISeriesResponse {
         series: ISeries[]
     }
+
+    interface IRecordingQueryRequest {
+        firstPage: number
+        genres?: string[]
+        language?: string
+        name?: string
+        nameSeries?: string[]
+        pageSize: number
+        rent?: boolean
+        series?: string[]
+        sort: 'name' | 'created'
+        sortOrder: 'ascending' | 'descending'
+    }
+
+    interface IQueryCountInfo {
+        _id: string
+        count: number
+    }
+
+    interface IRecordingQueryResponse {
+        genres: IQueryCountInfo[]
+        languages: IQueryCountInfo[]
+        total: number
+        view: any[]
+    }
 }

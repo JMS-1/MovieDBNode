@@ -12,15 +12,15 @@ export const containerApi = Router().use(
         .get('/', (request, response, next) =>
             processApiRequest(
                 async () => {
-                    const containers = await containerCollection.query()
+                    const containers = await containerCollection.find()
 
                     return <IContainerResponse>{
                         containers: containers.map(toProtocol),
                     }
                 },
                 request,
-                response,
-            ),
+                response
+            )
         )
         .put('/:id', (request, response, next) =>
             processApiRequest(
@@ -29,11 +29,11 @@ export const containerApi = Router().use(
 
                     return <IUpdateContainerResponse>{
                         container: toProtocol(container),
-                        errors: await containerCollection.update(container),
+                        errors: await containerCollection.findOneAndReplace(container),
                     }
                 },
                 request,
-                response,
-            ),
-        ),
+                response
+            )
+        )
 )

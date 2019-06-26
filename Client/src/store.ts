@@ -75,4 +75,8 @@ export class ServerApi {
     static put(method: string, data: any, process: (data: any) => Action): void {
         ServerApi.process(method, 'PUT', data, process)
     }
+
+    static post(method: string, data: any, process: (data: any) => Action): void {
+        ServerApi.process(method, 'POST', data, process)
+    }
 }

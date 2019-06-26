@@ -4,7 +4,7 @@ const express_1 = require("express");
 const utils_1 = require("./utils");
 const series_1 = require("../database/series");
 exports.seriesApi = express_1.Router().use('/series', express_1.Router().get('/', (request, response, next) => utils_1.processApiRequest(async () => {
-    const series = await series_1.seriesCollection.query();
+    const series = await series_1.seriesCollection.find();
     return {
         series: series.map(series_1.toProtocol),
     };

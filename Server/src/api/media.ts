@@ -11,14 +11,14 @@ export const mediaApi = Router().use(
     Router().get('/', (request, response, next) =>
         processApiRequest(
             async () => {
-                const media = await mediaCollection.query()
+                const media = await mediaCollection.find()
 
                 return <IMediaResponse>{
                     media: media.map(toProtocol),
                 }
             },
             request,
-            response,
-        ),
-    ),
+            response
+        )
+    )
 )
