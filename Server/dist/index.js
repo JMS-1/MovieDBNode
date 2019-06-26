@@ -151,10 +151,13 @@ exports.ReportError = react_redux_1.connect(mapStateToProps, mapDispatchToProps)
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const containerRedux_1 = __webpack_require__(/*! ../../routes/container/containerRedux */ "./Client/src/routes/container/containerRedux.ts");
 class CRoot extends React.PureComponent {
     render() {
         return (React.createElement("div", { className: 'movie-db-root' },
+            React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: this.props.busy },
+                React.createElement(semantic_ui_react_1.Loader, null)),
             React.createElement("div", { className: 'content' },
                 React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }))));
     }
@@ -177,7 +180,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./root */ "./Client/src/components/root/root.tsx");
 function mapStateToProps(state, props) {
-    return {};
+    return {
+        busy: state.application.requests > 0,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
     return {};
@@ -267,6 +272,12 @@ class ApplicationActions {
     static loadSchemas(schemas) {
         return { schemas, type: "movie-db.application.load-schemas" };
     }
+    static beginWebRequest() {
+        return { type: "movie-db.application.begin-request" };
+    }
+    static endWebRequest(error) {
+        return { error, type: "movie-db.application.end-request" };
+    }
 }
 exports.ApplicationActions = ApplicationActions;
 
@@ -286,6 +297,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
 function getInitialState() {
     return {
+        errors: [],
+        requests: 0,
         schemas: undefined,
     };
 }
@@ -300,6 +313,17 @@ function loadSchemas(state, response) {
     return Object.assign({}, state, { schemas });
 }
 exports.loadSchemas = loadSchemas;
+function beginWebRequest(state, request) {
+    return Object.assign({}, state, { requests: state.requests + 1 });
+}
+exports.beginWebRequest = beginWebRequest;
+function endWebRequest(state, request) {
+    if (request.error) {
+        state = Object.assign({}, state, { errors: [...state.errors, request.error] });
+    }
+    return Object.assign({}, state, { requests: state.requests - 1 });
+}
+exports.endWebRequest = endWebRequest;
 
 
 /***/ }),
@@ -326,6 +350,10 @@ function ApplicationReducer(state, action) {
     switch (action.type) {
         case "movie-db.application.load-schemas":
             return controller.loadSchemas(state, action);
+        case "movie-db.application.begin-request":
+            return controller.beginWebRequest(state, action);
+        case "movie-db.application.end-request":
+            return controller.endWebRequest(state, action);
     }
     return state;
 }
@@ -1333,23 +1361,33 @@ function initializeStore() {
     return store;
 }
 exports.initializeStore = initializeStore;
+function getMessage(error) {
+    return typeof error === 'string' ? error : error.message || 'failed';
+}
 class ServerApi {
     static process(webMethod, method, data, process) {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                store.dispatch(process(xhr.response));
+        store.dispatch(controller.ApplicationActions.beginWebRequest());
+        try {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    store.dispatch(controller.ApplicationActions.endWebRequest(undefined));
+                    store.dispatch(process(xhr.response));
+                }
+                else {
+                    store.dispatch(controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`));
+                }
+            };
+            xhr.open(method, `api/${webMethod}`);
+            if (data) {
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             }
-            else {
-                console.log('[tbd]');
-            }
-        };
-        xhr.open('GET', `api/${webMethod}`);
-        if (data) {
-            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.responseType = 'json';
+            xhr.send(data);
         }
-        xhr.responseType = 'json';
-        xhr.send(data);
+        catch (error) {
+            store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)));
+        }
     }
     static get(method, process) {
         ServerApi.process(method, 'GET', undefined, process);

@@ -28,27 +28,38 @@ export function initializeStore(): Store<IClientState> {
     return store
 }
 
+function getMessage(error: any): string {
+    return typeof error === 'string' ? error : error.message || 'failed'
+}
+
 export class ServerApi {
     private static process(webMethod: string, method: string, data: any, process: (data: any) => Action): void {
-        const xhr = new XMLHttpRequest()
+        store.dispatch(controller.ApplicationActions.beginWebRequest())
 
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                store.dispatch(process(xhr.response))
-            } else {
-                console.log('[tbd]')
+        try {
+            const xhr = new XMLHttpRequest()
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    store.dispatch(controller.ApplicationActions.endWebRequest(undefined))
+                    store.dispatch(process(xhr.response))
+                } else {
+                    store.dispatch(controller.ApplicationActions.endWebRequest(xhr.statusText || `HTTP ${xhr.status}`))
+                }
             }
+
+            xhr.open(method, `api/${webMethod}`)
+
+            if (data) {
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+            }
+
+            xhr.responseType = 'json'
+
+            xhr.send(data)
+        } catch (error) {
+            store.dispatch(controller.ApplicationActions.endWebRequest(getMessage(error)))
         }
-
-        xhr.open('GET', `api/${webMethod}`)
-
-        if (data) {
-            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-        }
-
-        xhr.responseType = 'json'
-
-        xhr.send(data)
     }
 
     static get(method: string, process: (data: any) => Action): void {
