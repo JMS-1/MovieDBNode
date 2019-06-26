@@ -6,6 +6,7 @@ export * from './actions'
 export * from './selectors'
 
 type IAction =
+    | local.IContainerSaved
     | local.IContainerSelect
     | local.ILoadContainers
     | local.ILoadSchemas
@@ -26,6 +27,8 @@ export function ContainerReducer(state: local.IContainerState, action: IAction):
             return controller.select(state, action)
         case local.containerActions.setProp:
             return controller.setProperty(state, action)
+        case local.containerActions.save:
+            return controller.saveDone(state, action)
         case local.applicationActions.loadSchema:
             return controller.loadSchema(state, action)
     }

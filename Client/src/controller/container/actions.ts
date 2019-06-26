@@ -20,4 +20,8 @@ export class ContainerActions {
     ): local.ISetContainerProperty<TProp> {
         return { prop, value, type: local.containerActions.setProp }
     }
+
+    static saveDone(response: api.IUpdateContainerResponse): local.IContainerSaved {
+        return { container: response.container, errors: response.errors, type: local.containerActions.save }
+    }
 }

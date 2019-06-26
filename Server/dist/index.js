@@ -357,6 +357,9 @@ class ContainerActions {
     static setProperty(prop, value) {
         return { prop, value, type: "movie-db.containers.set-prop" };
     }
+    static saveDone(response) {
+        return { container: response.container, errors: response.errors, type: "movie-db.containers.save-done" };
+    }
 }
 exports.ContainerActions = ContainerActions;
 
@@ -424,6 +427,19 @@ function loadSchema(state, response) {
     return validateContainer(Object.assign({}, state, { validator: response.schemas.container }));
 }
 exports.loadSchema = loadSchema;
+function saveDone(state, response) {
+    if (response.errors) {
+        return Object.assign({}, state, { validation: response.errors });
+    }
+    const { _id } = response.container;
+    const all = [...state.all];
+    const index = all.findIndex(c => c._id === _id);
+    if (index >= 0) {
+        all[index] = response.container;
+    }
+    return Object.assign({}, state, { all, selected: _id, workingCopy: undefined, validation: undefined });
+}
+exports.saveDone = saveDone;
 
 
 /***/ }),
@@ -457,6 +473,8 @@ function ContainerReducer(state, action) {
             return controller.select(state, action);
         case "movie-db.containers.set-prop":
             return controller.setProperty(state, action);
+        case "movie-db.containers.save-done":
+            return controller.saveDone(state, action);
         case "movie-db.application.load-schemas":
             return controller.loadSchema(state, action);
     }
@@ -1073,9 +1091,14 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const messageRedux_1 = __webpack_require__(/*! ../../../components/message/messageRedux */ "./Client/src/components/message/messageRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+const store_1 = __webpack_require__(/*! ../../../store */ "./Client/src/store.ts");
 class CContainerDetails extends React.PureComponent {
     constructor() {
         super(...arguments);
+        this.onSave = () => {
+            store_1.ServerApi.put(`container/${this.props.id}`, this.props.edit, controller_1.ContainerActions.saveDone);
+        };
         this.setType = (ev, props) => {
             this.props.setProp('type', props.value);
         };
@@ -1084,6 +1107,7 @@ class CContainerDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
+        const { edit } = this.props;
         return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: this.props.hasError },
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.idLabel),
@@ -1094,10 +1118,12 @@ class CContainerDetails extends React.PureComponent {
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'name', required: true }),
             React.createElement(semantic_ui_react_1.Form.Field, null,
                 React.createElement("label", null, this.props.typeLabel),
-                React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: this.props.type }),
+                React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: edit && edit.type }),
                 React.createElement(messageRedux_1.ReportError, { errors: this.props.typeErrors })),
             React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
-            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' })));
+            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' }),
+            React.createElement(semantic_ui_react_1.Button.Group, null,
+                React.createElement(semantic_ui_react_1.Button, { color: 'red', onClick: this.onSave }, "[SAVE]"))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);
@@ -1133,13 +1159,13 @@ function mapStateToProps(state, props) {
     const container = controller.getContainerEdit(state);
     const errors = route.validation;
     return {
+        edit: container,
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
         parent: controller.getFullContainerName(container && container.parentId, controller.getContainerMap(state)) ||
             mui.noParent,
         parentLabel: emui.parentId,
-        type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
         typeOptions: controller.getContainerTypeOptions(state),
@@ -1308,7 +1334,7 @@ function initializeStore() {
 }
 exports.initializeStore = initializeStore;
 class ServerApi {
-    static get(method, process) {
+    static process(webMethod, method, data, process) {
         const xhr = new XMLHttpRequest();
         xhr.onload = () => {
             if (xhr.status === 200) {
@@ -1318,9 +1344,18 @@ class ServerApi {
                 console.log('[tbd]');
             }
         };
+        xhr.open('GET', `api/${webMethod}`);
+        if (data) {
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        }
         xhr.responseType = 'json';
-        xhr.open('GET', `api/${method}`);
-        xhr.send();
+        xhr.send(data);
+    }
+    static get(method, process) {
+        ServerApi.process(method, 'GET', undefined, process);
+    }
+    static put(method, data, process) {
+        ServerApi.process(method, 'PUT', data, process);
     }
 }
 exports.ServerApi = ServerApi;

@@ -67,14 +67,12 @@ declare module 'movie-db-api' {
 
     interface IAddContainerResponse {
         container: IContainer
-    }
-
-    interface IUpdateContainerRequest {
-        container: IContainer
+        errors: IValidationError[]
     }
 
     interface IUpdateContainerResponse {
         container: IContainer
+        errors: IValidationError[]
     }
 
     interface IDeleteContainerRequest {
@@ -82,6 +80,7 @@ declare module 'movie-db-api' {
     }
 
     interface IDeleteContainerResponse {
+        errors: IValidationError[]
         id: string
     }
 

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("body-parser");
 const utils_1 = require("../utils");
 function processApiRequest(processor, request, response) {
     function onError(error) {

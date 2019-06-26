@@ -29,7 +29,7 @@ export function initializeStore(): Store<IClientState> {
 }
 
 export class ServerApi {
-    static get(method: string, process: (data: any) => Action): void {
+    private static process(webMethod: string, method: string, data: any, process: (data: any) => Action): void {
         const xhr = new XMLHttpRequest()
 
         xhr.onload = () => {
@@ -40,8 +40,22 @@ export class ServerApi {
             }
         }
 
+        xhr.open('GET', `api/${webMethod}`)
+
+        if (data) {
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+        }
+
         xhr.responseType = 'json'
-        xhr.open('GET', `api/${method}`)
-        xhr.send()
+
+        xhr.send(data)
+    }
+
+    static get(method: string, process: (data: any) => Action): void {
+        ServerApi.process(method, 'GET', undefined, process)
+    }
+
+    static put(method: string, data: any, process: (data: any) => Action): void {
+        ServerApi.process(method, 'PUT', data, process)
     }
 }

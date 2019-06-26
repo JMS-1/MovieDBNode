@@ -62,3 +62,20 @@ export function setProperty<TProp extends keyof api.IContainer>(
 export function loadSchema(state: local.IContainerState, response: local.ILoadSchemas): local.IContainerState {
     return validateContainer({ ...state, validator: response.schemas.container })
 }
+
+export function saveDone(state: local.IContainerState, response: local.IContainerSaved): local.IContainerState {
+    if (response.errors) {
+        return { ...state, validation: response.errors }
+    }
+
+    const { _id } = response.container
+
+    const all = [...state.all]
+    const index = all.findIndex(c => c._id === _id)
+
+    if (index >= 0) {
+        all[index] = response.container
+    }
+
+    return { ...state, all, selected: _id, workingCopy: undefined, validation: undefined }
+}

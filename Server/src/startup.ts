@@ -1,3 +1,4 @@
+import { json } from 'body-parser'
 import * as debug from 'debug'
 import * as express from 'express'
 import { join } from 'path'
@@ -14,6 +15,7 @@ async function startup(): Promise<void> {
     const app = express()
 
     app.use(express.static(join(__dirname, '../dist')))
+    app.use(json())
 
     installApi(app)
 

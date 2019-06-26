@@ -15,6 +15,7 @@ declare module 'movie-db-client' {
     const enum containerActions {
         filter = 'movie-db.containers.set-filter',
         load = 'movie-db.containers.load',
+        save = 'movie-db.containers.save-done',
         select = 'movie-db.containers.select',
         setProp = 'movie-db.containers.set-prop',
     }
@@ -38,5 +39,11 @@ declare module 'movie-db-client' {
     interface IContainerSelect extends Action {
         id: string
         type: containerActions.select
+    }
+
+    interface IContainerSaved extends Action {
+        container: api.IContainer
+        errors: api.IValidationError[]
+        type: containerActions.save
     }
 }

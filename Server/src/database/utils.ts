@@ -75,11 +75,34 @@ export abstract class CollectionBase<TType extends { _id: string }> {
             try {
                 return (
                     validate(container, this.schema) || [
-                        {
-                            constraint: 'database',
-                            message: getError(error),
-                            property: '*',
-                        },
+                        { constraint: 'database', message: getError(error), property: '*' },
+                    ]
+                )
+            } catch (e) {
+                throw error
+            }
+        }
+    }
+
+    async update(container: TType): Promise<IValidationError[]> {
+        try {
+            const me = await this.getCollection()
+            const updated = await me.findOneAndReplace({ _id: container._id }, container)
+
+            if (!updated) {
+                return [{ constraint: 'database', message: 'Nicht gefunden', property: '_id' }]
+            }
+
+            return undefined
+        } catch (error) {
+            if (error.code !== 121) {
+                throw error
+            }
+
+            try {
+                return (
+                    validate(container, this.schema) || [
+                        { constraint: 'database', message: getError(error), property: '*' },
                     ]
                 )
             } catch (e) {

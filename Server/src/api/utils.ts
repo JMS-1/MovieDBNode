@@ -1,4 +1,3 @@
-import 'body-parser'
 import { Request, Response } from 'express'
 
 import { apiError, getError } from '../utils'

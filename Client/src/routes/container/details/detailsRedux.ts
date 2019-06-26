@@ -15,6 +15,7 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
     const errors = route.validation
 
     return {
+        edit: container,
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
@@ -22,7 +23,6 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
             controller.getFullContainerName(container && container.parentId, controller.getContainerMap(state)) ||
             mui.noParent,
         parentLabel: emui.parentId,
-        type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
         typeOptions: controller.getContainerTypeOptions(state),

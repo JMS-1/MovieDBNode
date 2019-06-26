@@ -58,11 +58,30 @@ class CollectionBase {
             }
             try {
                 return (validation_1.validate(container, this.schema) || [
-                    {
-                        constraint: 'database',
-                        message: utils_1.getError(error),
-                        property: '*',
-                    },
+                    { constraint: 'database', message: utils_1.getError(error), property: '*' },
+                ]);
+            }
+            catch (e) {
+                throw error;
+            }
+        }
+    }
+    async update(container) {
+        try {
+            const me = await this.getCollection();
+            const updated = await me.findOneAndReplace({ _id: container._id }, container);
+            if (!updated) {
+                return [{ constraint: 'database', message: 'Nicht gefunden', property: '_id' }];
+            }
+            return undefined;
+        }
+        catch (error) {
+            if (error.code !== 121) {
+                throw error;
+            }
+            try {
+                return (validation_1.validate(container, this.schema) || [
+                    { constraint: 'database', message: utils_1.getError(error), property: '*' },
                 ]);
             }
             catch (e) {
