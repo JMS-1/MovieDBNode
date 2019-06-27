@@ -1,3 +1,4 @@
+import * as debug from 'debug'
 import { Collection, Db, FilterQuery, MongoClient } from 'mongodb'
 
 import { IValidatableSchema, IValidationError } from 'movie-db-api'
@@ -5,6 +6,8 @@ import { IValidatableSchema, IValidationError } from 'movie-db-api'
 import { validate } from './validation'
 
 import { getError } from '../utils'
+
+const databaseError = debug('database')
 
 let loader: Promise<MongoClient>
 
@@ -28,6 +31,8 @@ export async function dbConnect(): Promise<Db> {
 
             return client.db()
         } catch (e) {
+            databaseError('unable to connect to database: %s', getError(e))
+
             loader = null
         }
     }
@@ -69,6 +74,8 @@ export abstract class CollectionBase<TType extends { _id: string }> {
             return undefined
         } catch (error) {
             if (error.code !== 121) {
+                databaseError('error during insert: %s', getError(error))
+
                 throw error
             }
 
@@ -79,6 +86,8 @@ export abstract class CollectionBase<TType extends { _id: string }> {
                     ]
                 )
             } catch (e) {
+                databaseError('error during insert validation: %s', getError(e))
+
                 throw error
             }
         }
@@ -96,6 +105,8 @@ export abstract class CollectionBase<TType extends { _id: string }> {
             return undefined
         } catch (error) {
             if (error.code !== 121) {
+                databaseError('error during update: %s', getError(error))
+
                 throw error
             }
 
@@ -106,6 +117,8 @@ export abstract class CollectionBase<TType extends { _id: string }> {
                     ]
                 )
             } catch (e) {
+                databaseError('error during update validation: %s', getError(e))
+
                 throw error
             }
         }

@@ -1,3 +1,4 @@
+import * as debug from 'debug'
 import { FilterQuery } from 'mongodb'
 
 import { IQueryCountInfo, IRecordingQueryRequest, IRecordingQueryResponse } from 'movie-db-api'
@@ -8,6 +9,7 @@ import { validate } from './validation'
 
 export * from './entities/recording'
 
+const databaseTrace = debug('database:trace')
 const dateReg = /^CAST\(N'([^\.]+)(\.\d+)?' AS DateTime\)$/
 
 interface IAggregateCount {
@@ -108,6 +110,8 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
                 },
             },
         ]
+
+        databaseTrace('query recordings: %j', query)
 
         const db = await this.getCollection()
         const result = await db.aggregate<IAggregationResult>(query).toArray()

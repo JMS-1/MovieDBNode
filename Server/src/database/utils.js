@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const debug = require("debug");
 const mongodb_1 = require("mongodb");
 const validation_1 = require("./validation");
 const utils_1 = require("../utils");
+const databaseError = debug('database');
 let loader;
 function sleep(ms) {
     return new Promise(success => setTimeout(success, ms));
@@ -22,6 +24,7 @@ async function dbConnect() {
             return client.db();
         }
         catch (e) {
+            databaseError('unable to connect to database: %s', utils_1.getError(e));
             loader = null;
         }
     }
@@ -54,6 +57,7 @@ class CollectionBase {
         }
         catch (error) {
             if (error.code !== 121) {
+                databaseError('error during insert: %s', utils_1.getError(error));
                 throw error;
             }
             try {
@@ -62,6 +66,7 @@ class CollectionBase {
                 ]);
             }
             catch (e) {
+                databaseError('error during insert validation: %s', utils_1.getError(e));
                 throw error;
             }
         }
@@ -77,6 +82,7 @@ class CollectionBase {
         }
         catch (error) {
             if (error.code !== 121) {
+                databaseError('error during update: %s', utils_1.getError(error));
                 throw error;
             }
             try {
@@ -85,6 +91,7 @@ class CollectionBase {
                 ]);
             }
             catch (e) {
+                databaseError('error during update validation: %s', utils_1.getError(e));
                 throw error;
             }
         }

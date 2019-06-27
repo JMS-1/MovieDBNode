@@ -3,10 +3,12 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+const debug = require("debug");
 const recording_1 = require("./entities/recording");
 const utils_1 = require("./utils");
 const validation_1 = require("./validation");
 __export(require("./entities/recording"));
+const databaseTrace = debug('database:trace');
 const dateReg = /^CAST\(N'([^\.]+)(\.\d+)?' AS DateTime\)$/;
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
 exports.recordingCollection = new (class extends utils_1.CollectionBase {
@@ -79,6 +81,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
                 },
             },
         ];
+        databaseTrace('query recordings: %j', query);
         const db = await this.getCollection();
         const result = await db.aggregate(query).toArray();
         const firstRes = result && result[0];
