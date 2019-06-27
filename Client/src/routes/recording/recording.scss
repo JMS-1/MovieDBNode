@@ -12,10 +12,8 @@
         flex-shrink: 0;
     }
 
-    > .ui.segment {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+    > .ui.pagination {
+        align-self: flex-start;
     }
 
     > .table {

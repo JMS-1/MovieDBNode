@@ -19,8 +19,8 @@ export const containerApi = Router().use(
                     }
                 },
                 request,
-                response
-            )
+                response,
+            ),
         )
         .put('/:id', (request, response, next) =>
             processApiRequest(
@@ -33,7 +33,7 @@ export const containerApi = Router().use(
                     }
                 },
                 request,
-                response
-            )
-        )
+                response,
+            ),
+        ),
 )

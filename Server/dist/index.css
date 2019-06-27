@@ -83,10 +83,8 @@ body {
   .movie-db-recording-route > .ui.segment,
   .movie-db-recording-route > .ui.pagination {
     flex-shrink: 0; }
-  .movie-db-recording-route > .ui.segment {
-    display: flex;
-    flex-direction: row;
-    align-items: center; }
+  .movie-db-recording-route > .ui.pagination {
+    align-self: flex-start; }
   .movie-db-recording-route > .table {
     flex-grow: 1;
     flex-basis: 0; }

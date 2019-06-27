@@ -60,4 +60,8 @@ export class RecordingActions {
     static filterGenre(ids: string[]): local.ISetRecordingGenreFilter {
         return { ids, type: local.recordingActions.setGenreFilter }
     }
+
+    static filterRentTo(rent: boolean): local.ISetRecordingRentToFilter {
+        return { rent, type: local.recordingActions.setRentFilter }
+    }
 }

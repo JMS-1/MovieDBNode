@@ -1248,10 +1248,13 @@ function getInitialState() {
             noSelect: '(alle Sprachen)',
         },
         recording: {
+            anyRent: '(Verleih egal)',
             created: 'Erstellt',
             genres: 'Kategorien',
             languages: 'Sprachen',
             name: 'Name',
+            noRent: 'nicht verliehen',
+            yesRent: 'verliehen',
         },
         routes: {
             container: 'Ablagen',
@@ -1349,6 +1352,9 @@ class RecordingActions {
     static filterGenre(ids) {
         return { ids, type: "movie-db.recordings.filter-genre" };
     }
+    static filterRentTo(rent) {
+        return { rent, type: "movie-db.recordings.filter-rent" };
+    }
 }
 exports.RecordingActions = RecordingActions;
 
@@ -1387,12 +1393,13 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.filter-language"]: this.setLanguageFilter,
             ["movie-db.recordings.set-page"]: this.setPage,
             ["movie-db.recordings.set-prop"]: this.setProperty,
+            ["movie-db.recordings.filter-rent"]: this.setRentFilter,
             ["movie-db.recordings.filter-text"]: this.setTextFilter,
             ["movie-db.recordings.toggle-sort"]: this.setSort,
         };
     }
     getInitialState() {
-        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, resetAfterLoad: undefined, search: '', sort: 'fullName', sortOrder: 'ascending', total: 0 });
+        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', sort: 'fullName', sortOrder: 'ascending', total: 0 });
     }
     startSave(state, request) {
         if (state.workingCopy) {
@@ -1408,6 +1415,7 @@ const controller = new (class extends controller_1.EditController {
             genres: state.genres,
             language: state.language,
             pageSize: state.pageSize,
+            rent: state.rent,
             sort: state.sort,
             sortOrder: state.sortOrder,
         };
@@ -1435,13 +1443,19 @@ const controller = new (class extends controller_1.EditController {
         if (request.text === state.search) {
             return state;
         }
-        return this.sendQuery(Object.assign({}, state, { search: request.text }), true);
+        return this.sendQuery(Object.assign({}, state, { search: request.text || '' }), true);
     }
     setLanguageFilter(state, request) {
         if (request.id === state.language) {
             return state;
         }
-        return this.sendQuery(Object.assign({}, state, { language: request.id }), true);
+        return this.sendQuery(Object.assign({}, state, { language: request.id || undefined }), true);
+    }
+    setRentFilter(state, request) {
+        if (request.rent === state.rent) {
+            return state;
+        }
+        return this.sendQuery(Object.assign({}, state, { rent: typeof request.rent === 'boolean' ? request.rent : undefined }), true);
     }
     setGenreFilter(state, request) {
         return this.sendQuery(Object.assign({}, state, { genres: request.ids || [] }), true);
@@ -1499,6 +1513,11 @@ exports.getRecordingMap = reselect_1.createSelector((state) => state.recording.a
     return map;
 });
 exports.getRecordings = reselect_1.createSelector((state) => state.recording.all, (all) => all.map(r => r._id));
+exports.getRentOptions = reselect_1.createSelector((state) => state.mui.recording, (mui) => [
+    { key: '*', text: mui.anyRent, value: '' },
+    { key: '1', text: mui.yesRent, value: '1' },
+    { key: '0', text: mui.noRent, value: '0' },
+]);
 
 
 /***/ }),
@@ -1893,12 +1912,28 @@ class CRecordingItem extends React.PureComponent {
                 "/",
                 this.props.rentTo),
             React.createElement(semantic_ui_react_1.Table.Cell, { className: 'created' }, this.props.created),
-            React.createElement(semantic_ui_react_1.Table.Cell, { className: 'languages' }, this.props.languages.map(l => (React.createElement(React.Fragment, { key: l },
+            React.createElement(semantic_ui_react_1.Table.Cell, { className: 'languages' }, this.languages.map(l => (React.createElement(React.Fragment, { key: l },
                 React.createElement(languageRedux_1.Language, { id: l }),
                 React.createElement("span", { className: 'separator' }, ", "))))),
-            React.createElement(semantic_ui_react_1.Table.Cell, { className: 'genres' }, this.props.genres.map(l => (React.createElement(React.Fragment, { key: l },
+            React.createElement(semantic_ui_react_1.Table.Cell, { className: 'genres' }, this.genres.map(l => (React.createElement(React.Fragment, { key: l },
                 React.createElement(genreRedux_1.Genre, { id: l }),
                 React.createElement("span", { className: 'separator' }, ", ")))))));
+    }
+    get languages() {
+        const { languageMap } = this.props;
+        return [...(this.props.languages || [])].sort((l, r) => {
+            const left = languageMap[l];
+            const right = languageMap[r];
+            return ((left && left.name) || l).localeCompare((right && right.name) || r);
+        });
+    }
+    get genres() {
+        const { genreMap } = this.props;
+        return [...(this.props.genres || [])].sort((l, r) => {
+            const left = genreMap[l];
+            const right = genreMap[r];
+            return ((left && left.name) || l).localeCompare((right && right.name) || r);
+        });
     }
 }
 exports.CRecordingItem = CRecordingItem;
@@ -1929,11 +1964,13 @@ const none = [];
 function mapStateToProps(state, props) {
     const recording = controller_1.getRecordingMap(state)[props.id];
     return {
+        created: recording && makeTime(new Date(recording.created)),
+        genreMap: controller_1.getGenreMap(state),
+        genres: (recording && recording.genres) || none,
+        languageMap: controller_1.getLanguageMap(state),
+        languages: (recording && recording.languages) || none,
         name: recording && recording.fullName,
         rentTo: recording && recording.rentTo,
-        created: recording && makeTime(new Date(recording.created)),
-        genres: (recording && recording.genres) || none,
-        languages: (recording && recording.languages) || none,
     };
 }
 function mapDispatchToProps(dispatch, props) {
@@ -1964,15 +2001,17 @@ class CRecordingRoute extends React.PureComponent {
         this.sortName = () => this.props.toggleSort('fullName');
         this.sortCreated = () => this.props.toggleSort('created');
         this.onPage = (ev, data) => this.props.setPage(data.activePage);
-        this.setLanguage = (ev, data) => this.props.setLanguage(data.value);
-        this.setGenre = (ev, data) => this.props.setGenres(data.value);
+        this.setLanguage = (ev, data) => this.props.setLanguage(typeof data.value === 'string' ? data.value : undefined);
+        this.setRentTo = (ev, data) => this.props.setRent(data.value === '1' || (data.value !== '0' && undefined));
+        this.setGenre = (ev, data) => this.props.setGenres(Array.isArray(data.value) ? data.value : undefined);
     }
     render() {
         return (React.createElement("div", { className: 'movie-db-recording-route' },
             React.createElement(semanticUiReact.Segment, null,
                 React.createElement(searchRedux_1.RecordingSearch, null),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, onChange: this.setLanguage, options: this.props.languageOptions, placeholder: this.props.languageHint, selection: true, scrolling: true, value: this.props.language || '' }),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, selection: true, scrolling: true, value: this.props.genres })),
+                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setLanguage, options: this.props.languageOptions, placeholder: this.props.languageHint, selection: true, scrolling: true, value: this.props.language || '' }),
+                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, selection: true, scrolling: true, value: this.props.genres }),
+                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setRentTo, options: this.props.rentOptions, placeholder: this.props.rentToHint, selection: true, scrolling: true, value: this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : '' })),
             React.createElement("div", { className: 'table' },
                 React.createElement(semanticUiReact.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },
                     React.createElement(semanticUiReact.Table.Header, null,
@@ -2022,6 +2061,9 @@ function mapStateToProps(state, props) {
         nameHeader: mui.name,
         nameSort: route.sort === 'fullName' ? route.sortOrder : undefined,
         page: route.page,
+        rentOptions: controller.getRentOptions(state),
+        rentTo: route.rent,
+        rentToHint: mui.anyRent,
     };
 }
 function mapDispatchToProps(dispatch, props) {
@@ -2029,6 +2071,7 @@ function mapDispatchToProps(dispatch, props) {
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),
         setPage: page => dispatch(controller.RecordingActions.setPage(page)),
+        setRent: rentTo => dispatch(controller.RecordingActions.filterRentTo(rentTo)),
         toggleSort: sort => dispatch(controller.RecordingActions.setSort(sort)),
     };
 }

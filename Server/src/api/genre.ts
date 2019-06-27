@@ -18,7 +18,7 @@ export const genreApi = Router().use(
                 }
             },
             request,
-            response
-        )
-    )
+            response,
+        ),
+    ),
 )

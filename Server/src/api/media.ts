@@ -18,7 +18,7 @@ export const mediaApi = Router().use(
                 }
             },
             request,
-            response
-        )
-    )
+            response,
+        ),
+    ),
 )

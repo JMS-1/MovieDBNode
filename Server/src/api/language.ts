@@ -18,7 +18,7 @@ export const languageApi = Router().use(
                 }
             },
             request,
-            response
-        )
-    )
+            response,
+        ),
+    ),
 )

@@ -18,7 +18,7 @@ export const seriesApi = Router().use(
                 }
             },
             request,
-            response
-        )
-    )
+            response,
+        ),
+    ),
 )

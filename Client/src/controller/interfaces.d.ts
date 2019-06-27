@@ -25,7 +25,7 @@ declare module 'movie-db-client' {
     }
 
     interface ISelectOption<TValue = string> {
-        readonly key: TValue
+        readonly key: TValue | string
         readonly text: string
         readonly value: TValue
     }

@@ -48,10 +48,13 @@ export function getInitialState(): IMuiState {
             noSelect: '(alle Sprachen)',
         },
         recording: {
+            anyRent: '(Verleih egal)',
             created: 'Erstellt',
             genres: 'Kategorien',
             languages: 'Sprachen',
             name: 'Name',
+            noRent: 'nicht verliehen',
+            yesRent: 'verliehen',
         },
         routes: {
             container: 'Ablagen',

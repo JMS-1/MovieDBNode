@@ -22,10 +22,13 @@ declare module 'movie-db-client' {
             readonly noSelect: string
         }
         readonly recording: {
-            readonly name: string
+            readonly anyRent: string
             readonly created: string
-            readonly languages: string
             readonly genres: string
+            readonly languages: string
+            readonly name: string
+            readonly noRent: string
+            readonly yesRent: string
         }
         readonly routes: {
             readonly container: string

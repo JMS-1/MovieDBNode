@@ -21,6 +21,7 @@ type TRecordingActions =
     | local.ISetRecordingLanguageFilter
     | local.ISetRecordingPage
     | local.ISetRecordingProperty<any>
+    | local.ISetRecordingRentToFilter
     | local.ISetRecordingTextFilter
     | local.IToggleRecordingSort
 
@@ -40,6 +41,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.setLanguageFilter]: this.setLanguageFilter,
             [local.recordingActions.setPage]: this.setPage,
             [local.recordingActions.setProp]: this.setProperty,
+            [local.recordingActions.setRentFilter]: this.setRentFilter,
             [local.recordingActions.setTextFilter]: this.setTextFilter,
             [local.recordingActions.sort]: this.setSort,
         }
@@ -56,6 +58,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             languageInfo: [],
             page: 1,
             pageSize: 15,
+            rent: undefined,
             resetAfterLoad: undefined,
             search: '',
             sort: 'fullName',
@@ -80,6 +83,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             genres: state.genres,
             language: state.language,
             pageSize: state.pageSize,
+            rent: state.rent,
             sort: state.sort,
             sortOrder: state.sortOrder,
         }
@@ -123,7 +127,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             return state
         }
 
-        return this.sendQuery({ ...state, search: request.text }, true)
+        return this.sendQuery({ ...state, search: request.text || '' }, true)
     }
 
     private setLanguageFilter(
@@ -134,7 +138,18 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             return state
         }
 
-        return this.sendQuery({ ...state, language: request.id }, true)
+        return this.sendQuery({ ...state, language: request.id || undefined }, true)
+    }
+
+    private setRentFilter(
+        state: local.IRecordingState,
+        request: local.ISetRecordingRentToFilter,
+    ): local.IRecordingState {
+        if (request.rent === state.rent) {
+            return state
+        }
+
+        return this.sendQuery({ ...state, rent: typeof request.rent === 'boolean' ? request.rent : undefined }, true)
     }
 
     private setGenreFilter(

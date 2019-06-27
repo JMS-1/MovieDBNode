@@ -5,7 +5,7 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './item'
 
-import { getRecordingMap } from '../../../controller'
+import { getGenreMap, getLanguageMap, getRecordingMap } from '../../../controller'
 
 function makeNumber(n: number): string {
     return n < 10 ? `0${n}` : `${n}`
@@ -23,11 +23,13 @@ function mapStateToProps(state: IClientState, props: local.IRecordingItemUiProps
     const recording = getRecordingMap(state)[props.id]
 
     return {
+        created: recording && makeTime(new Date(recording.created)),
+        genreMap: getGenreMap(state),
+        genres: (recording && recording.genres) || none,
+        languageMap: getLanguageMap(state),
+        languages: (recording && recording.languages) || none,
         name: recording && recording.fullName,
         rentTo: recording && recording.rentTo,
-        created: recording && makeTime(new Date(recording.created)),
-        genres: (recording && recording.genres) || none,
-        languages: (recording && recording.languages) || none,
     }
 }
 

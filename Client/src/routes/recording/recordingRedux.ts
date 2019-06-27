@@ -27,22 +27,26 @@ function mapStateToProps(state: IClientState, props: local.IRecordingRouteUiProp
         nameHeader: mui.name,
         nameSort: route.sort === 'fullName' ? route.sortOrder : undefined,
         page: route.page,
+        rentOptions: controller.getRentOptions(state),
+        rentTo: route.rent,
+        rentToHint: mui.anyRent,
     }
 }
 
 function mapDispatchToProps(
     dispatch: Dispatch<Action>,
-    props: local.IRecordingRouteUiProps
+    props: local.IRecordingRouteUiProps,
 ): local.IRecordingRouteActions {
     return {
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),
         setPage: page => dispatch(controller.RecordingActions.setPage(page)),
+        setRent: rentTo => dispatch(controller.RecordingActions.filterRentTo(rentTo)),
         toggleSort: sort => dispatch(controller.RecordingActions.setSort(sort)),
     }
 }
 
 export const RecordingRoute = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(local.CRecordingRoute)

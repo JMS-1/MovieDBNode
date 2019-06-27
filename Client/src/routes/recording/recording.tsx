@@ -18,25 +18,29 @@ export interface IRecordingRouteUiProps extends RouteComponentProps<IRecordingRo
 export interface IRecordingRouteProps {
     createdHeader: string
     createdSort: TSortOrder
-    genres: string[]
+    genreHeader: string
     genreHint: string
     genreOptions: ISelectOption[]
-    genreHeader: string
+    genres: string[]
     language: string
+    languageHeader: string
     languageHint: string
     languageOptions: ISelectOption[]
-    languageHeader: string
     lastPage: number
     list: string[]
     nameHeader: string
     nameSort: TSortOrder
     page: number
+    rentOptions: ISelectOption[]
+    rentTo: boolean
+    rentToHint: string
 }
 
 export interface IRecordingRouteActions {
     setGenres(ids: string[]): void
     setLanguage(id: string): void
     setPage(page: number): void
+    setRent(rentTo: boolean): void
     toggleSort(sort: TRecordingSort): void
 }
 
@@ -50,6 +54,7 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                     <RecordingSearch />
                     <semanticUiReact.Dropdown
                         clearable
+                        fluid
                         onChange={this.setLanguage}
                         options={this.props.languageOptions}
                         placeholder={this.props.languageHint}
@@ -59,6 +64,7 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                     />
                     <semanticUiReact.Dropdown
                         clearable
+                        fluid
                         multiple
                         onChange={this.setGenre}
                         options={this.props.genreOptions}
@@ -66,6 +72,16 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         selection
                         scrolling
                         value={this.props.genres}
+                    />
+                    <semanticUiReact.Dropdown
+                        clearable
+                        fluid
+                        onChange={this.setRentTo}
+                        options={this.props.rentOptions}
+                        placeholder={this.props.rentToHint}
+                        selection
+                        scrolling
+                        value={this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : ''}
                     />
                 </semanticUiReact.Segment>
                 <div className='table'>
@@ -118,8 +134,11 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
         this.props.setPage(data.activePage as number)
 
     private readonly setLanguage = (ev: React.SyntheticEvent<HTMLElement>, data: semanticUiReact.DropdownProps): void =>
-        this.props.setLanguage(data.value as string)
+        this.props.setLanguage(typeof data.value === 'string' ? data.value : undefined)
+
+    private readonly setRentTo = (ev: React.SyntheticEvent<HTMLElement>, data: semanticUiReact.DropdownProps): void =>
+        this.props.setRent(data.value === '1' || (data.value !== '0' && undefined))
 
     private readonly setGenre = (ev: React.SyntheticEvent<HTMLElement>, data: semanticUiReact.DropdownProps): void =>
-        this.props.setGenres(data.value as string[])
+        this.props.setGenres(Array.isArray(data.value) ? (data.value as string[]) : undefined)
 }

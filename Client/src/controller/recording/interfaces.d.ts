@@ -12,6 +12,7 @@ declare module 'movie-db-client' {
         readonly languageInfo: api.IQueryCountInfo[]
         readonly page: number
         readonly pageSize: number
+        readonly rent: boolean
         readonly resetAfterLoad: boolean
         readonly search: string
         readonly sort: api.TRecordingSort
@@ -30,6 +31,7 @@ declare module 'movie-db-client' {
         setLanguageFilter = 'movie-db.recordings.filter-language',
         setPage = 'movie-db.recordings.set-page',
         setProp = 'movie-db.recordings.set-prop',
+        setRentFilter = 'movie-db.recordings.filter-rent',
         setTextFilter = 'movie-db.recordings.filter-text',
         sort = 'movie-db.recordings.toggle-sort',
     }
@@ -91,5 +93,10 @@ declare module 'movie-db-client' {
     interface ISetRecordingGenreFilter extends Action {
         ids: string[]
         type: recordingActions.setGenreFilter
+    }
+
+    interface ISetRecordingRentToFilter extends Action {
+        rent: boolean
+        type: recordingActions.setRentFilter
     }
 }
