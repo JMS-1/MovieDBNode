@@ -82,15 +82,16 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             },
         ];
         databaseTrace('query recordings: %j', query);
-        const db = await this.getCollection();
-        const result = await db.aggregate(query).toArray();
+        const me = await this.getCollection();
+        const result = await me.aggregate(query).toArray();
         const firstRes = result && result[0];
         const countRes = firstRes && firstRes.count && firstRes.count[0];
         return {
+            count: (countRes && countRes.total) || 0,
             genres: (firstRes && firstRes.genres) || [],
             languages: (firstRes && firstRes.languages) || [],
-            total: (countRes && countRes.total) || 0,
-            view: (firstRes && firstRes.view) || [],
+            total: await me.countDocuments(),
+            view: ((firstRes && firstRes.view) || []).map(recording_1.toProtocol),
         };
     }
 })();

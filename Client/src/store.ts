@@ -21,6 +21,7 @@ export function initializeStore(): Store<IClientState> {
             mui: controller.MuiReducer,
             router: connectRouter(history),
             series: controller.SeriesReducer,
+            recording: controller.RecordingReducer,
         }),
         applyMiddleware(routerMiddleware(history)),
     )

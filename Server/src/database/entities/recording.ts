@@ -1,25 +1,14 @@
+import { url } from 'inspector'
+
+import { INewRecording, IRecording, IRecordingLink } from 'movie-db-api'
+
 import { IObjectFieldSchema, ISchema, isoDate, uniqueId } from './utils'
 
 export const collectionName = 'recordings'
 
-export interface IDbLink {
-    description?: string
-    name: string
-    url: string
-}
+export interface IDbLink extends IRecordingLink {}
 
-export interface IDbRecording {
-    _id: string
-    created: string
-    description?: string
-    genres: string[]
-    languages: string[]
-    links: IDbLink[]
-    media: string
-    name: string
-    rentTo?: string
-    series?: string
-}
+export interface IDbRecording extends IRecording {}
 
 const LinkSubSchema: IObjectFieldSchema<IDbLink> = {
     type: 'object',
@@ -115,4 +104,51 @@ export const RecordingSchema: ISchema<IDbRecording> = {
         },
     },
     required: ['_id', 'name', 'created', 'media', 'genres', 'languages', 'links'],
+}
+
+function linkToProtocol(link: IDbLink): IRecordingLink {
+    return link
+}
+
+function linkToEntity(link: IRecordingLink): IDbLink {
+    const dbLink: IDbLink = {
+        name: link.name,
+        url: url.name,
+    }
+
+    if (link.description) {
+        dbLink.description = link.description
+    }
+
+    return dbLink
+}
+
+export function toProtocol(recording: IDbRecording): IRecording {
+    return { ...recording, links: (recording.links || []).map(linkToProtocol) }
+}
+
+export function toEntity(recording: INewRecording, id: string, created: string): IDbRecording {
+    const dbRecording: IDbRecording = {
+        _id: id,
+        created,
+        genres: recording.genres || [],
+        languages: recording.languages || [],
+        links: (recording.links || []).map(linkToEntity),
+        media: recording.media,
+        name: recording.name,
+    }
+
+    if (recording.description) {
+        dbRecording.description = recording.description
+    }
+
+    if (recording.rentTo) {
+        dbRecording.rentTo = recording.rentTo
+    }
+
+    if (recording.series) {
+        dbRecording.series = recording.series
+    }
+
+    return dbRecording
 }

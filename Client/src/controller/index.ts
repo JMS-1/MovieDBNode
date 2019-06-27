@@ -7,6 +7,7 @@ export * from './language'
 export * from './media'
 export * from './mui'
 export * from './series'
+export * from './recording'
 
 export function getErrors<TType, TProp extends keyof TType>(
     errors: IValidationError[],

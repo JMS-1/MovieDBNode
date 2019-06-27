@@ -14,6 +14,7 @@ declare module 'movie-db-client' {
         readonly mui: IMuiState
         readonly router: RouterState
         readonly series: ISeriesState
+        readonly recording: IRecordingState
     }
 
     type IItemMui<TItem> = Required<{ [prop in keyof TItem]: string }>

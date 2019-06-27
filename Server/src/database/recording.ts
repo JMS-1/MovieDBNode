@@ -3,7 +3,7 @@ import { FilterQuery } from 'mongodb'
 
 import { IQueryCountInfo, IRecordingQueryRequest, IRecordingQueryResponse } from 'movie-db-api'
 
-import { collectionName, IDbRecording, RecordingSchema } from './entities/recording'
+import { collectionName, IDbRecording, RecordingSchema, toProtocol } from './entities/recording'
 import { CollectionBase } from './utils'
 import { validate } from './validation'
 
@@ -113,17 +113,18 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
 
         databaseTrace('query recordings: %j', query)
 
-        const db = await this.getCollection()
-        const result = await db.aggregate<IAggregationResult>(query).toArray()
+        const me = await this.getCollection()
+        const result = await me.aggregate<IAggregationResult>(query).toArray()
 
         const firstRes = result && result[0]
         const countRes = firstRes && firstRes.count && firstRes.count[0]
 
         return {
+            count: (countRes && countRes.total) || 0,
             genres: (firstRes && firstRes.genres) || [],
             languages: (firstRes && firstRes.languages) || [],
-            total: (countRes && countRes.total) || 0,
-            view: (firstRes && firstRes.view) || [],
+            total: await me.countDocuments(),
+            view: ((firstRes && firstRes.view) || []).map(toProtocol),
         }
     }
 })()

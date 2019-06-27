@@ -165,7 +165,8 @@ class CRoot extends React.PureComponent {
                     React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
             React.createElement("div", { className: 'content' },
                 React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }),
-                React.createElement(react_router_1.Route, { path: '/recording/:id?', component: recordingRedux_1.RecordingRoute }))));
+                React.createElement(react_router_1.Route, { path: '/recording/:id?', component: recordingRedux_1.RecordingRoute }),
+                React.createElement(react_router_1.Route, { path: '/', exact: true, component: recordingRedux_1.RecordingRoute }))));
     }
 }
 exports.CRoot = CRoot;
@@ -768,6 +769,7 @@ __export(__webpack_require__(/*! ./language */ "./Client/src/controller/language
 __export(__webpack_require__(/*! ./media */ "./Client/src/controller/media/index.ts"));
 __export(__webpack_require__(/*! ./mui */ "./Client/src/controller/mui/index.ts"));
 __export(__webpack_require__(/*! ./series */ "./Client/src/controller/series/index.ts"));
+__export(__webpack_require__(/*! ./recording */ "./Client/src/controller/recording/index.ts"));
 function getErrors(errors, prop, edit) {
     const list = errors && errors.filter(e => e.property === prop);
     return list && list.length > 0 && list.map(e => `${e.message} (${e.constraint})`);
@@ -1020,6 +1022,143 @@ exports.MuiReducer = MuiReducer;
 
 /***/ }),
 
+/***/ "./Client/src/controller/recording/actions.ts":
+/*!****************************************************!*\
+  !*** ./Client/src/controller/recording/actions.ts ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class RecordingActions {
+    static load(response) {
+        return { list: response.view, type: "movie-db.recordings.query-done" };
+    }
+    static select(id) {
+        return { id, type: "movie-db.recordings.select" };
+    }
+    static setProperty(prop, value) {
+        return { prop, value, type: "movie-db.recordings.set-prop" };
+    }
+    static saveDone(response) {
+        return { item: response.recording, errors: response.errors, type: "movie-db.recordings.save-done" };
+    }
+    static cancelEdit() {
+        return { type: "movie-db.recordings.cancel-edit" };
+    }
+    static save() {
+        return { type: "movie-db.recordings.save" };
+    }
+    static query() {
+        return { type: "movie-db.recordings.query" };
+    }
+}
+exports.RecordingActions = RecordingActions;
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/recording/controller.ts":
+/*!*******************************************************!*\
+  !*** ./Client/src/controller/recording/controller.ts ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/recording/actions.ts");
+const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
+const store_1 = __webpack_require__(/*! ../../store */ "./Client/src/store.ts");
+const controller = new (class extends controller_1.EditController {
+    constructor() {
+        super(...arguments);
+        this.schema = 'recording';
+    }
+    getReducerMap() {
+        return {
+            ["movie-db.application.load-schemas"]: this.loadSchema,
+            ["movie-db.recordings.cancel-edit"]: this.cancelEdit,
+            ["movie-db.recordings.query"]: this.query,
+            ["movie-db.recordings.query-done"]: this.load,
+            ["movie-db.recordings.save"]: this.startSave,
+            ["movie-db.recordings.save-done"]: this.saveDone,
+            ["movie-db.recordings.select"]: this.select,
+            ["movie-db.recordings.set-prop"]: this.setProperty,
+        };
+    }
+    getInitialState() {
+        return Object.assign({}, super.getInitialState(), { page: 1, pageSize: 15, sort: 'name', sortOrder: 'ascending' });
+    }
+    startSave(state, request) {
+        if (state.workingCopy) {
+            store_1.ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, actions_1.RecordingActions.saveDone);
+        }
+        return state;
+    }
+    query(state, request) {
+        const req = {
+            firstPage: state.page - 1,
+            pageSize: state.pageSize,
+            sort: state.sort,
+            sortOrder: state.sortOrder,
+        };
+        store_1.ServerApi.post('recording/search', req, actions_1.RecordingActions.load);
+        return state;
+    }
+    load(state, response) {
+        state = super.load(state, response);
+        return state;
+    }
+})();
+exports.RecordingReducer = controller.reducer;
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/recording/index.ts":
+/*!**************************************************!*\
+  !*** ./Client/src/controller/recording/index.ts ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(/*! ./actions */ "./Client/src/controller/recording/actions.ts"));
+__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/recording/controller.ts"));
+__export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/recording/selectors.ts"));
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/recording/selectors.ts":
+/*!******************************************************!*\
+  !*** ./Client/src/controller/recording/selectors.ts ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+exports.getRecordingMap = reselect_1.createSelector((state) => state.recording.all, (all) => {
+    const map = {};
+    all.forEach(r => (map[r._id] = r));
+    return map;
+});
+
+
+/***/ }),
+
 /***/ "./Client/src/controller/series/actions.ts":
 /*!*************************************************!*\
   !*** ./Client/src/controller/series/actions.ts ***!
@@ -1118,6 +1257,7 @@ store_1.ServerApi.get('language', controller.LanguageActions.load);
 store_1.ServerApi.get('media', controller.MediaActions.load);
 store_1.ServerApi.get('schemas', controller.ApplicationActions.loadSchemas);
 store_1.ServerApi.get('series', controller.SeriesActions.load);
+store.dispatch(controller.RecordingActions.query());
 const css = document.querySelector('head > link[rel="stylesheet"][href="index.css"]');
 document.addEventListener('keydown', (ev) => ev.ctrlKey && ev.key === 'F12' && (css.href = css.href));
 
@@ -1473,6 +1613,7 @@ function initializeStore() {
         mui: controller.MuiReducer,
         router: connected_react_router_1.connectRouter(exports.history),
         series: controller.SeriesReducer,
+        recording: controller.RecordingReducer,
     }), redux_1.applyMiddleware(connected_react_router_1.routerMiddleware(exports.history)));
     return store;
 }

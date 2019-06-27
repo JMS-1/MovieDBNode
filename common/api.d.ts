@@ -61,10 +61,6 @@ declare module 'movie-db-api' {
         containers: IContainer[]
     }
 
-    interface IAddContainerRequest {
-        container: INewContainer
-    }
-
     interface IAddContainerResponse {
         container: IContainer
         errors: IValidationError[]
@@ -73,10 +69,6 @@ declare module 'movie-db-api' {
     interface IUpdateContainerResponse {
         container: IContainer
         errors: IValidationError[]
-    }
-
-    interface IDeleteContainerRequest {
-        id: string
     }
 
     interface IDeleteContainerResponse {
@@ -136,6 +128,10 @@ declare module 'movie-db-api' {
         series: ISeries[]
     }
 
+    type TRecordingSort = 'name' | 'created'
+
+    type TSortOrder = 'ascending' | 'descending'
+
     interface IRecordingQueryRequest {
         firstPage: number
         genres?: string[]
@@ -145,8 +141,8 @@ declare module 'movie-db-api' {
         pageSize: number
         rent?: boolean
         series?: string[]
-        sort: 'name' | 'created'
-        sortOrder: 'ascending' | 'descending'
+        sort: TRecordingSort
+        sortOrder: TSortOrder
     }
 
     interface IQueryCountInfo {
@@ -154,10 +150,48 @@ declare module 'movie-db-api' {
         count: number
     }
 
+    interface IRecordingLink {
+        description?: string
+        name: string
+        url: string
+    }
+
+    interface INewRecording {
+        description?: string
+        genres: string[]
+        languages: string[]
+        links: IRecordingLink[]
+        media: string
+        name: string
+        rentTo?: string
+        series?: string
+    }
+
+    interface IRecording extends INewRecording {
+        _id: string
+        created: string
+    }
+
     interface IRecordingQueryResponse {
+        count: number
         genres: IQueryCountInfo[]
         languages: IQueryCountInfo[]
         total: number
         view: any[]
+    }
+
+    interface IAddRecordingResponse {
+        errors: IValidationError[]
+        recording: IRecording
+    }
+
+    interface IUpdateRecordingResponse {
+        errors: IValidationError[]
+        recording: IRecording
+    }
+
+    interface IDeleteRecordingResponse {
+        errors: IValidationError[]
+        id: string
     }
 }

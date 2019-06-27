@@ -107,6 +107,10 @@ class CollectionBase {
         }
         return query.toArray();
     }
+    async findOne(id) {
+        const me = await this.getCollection();
+        return me.findOne({ _id: id.toString() });
+    }
 }
 exports.CollectionBase = CollectionBase;
 

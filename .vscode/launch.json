@@ -19,7 +19,7 @@
             },
             "sourceMaps": true,
             "type": "chrome",
-            "url": "http://localhost:29099/#!/recording",
+            "url": "http://localhost:29099",
             "userDataDir": "${workspaceFolder}/.vscode/chrome",
             "webRoot": "${workspaceFolder}"
         },

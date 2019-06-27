@@ -39,6 +39,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
                 <div className='content'>
                     <Route path='/container/:id?' component={ContainerRoute} />
                     <Route path='/recording/:id?' component={RecordingRoute} />
+                    <Route path='/' exact component={RecordingRoute} />
                 </div>
             </div>
         )

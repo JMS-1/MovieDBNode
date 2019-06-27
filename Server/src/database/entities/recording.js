@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const inspector_1 = require("inspector");
 const utils_1 = require("./utils");
 exports.collectionName = 'recordings';
 const LinkSubSchema = {
@@ -96,5 +97,44 @@ exports.RecordingSchema = {
     },
     required: ['_id', 'name', 'created', 'media', 'genres', 'languages', 'links'],
 };
+function linkToProtocol(link) {
+    return link;
+}
+function linkToEntity(link) {
+    const dbLink = {
+        name: link.name,
+        url: inspector_1.url.name,
+    };
+    if (link.description) {
+        dbLink.description = link.description;
+    }
+    return dbLink;
+}
+function toProtocol(recording) {
+    return Object.assign({}, recording, { links: (recording.links || []).map(linkToProtocol) });
+}
+exports.toProtocol = toProtocol;
+function toEntity(recording, id, created) {
+    const dbRecording = {
+        _id: id,
+        created,
+        genres: recording.genres || [],
+        languages: recording.languages || [],
+        links: (recording.links || []).map(linkToEntity),
+        media: recording.media,
+        name: recording.name,
+    };
+    if (recording.description) {
+        dbRecording.description = recording.description;
+    }
+    if (recording.rentTo) {
+        dbRecording.rentTo = recording.rentTo;
+    }
+    if (recording.series) {
+        dbRecording.series = recording.series;
+    }
+    return dbRecording;
+}
+exports.toEntity = toEntity;
 
 //# sourceMappingURL=recording.js.map

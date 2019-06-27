@@ -139,4 +139,10 @@ export abstract class CollectionBase<TType extends { _id: string }> {
 
         return query.toArray()
     }
+
+    async findOne(id: string): Promise<TType> {
+        const me = await this.getCollection()
+
+        return me.findOne({ _id: id.toString() })
+    }
 }
