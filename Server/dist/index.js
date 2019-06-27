@@ -255,10 +255,11 @@ class CRoot extends React.PureComponent {
         const { errors, busy } = this.props;
         return (React.createElement("div", { className: 'movie-db-root' },
             React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: busy || errors.length > 0 },
-                React.createElement(semantic_ui_react_1.Loader, { inverted: true, size: 'massive', disabled: !busy }),
+                React.createElement(semantic_ui_react_1.Loader, { disabled: !busy }),
                 React.createElement(semantic_ui_react_1.Message, { negative: true, hidden: errors.length < 1, onDismiss: this.props.clearErrors },
                     React.createElement(semantic_ui_react_1.Header, null, this.props.title),
                     React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
+            React.createElement(semantic_ui_react_1.Menu, null),
             React.createElement("div", { className: 'content' },
                 React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }),
                 React.createElement(react_router_1.Route, { path: '/recording/:id?', component: recordingRedux_1.RecordingRoute }),
@@ -285,10 +286,8 @@ const local = __webpack_require__(/*! ./root */ "./Client/src/components/root/ro
 const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
     const route = state.application;
-    const busy = Date.now() - route.busySince;
-    const requests = route.requests;
     return {
-        busy: requests > 1 || (requests > 0 && busy >= 250),
+        busy: route.requests > 0,
         errors: route.errors,
         title: state.mui.webError,
     };

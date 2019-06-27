@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Route } from 'react-router'
-import { Dimmer, Header, Loader, Message } from 'semantic-ui-react'
+import { Dimmer, Header, Loader, Menu, Message } from 'semantic-ui-react'
 
 import { ContainerRoute } from '../../routes/container/containerRedux'
 import { RecordingRoute } from '../../routes/recording/recordingRedux'
@@ -26,7 +26,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
         return (
             <div className='movie-db-root'>
                 <Dimmer page active={busy || errors.length > 0}>
-                    <Loader inverted size='massive' disabled={!busy} />
+                    <Loader disabled={!busy} />
                     <Message negative hidden={errors.length < 1} onDismiss={this.props.clearErrors}>
                         <Header>{this.props.title}</Header>
                         <Message.List>
@@ -36,6 +36,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
                         </Message.List>
                     </Message>
                 </Dimmer>
+                <Menu />
                 <div className='content'>
                     <Route path='/container/:id?' component={ContainerRoute} />
                     <Route path='/recording/:id?' component={RecordingRoute} />

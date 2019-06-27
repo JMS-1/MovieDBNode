@@ -9,11 +9,9 @@ import { ApplicationActions } from '../../controller'
 
 function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.IRootProps {
     const route = state.application
-    const busy = Date.now() - route.busySince
-    const requests = route.requests
 
     return {
-        busy: requests > 1 || (requests > 0 && busy >= 250),
+        busy: route.requests > 0,
         errors: route.errors,
         title: state.mui.webError,
     }
