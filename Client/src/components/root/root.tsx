@@ -9,19 +9,28 @@ export interface IRootUiProps {}
 
 export interface IRootProps {
     busy: boolean
+    containerRoute: string
     errors: string[]
+    path: string
+    recordingRoute: string
     title: string
 }
 
 export interface IRootActions {
     clearErrors(): void
+    goto(path: string): void
 }
 
 export type TRootProps = IRootProps & IRootUiProps & IRootActions
 
+const containerRoute = '/container'
+const recordingRoute = '/recording'
+
 export class CRoot extends React.PureComponent<TRootProps> {
     render(): JSX.Element {
-        const { errors, busy } = this.props
+        const { errors, busy, path } = this.props
+        const container = path.startsWith(containerRoute)
+        const recording = path.startsWith(recordingRoute) || path === '/'
 
         return (
             <div className='movie-db-root'>
@@ -36,13 +45,24 @@ export class CRoot extends React.PureComponent<TRootProps> {
                         </Message.List>
                     </Message>
                 </Dimmer>
-                <Menu />
+                <Menu borderless pointing>
+                    <Menu.Item active={recording} onClick={this.gotoRecordings}>
+                        {this.props.recordingRoute}
+                    </Menu.Item>
+                    <Menu.Item active={container} onClick={this.gotoContainer}>
+                        {this.props.containerRoute}
+                    </Menu.Item>
+                </Menu>
                 <div className='content'>
-                    <Route path='/container/:id?' component={ContainerRoute} />
-                    <Route path='/recording/:id?' component={RecordingRoute} />
+                    <Route path={`${containerRoute}/:id?`} component={ContainerRoute} />
+                    <Route path={`${recordingRoute}/:id?`} component={RecordingRoute} />
                     <Route path='/' exact component={RecordingRoute} />
                 </div>
             </div>
         )
     }
+
+    private readonly gotoContainer = (): void => this.props.goto(containerRoute)
+
+    private readonly gotoRecordings = (): void => this.props.goto(recordingRoute)
 }

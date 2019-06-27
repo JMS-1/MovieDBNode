@@ -95,11 +95,10 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
                 $match: { fullName: { $regex: req.fullName.toString().replace(escapeReg, '\\$&'), $options: 'i' } },
             });
         }
+        const baseQuery = [...query];
         query.push({
             $facet: {
                 count: [{ $count: 'total' }],
-                languages: [{ $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
-                genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
                 view: [
                     { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
                     { $skip: 1 * req.firstPage * req.pageSize },
@@ -112,11 +111,35 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         const result = await me.aggregate(query).toArray();
         const firstRes = result && result[0];
         const countRes = firstRes && firstRes.count && firstRes.count[0];
+        const languageQuery = filter.languages;
+        delete filter.languages;
+        const languageInfo = await me
+            .aggregate([
+            ...baseQuery,
+            { $unwind: '$languages' },
+            { $group: { _id: '$languages', count: { $sum: 1 } } },
+        ])
+            .toArray();
+        if (languageQuery) {
+            filter.languages = languageQuery;
+        }
+        const genreQuery = filter.genres;
+        delete filter.genres;
+        const genreInfo = await me
+            .aggregate([
+            ...baseQuery,
+            { $unwind: '$genres' },
+            { $group: { _id: '$genres', count: { $sum: 1 } } },
+        ])
+            .toArray();
+        if (genreQuery) {
+            filter.genres = genreQuery;
+        }
         return {
             correlationId: req.correlationId,
             count: (countRes && countRes.total) || 0,
-            genres: (firstRes && firstRes.genres) || [],
-            languages: (firstRes && firstRes.languages) || [],
+            genres: genreInfo || [],
+            languages: languageInfo || [],
             total: await me.countDocuments(),
             view: (firstRes && firstRes.view) || [],
         };

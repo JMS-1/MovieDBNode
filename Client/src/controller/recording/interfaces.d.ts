@@ -7,6 +7,7 @@ declare module 'movie-db-client' {
         readonly correlationId: string
         readonly count: number
         readonly genres: api.IQueryCountInfo[]
+        readonly language: string
         readonly languages: api.IQueryCountInfo[]
         readonly page: number
         readonly pageSize: number
@@ -24,10 +25,11 @@ declare module 'movie-db-client' {
         save = 'movie-db.recordings.save',
         saveDone = 'movie-db.recordings.save-done',
         select = 'movie-db.recordings.select',
+        setLanguageFilter = 'movie-db.recordings.filter-language',
         setPage = 'movie-db.recordings.set-page',
         setProp = 'movie-db.recordings.set-prop',
-        sort = 'movie-db.recordings.toggle-sort',
         setTextFilter = 'movie-db.recordings.filter-text',
+        sort = 'movie-db.recordings.toggle-sort',
     }
 
     interface ILoadRecordings extends IGenericLoad<api.IRecording> {
@@ -77,5 +79,10 @@ declare module 'movie-db-client' {
     interface ISetRecordingTextFilter extends Action {
         text: string
         type: recordingActions.setTextFilter
+    }
+
+    interface ISetRecordingLanguageFilter extends Action {
+        id: string
+        type: recordingActions.setLanguageFilter
     }
 }

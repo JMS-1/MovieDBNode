@@ -250,19 +250,30 @@ const react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/r
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const containerRedux_1 = __webpack_require__(/*! ../../routes/container/containerRedux */ "./Client/src/routes/container/containerRedux.ts");
 const recordingRedux_1 = __webpack_require__(/*! ../../routes/recording/recordingRedux */ "./Client/src/routes/recording/recordingRedux.ts");
+const containerRoute = '/container';
+const recordingRoute = '/recording';
 class CRoot extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.gotoContainer = () => this.props.goto(containerRoute);
+        this.gotoRecordings = () => this.props.goto(recordingRoute);
+    }
     render() {
-        const { errors, busy } = this.props;
+        const { errors, busy, path } = this.props;
+        const container = path.startsWith(containerRoute);
+        const recording = path.startsWith(recordingRoute) || path === '/';
         return (React.createElement("div", { className: 'movie-db-root' },
             React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: busy || errors.length > 0 },
                 React.createElement(semantic_ui_react_1.Loader, { disabled: !busy }),
                 React.createElement(semantic_ui_react_1.Message, { negative: true, hidden: errors.length < 1, onDismiss: this.props.clearErrors },
                     React.createElement(semantic_ui_react_1.Header, null, this.props.title),
                     React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
-            React.createElement(semantic_ui_react_1.Menu, null),
+            React.createElement(semantic_ui_react_1.Menu, { borderless: true, pointing: true },
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: recording, onClick: this.gotoRecordings }, this.props.recordingRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: container, onClick: this.gotoContainer }, this.props.containerRoute)),
             React.createElement("div", { className: 'content' },
-                React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }),
-                React.createElement(react_router_1.Route, { path: '/recording/:id?', component: recordingRedux_1.RecordingRoute }),
+                React.createElement(react_router_1.Route, { path: `${containerRoute}/:id?`, component: containerRedux_1.ContainerRoute }),
+                React.createElement(react_router_1.Route, { path: `${recordingRoute}/:id?`, component: recordingRedux_1.RecordingRoute }),
                 React.createElement(react_router_1.Route, { path: '/', exact: true, component: recordingRedux_1.RecordingRoute }))));
     }
 }
@@ -281,20 +292,26 @@ exports.CRoot = CRoot;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./root */ "./Client/src/components/root/root.tsx");
 const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
+    const mui = state.mui.routes;
     const route = state.application;
     return {
         busy: route.requests > 0,
+        containerRoute: mui.container,
         errors: route.errors,
+        path: state.router.location.pathname,
+        recordingRoute: mui.recording,
         title: state.mui.webError,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
         clearErrors: () => dispatch(controller_1.ApplicationActions.clearErrors()),
+        goto: path => dispatch(connected_react_router_1.routerActions.push(path)),
     };
 }
 exports.Root = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRoot);
@@ -1053,6 +1070,22 @@ exports.getLanguageMap = reselect_1.createSelector((state) => state.language.all
     all.forEach(l => (map[l._id] = l));
     return map;
 });
+exports.getLanguageCountMap = reselect_1.createSelector((state) => state.recording.languages, (all) => {
+    const map = {};
+    all.forEach(l => (map[l._id] = l));
+    return map;
+});
+exports.getLanguageOptions = reselect_1.createSelector((state) => state.language.all, (state) => state.mui.language.noSelect, exports.getLanguageCountMap, (all, noSelect, counts) => {
+    const options = all
+        .map(l => {
+        const info = counts[l._id];
+        return info && info.count && { key: l._id, text: `${l.name || l._id} (${info.count})`, value: l._id };
+    })
+        .filter(o => o);
+    options.sort((l, r) => l.text.localeCompare(r.text));
+    options.unshift({ key: '*', text: noSelect, value: '' });
+    return options;
+});
 
 
 /***/ }),
@@ -1194,11 +1227,18 @@ function getInitialState() {
                 },
             },
         },
+        language: {
+            noSelect: '(alle Sprachen)',
+        },
         recording: {
             created: 'Erstellt',
             genres: 'Kategorien',
             languages: 'Sprachen',
             name: 'Name',
+        },
+        routes: {
+            container: 'Ablagen',
+            recording: 'Aufzeichnungen',
         },
         save: 'Speichern',
         search: 'Suche...',
@@ -1286,6 +1326,9 @@ class RecordingActions {
     static filterText(text) {
         return { text, type: "movie-db.recordings.filter-text" };
     }
+    static filterLanguage(id) {
+        return { id, type: "movie-db.recordings.filter-language" };
+    }
 }
 exports.RecordingActions = RecordingActions;
 
@@ -1322,12 +1365,13 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.select"]: this.select,
             ["movie-db.recordings.set-page"]: this.setPage,
             ["movie-db.recordings.set-prop"]: this.setProperty,
+            ["movie-db.recordings.filter-language"]: this.setLanguageFilter,
             ["movie-db.recordings.filter-text"]: this.setTextFilter,
             ["movie-db.recordings.toggle-sort"]: this.setSort,
         };
     }
     getInitialState() {
-        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, genres: [], languages: [], page: 1, pageSize: 15, resetAfterLoad: undefined, search: '', sort: 'fullName', sortOrder: 'ascending', total: 0 });
+        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, genres: [], language: '', languages: [], page: 1, pageSize: 15, resetAfterLoad: undefined, search: '', sort: 'fullName', sortOrder: 'ascending', total: 0 });
     }
     startSave(state, request) {
         if (state.workingCopy) {
@@ -1340,6 +1384,7 @@ const controller = new (class extends controller_1.EditController {
             correlationId: uuid_1.v4(),
             firstPage: reset ? 0 : state.page - 1,
             fullName: state.search,
+            language: state.language,
             pageSize: state.pageSize,
             sort: state.sort,
             sortOrder: state.sortOrder,
@@ -1369,6 +1414,12 @@ const controller = new (class extends controller_1.EditController {
             return state;
         }
         return this.sendQuery(Object.assign({}, state, { search: request.text }), true);
+    }
+    setLanguageFilter(state, request) {
+        if (request.id === state.language) {
+            return state;
+        }
+        return this.sendQuery(Object.assign({}, state, { language: request.id }), true);
     }
     load(state, response) {
         if (response.correlationId !== state.correlationId) {
@@ -1879,7 +1930,7 @@ exports.RecordingItem = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const itemRedux_1 = __webpack_require__(/*! ./item/itemRedux */ "./Client/src/routes/recording/item/itemRedux.ts");
 const searchRedux_1 = __webpack_require__(/*! ../../components/search/searchRedux */ "./Client/src/components/search/searchRedux.ts");
 class CRecordingRoute extends React.PureComponent {
@@ -1887,21 +1938,25 @@ class CRecordingRoute extends React.PureComponent {
         super(...arguments);
         this.sortName = () => this.props.toggleSort('fullName');
         this.sortCreated = () => this.props.toggleSort('created');
-        this.onPage = (event, data) => this.props.setPage(data.activePage);
+        this.onPage = (ev, data) => this.props.setPage(data.activePage);
+        this.setLanguage = (ev, data) => this.props.setLanguage(data.value);
     }
     render() {
+        const { languageOptions } = this.props;
         return (React.createElement("div", { className: 'movie-db-recording-route' },
-            React.createElement(semantic_ui_react_1.Segment, null,
-                React.createElement(searchRedux_1.RecordingSearch, null)),
-            React.createElement(semantic_ui_react_1.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },
-                React.createElement(semantic_ui_react_1.Table.Header, null,
-                    React.createElement(semantic_ui_react_1.Table.Row, null,
-                        React.createElement(semantic_ui_react_1.Table.HeaderCell, { className: 'name', onClick: this.sortName, sorted: this.props.nameSort }, this.props.name),
-                        React.createElement(semantic_ui_react_1.Table.HeaderCell, { className: 'created', onClick: this.sortCreated, sorted: this.props.createdSort }, this.props.created),
-                        React.createElement(semantic_ui_react_1.Table.HeaderCell, { className: 'languages' }, this.props.languages),
-                        React.createElement(semantic_ui_react_1.Table.HeaderCell, { className: 'genres' }, this.props.genres))),
-                React.createElement(semantic_ui_react_1.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r }))))),
-            React.createElement(semantic_ui_react_1.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })));
+            React.createElement(semanticUiReact.Segment, null,
+                React.createElement(searchRedux_1.RecordingSearch, null),
+                React.createElement(semanticUiReact.Dropdown, { clearable: true, onChange: this.setLanguage, options: languageOptions, placeholder: languageOptions[0].text, selection: true, scrolling: true, value: this.props.language || '' })),
+            React.createElement("div", { className: 'table' },
+                React.createElement(semanticUiReact.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },
+                    React.createElement(semanticUiReact.Table.Header, null,
+                        React.createElement(semanticUiReact.Table.Row, null,
+                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'name', onClick: this.sortName, sorted: this.props.nameSort }, this.props.name),
+                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'created', onClick: this.sortCreated, sorted: this.props.createdSort }, this.props.created),
+                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'languages' }, this.props.languages),
+                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'genres' }, this.props.genres))),
+                    React.createElement(semanticUiReact.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r })))))),
+            React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })));
     }
 }
 exports.CRecordingRoute = CRecordingRoute;
@@ -1929,6 +1984,8 @@ function mapStateToProps(state, props) {
         created: mui.created,
         createdSort: route.sort === 'created' ? route.sortOrder : undefined,
         genres: mui.genres,
+        language: route.language,
+        languageOptions: controller_1.getLanguageOptions(state),
         languages: mui.languages,
         lastPage: Math.ceil(route.count / route.pageSize),
         list: controller_1.getRecordings(state),
@@ -1939,6 +1996,7 @@ function mapStateToProps(state, props) {
 }
 function mapDispatchToProps(dispatch, props) {
     return {
+        setLanguage: id => dispatch(controller_1.RecordingActions.filterLanguage(id)),
         setPage: page => dispatch(controller_1.RecordingActions.setPage(page)),
         toggleSort: sort => dispatch(controller_1.RecordingActions.setSort(sort)),
     };

@@ -41,11 +41,18 @@ export function getInitialState(): IMuiState {
                 },
             },
         },
+        language: {
+            noSelect: '(alle Sprachen)',
+        },
         recording: {
             created: 'Erstellt',
             genres: 'Kategorien',
             languages: 'Sprachen',
             name: 'Name',
+        },
+        routes: {
+            container: 'Ablagen',
+            recording: 'Aufzeichnungen',
         },
         save: 'Speichern',
         search: 'Suche...',

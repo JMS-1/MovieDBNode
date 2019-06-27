@@ -24,11 +24,14 @@ declare module 'movie-db-client' {
         Series = ' > ',
     }
 
-    interface IIconSelectOption<TValue> {
-        readonly icon: { name: SemanticICONS }
+    interface ISelectOption<TValue = string> {
         readonly key: TValue
         readonly text: string
         readonly value: TValue
+    }
+
+    interface IIconSelectOption<TValue = string> extends ISelectOption<TValue> {
+        readonly icon: { name: SemanticICONS }
     }
 
     type IActionHandlerMap<TActions extends Action, TState> = {

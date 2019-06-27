@@ -17,6 +17,7 @@ type TRecordingActions =
     | local.IRecordingSaved
     | local.ISaveRecording
     | local.ISelectRecording
+    | local.ISetRecordingLanguageFilter
     | local.ISetRecordingPage
     | local.ISetRecordingProperty<any>
     | local.ISetRecordingTextFilter
@@ -36,6 +37,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.select]: this.select,
             [local.recordingActions.setPage]: this.setPage,
             [local.recordingActions.setProp]: this.setProperty,
+            [local.recordingActions.setLanguageFilter]: this.setLanguageFilter,
             [local.recordingActions.setTextFilter]: this.setTextFilter,
             [local.recordingActions.sort]: this.setSort,
         }
@@ -47,6 +49,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             correlationId: undefined,
             count: 0,
             genres: [],
+            language: '',
             languages: [],
             page: 1,
             pageSize: 15,
@@ -71,6 +74,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             correlationId: uuid(),
             firstPage: reset ? 0 : state.page - 1,
             fullName: state.search,
+            language: state.language,
             pageSize: state.pageSize,
             sort: state.sort,
             sortOrder: state.sortOrder,
@@ -116,6 +120,17 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         }
 
         return this.sendQuery({ ...state, search: request.text }, true)
+    }
+
+    private setLanguageFilter(
+        state: local.IRecordingState,
+        request: local.ISetRecordingLanguageFilter,
+    ): local.IRecordingState {
+        if (request.id === state.language) {
+            return state
+        }
+
+        return this.sendQuery({ ...state, language: request.id }, true)
     }
 
     protected load(state: local.IRecordingState, response: local.ILoadRecordings): local.IRecordingState {

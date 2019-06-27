@@ -30,7 +30,8 @@ body {
 .movie-db-root {
   height: 100%;
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  overflow: hidden; }
   .movie-db-root > .ui.menu {
     flex-shrink: 0; }
   .movie-db-root > .content {
@@ -76,29 +77,41 @@ body {
 .movie-db-recording-route {
   overflow: auto;
   height: calc(100% - 1em);
-  padding: 0.5em; }
-  .movie-db-recording-route > .ui.table > thead > tr > th.created,
-  .movie-db-recording-route > .ui.table > tbody > tr > td.created {
-    width: 12em;
-    min-width: 12em;
-    max-width: 12em; }
-  .movie-db-recording-route > .ui.table > thead > tr > th.name,
-  .movie-db-recording-route > .ui.table > tbody > tr > td.name {
-    width: 40em;
-    min-width: 40em;
-    max-width: 40em; }
-  .movie-db-recording-route > .ui.table > thead > tr > th.languages, .movie-db-recording-route > .ui.table > thead > tr > th.genres,
-  .movie-db-recording-route > .ui.table > tbody > tr > td.languages,
-  .movie-db-recording-route > .ui.table > tbody > tr > td.genres {
-    width: 20em;
-    min-width: 20em;
-    max-width: 20em; }
-  .movie-db-recording-route > .ui.table > thead > tr > th {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
-    .movie-db-recording-route > .ui.table > thead > tr > th.languages, .movie-db-recording-route > .ui.table > thead > tr > th.genres {
-      cursor: default; }
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column; }
+  .movie-db-recording-route > .ui.segment,
+  .movie-db-recording-route > .ui.pagination {
+    flex-shrink: 0; }
+  .movie-db-recording-route > .ui.segment {
+    display: flex;
+    flex-direction: row;
+    align-items: center; }
+  .movie-db-recording-route > .table {
+    flex-grow: 1;
+    flex-basis: 0; }
+    .movie-db-recording-route > .table > .ui.table > thead > tr > th.created,
+    .movie-db-recording-route > .table > .ui.table > tbody > tr > td.created {
+      width: 12em;
+      min-width: 12em;
+      max-width: 12em; }
+    .movie-db-recording-route > .table > .ui.table > thead > tr > th.name,
+    .movie-db-recording-route > .table > .ui.table > tbody > tr > td.name {
+      width: 40em;
+      min-width: 40em;
+      max-width: 40em; }
+    .movie-db-recording-route > .table > .ui.table > thead > tr > th.languages, .movie-db-recording-route > .table > .ui.table > thead > tr > th.genres,
+    .movie-db-recording-route > .table > .ui.table > tbody > tr > td.languages,
+    .movie-db-recording-route > .table > .ui.table > tbody > tr > td.genres {
+      width: 20em;
+      min-width: 20em;
+      max-width: 20em; }
+    .movie-db-recording-route > .table > .ui.table > thead > tr > th {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; }
+      .movie-db-recording-route > .table > .ui.table > thead > tr > th.languages, .movie-db-recording-route > .table > .ui.table > thead > tr > th.genres {
+        cursor: default; }
 
 .movie-db-recording-item > td {
   white-space: nowrap;

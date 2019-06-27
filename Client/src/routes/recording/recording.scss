@@ -4,32 +4,50 @@
     overflow: auto;
     height: calc(100% - 1em);
     padding: 0.5em;
+    display: flex;
+    flex-direction: column;
 
-    > .ui.table {
-        > thead > tr > th,
-        > tbody > tr > td {
-            &.created {
-                @include fix-width(12em);
+    > .ui.segment,
+    > .ui.pagination {
+        flex-shrink: 0;
+    }
+
+    > .ui.segment {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    > .table {
+        flex-grow: 1;
+        flex-basis: 0;
+
+        > .ui.table {
+            > thead > tr > th,
+            > tbody > tr > td {
+                &.created {
+                    @include fix-width(12em);
+                }
+
+                &.name {
+                    @include fix-width(40em);
+                }
+
+                &.languages,
+                &.genres {
+                    @include fix-width(20em);
+                }
             }
 
-            &.name {
-                @include fix-width(40em);
-            }
+            > thead > tr > th {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
 
-            &.languages,
-            &.genres {
-                @include fix-width(20em);
-            }
-        }
-
-        > thead > tr > th {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            &.languages,
-            &.genres {
-                cursor: default;
+                &.languages,
+                &.genres {
+                    cursor: default;
+                }
             }
         }
     }

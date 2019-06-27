@@ -52,4 +52,8 @@ export class RecordingActions {
     static filterText(text: string): local.ISetRecordingTextFilter {
         return { text, type: local.recordingActions.setTextFilter }
     }
+
+    static filterLanguage(id: string): local.ISetRecordingLanguageFilter {
+        return { id, type: local.recordingActions.setLanguageFilter }
+    }
 }

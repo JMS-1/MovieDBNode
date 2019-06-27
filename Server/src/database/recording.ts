@@ -18,8 +18,6 @@ interface IAggregateCount {
 
 interface IAggregationResult {
     count: IAggregateCount[]
-    languages: api.IQueryCountInfo[]
-    genres: api.IQueryCountInfo[]
     view: api.IRecordingInfo[]
 }
 
@@ -83,7 +81,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             filter.rentTo = { $exists: req.rent }
         }
 
-        const query: any[] = [
+        const query = [
             { $match: filter },
             {
                 $graphLookup: {
@@ -123,11 +121,12 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             })
         }
 
-        query.push({
+        const baseQuery = [...query]
+
+        // Für die eigentliche Ergebnisermittlung sind aller Filter aktiv.
+        query.push(<any>{
             $facet: {
                 count: [{ $count: 'total' }],
-                languages: [{ $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
-                genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
                 view: [
                     { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
                     { $skip: 1 * req.firstPage * req.pageSize },
@@ -144,11 +143,45 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         const firstRes = result && result[0]
         const countRes = firstRes && firstRes.count && firstRes.count[0]
 
+        // Für die Bewertung der Sprachen muss der Sprachfilter deaktiviert werden.
+        const languageQuery = filter.languages
+
+        delete filter.languages
+
+        const languageInfo = await me
+            .aggregate<api.IQueryCountInfo>([
+                ...baseQuery,
+                { $unwind: '$languages' },
+                { $group: { _id: '$languages', count: { $sum: 1 } } },
+            ])
+            .toArray()
+
+        if (languageQuery) {
+            filter.languages = languageQuery
+        }
+
+        // Für die Bewertung der Generes muss der Genrefilter deaktiviert werden.
+        const genreQuery = filter.genres
+
+        delete filter.genres
+
+        const genreInfo = await me
+            .aggregate<api.IQueryCountInfo>([
+                ...baseQuery,
+                { $unwind: '$genres' },
+                { $group: { _id: '$genres', count: { $sum: 1 } } },
+            ])
+            .toArray()
+
+        if (genreQuery) {
+            filter.genres = genreQuery
+        }
+
         return {
             correlationId: req.correlationId,
             count: (countRes && countRes.total) || 0,
-            genres: (firstRes && firstRes.genres) || [],
-            languages: (firstRes && firstRes.languages) || [],
+            genres: genreInfo || [],
+            languages: languageInfo || [],
             total: await me.countDocuments(),
             view: (firstRes && firstRes.view) || [],
         }
