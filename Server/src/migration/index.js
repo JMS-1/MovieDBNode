@@ -13,13 +13,6 @@ const recording_1 = require("../database/recording");
 const series_1 = require("../database/series");
 const validation_1 = require("../database/validation");
 const readFile = util_1.promisify(fs.readFile);
-const temp = '\ufeff';
-const doubleQuote = /''/g;
-const fieldReg = /\[([^\]]+)\]/g;
-const insertReg = /^INSERT \[dbo\]\.\[([^\]]+)\] \(([^\)]+)\) VALUES \((.+)\)$/;
-const normReg = /(N'([^']|'')*')/g;
-const tempOff = new RegExp(temp, 'g');
-const tempOn = /,/g;
 const genreLinks = new (class extends relation_1.RelationCollection {
 })('Genre');
 const languageLinks = new (class extends relation_1.RelationCollection {
@@ -41,29 +34,46 @@ async function runMigration() {
     const path = path_1.join(__dirname, '../../../legacy/all.sql');
     const all = await readFile(path);
     const str = all.toString('UCS2');
-    for (let line of str.split('\r\n')) {
-        const insert = insertReg.exec(line);
+    const valueTest = "(NULL|N'([^']|'')*'|\\d+|CAST\\([^\\)]+\\))";
+    const valuesTest = `${valueTest}(, ${valueTest})*`;
+    const insertTest = `^INSERT \\[dbo\\]\\.\\[([^\\]]+)\\] \\(([^\\)]+)\\) VALUES \\((${valuesTest})\\)$`;
+    const insertReg = new RegExp(insertTest, 'gm');
+    for (let count = 0;; ++count) {
+        const insert = insertReg.exec(str);
         if (!insert) {
-            continue;
+            const expected = str.split('\r\n').filter(s => s.startsWith('INSERT ')).length;
+            if (expected !== count) {
+                throw new Error(`migration count mismatch, expected ${expected} but got ${count}`);
+            }
+            break;
         }
         const table = insert[1];
         const collection = collections[table];
         if (!collection) {
             continue;
         }
-        const fields = insert[2].split(',').map(f => f.trim().replace(fieldReg, (m, n) => n));
-        const data = insert[3].replace(normReg, (m, n) => n.replace(tempOn, temp)).split(',');
-        if (fields.length !== data.length) {
-            throw new Error(`bad INSERT: ${line}`);
+        const fields = [];
+        const fieldReg = /\[([^\]]+)\](, )?/g;
+        for (let field; (field = fieldReg.exec(insert[2]));) {
+            fields.push(field[1]);
         }
+        const values = [];
+        const valueReg = new RegExp(`${valueTest}(, )?`, 'g');
+        for (let value; (value = valueReg.exec(insert[3]));) {
+            values.push(value[1]);
+        }
+        if (fields.length !== values.length) {
+            throw new Error(`bad INSERT: ${insert[0]} ${insert[1]} ${insert[2]}`);
+        }
+        const quoteReg = /''/g;
         const row = {};
         for (let i = 0; i < fields.length; i++) {
-            const value = data[i].trim().replace(tempOff, ',');
+            const value = values[i];
             row[fields[i]] =
                 value === 'NULL'
                     ? null
                     : value.charAt(0) === 'N'
-                        ? value.substr(2, value.length - 3).replace(doubleQuote, "'")
+                        ? value.substr(2, value.length - 3).replace(quoteReg, "'")
                         : value;
         }
         await collection.fromSql(row);
