@@ -13,11 +13,13 @@ function mapStateToProps(state: IClientState, props: local.IRecordingRouteUiProp
 
     return {
         created: mui.created,
+        createdSort: route.sort === 'created' ? route.sortOrder : undefined,
         genres: mui.genres,
         languages: mui.languages,
         lastPage: Math.ceil(route.count / route.pageSize),
         list: getRecordings(state),
         name: mui.name,
+        nameSort: route.sort === 'fullName' ? route.sortOrder : undefined,
         page: route.page,
     }
 }
@@ -28,6 +30,7 @@ function mapDispatchToProps(
 ): local.IRecordingRouteActions {
     return {
         setPage: page => dispatch(RecordingActions.setPage(page)),
+        toggleSort: sort => dispatch(RecordingActions.setSort(sort)),
     }
 }
 

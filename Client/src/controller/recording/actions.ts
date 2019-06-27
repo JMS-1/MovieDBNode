@@ -4,6 +4,7 @@ import * as local from 'movie-db-client'
 export class RecordingActions {
     static load(response: api.IRecordingQueryResponse): local.ILoadRecordings {
         return {
+            correlationId: response.correlationId,
             count: response.count,
             genres: response.genres,
             languages: response.languages,
@@ -17,8 +18,12 @@ export class RecordingActions {
         return { id, type: local.recordingActions.select }
     }
 
-    static setPage(page: number): local.IRecordingSetPage {
+    static setPage(page: number): local.ISetRecordingPage {
         return { page, type: local.recordingActions.setPage }
+    }
+
+    static setSort(sort: api.TRecordingSort): local.IToggleRecordingSort {
+        return { sort, type: local.recordingActions.sort }
     }
 
     static setProperty<TProp extends keyof api.IRecording>(
@@ -42,5 +47,9 @@ export class RecordingActions {
 
     static query(): local.IQueryRecordings {
         return { type: local.recordingActions.query }
+    }
+
+    static filterText(text: string): local.ISetRecordingTextFilter {
+        return { text, type: local.recordingActions.setTextFilter }
     }
 }

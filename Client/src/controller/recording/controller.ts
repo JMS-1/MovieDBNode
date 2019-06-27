@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid'
+
 import * as api from 'movie-db-api'
 import * as local from 'movie-db-client'
 
@@ -13,10 +15,12 @@ type TRecordingActions =
     | local.ILoadSchemas
     | local.IQueryRecordings
     | local.IRecordingSaved
-    | local.IRecordingSetPage
     | local.ISaveRecording
     | local.ISelectRecording
+    | local.ISetRecordingPage
     | local.ISetRecordingProperty<any>
+    | local.ISetRecordingTextFilter
+    | local.IToggleRecordingSort
 
 const controller = new (class extends EditController<api.IRecording, TRecordingActions, local.IRecordingState> {
     protected readonly schema = 'recording'
@@ -32,17 +36,22 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.select]: this.select,
             [local.recordingActions.setPage]: this.setPage,
             [local.recordingActions.setProp]: this.setProperty,
+            [local.recordingActions.setTextFilter]: this.setTextFilter,
+            [local.recordingActions.sort]: this.setSort,
         }
     }
 
     protected getInitialState(): local.IRecordingState {
         return {
             ...super.getInitialState(),
+            correlationId: undefined,
             count: 0,
             genres: [],
             languages: [],
             page: 1,
             pageSize: 15,
+            resetAfterLoad: undefined,
+            search: '',
             sort: 'fullName',
             sortOrder: 'ascending',
             total: 0,
@@ -57,9 +66,11 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return state
     }
 
-    private sendQuery(state: local.IRecordingState): local.IRecordingState {
+    private sendQuery(state: local.IRecordingState, reset: boolean = false): local.IRecordingState {
         const req: api.IRecordingQueryRequest = {
-            firstPage: state.page - 1,
+            correlationId: uuid(),
+            firstPage: reset ? 0 : state.page - 1,
+            fullName: state.search,
             pageSize: state.pageSize,
             sort: state.sort,
             sortOrder: state.sortOrder,
@@ -67,14 +78,14 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
         ServerApi.post('recording/search', req, RecordingActions.load)
 
-        return state
+        return { ...state, correlationId: req.correlationId, resetAfterLoad: reset }
     }
 
     private query(state: local.IRecordingState, request: local.IQueryRecordings): local.IRecordingState {
         return this.sendQuery(state)
     }
 
-    private setPage(state: local.IRecordingState, request: local.IRecordingSetPage): local.IRecordingState {
+    private setPage(state: local.IRecordingState, request: local.ISetRecordingPage): local.IRecordingState {
         const pages = Math.ceil(state.count / state.pageSize)
         const page = Math.max(1, Math.min(pages, request.page))
 
@@ -85,14 +96,46 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return this.sendQuery({ ...state, page })
     }
 
+    private setSort(state: local.IRecordingState, request: local.IToggleRecordingSort): local.IRecordingState {
+        if (request.sort === state.sort) {
+            return this.sendQuery(
+                { ...state, sortOrder: state.sortOrder === 'ascending' ? 'descending' : 'ascending' },
+                true,
+            )
+        }
+
+        return this.sendQuery(
+            { ...state, sort: request.sort, sortOrder: request.sort === 'created' ? 'descending' : 'ascending' },
+            true,
+        )
+    }
+
+    private setTextFilter(state: local.IRecordingState, request: local.ISetRecordingTextFilter): local.IRecordingState {
+        if (request.text === state.search) {
+            return state
+        }
+
+        return this.sendQuery({ ...state, search: request.text }, true)
+    }
+
     protected load(state: local.IRecordingState, response: local.ILoadRecordings): local.IRecordingState {
+        if (response.correlationId !== state.correlationId) {
+            return state
+        }
+
         state = super.load(state, response)
+
+        if (state.resetAfterLoad) {
+            state = { ...state, page: 1 }
+        }
 
         return {
             ...state,
+            correlationId: undefined,
             count: response.count,
             genres: response.genres || [],
             languages: response.languages || [],
+            resetAfterLoad: undefined,
             total: response.total,
         }
     }

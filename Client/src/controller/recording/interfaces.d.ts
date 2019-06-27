@@ -4,11 +4,14 @@ declare module 'movie-db-client' {
     import * as api from 'movie-db-api'
 
     interface IRecordingState extends IEditState<api.IRecordingInfo> {
+        readonly correlationId: string
         readonly count: number
         readonly genres: api.IQueryCountInfo[]
         readonly languages: api.IQueryCountInfo[]
         readonly page: number
         readonly pageSize: number
+        readonly resetAfterLoad: boolean
+        readonly search: string
         readonly sort: api.TRecordingSort
         readonly sortOrder: api.TSortOrder
         readonly total: number
@@ -23,9 +26,12 @@ declare module 'movie-db-client' {
         select = 'movie-db.recordings.select',
         setPage = 'movie-db.recordings.set-page',
         setProp = 'movie-db.recordings.set-prop',
+        sort = 'movie-db.recordings.toggle-sort',
+        setTextFilter = 'movie-db.recordings.filter-text',
     }
 
     interface ILoadRecordings extends IGenericLoad<api.IRecording> {
+        correlationId: string
         count: number
         genres: api.IQueryCountInfo[]
         languages: api.IQueryCountInfo[]
@@ -58,8 +64,18 @@ declare module 'movie-db-client' {
         type: recordingActions.query
     }
 
-    interface IRecordingSetPage extends Action {
+    interface ISetRecordingPage extends Action {
         page: number
         type: recordingActions.setPage
+    }
+
+    interface IToggleRecordingSort extends Action {
+        sort: api.TRecordingSort
+        type: recordingActions.sort
+    }
+
+    interface ISetRecordingTextFilter extends Action {
+        text: string
+        type: recordingActions.setTextFilter
     }
 }

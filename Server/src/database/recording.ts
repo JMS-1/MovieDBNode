@@ -145,6 +145,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         const countRes = firstRes && firstRes.count && firstRes.count[0]
 
         return {
+            correlationId: req.correlationId,
             count: (countRes && countRes.total) || 0,
             genres: (firstRes && firstRes.genres) || [],
             languages: (firstRes && firstRes.languages) || [],

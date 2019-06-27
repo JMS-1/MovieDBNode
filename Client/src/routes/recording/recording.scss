@@ -1,6 +1,38 @@
+@import '../../mixins';
+
 .movie-db-recording-route {
-    overflow: hidden;
-    height: 100%;
+    overflow: auto;
+    height: calc(100% - 1em);
+    padding: 0.5em;
+
+    > .ui.table {
+        > thead > tr > th,
+        > tbody > tr > td {
+            &.created {
+                @include fix-width(12em);
+            }
+
+            &.name {
+                @include fix-width(40em);
+            }
+
+            &.languages,
+            &.genres {
+                @include fix-width(20em);
+            }
+        }
+
+        > thead > tr > th {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &.languages,
+            &.genres {
+                cursor: default;
+            }
+        }
+    }
 }
 
 @import 'item/item';

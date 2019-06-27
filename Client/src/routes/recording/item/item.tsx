@@ -24,11 +24,11 @@ export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
     render(): JSX.Element {
         return (
             <Table.Row className='movie-db-recording-item'>
-                <Table.Cell>
+                <Table.Cell className='name'>
                     {this.props.name}/{this.props.rentTo}
                 </Table.Cell>
-                <Table.Cell>{this.props.created}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell className='created'>{this.props.created}</Table.Cell>
+                <Table.Cell className='languages'>
                     {this.props.languages.map(l => (
                         <React.Fragment key={l}>
                             <Language id={l} />
@@ -36,7 +36,7 @@ export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
                         </React.Fragment>
                     ))}
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell className='genres'>
                     {this.props.genres.map(l => (
                         <React.Fragment key={l}>
                             <Genre id={l} />

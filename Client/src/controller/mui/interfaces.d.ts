@@ -22,6 +22,7 @@ declare module 'movie-db-client' {
             readonly genres: string
         }
         readonly save: string
+        readonly search: string
         readonly validationError: string
         readonly webError: string
     }

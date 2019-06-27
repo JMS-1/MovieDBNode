@@ -48,6 +48,7 @@ export function getInitialState(): IMuiState {
             name: 'Name',
         },
         save: 'Speichern',
+        search: 'Suche...',
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
     }

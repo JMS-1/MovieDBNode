@@ -133,6 +133,7 @@ declare module 'movie-db-api' {
     type TSortOrder = 'ascending' | 'descending'
 
     interface IRecordingQueryRequest {
+        correlationId: string
         firstPage: number
         fullName?: string
         genres?: string[]
@@ -176,6 +177,7 @@ declare module 'movie-db-api' {
     }
 
     interface IRecordingQueryResponse {
+        correlationId: string
         count: number
         genres: IQueryCountInfo[]
         languages: IQueryCountInfo[]
