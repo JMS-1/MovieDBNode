@@ -3,11 +3,15 @@ declare module 'movie-db-client' {
 
     import * as api from 'movie-db-api'
 
-    interface IRecordingState extends IEditState<api.IRecording> {
+    interface IRecordingState extends IEditState<api.IRecordingInfo> {
+        readonly count: number
+        readonly genres: api.IQueryCountInfo[]
+        readonly languages: api.IQueryCountInfo[]
         readonly page: number
         readonly pageSize: number
         readonly sort: api.TRecordingSort
         readonly sortOrder: api.TSortOrder
+        readonly total: number
     }
 
     const enum recordingActions {
@@ -17,10 +21,15 @@ declare module 'movie-db-client' {
         save = 'movie-db.recordings.save',
         saveDone = 'movie-db.recordings.save-done',
         select = 'movie-db.recordings.select',
+        setPage = 'movie-db.recordings.set-page',
         setProp = 'movie-db.recordings.set-prop',
     }
 
     interface ILoadRecordings extends IGenericLoad<api.IRecording> {
+        count: number
+        genres: api.IQueryCountInfo[]
+        languages: api.IQueryCountInfo[]
+        total: number
         type: recordingActions.queryDone
     }
 
@@ -47,5 +56,10 @@ declare module 'movie-db-client' {
 
     interface IQueryRecordings extends Action {
         type: recordingActions.query
+    }
+
+    interface IRecordingSetPage extends Action {
+        page: number
+        type: recordingActions.setPage
     }
 }

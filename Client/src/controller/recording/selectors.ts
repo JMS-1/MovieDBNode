@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect'
 
-import { IRecording } from 'movie-db-api'
+import { IRecordingInfo } from 'movie-db-api'
 import { IClientState } from 'movie-db-client'
 
 export interface IRecordingMap {
-    [id: string]: IRecording
+    [id: string]: IRecordingInfo
 }
 
 export const getRecordingMap = createSelector(
@@ -16,4 +16,9 @@ export const getRecordingMap = createSelector(
 
         return map
     },
+)
+
+export const getRecordings = createSelector(
+    (state: IClientState) => state.recording.all,
+    (all): string[] => all.map(r => r._id),
 )

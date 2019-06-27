@@ -1,0 +1,11 @@
+.movie-db-recording-item {
+    > td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        > span.separator:last-child {
+            display: none;
+        }
+    }
+}

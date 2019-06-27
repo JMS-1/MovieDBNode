@@ -86,6 +86,102 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./Client/src/components/genre/genre.tsx":
+/*!***********************************************!*\
+  !*** ./Client/src/components/genre/genre.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CGenre extends React.PureComponent {
+    render() {
+        return React.createElement(React.Fragment, null, this.props.name);
+    }
+}
+exports.CGenre = CGenre;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/genre/genreRedux.ts":
+/*!***************************************************!*\
+  !*** ./Client/src/components/genre/genreRedux.ts ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./genre */ "./Client/src/components/genre/genre.tsx");
+const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
+function mapStateToProps(state, props) {
+    const genre = controller_1.getGenreMap(state)[props.id];
+    return {
+        name: (genre && genre.name) || props.id,
+    };
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.Genre = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CGenre);
+
+
+/***/ }),
+
+/***/ "./Client/src/components/language/language.tsx":
+/*!*****************************************************!*\
+  !*** ./Client/src/components/language/language.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CLanguage extends React.PureComponent {
+    render() {
+        return React.createElement(React.Fragment, null, this.props.name);
+    }
+}
+exports.CLanguage = CLanguage;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/language/languageRedux.ts":
+/*!*********************************************************!*\
+  !*** ./Client/src/components/language/languageRedux.ts ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./language */ "./Client/src/components/language/language.tsx");
+const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
+function mapStateToProps(state, props) {
+    const language = controller_1.getLanguageMap(state)[props.id];
+    return {
+        name: (language && language.name) || props.id,
+    };
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.Language = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CLanguage);
+
+
+/***/ }),
+
 /***/ "./Client/src/components/message/message.tsx":
 /*!***************************************************!*\
   !*** ./Client/src/components/message/message.tsx ***!
@@ -745,6 +841,27 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/genre/actions.ts"));
 __export(__webpack_require__(/*! ./controller */ "./Client/src/controller/genre/controller.ts"));
+__export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/genre/selectors.ts"));
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/genre/selectors.ts":
+/*!**************************************************!*\
+  !*** ./Client/src/controller/genre/selectors.ts ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+exports.getGenreMap = reselect_1.createSelector((state) => state.genre.all, (all) => {
+    const map = {};
+    all.forEach(l => (map[l._id] = l));
+    return map;
+});
 
 
 /***/ }),
@@ -845,6 +962,27 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/language/actions.ts"));
 __export(__webpack_require__(/*! ./controller */ "./Client/src/controller/language/controller.ts"));
+__export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/language/selectors.ts"));
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/language/selectors.ts":
+/*!*****************************************************!*\
+  !*** ./Client/src/controller/language/selectors.ts ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+exports.getLanguageMap = reselect_1.createSelector((state) => state.language.all, (all) => {
+    const map = {};
+    all.forEach(l => (map[l._id] = l));
+    return map;
+});
 
 
 /***/ }),
@@ -986,6 +1124,12 @@ function getInitialState() {
                 },
             },
         },
+        recording: {
+            created: 'Erstellt',
+            genres: 'Kategorien',
+            languages: 'Sprachen',
+            name: 'Name',
+        },
         save: 'Speichern',
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
@@ -1034,10 +1178,20 @@ exports.MuiReducer = MuiReducer;
 Object.defineProperty(exports, "__esModule", { value: true });
 class RecordingActions {
     static load(response) {
-        return { list: response.view, type: "movie-db.recordings.query-done" };
+        return {
+            count: response.count,
+            genres: response.genres,
+            languages: response.languages,
+            list: response.view,
+            total: response.total,
+            type: "movie-db.recordings.query-done",
+        };
     }
     static select(id) {
         return { id, type: "movie-db.recordings.select" };
+    }
+    static setPage(page) {
+        return { page, type: "movie-db.recordings.set-page" };
     }
     static setProperty(prop, value) {
         return { prop, value, type: "movie-db.recordings.set-prop" };
@@ -1087,11 +1241,12 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.save"]: this.startSave,
             ["movie-db.recordings.save-done"]: this.saveDone,
             ["movie-db.recordings.select"]: this.select,
+            ["movie-db.recordings.set-page"]: this.setPage,
             ["movie-db.recordings.set-prop"]: this.setProperty,
         };
     }
     getInitialState() {
-        return Object.assign({}, super.getInitialState(), { page: 1, pageSize: 15, sort: 'fullName', sortOrder: 'ascending' });
+        return Object.assign({}, super.getInitialState(), { count: 0, genres: [], languages: [], page: 1, pageSize: 15, sort: 'fullName', sortOrder: 'ascending', total: 0 });
     }
     startSave(state, request) {
         if (state.workingCopy) {
@@ -1099,7 +1254,7 @@ const controller = new (class extends controller_1.EditController {
         }
         return state;
     }
-    query(state, request) {
+    sendQuery(state) {
         const req = {
             firstPage: state.page - 1,
             pageSize: state.pageSize,
@@ -1109,9 +1264,20 @@ const controller = new (class extends controller_1.EditController {
         store_1.ServerApi.post('recording/search', req, actions_1.RecordingActions.load);
         return state;
     }
+    query(state, request) {
+        return this.sendQuery(state);
+    }
+    setPage(state, request) {
+        const pages = Math.ceil(state.count / state.pageSize);
+        const page = Math.max(1, Math.min(pages, request.page));
+        if (page === state.page) {
+            return state;
+        }
+        return this.sendQuery(Object.assign({}, state, { page }));
+    }
     load(state, response) {
         state = super.load(state, response);
-        return state;
+        return Object.assign({}, state, { count: response.count, genres: response.genres || [], languages: response.languages || [], total: response.total });
     }
 })();
 exports.RecordingReducer = controller.reducer;
@@ -1155,6 +1321,7 @@ exports.getRecordingMap = reselect_1.createSelector((state) => state.recording.a
     all.forEach(r => (map[r._id] = r));
     return map;
 });
+exports.getRecordings = reselect_1.createSelector((state) => state.recording.all, (all) => all.map(r => r._id));
 
 
 /***/ }),
@@ -1540,6 +1707,79 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 /***/ }),
 
+/***/ "./Client/src/routes/recording/item/item.tsx":
+/*!***************************************************!*\
+  !*** ./Client/src/routes/recording/item/item.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const genreRedux_1 = __webpack_require__(/*! ../../../components/genre/genreRedux */ "./Client/src/components/genre/genreRedux.ts");
+const languageRedux_1 = __webpack_require__(/*! ../../../components/language/languageRedux */ "./Client/src/components/language/languageRedux.ts");
+class CRecordingItem extends React.PureComponent {
+    render() {
+        return (React.createElement(semantic_ui_react_1.Table.Row, { className: 'movie-db-recording-item' },
+            React.createElement(semantic_ui_react_1.Table.Cell, null,
+                this.props.name,
+                "/",
+                this.props.rentTo),
+            React.createElement(semantic_ui_react_1.Table.Cell, null, this.props.created),
+            React.createElement(semantic_ui_react_1.Table.Cell, null, this.props.languages.map(l => (React.createElement(React.Fragment, { key: l },
+                React.createElement(languageRedux_1.Language, { id: l }),
+                React.createElement("span", { className: 'separator' }, ", "))))),
+            React.createElement(semantic_ui_react_1.Table.Cell, null, this.props.genres.map(l => (React.createElement(React.Fragment, { key: l },
+                React.createElement(genreRedux_1.Genre, { id: l }),
+                React.createElement("span", { className: 'separator' }, ", ")))))));
+    }
+}
+exports.CRecordingItem = CRecordingItem;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/item/itemRedux.ts":
+/*!*******************************************************!*\
+  !*** ./Client/src/routes/recording/item/itemRedux.ts ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./item */ "./Client/src/routes/recording/item/item.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+function makeNumber(n) {
+    return n < 10 ? `0${n}` : `${n}`;
+}
+function makeTime(date) {
+    return `${makeNumber(date.getDate())}.${makeNumber(1 + date.getMonth())}.${date.getFullYear()} ${makeNumber(date.getHours())}:${makeNumber(date.getMinutes())}:${makeNumber(date.getSeconds())}`;
+}
+const none = [];
+function mapStateToProps(state, props) {
+    const recording = controller_1.getRecordingMap(state)[props.id];
+    return {
+        name: recording && recording.fullName,
+        rentTo: recording && recording.rentTo,
+        created: recording && makeTime(new Date(recording.created)),
+        genres: (recording && recording.genres) || none,
+        languages: (recording && recording.languages) || none,
+    };
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.RecordingItem = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingItem);
+
+
+/***/ }),
+
 /***/ "./Client/src/routes/recording/recording.tsx":
 /*!***************************************************!*\
   !*** ./Client/src/routes/recording/recording.tsx ***!
@@ -1551,12 +1791,23 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const itemRedux_1 = __webpack_require__(/*! ./item/itemRedux */ "./Client/src/routes/recording/item/itemRedux.ts");
 class CRecordingRoute extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.onPage = (event, data) => this.props.setPage(data.activePage);
+    }
     render() {
-        return React.createElement("div", { className: 'movie-db-recording-route' },
-            "[RECORDINGS ",
-            this.props.match.params.id,
-            "]");
+        return (React.createElement("div", { className: 'movie-db-recording-route' },
+            React.createElement(semantic_ui_react_1.Table, null,
+                React.createElement(semantic_ui_react_1.Table.Header, null,
+                    React.createElement(semantic_ui_react_1.Table.HeaderCell, null, this.props.name),
+                    React.createElement(semantic_ui_react_1.Table.HeaderCell, null, this.props.created),
+                    React.createElement(semantic_ui_react_1.Table.HeaderCell, null, this.props.languages),
+                    React.createElement(semantic_ui_react_1.Table.HeaderCell, null, this.props.genres)),
+                React.createElement(semantic_ui_react_1.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r }))))),
+            React.createElement(semantic_ui_react_1.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })));
     }
 }
 exports.CRecordingRoute = CRecordingRoute;
@@ -1576,11 +1827,24 @@ exports.CRecordingRoute = CRecordingRoute;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./recording */ "./Client/src/routes/recording/recording.tsx");
+const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    const mui = state.mui.recording;
+    const route = state.recording;
+    return {
+        created: mui.created,
+        genres: mui.genres,
+        languages: mui.languages,
+        lastPage: Math.ceil(route.count / route.pageSize),
+        list: controller_1.getRecordings(state),
+        name: mui.name,
+        page: route.page,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        setPage: page => dispatch(controller_1.RecordingActions.setPage(page)),
+    };
 }
 exports.RecordingRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingRoute);
 

@@ -56,3 +56,10 @@ body {
 .movie-db-recording-route {
   overflow: hidden;
   height: 100%; }
+
+.movie-db-recording-item > td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+  .movie-db-recording-item > td > span.separator:last-child {
+    display: none; }

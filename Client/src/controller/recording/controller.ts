@@ -13,6 +13,7 @@ type TRecordingActions =
     | local.ILoadSchemas
     | local.IQueryRecordings
     | local.IRecordingSaved
+    | local.IRecordingSetPage
     | local.ISaveRecording
     | local.ISelectRecording
     | local.ISetRecordingProperty<any>
@@ -29,6 +30,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.save]: this.startSave,
             [local.recordingActions.saveDone]: this.saveDone,
             [local.recordingActions.select]: this.select,
+            [local.recordingActions.setPage]: this.setPage,
             [local.recordingActions.setProp]: this.setProperty,
         }
     }
@@ -36,10 +38,14 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
     protected getInitialState(): local.IRecordingState {
         return {
             ...super.getInitialState(),
+            count: 0,
+            genres: [],
+            languages: [],
             page: 1,
             pageSize: 15,
             sort: 'fullName',
             sortOrder: 'ascending',
+            total: 0,
         }
     }
 
@@ -51,7 +57,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return state
     }
 
-    private query(state: local.IRecordingState, request: local.IQueryRecordings): local.IRecordingState {
+    private sendQuery(state: local.IRecordingState): local.IRecordingState {
         const req: api.IRecordingQueryRequest = {
             firstPage: state.page - 1,
             pageSize: state.pageSize,
@@ -64,10 +70,31 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return state
     }
 
+    private query(state: local.IRecordingState, request: local.IQueryRecordings): local.IRecordingState {
+        return this.sendQuery(state)
+    }
+
+    private setPage(state: local.IRecordingState, request: local.IRecordingSetPage): local.IRecordingState {
+        const pages = Math.ceil(state.count / state.pageSize)
+        const page = Math.max(1, Math.min(pages, request.page))
+
+        if (page === state.page) {
+            return state
+        }
+
+        return this.sendQuery({ ...state, page })
+    }
+
     protected load(state: local.IRecordingState, response: local.ILoadRecordings): local.IRecordingState {
         state = super.load(state, response)
 
-        return state
+        return {
+            ...state,
+            count: response.count,
+            genres: response.genres || [],
+            languages: response.languages || [],
+            total: response.total,
+        }
     }
 })()
 

@@ -41,6 +41,12 @@ export function getInitialState(): IMuiState {
                 },
             },
         },
+        recording: {
+            created: 'Erstellt',
+            genres: 'Kategorien',
+            languages: 'Sprachen',
+            name: 'Name',
+        },
         save: 'Speichern',
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
