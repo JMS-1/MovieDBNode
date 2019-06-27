@@ -41,6 +41,9 @@ export function getInitialState(): IMuiState {
                 },
             },
         },
+        genre: {
+            noSelect: '(alle Kategorien)',
+        },
         language: {
             noSelect: '(alle Sprachen)',
         },

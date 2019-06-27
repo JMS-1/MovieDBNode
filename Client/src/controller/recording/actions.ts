@@ -56,4 +56,8 @@ export class RecordingActions {
     static filterLanguage(id: string): local.ISetRecordingLanguageFilter {
         return { id, type: local.recordingActions.setLanguageFilter }
     }
+
+    static filterGenre(ids: string[]): local.ISetRecordingGenreFilter {
+        return { ids, type: local.recordingActions.setGenreFilter }
+    }
 }

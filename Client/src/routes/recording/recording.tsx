@@ -16,20 +16,25 @@ export interface IRecordingRouteParams {
 export interface IRecordingRouteUiProps extends RouteComponentProps<IRecordingRouteParams> {}
 
 export interface IRecordingRouteProps {
-    created: string
+    createdHeader: string
     createdSort: TSortOrder
-    genres: string
+    genres: string[]
+    genreHint: string
+    genreOptions: ISelectOption[]
+    genreHeader: string
     language: string
+    languageHint: string
     languageOptions: ISelectOption[]
-    languages: string
+    languageHeader: string
     lastPage: number
     list: string[]
-    name: string
+    nameHeader: string
     nameSort: TSortOrder
     page: number
 }
 
 export interface IRecordingRouteActions {
+    setGenres(ids: string[]): void
     setLanguage(id: string): void
     setPage(page: number): void
     toggleSort(sort: TRecordingSort): void
@@ -39,8 +44,6 @@ export type TRecordingRouteProps = IRecordingRouteProps & IRecordingRouteUiProps
 
 export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
     render(): JSX.Element {
-        const { languageOptions } = this.props
-
         return (
             <div className='movie-db-recording-route'>
                 <semanticUiReact.Segment>
@@ -48,11 +51,21 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                     <semanticUiReact.Dropdown
                         clearable
                         onChange={this.setLanguage}
-                        options={languageOptions}
-                        placeholder={languageOptions[0].text}
+                        options={this.props.languageOptions}
+                        placeholder={this.props.languageHint}
                         selection
                         scrolling
                         value={this.props.language || ''}
+                    />
+                    <semanticUiReact.Dropdown
+                        clearable
+                        multiple
+                        onChange={this.setGenre}
+                        options={this.props.genreOptions}
+                        placeholder={this.props.genreHint}
+                        selection
+                        scrolling
+                        value={this.props.genres}
                     />
                 </semanticUiReact.Segment>
                 <div className='table'>
@@ -64,20 +77,20 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                                     onClick={this.sortName}
                                     sorted={this.props.nameSort}
                                 >
-                                    {this.props.name}
+                                    {this.props.nameHeader}
                                 </semanticUiReact.Table.HeaderCell>
                                 <semanticUiReact.Table.HeaderCell
                                     className='created'
                                     onClick={this.sortCreated}
                                     sorted={this.props.createdSort}
                                 >
-                                    {this.props.created}
+                                    {this.props.createdHeader}
                                 </semanticUiReact.Table.HeaderCell>
                                 <semanticUiReact.Table.HeaderCell className='languages'>
-                                    {this.props.languages}
+                                    {this.props.languageHeader}
                                 </semanticUiReact.Table.HeaderCell>
                                 <semanticUiReact.Table.HeaderCell className='genres'>
-                                    {this.props.genres}
+                                    {this.props.genreHeader}
                                 </semanticUiReact.Table.HeaderCell>
                             </semanticUiReact.Table.Row>
                         </semanticUiReact.Table.Header>
@@ -106,4 +119,7 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
 
     private readonly setLanguage = (ev: React.SyntheticEvent<HTMLElement>, data: semanticUiReact.DropdownProps): void =>
         this.props.setLanguage(data.value as string)
+
+    private readonly setGenre = (ev: React.SyntheticEvent<HTMLElement>, data: semanticUiReact.DropdownProps): void =>
+        this.props.setGenres(data.value as string[])
 }

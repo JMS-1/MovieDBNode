@@ -99,6 +99,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         query.push({
             $facet: {
                 count: [{ $count: 'total' }],
+                genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
                 view: [
                     { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
                     { $skip: 1 * req.firstPage * req.pageSize },
@@ -123,22 +124,10 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         if (languageQuery) {
             filter.languages = languageQuery;
         }
-        const genreQuery = filter.genres;
-        delete filter.genres;
-        const genreInfo = await me
-            .aggregate([
-            ...baseQuery,
-            { $unwind: '$genres' },
-            { $group: { _id: '$genres', count: { $sum: 1 } } },
-        ])
-            .toArray();
-        if (genreQuery) {
-            filter.genres = genreQuery;
-        }
         return {
             correlationId: req.correlationId,
             count: (countRes && countRes.total) || 0,
-            genres: genreInfo || [],
+            genres: (firstRes && firstRes.genres) || [],
             languages: languageInfo || [],
             total: await me.countDocuments(),
             view: (firstRes && firstRes.view) || [],

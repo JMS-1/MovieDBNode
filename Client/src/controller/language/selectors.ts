@@ -23,7 +23,7 @@ export const getLanguageMap = createSelector(
 )
 
 export const getLanguageCountMap = createSelector(
-    (state: IClientState) => state.recording.languages,
+    (state: IClientState) => state.recording.languageInfo,
     (all): ILanguageCountMap => {
         const map: ILanguageCountMap = {}
 
@@ -35,20 +35,17 @@ export const getLanguageCountMap = createSelector(
 
 export const getLanguageOptions = createSelector(
     (state: IClientState) => state.language.all,
-    (state: IClientState) => state.mui.language.noSelect,
     getLanguageCountMap,
-    (all, noSelect, counts): ISelectOption[] => {
+    (all, counts): ISelectOption[] => {
         const options: ISelectOption[] = all
             .map(l => {
                 const info = counts[l._id]
 
-                return info && info.count && { key: l._id, text: `${l.name || l._id} (${info.count})`, value: l._id }
+                return info && info.count && { key: l._id, text: l.name || l._id, value: l._id }
             })
             .filter(o => o)
 
         options.sort((l, r) => l.text.localeCompare(r.text))
-
-        options.unshift({ key: '*', text: noSelect, value: '' })
 
         return options
     },

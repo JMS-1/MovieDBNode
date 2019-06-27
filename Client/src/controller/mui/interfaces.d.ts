@@ -18,6 +18,9 @@ declare module 'movie-db-client' {
         readonly language: {
             readonly noSelect: string
         }
+        readonly genre: {
+            readonly noSelect: string
+        }
         readonly recording: {
             readonly name: string
             readonly created: string

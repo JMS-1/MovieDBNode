@@ -17,6 +17,7 @@ type TRecordingActions =
     | local.IRecordingSaved
     | local.ISaveRecording
     | local.ISelectRecording
+    | local.ISetRecordingGenreFilter
     | local.ISetRecordingLanguageFilter
     | local.ISetRecordingPage
     | local.ISetRecordingProperty<any>
@@ -35,9 +36,10 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.save]: this.startSave,
             [local.recordingActions.saveDone]: this.saveDone,
             [local.recordingActions.select]: this.select,
+            [local.recordingActions.setGenreFilter]: this.setGenreFilter,
+            [local.recordingActions.setLanguageFilter]: this.setLanguageFilter,
             [local.recordingActions.setPage]: this.setPage,
             [local.recordingActions.setProp]: this.setProperty,
-            [local.recordingActions.setLanguageFilter]: this.setLanguageFilter,
             [local.recordingActions.setTextFilter]: this.setTextFilter,
             [local.recordingActions.sort]: this.setSort,
         }
@@ -48,9 +50,10 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             ...super.getInitialState(),
             correlationId: undefined,
             count: 0,
+            genreInfo: [],
             genres: [],
             language: '',
-            languages: [],
+            languageInfo: [],
             page: 1,
             pageSize: 15,
             resetAfterLoad: undefined,
@@ -74,6 +77,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             correlationId: uuid(),
             firstPage: reset ? 0 : state.page - 1,
             fullName: state.search,
+            genres: state.genres,
             language: state.language,
             pageSize: state.pageSize,
             sort: state.sort,
@@ -133,6 +137,13 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return this.sendQuery({ ...state, language: request.id }, true)
     }
 
+    private setGenreFilter(
+        state: local.IRecordingState,
+        request: local.ISetRecordingGenreFilter,
+    ): local.IRecordingState {
+        return this.sendQuery({ ...state, genres: request.ids || [] }, true)
+    }
+
     protected load(state: local.IRecordingState, response: local.ILoadRecordings): local.IRecordingState {
         if (response.correlationId !== state.correlationId) {
             return state
@@ -148,8 +159,8 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             ...state,
             correlationId: undefined,
             count: response.count,
-            genres: response.genres || [],
-            languages: response.languages || [],
+            genreInfo: response.genres || [],
+            languageInfo: response.languages || [],
             resetAfterLoad: undefined,
             total: response.total,
         }

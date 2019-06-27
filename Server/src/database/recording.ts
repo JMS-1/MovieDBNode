@@ -18,6 +18,7 @@ interface IAggregateCount {
 
 interface IAggregationResult {
     count: IAggregateCount[]
+    genres: api.IQueryCountInfo[]
     view: api.IRecordingInfo[]
 }
 
@@ -127,6 +128,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         query.push(<any>{
             $facet: {
                 count: [{ $count: 'total' }],
+                genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
                 view: [
                     { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
                     { $skip: 1 * req.firstPage * req.pageSize },
@@ -160,27 +162,10 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             filter.languages = languageQuery
         }
 
-        // Für die Bewertung der Generes muss der Genrefilter deaktiviert werden.
-        const genreQuery = filter.genres
-
-        delete filter.genres
-
-        const genreInfo = await me
-            .aggregate<api.IQueryCountInfo>([
-                ...baseQuery,
-                { $unwind: '$genres' },
-                { $group: { _id: '$genres', count: { $sum: 1 } } },
-            ])
-            .toArray()
-
-        if (genreQuery) {
-            filter.genres = genreQuery
-        }
-
         return {
             correlationId: req.correlationId,
             count: (countRes && countRes.total) || 0,
-            genres: genreInfo || [],
+            genres: (firstRes && firstRes.genres) || [],
             languages: languageInfo || [],
             total: await me.countDocuments(),
             view: (firstRes && firstRes.view) || [],
