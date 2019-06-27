@@ -153,6 +153,7 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const containerRedux_1 = __webpack_require__(/*! ../../routes/container/containerRedux */ "./Client/src/routes/container/containerRedux.ts");
+const recordingRedux_1 = __webpack_require__(/*! ../../routes/recording/recordingRedux */ "./Client/src/routes/recording/recordingRedux.ts");
 class CRoot extends React.PureComponent {
     render() {
         const { errors, busy } = this.props;
@@ -163,7 +164,8 @@ class CRoot extends React.PureComponent {
                     React.createElement(semantic_ui_react_1.Header, null, this.props.title),
                     React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
             React.createElement("div", { className: 'content' },
-                React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }))));
+                React.createElement(react_router_1.Route, { path: '/container/:id?', component: containerRedux_1.ContainerRoute }),
+                React.createElement(react_router_1.Route, { path: '/recording/:id?', component: recordingRedux_1.RecordingRoute }))));
     }
 }
 exports.CRoot = CRoot;
@@ -1394,6 +1396,53 @@ function mapDispatchToProps(dispatch, props) {
     };
 }
 exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerTree);
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/recording.tsx":
+/*!***************************************************!*\
+  !*** ./Client/src/routes/recording/recording.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CRecordingRoute extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-recording-route' },
+            "[RECORDINGS ",
+            this.props.match.params.id,
+            "]");
+    }
+}
+exports.CRecordingRoute = CRecordingRoute;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/recordingRedux.ts":
+/*!*******************************************************!*\
+  !*** ./Client/src/routes/recording/recordingRedux.ts ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./recording */ "./Client/src/routes/recording/recording.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.RecordingRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingRoute);
 
 
 /***/ }),

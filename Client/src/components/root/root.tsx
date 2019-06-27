@@ -3,6 +3,7 @@ import { Route } from 'react-router'
 import { Dimmer, Header, Loader, Message } from 'semantic-ui-react'
 
 import { ContainerRoute } from '../../routes/container/containerRedux'
+import { RecordingRoute } from '../../routes/recording/recordingRedux'
 
 export interface IRootUiProps {}
 
@@ -37,6 +38,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
                 </Dimmer>
                 <div className='content'>
                     <Route path='/container/:id?' component={ContainerRoute} />
+                    <Route path='/recording/:id?' component={RecordingRoute} />
                 </div>
             </div>
         )

@@ -52,3 +52,7 @@ body {
 
 .movie-db-container-tree-level > .ui.label {
   width: 100%; }
+
+.movie-db-recording-route {
+  overflow: hidden;
+  height: 100%; }
