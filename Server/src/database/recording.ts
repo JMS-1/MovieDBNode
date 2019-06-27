@@ -1,9 +1,9 @@
 import * as debug from 'debug'
 import { FilterQuery } from 'mongodb'
 
-import { IQueryCountInfo, IRecordingQueryRequest, IRecordingQueryResponse } from 'movie-db-api'
+import * as api from 'movie-db-api'
 
-import { collectionName, IDbRecording, RecordingSchema, toProtocol } from './entities/recording'
+import { collectionName, IDbRecording, RecordingSchema } from './entities/recording'
 import { CollectionBase } from './utils'
 import { validate } from './validation'
 
@@ -18,9 +18,9 @@ interface IAggregateCount {
 
 interface IAggregationResult {
     count: IAggregateCount[]
-    languages: IQueryCountInfo[]
-    genres: IQueryCountInfo[]
-    view: IDbRecording[]
+    languages: api.IQueryCountInfo[]
+    genres: api.IQueryCountInfo[]
+    view: api.IRecordingInfo[]
 }
 
 const escapeReg = /[.*+?^${}()|[\]\\]/g
@@ -64,20 +64,8 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         this.cacheMigrated(recording)
     }
 
-    async query(req: IRecordingQueryRequest): Promise<IRecordingQueryResponse> {
-        const filter: FilterQuery<IDbRecording> = { $or: [] }
-
-        if (req.name) {
-            filter.$or.push({ name: { $regex: req.name.toString().replace(escapeReg, '\\$&'), $options: 'i' } })
-        }
-
-        if (req.nameSeries && req.nameSeries.length > 0) {
-            filter.$or.push({ series: { $in: req.nameSeries.map(s => s.toString()) } })
-        }
-
-        if (filter.$or.length < 1) {
-            delete filter.$or
-        }
+    async query(req: api.IRecordingQueryRequest): Promise<api.IRecordingQueryResponse> {
+        const filter: FilterQuery<IDbRecording> = {}
 
         if (req.language) {
             filter.languages = req.language.toString()
@@ -95,21 +83,58 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             filter.rentTo = { $exists: req.rent }
         }
 
-        const query = [
+        const query: any[] = [
             { $match: filter },
             {
-                $facet: {
-                    count: [{ $count: 'total' }],
-                    languages: [{ $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
-                    genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
-                    view: [
-                        { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
-                        { $skip: 1 * req.firstPage * req.pageSize },
-                        { $limit: 1 * req.pageSize },
-                    ],
+                $graphLookup: {
+                    as: 'hierarchy',
+                    connectFromField: 'parentId',
+                    connectToField: '_id',
+                    from: 'series',
+                    startWith: '$series',
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    created: 1,
+                    description: 1,
+                    fullName: {
+                        $reduce: {
+                            in: { $concat: ['$$this.name', ' > ', '$$value'] },
+                            initialValue: '$name',
+                            input: { $reverseArray: '$hierarchy' },
+                        },
+                    },
+                    genres: 1,
+                    languages: 1,
+                    links: 1,
+                    media: 1,
+                    name: 1,
+                    rentTo: 1,
+                    series: 1,
                 },
             },
         ]
+
+        if (req.fullName) {
+            query.push({
+                $match: { fullName: { $regex: req.fullName.toString().replace(escapeReg, '\\$&'), $options: 'i' } },
+            })
+        }
+
+        query.push({
+            $facet: {
+                count: [{ $count: 'total' }],
+                languages: [{ $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
+                genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
+                view: [
+                    { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
+                    { $skip: 1 * req.firstPage * req.pageSize },
+                    { $limit: 1 * req.pageSize },
+                ],
+            },
+        })
 
         databaseTrace('query recordings: %j', query)
 
@@ -124,7 +149,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             genres: (firstRes && firstRes.genres) || [],
             languages: (firstRes && firstRes.languages) || [],
             total: await me.countDocuments(),
-            view: ((firstRes && firstRes.view) || []).map(toProtocol),
+            view: (firstRes && firstRes.view) || [],
         }
     }
 })()

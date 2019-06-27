@@ -44,16 +44,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         this.cacheMigrated(recording);
     }
     async query(req) {
-        const filter = { $or: [] };
-        if (req.name) {
-            filter.$or.push({ name: { $regex: req.name.toString().replace(escapeReg, '\\$&'), $options: 'i' } });
-        }
-        if (req.nameSeries && req.nameSeries.length > 0) {
-            filter.$or.push({ series: { $in: req.nameSeries.map(s => s.toString()) } });
-        }
-        if (filter.$or.length < 1) {
-            delete filter.$or;
-        }
+        const filter = {};
         if (req.language) {
             filter.languages = req.language.toString();
         }
@@ -69,18 +60,53 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         const query = [
             { $match: filter },
             {
-                $facet: {
-                    count: [{ $count: 'total' }],
-                    languages: [{ $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
-                    genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
-                    view: [
-                        { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
-                        { $skip: 1 * req.firstPage * req.pageSize },
-                        { $limit: 1 * req.pageSize },
-                    ],
+                $graphLookup: {
+                    as: 'hierarchy',
+                    connectFromField: 'parentId',
+                    connectToField: '_id',
+                    from: 'series',
+                    startWith: '$series',
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    created: 1,
+                    description: 1,
+                    fullName: {
+                        $reduce: {
+                            in: { $concat: ['$$this.name', ' > ', '$$value'] },
+                            initialValue: '$name',
+                            input: { $reverseArray: '$hierarchy' },
+                        },
+                    },
+                    genres: 1,
+                    languages: 1,
+                    links: 1,
+                    media: 1,
+                    name: 1,
+                    rentTo: 1,
+                    series: 1,
                 },
             },
         ];
+        if (req.fullName) {
+            query.push({
+                $match: { fullName: { $regex: req.fullName.toString().replace(escapeReg, '\\$&'), $options: 'i' } },
+            });
+        }
+        query.push({
+            $facet: {
+                count: [{ $count: 'total' }],
+                languages: [{ $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
+                genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
+                view: [
+                    { $sort: { [req.sort.toString()]: req.sortOrder === 'ascending' ? +1 : -1 } },
+                    { $skip: 1 * req.firstPage * req.pageSize },
+                    { $limit: 1 * req.pageSize },
+                ],
+            },
+        });
         databaseTrace('query recordings: %j', query);
         const me = await this.getCollection();
         const result = await me.aggregate(query).toArray();
@@ -91,7 +117,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             genres: (firstRes && firstRes.genres) || [],
             languages: (firstRes && firstRes.languages) || [],
             total: await me.countDocuments(),
-            view: ((firstRes && firstRes.view) || []).map(recording_1.toProtocol),
+            view: (firstRes && firstRes.view) || [],
         };
     }
 })();

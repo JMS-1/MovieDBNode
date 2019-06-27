@@ -38,7 +38,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             ...super.getInitialState(),
             page: 1,
             pageSize: 15,
-            sort: 'name',
+            sort: 'fullName',
             sortOrder: 'ascending',
         }
     }

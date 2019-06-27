@@ -1091,7 +1091,7 @@ const controller = new (class extends controller_1.EditController {
         };
     }
     getInitialState() {
-        return Object.assign({}, super.getInitialState(), { page: 1, pageSize: 15, sort: 'name', sortOrder: 'ascending' });
+        return Object.assign({}, super.getInitialState(), { page: 1, pageSize: 15, sort: 'fullName', sortOrder: 'ascending' });
     }
     startSave(state, request) {
         if (state.workingCopy) {

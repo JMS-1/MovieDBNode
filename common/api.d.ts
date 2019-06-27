@@ -128,16 +128,15 @@ declare module 'movie-db-api' {
         series: ISeries[]
     }
 
-    type TRecordingSort = 'name' | 'created'
+    type TRecordingSort = 'fullName' | 'created'
 
     type TSortOrder = 'ascending' | 'descending'
 
     interface IRecordingQueryRequest {
         firstPage: number
+        fullName?: string
         genres?: string[]
         language?: string
-        name?: string
-        nameSeries?: string[]
         pageSize: number
         rent?: boolean
         series?: string[]
@@ -172,12 +171,16 @@ declare module 'movie-db-api' {
         created: string
     }
 
+    interface IRecordingInfo extends IRecording {
+        fullName: string
+    }
+
     interface IRecordingQueryResponse {
         count: number
         genres: IQueryCountInfo[]
         languages: IQueryCountInfo[]
         total: number
-        view: any[]
+        view: IRecordingInfo[]
     }
 
     interface IAddRecordingResponse {
