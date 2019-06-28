@@ -70,7 +70,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
                     startWith: '$series',
                 },
             },
-            { $unwind: '$hierarchy' },
+            { $unwind: { path: '$hierarchy', preserveNullAndEmptyArrays: true } },
             { $sort: { 'hierarchy._depth': 1 } },
             {
                 $group: {

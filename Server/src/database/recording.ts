@@ -95,7 +95,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
                     startWith: '$series',
                 },
             },
-            { $unwind: '$hierarchy' },
+            { $unwind: { path: '$hierarchy', preserveNullAndEmptyArrays: true } },
             { $sort: { 'hierarchy._depth': 1 } },
             {
                 $group: {
