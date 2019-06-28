@@ -11,6 +11,7 @@ __export(require("./entities/recording"));
 const databaseTrace = debug('database:trace');
 const dateReg = /^CAST\(N'([^\.]+)(\.\d+)?' AS DateTime\)$/;
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
+const collation = { locale: 'en', strength: 2 };
 exports.recordingCollection = new (class extends utils_1.CollectionBase {
     constructor() {
         super(...arguments);
@@ -127,16 +128,12 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         });
         databaseTrace('query recordings: %j', query);
         const me = await this.getCollection();
-        const result = await me.aggregate(query).toArray();
+        const result = await me.aggregate(query, { collation }).toArray();
         const firstRes = result && result[0];
         const countRes = firstRes && firstRes.count && firstRes.count[0];
         delete filter.languages;
         const languageInfo = await me
-            .aggregate([
-            ...baseQuery,
-            { $unwind: '$languages' },
-            { $group: { _id: '$languages', count: { $sum: 1 } } },
-        ])
+            .aggregate([...baseQuery, { $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }], { collation })
             .toArray();
         return {
             correlationId: req.correlationId,

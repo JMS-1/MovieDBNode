@@ -1,5 +1,5 @@
 import * as debug from 'debug'
-import { FilterQuery } from 'mongodb'
+import { CollationDocument, FilterQuery } from 'mongodb'
 
 import * as api from 'movie-db-api'
 
@@ -23,6 +23,7 @@ interface IAggregationResult {
 }
 
 const escapeReg = /[.*+?^${}()|[\]\\]/g
+const collation: CollationDocument = { locale: 'en', strength: 2 }
 
 export const recordingCollection = new (class extends CollectionBase<IDbRecording> {
     readonly name = collectionName
@@ -158,7 +159,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         databaseTrace('query recordings: %j', query)
 
         const me = await this.getCollection()
-        const result = await me.aggregate<IAggregationResult>(query).toArray()
+        const result = await me.aggregate<IAggregationResult>(query, { collation }).toArray()
 
         const firstRes = result && result[0]
         const countRes = firstRes && firstRes.count && firstRes.count[0]
@@ -167,11 +168,10 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         delete filter.languages
 
         const languageInfo = await me
-            .aggregate<api.IQueryCountInfo>([
-                ...baseQuery,
-                { $unwind: '$languages' },
-                { $group: { _id: '$languages', count: { $sum: 1 } } },
-            ])
+            .aggregate<api.IQueryCountInfo>(
+                [...baseQuery, { $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
+                { collation },
+            )
             .toArray()
 
         return {
