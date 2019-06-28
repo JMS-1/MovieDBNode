@@ -2141,7 +2141,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const itemRedux_1 = __webpack_require__(/*! ./item/itemRedux */ "./Client/src/routes/recording/item/itemRedux.ts");
+const sizeRedux_1 = __webpack_require__(/*! ./size/sizeRedux */ "./Client/src/routes/recording/size/sizeRedux.ts");
 const searchRedux_1 = __webpack_require__(/*! ../../components/search/searchRedux */ "./Client/src/components/search/searchRedux.ts");
+const pageSizes = [15, 30, 50, 75, 100, 250];
 class CRecordingRoute extends React.PureComponent {
     constructor() {
         super(...arguments);
@@ -2155,15 +2157,8 @@ class CRecordingRoute extends React.PureComponent {
             const series = typeof data.value === 'string' && this.props.seriesMap[data.value];
             this.props.setSeries((series && series.children) || []);
         };
-        this.setPageSize15 = () => this.props.setPageSize(15);
-        this.setPageSize30 = () => this.props.setPageSize(30);
-        this.setPageSize50 = () => this.props.setPageSize(50);
-        this.setPageSize75 = () => this.props.setPageSize(75);
-        this.setPageSize100 = () => this.props.setPageSize(100);
-        this.setPageSize250 = () => this.props.setPageSize(250);
     }
     render() {
-        const { pageSize } = this.props;
         return (React.createElement("div", { className: 'movie-db-recording-route' },
             React.createElement(semanticUiReact.Segment, { className: 'count' }, this.props.count),
             React.createElement(semanticUiReact.Segment, { className: 'filter' },
@@ -2174,13 +2169,7 @@ class CRecordingRoute extends React.PureComponent {
                 React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, search: true, selection: true, scrolling: true, value: this.props.genres }),
                 React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, placeholder: this.props.seriesHint, search: true, selection: true, scrolling: true, value: this.props.series[0] || '' }),
                 React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setRentTo, options: this.props.rentOptions, placeholder: this.props.rentToHint, selection: true, scrolling: true, value: this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : '' })),
-            React.createElement(semanticUiReact.Menu, { className: 'page-size' },
-                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 15, onClick: this.setPageSize15 }, "15"),
-                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 30, onClick: this.setPageSize30 }, "30"),
-                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 50, onClick: this.setPageSize50 }, "50"),
-                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 75, onClick: this.setPageSize75 }, "75"),
-                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 100, onClick: this.setPageSize100 }, "100"),
-                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 250, onClick: this.setPageSize250 }, "250")),
+            React.createElement(semanticUiReact.Menu, { className: 'page-size' }, pageSizes.map(p => (React.createElement(sizeRedux_1.PageSizeSelector, { key: p, size: p })))),
             React.createElement("div", { className: 'pager' },
                 React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })),
             React.createElement("div", { className: 'table' },
@@ -2256,6 +2245,57 @@ function mapDispatchToProps(dispatch, props) {
     };
 }
 exports.RecordingRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingRoute);
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/size/size.tsx":
+/*!***************************************************!*\
+  !*** ./Client/src/routes/recording/size/size.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+class CPageSizeSelector extends React.PureComponent {
+    render() {
+        const { size } = this.props;
+        return (React.createElement(semantic_ui_react_1.MenuItem, { active: size === this.props.currentSize, className: 'movie-db-recording-size', onClick: this.props.select }, size));
+    }
+}
+exports.CPageSizeSelector = CPageSizeSelector;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/size/sizeRedux.ts":
+/*!*******************************************************!*\
+  !*** ./Client/src/routes/recording/size/sizeRedux.ts ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./size */ "./Client/src/routes/recording/size/size.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+function mapStateToProps(state, props) {
+    return {
+        currentSize: state.recording.pageSize,
+    };
+}
+function mapDispatchToProps(dispatch, props) {
+    return {
+        select: () => dispatch(controller_1.RecordingActions.setPageSize(props.size)),
+    };
+}
+exports.PageSizeSelector = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CPageSizeSelector);
 
 
 /***/ }),

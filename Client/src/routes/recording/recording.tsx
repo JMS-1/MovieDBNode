@@ -5,6 +5,7 @@ import { TRecordingSort, TSortOrder } from 'movie-db-api'
 import { ISelectOption } from 'movie-db-client'
 
 import { RecordingItem } from './item/itemRedux'
+import { PageSizeSelector } from './size/sizeRedux'
 
 import { RecordingSearch } from '../../components/search/searchRedux'
 import { ISeriesMap } from '../../controller'
@@ -52,10 +53,10 @@ export interface IRecordingRouteActions {
 
 export type TRecordingRouteProps = IRecordingRouteProps & IRecordingRouteUiProps & IRecordingRouteActions
 
+const pageSizes = [15, 30, 50, 75, 100, 250]
+
 export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
     render(): JSX.Element {
-        const { pageSize } = this.props
-
         return (
             <div className='movie-db-recording-route'>
                 <semanticUiReact.Segment className='count'>{this.props.count}</semanticUiReact.Segment>
@@ -112,24 +113,9 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                     />
                 </semanticUiReact.Segment>
                 <semanticUiReact.Menu className='page-size'>
-                    <semanticUiReact.MenuItem active={pageSize === 15} onClick={this.setPageSize15}>
-                        15
-                    </semanticUiReact.MenuItem>
-                    <semanticUiReact.MenuItem active={pageSize === 30} onClick={this.setPageSize30}>
-                        30
-                    </semanticUiReact.MenuItem>
-                    <semanticUiReact.MenuItem active={pageSize === 50} onClick={this.setPageSize50}>
-                        50
-                    </semanticUiReact.MenuItem>
-                    <semanticUiReact.MenuItem active={pageSize === 75} onClick={this.setPageSize75}>
-                        75
-                    </semanticUiReact.MenuItem>
-                    <semanticUiReact.MenuItem active={pageSize === 100} onClick={this.setPageSize100}>
-                        100
-                    </semanticUiReact.MenuItem>
-                    <semanticUiReact.MenuItem active={pageSize === 250} onClick={this.setPageSize250}>
-                        250
-                    </semanticUiReact.MenuItem>
+                    {pageSizes.map(p => (
+                        <PageSizeSelector key={p} size={p} />
+                    ))}
                 </semanticUiReact.Menu>
                 <div className='pager'>
                     <semanticUiReact.Pagination
@@ -196,16 +182,4 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
 
         this.props.setSeries((series && series.children) || [])
     }
-
-    private readonly setPageSize15 = (): void => this.props.setPageSize(15)
-
-    private readonly setPageSize30 = (): void => this.props.setPageSize(30)
-
-    private readonly setPageSize50 = (): void => this.props.setPageSize(50)
-
-    private readonly setPageSize75 = (): void => this.props.setPageSize(75)
-
-    private readonly setPageSize100 = (): void => this.props.setPageSize(100)
-
-    private readonly setPageSize250 = (): void => this.props.setPageSize(250)
 }
