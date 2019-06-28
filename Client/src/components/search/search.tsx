@@ -1,7 +1,9 @@
 import * as React from 'react'
 import { Icon, Input } from 'semantic-ui-react'
 
-export interface ISearchUiProps {}
+export interface ISearchUiProps {
+    fluid?: boolean
+}
 
 export interface ISearchProps {
     hint: string
@@ -19,7 +21,14 @@ export class CSearch extends React.PureComponent<TSearchProps> {
         const { text } = this.props
 
         return (
-            <Input onChange={this.setFilter} placeholder='[TBD]' value={text} className='movie-db-search' icon>
+            <Input
+                className='movie-db-search'
+                fluid={this.props.fluid}
+                icon
+                onChange={this.setFilter}
+                placeholder='[TBD]'
+                value={text}
+            >
                 <input />
                 <Icon name={text ? 'close' : 'search'} link onClick={this.clearFilter} />
             </Input>

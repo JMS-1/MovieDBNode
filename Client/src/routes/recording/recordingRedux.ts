@@ -12,6 +12,8 @@ function mapStateToProps(state: IClientState, props: local.IRecordingRouteUiProp
     const route = state.recording
 
     return {
+        clear: mui.clear,
+        count: mui.count.replace(/\{count\}/g, `${route.count}`).replace(/\{total\}/g, `${route.total}`),
         createdHeader: mui.created,
         createdSort: route.sort === 'created' ? route.sortOrder : undefined,
         genreHeader: mui.genres,
@@ -27,9 +29,14 @@ function mapStateToProps(state: IClientState, props: local.IRecordingRouteUiProp
         nameHeader: mui.name,
         nameSort: route.sort === 'fullName' ? route.sortOrder : undefined,
         page: route.page,
+        pageSize: route.pageSize,
         rentOptions: controller.getRentOptions(state),
         rentTo: route.rent,
         rentToHint: mui.anyRent,
+        series: route.series,
+        seriesHint: state.mui.series.noSelect,
+        seriesMap: controller.getSeriesMap(state),
+        seriesOptions: controller.getSeriesOptions(state),
     }
 }
 
@@ -38,10 +45,13 @@ function mapDispatchToProps(
     props: local.IRecordingRouteUiProps,
 ): local.IRecordingRouteActions {
     return {
+        clearFilter: () => dispatch(controller.RecordingActions.resetFilter()),
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),
         setPage: page => dispatch(controller.RecordingActions.setPage(page)),
+        setPageSize: size => dispatch(controller.RecordingActions.setPageSize(size)),
         setRent: rentTo => dispatch(controller.RecordingActions.filterRentTo(rentTo)),
+        setSeries: ids => dispatch(controller.RecordingActions.filterSeries(ids)),
         toggleSort: sort => dispatch(controller.RecordingActions.setSort(sort)),
     }
 }

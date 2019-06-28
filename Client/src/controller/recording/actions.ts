@@ -22,6 +22,10 @@ export class RecordingActions {
         return { page, type: local.recordingActions.setPage }
     }
 
+    static setPageSize(size: number): local.ISetRecordingPageSize {
+        return { size, type: local.recordingActions.setSize }
+    }
+
     static setSort(sort: api.TRecordingSort): local.IToggleRecordingSort {
         return { sort, type: local.recordingActions.sort }
     }
@@ -61,7 +65,15 @@ export class RecordingActions {
         return { ids, type: local.recordingActions.setGenreFilter }
     }
 
+    static filterSeries(ids: string[]): local.ISetRecordingSeriesFilter {
+        return { ids, type: local.recordingActions.setSeriesFilter }
+    }
+
     static filterRentTo(rent: boolean): local.ISetRecordingRentToFilter {
         return { rent, type: local.recordingActions.setRentFilter }
+    }
+
+    static resetFilter(): local.IResetRecordingFilter {
+        return { type: local.recordingActions.resetFilter }
     }
 }

@@ -6,18 +6,18 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './level'
 
-import { getContainerChildMap, getContainerMap } from '../../../controller'
+import { getContainerMap, getFilteredContainerChildMap } from '../../../controller'
 
 const noChildren: string[] = []
 
 export const ContainerNode = connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(local.CContainerNode)
 
 function mapStateToProps(state: IClientState, props: local.IContainerNodeUiProps): local.IContainerNodeProps {
     const container = getContainerMap(state)[props.scope]
-    const list = getContainerChildMap(state)[props.scope] || noChildren
+    const list = getFilteredContainerChildMap(state)[props.scope] || noChildren
     const type = state.mui.container.types[container && container.raw.type]
 
     return {
@@ -29,7 +29,7 @@ function mapStateToProps(state: IClientState, props: local.IContainerNodeUiProps
 
 function mapDispatchToProps(
     dispatch: Dispatch<Action>,
-    props: local.IContainerNodeUiProps,
+    props: local.IContainerNodeUiProps
 ): local.IContainerNodeActions {
     return {}
 }

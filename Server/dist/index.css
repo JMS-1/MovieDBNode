@@ -36,7 +36,8 @@ body {
     flex-shrink: 0; }
   .movie-db-root > .content {
     flex-grow: 1;
-    flex-basis: 0; }
+    flex-basis: 0;
+    overflow: hidden; }
     .movie-db-root > .content .movie-db-route {
       height: 100%; }
 
@@ -80,10 +81,26 @@ body {
   padding: 0.5em;
   display: flex;
   flex-direction: column; }
-  .movie-db-recording-route > .ui.segment,
-  .movie-db-recording-route > .ui.pagination {
+  .movie-db-recording-route > .filter {
     flex-shrink: 0; }
-  .movie-db-recording-route > .ui.pagination {
+    .movie-db-recording-route > .filter > .search {
+      display: flex;
+      flex-direction: row;
+      align-items: center; }
+      .movie-db-recording-route > .filter > .search > .movie-db-search {
+        flex-grow: 1;
+        flex-basis: 0; }
+      .movie-db-recording-route > .filter > .search > .ui.button {
+        flex-shrink: 0; }
+  .movie-db-recording-route > .pager {
+    align-items: center;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0; }
+    .movie-db-recording-route > .pager > .ui.segment {
+      margin: 0 1em 0 0; }
+  .movie-db-recording-route > .page-size {
     align-self: flex-start; }
   .movie-db-recording-route > .table {
     flex-grow: 1;
@@ -117,3 +134,16 @@ body {
   text-overflow: ellipsis; }
   .movie-db-recording-item > td > span.separator:last-child {
     display: none; }
+  .movie-db-recording-item > td.name {
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    justify-content: space-between; }
+    .movie-db-recording-item > td.name > div {
+      flex-grow: 1;
+      flex-basis: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+    .movie-db-recording-item > td.name > .ui.icon {
+      flex-shrink: 0; }

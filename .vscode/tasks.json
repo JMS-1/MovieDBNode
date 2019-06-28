@@ -48,7 +48,7 @@
             "type": "shell"
         },
         {
-            "dependsOn": ["watch TSX", "watch SASS", "watch semantic", "watch API"],
+            "dependsOn": ["watch TSX", "watch SASS"],
             "group": "build",
             "label": "watch",
             "problemMatcher": []

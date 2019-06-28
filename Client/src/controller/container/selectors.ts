@@ -79,7 +79,7 @@ function filterChildMap(map: IContainerChildMap, scope: string, filter: string, 
     }
 }
 
-export const getContainerChildMap = createSelector(
+export const getFilteredContainerChildMap = createSelector(
     (state: IClientState) => state.container.all,
     (state: IClientState) => state.container.filter,
     getContainerMap,

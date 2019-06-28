@@ -339,7 +339,7 @@ class CSearch extends React.PureComponent {
     }
     render() {
         const { text } = this.props;
-        return (React.createElement(semantic_ui_react_1.Input, { onChange: this.setFilter, placeholder: '[TBD]', value: text, className: 'movie-db-search', icon: true },
+        return (React.createElement(semantic_ui_react_1.Input, { className: 'movie-db-search', fluid: this.props.fluid, icon: true, onChange: this.setFilter, placeholder: '[TBD]', value: text },
             React.createElement("input", null),
             React.createElement(semantic_ui_react_1.Icon, { name: text ? 'close' : 'search', link: true, onClick: this.clearFilter })));
     }
@@ -724,7 +724,7 @@ function filterChildMap(map, scope, filter, lookup) {
         delete map[scope];
     }
 }
-exports.getContainerChildMap = reselect_1.createSelector((state) => state.container.all, (state) => state.container.filter, exports.getContainerMap, (all, filter, lookup) => {
+exports.getFilteredContainerChildMap = reselect_1.createSelector((state) => state.container.all, (state) => state.container.filter, exports.getContainerMap, (all, filter, lookup) => {
     const map = {};
     for (let container of all) {
         const parentId = container.parentId || '';
@@ -1248,7 +1248,9 @@ function getInitialState() {
             noSelect: '(alle Sprachen)',
         },
         recording: {
-            anyRent: '(Verleih egal)',
+            anyRent: '(verliehen egal)',
+            clear: 'Neue Suche',
+            count: '{count} von {total}',
             created: 'Erstellt',
             genres: 'Kategorien',
             languages: 'Sprachen',
@@ -1262,6 +1264,9 @@ function getInitialState() {
         },
         save: 'Speichern',
         search: 'Suche...',
+        series: {
+            noSelect: '(alle Serien)',
+        },
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
     };
@@ -1325,6 +1330,9 @@ class RecordingActions {
     static setPage(page) {
         return { page, type: "movie-db.recordings.set-page" };
     }
+    static setPageSize(size) {
+        return { size, type: "movie-db.recordings.set-page-size" };
+    }
     static setSort(sort) {
         return { sort, type: "movie-db.recordings.toggle-sort" };
     }
@@ -1352,8 +1360,14 @@ class RecordingActions {
     static filterGenre(ids) {
         return { ids, type: "movie-db.recordings.filter-genre" };
     }
+    static filterSeries(ids) {
+        return { ids, type: "movie-db.recordings.filter-series" };
+    }
     static filterRentTo(rent) {
         return { rent, type: "movie-db.recordings.filter-rent" };
+    }
+    static resetFilter() {
+        return { type: "movie-db.recordings.reset-filter" };
     }
 }
 exports.RecordingActions = RecordingActions;
@@ -1386,6 +1400,7 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.cancel-edit"]: this.cancelEdit,
             ["movie-db.recordings.query"]: this.query,
             ["movie-db.recordings.query-done"]: this.load,
+            ["movie-db.recordings.reset-filter"]: this.resetFilter,
             ["movie-db.recordings.save"]: this.startSave,
             ["movie-db.recordings.save-done"]: this.saveDone,
             ["movie-db.recordings.select"]: this.select,
@@ -1394,18 +1409,23 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.set-page"]: this.setPage,
             ["movie-db.recordings.set-prop"]: this.setProperty,
             ["movie-db.recordings.filter-rent"]: this.setRentFilter,
+            ["movie-db.recordings.filter-series"]: this.setSeriesFilter,
+            ["movie-db.recordings.set-page-size"]: this.setPageSize,
             ["movie-db.recordings.filter-text"]: this.setTextFilter,
             ["movie-db.recordings.toggle-sort"]: this.setSort,
         };
     }
     getInitialState() {
-        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', sort: 'fullName', sortOrder: 'ascending', total: 0 });
+        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending', total: 0 });
     }
     startSave(state, request) {
         if (state.workingCopy) {
             store_1.ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, actions_1.RecordingActions.saveDone);
         }
         return state;
+    }
+    resetFilter(state, request) {
+        return this.sendQuery(Object.assign({}, state, { genres: [], language: '', pageSize: 15, rent: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending' }), true);
     }
     sendQuery(state, reset = false) {
         const req = {
@@ -1416,6 +1436,7 @@ const controller = new (class extends controller_1.EditController {
             language: state.language,
             pageSize: state.pageSize,
             rent: state.rent,
+            series: state.series,
             sort: state.sort,
             sortOrder: state.sortOrder,
         };
@@ -1432,6 +1453,12 @@ const controller = new (class extends controller_1.EditController {
             return state;
         }
         return this.sendQuery(Object.assign({}, state, { page }));
+    }
+    setPageSize(state, request) {
+        if (request.size === state.pageSize) {
+            return state;
+        }
+        return this.sendQuery(Object.assign({}, state, { pageSize: request.size }), true);
     }
     setSort(state, request) {
         if (request.sort === state.sort) {
@@ -1459,6 +1486,9 @@ const controller = new (class extends controller_1.EditController {
     }
     setGenreFilter(state, request) {
         return this.sendQuery(Object.assign({}, state, { genres: request.ids || [] }), true);
+    }
+    setSeriesFilter(state, request) {
+        return this.sendQuery(Object.assign({}, state, { series: request.ids || [] }), true);
     }
     load(state, response) {
         if (response.correlationId !== state.correlationId) {
@@ -1513,11 +1543,7 @@ exports.getRecordingMap = reselect_1.createSelector((state) => state.recording.a
     return map;
 });
 exports.getRecordings = reselect_1.createSelector((state) => state.recording.all, (all) => all.map(r => r._id));
-exports.getRentOptions = reselect_1.createSelector((state) => state.mui.recording, (mui) => [
-    { key: '*', text: mui.anyRent, value: '' },
-    { key: '1', text: mui.yesRent, value: '1' },
-    { key: '0', text: mui.noRent, value: '0' },
-]);
+exports.getRentOptions = reselect_1.createSelector((state) => state.mui.recording, (mui) => [{ key: '1', text: mui.yesRent, value: '1' }, { key: '0', text: mui.noRent, value: '0' }]);
 
 
 /***/ }),
@@ -1588,6 +1614,83 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/series/actions.ts"));
 __export(__webpack_require__(/*! ./controller */ "./Client/src/controller/series/controller.ts"));
+__export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/series/selectors.ts"));
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/series/selectors.ts":
+/*!***************************************************!*\
+  !*** ./Client/src/controller/series/selectors.ts ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+function processSeries(id, map) {
+    const info = map[id];
+    if (info && !info.name) {
+        const series = info.raw;
+        const parent = processSeries(series.parentId, map);
+        if (parent) {
+            for (let p = parent; p; p = map[p.raw.parentId]) {
+                p.children.push(...info.children);
+                p.children.push(id);
+            }
+            info.name = `${parent.name}${" > "}${series.name}`;
+        }
+        else {
+            info.name = series.name;
+        }
+    }
+    return info;
+}
+exports.getSeriesMap = reselect_1.createSelector((state) => state.series.all, (all) => {
+    const map = {};
+    all.forEach(c => (map[c._id] = { raw: c, name: undefined, children: [c._id] }));
+    for (let container of Object.values(map)) {
+        processSeries(container.raw._id, map);
+    }
+    return map;
+});
+exports.getSeriesChildMap = reselect_1.createSelector((state) => state.series.all, exports.getSeriesMap, (all, lookup) => {
+    const map = {};
+    for (let container of all) {
+        const parentId = container.parentId || '';
+        let parentInfo = map[parentId];
+        if (!parentInfo) {
+            map[parentId] = parentInfo = [];
+        }
+        parentInfo.push(container._id);
+    }
+    for (let children of Object.values(map)) {
+        children.sort((l, r) => {
+            const left = lookup[l];
+            const right = lookup[r];
+            return ((left && left.raw.name) || left.raw._id).localeCompare((right && right.raw.name) || right.raw._id);
+        });
+    }
+    return map;
+});
+function buildOptions(scope, prefix, list, tree, lookup) {
+    if (scope) {
+        prefix += '\xa0\xa0\xa0\xa0';
+    }
+    const children = (tree[scope] || []).map(id => lookup[id]).filter(s => s);
+    for (let child of children) {
+        const series = child.raw;
+        list.push({ key: series._id, text: `${prefix}${child.name}`, value: series._id });
+        buildOptions(series._id, prefix, list, tree, lookup);
+    }
+}
+exports.getSeriesOptions = reselect_1.createSelector(exports.getSeriesChildMap, exports.getSeriesMap, (tree, map) => {
+    const list = [];
+    buildOptions('', '', list, tree, map);
+    return list;
+});
 
 
 /***/ }),
@@ -1827,7 +1930,7 @@ const noChildren = [];
 exports.ContainerNode = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerNode);
 function mapStateToProps(state, props) {
     const container = controller_1.getContainerMap(state)[props.scope];
-    const list = controller_1.getContainerChildMap(state)[props.scope] || noChildren;
+    const list = controller_1.getFilteredContainerChildMap(state)[props.scope] || noChildren;
     const type = state.mui.container.types[container && container.raw.type];
     return {
         list: list.map(id => React.createElement(exports.ContainerNode, { key: id, scope: id, detail: props.detail })),
@@ -1906,11 +2009,11 @@ const genreRedux_1 = __webpack_require__(/*! ../../../components/genre/genreRedu
 const languageRedux_1 = __webpack_require__(/*! ../../../components/language/languageRedux */ "./Client/src/components/language/languageRedux.ts");
 class CRecordingItem extends React.PureComponent {
     render() {
+        const { rentTo } = this.props;
         return (React.createElement(semantic_ui_react_1.Table.Row, { className: 'movie-db-recording-item' },
             React.createElement(semantic_ui_react_1.Table.Cell, { className: 'name' },
-                this.props.name,
-                "/",
-                this.props.rentTo),
+                React.createElement("div", null, this.props.name),
+                rentTo && React.createElement(semantic_ui_react_1.Icon, { name: 'user outline', title: rentTo })),
             React.createElement(semantic_ui_react_1.Table.Cell, { className: 'created' }, this.props.created),
             React.createElement(semantic_ui_react_1.Table.Cell, { className: 'languages' }, this.languages.map(l => (React.createElement(React.Fragment, { key: l },
                 React.createElement(languageRedux_1.Language, { id: l }),
@@ -2000,18 +2103,39 @@ class CRecordingRoute extends React.PureComponent {
         super(...arguments);
         this.sortName = () => this.props.toggleSort('fullName');
         this.sortCreated = () => this.props.toggleSort('created');
-        this.onPage = (ev, data) => this.props.setPage(data.activePage);
+        this.onPage = (ev, data) => this.props.setPage(typeof data.activePage === 'number' ? data.activePage : 1);
         this.setLanguage = (ev, data) => this.props.setLanguage(typeof data.value === 'string' ? data.value : undefined);
         this.setRentTo = (ev, data) => this.props.setRent(data.value === '1' || (data.value !== '0' && undefined));
         this.setGenre = (ev, data) => this.props.setGenres(Array.isArray(data.value) ? data.value : undefined);
+        this.setSeries = (ev, data) => {
+            const series = typeof data.value === 'string' && this.props.seriesMap[data.value];
+            this.props.setSeries((series && series.children) || []);
+        };
+        this.setPageSize15 = () => this.props.setPageSize(15);
+        this.setPageSize30 = () => this.props.setPageSize(30);
+        this.setPageSize50 = () => this.props.setPageSize(50);
+        this.setPageSize75 = () => this.props.setPageSize(75);
+        this.setPageSize100 = () => this.props.setPageSize(100);
+        this.setPageSize250 = () => this.props.setPageSize(250);
     }
     render() {
+        const { pageSize } = this.props;
         return (React.createElement("div", { className: 'movie-db-recording-route' },
-            React.createElement(semanticUiReact.Segment, null,
-                React.createElement(searchRedux_1.RecordingSearch, null),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setLanguage, options: this.props.languageOptions, placeholder: this.props.languageHint, selection: true, scrolling: true, value: this.props.language || '' }),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, selection: true, scrolling: true, value: this.props.genres }),
+            React.createElement(semanticUiReact.Segment, { className: 'filter' },
+                React.createElement("div", { className: 'search' },
+                    React.createElement(searchRedux_1.RecordingSearch, { fluid: true }),
+                    React.createElement(semanticUiReact.Button, { onClick: this.props.clearFilter }, this.props.clear)),
+                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setLanguage, options: this.props.languageOptions, placeholder: this.props.languageHint, search: true, selection: true, scrolling: true, value: this.props.language || '' }),
+                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, search: true, selection: true, scrolling: true, value: this.props.genres }),
+                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, placeholder: this.props.seriesHint, search: true, selection: true, scrolling: true, value: this.props.series[0] || '' }),
                 React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setRentTo, options: this.props.rentOptions, placeholder: this.props.rentToHint, selection: true, scrolling: true, value: this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : '' })),
+            React.createElement(semanticUiReact.Menu, { className: 'page-size' },
+                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 15, onClick: this.setPageSize15 }, "15"),
+                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 30, onClick: this.setPageSize30 }, "30"),
+                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 50, onClick: this.setPageSize50 }, "50"),
+                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 75, onClick: this.setPageSize75 }, "75"),
+                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 100, onClick: this.setPageSize100 }, "100"),
+                React.createElement(semanticUiReact.MenuItem, { active: pageSize === 250, onClick: this.setPageSize250 }, "250")),
             React.createElement("div", { className: 'table' },
                 React.createElement(semanticUiReact.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },
                     React.createElement(semanticUiReact.Table.Header, null,
@@ -2021,7 +2145,9 @@ class CRecordingRoute extends React.PureComponent {
                             React.createElement(semanticUiReact.Table.HeaderCell, { className: 'languages' }, this.props.languageHeader),
                             React.createElement(semanticUiReact.Table.HeaderCell, { className: 'genres' }, this.props.genreHeader))),
                     React.createElement(semanticUiReact.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r })))))),
-            React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })));
+            React.createElement("div", { className: 'pager' },
+                React.createElement(semanticUiReact.Segment, null, this.props.count),
+                React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage }))));
     }
 }
 exports.CRecordingRoute = CRecordingRoute;
@@ -2046,6 +2172,8 @@ function mapStateToProps(state, props) {
     const mui = state.mui.recording;
     const route = state.recording;
     return {
+        clear: mui.clear,
+        count: mui.count.replace(/\{count\}/g, `${route.count}`).replace(/\{total\}/g, `${route.total}`),
         createdHeader: mui.created,
         createdSort: route.sort === 'created' ? route.sortOrder : undefined,
         genreHeader: mui.genres,
@@ -2061,17 +2189,25 @@ function mapStateToProps(state, props) {
         nameHeader: mui.name,
         nameSort: route.sort === 'fullName' ? route.sortOrder : undefined,
         page: route.page,
+        pageSize: route.pageSize,
         rentOptions: controller.getRentOptions(state),
         rentTo: route.rent,
         rentToHint: mui.anyRent,
+        series: route.series,
+        seriesHint: state.mui.series.noSelect,
+        seriesMap: controller.getSeriesMap(state),
+        seriesOptions: controller.getSeriesOptions(state),
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
+        clearFilter: () => dispatch(controller.RecordingActions.resetFilter()),
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),
         setPage: page => dispatch(controller.RecordingActions.setPage(page)),
+        setPageSize: size => dispatch(controller.RecordingActions.setPageSize(size)),
         setRent: rentTo => dispatch(controller.RecordingActions.filterRentTo(rentTo)),
+        setSeries: ids => dispatch(controller.RecordingActions.filterSeries(ids)),
         toggleSort: sort => dispatch(controller.RecordingActions.setSort(sort)),
     };
 }

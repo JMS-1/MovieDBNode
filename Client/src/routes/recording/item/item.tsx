@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Table } from 'semantic-ui-react'
+import { Icon, Table } from 'semantic-ui-react'
 
 import { Genre } from '../../../components/genre/genreRedux'
 import { Language } from '../../../components/language/languageRedux'
@@ -25,10 +25,13 @@ export type TRecordingItemProps = IRecordingItemProps & IRecordingItemUiProps & 
 
 export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
     render(): JSX.Element {
+        const { rentTo } = this.props
+
         return (
             <Table.Row className='movie-db-recording-item'>
                 <Table.Cell className='name'>
-                    {this.props.name}/{this.props.rentTo}
+                    <div>{this.props.name}</div>
+                    {rentTo && <Icon name='user outline' title={rentTo} />}
                 </Table.Cell>
                 <Table.Cell className='created'>{this.props.created}</Table.Cell>
                 <Table.Cell className='languages'>

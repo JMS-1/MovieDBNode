@@ -112,7 +112,6 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         const result = await me.aggregate(query).toArray();
         const firstRes = result && result[0];
         const countRes = firstRes && firstRes.count && firstRes.count[0];
-        const languageQuery = filter.languages;
         delete filter.languages;
         const languageInfo = await me
             .aggregate([
@@ -121,9 +120,6 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             { $group: { _id: '$languages', count: { $sum: 1 } } },
         ])
             .toArray();
-        if (languageQuery) {
-            filter.languages = languageQuery;
-        }
         return {
             correlationId: req.correlationId,
             count: (countRes && countRes.total) || 0,

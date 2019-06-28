@@ -146,8 +146,6 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         const countRes = firstRes && firstRes.count && firstRes.count[0]
 
         // Für die Bewertung der Sprachen muss der Sprachfilter deaktiviert werden.
-        const languageQuery = filter.languages
-
         delete filter.languages
 
         const languageInfo = await me
@@ -157,10 +155,6 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
                 { $group: { _id: '$languages', count: { $sum: 1 } } },
             ])
             .toArray()
-
-        if (languageQuery) {
-            filter.languages = languageQuery
-        }
 
         return {
             correlationId: req.correlationId,

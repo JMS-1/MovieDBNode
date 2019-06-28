@@ -15,6 +15,7 @@ declare module 'movie-db-client' {
         readonly rent: boolean
         readonly resetAfterLoad: boolean
         readonly search: string
+        readonly series: string[]
         readonly sort: api.TRecordingSort
         readonly sortOrder: api.TSortOrder
         readonly total: number
@@ -24,6 +25,7 @@ declare module 'movie-db-client' {
         cancel = 'movie-db.recordings.cancel-edit',
         query = 'movie-db.recordings.query',
         queryDone = 'movie-db.recordings.query-done',
+        resetFilter = 'movie-db.recordings.reset-filter',
         save = 'movie-db.recordings.save',
         saveDone = 'movie-db.recordings.save-done',
         select = 'movie-db.recordings.select',
@@ -32,6 +34,8 @@ declare module 'movie-db-client' {
         setPage = 'movie-db.recordings.set-page',
         setProp = 'movie-db.recordings.set-prop',
         setRentFilter = 'movie-db.recordings.filter-rent',
+        setSeriesFilter = 'movie-db.recordings.filter-series',
+        setSize = 'movie-db.recordings.set-page-size',
         setTextFilter = 'movie-db.recordings.filter-text',
         sort = 'movie-db.recordings.toggle-sort',
     }
@@ -75,6 +79,11 @@ declare module 'movie-db-client' {
         type: recordingActions.setPage
     }
 
+    interface ISetRecordingPageSize extends Action {
+        size: number
+        type: recordingActions.setSize
+    }
+
     interface IToggleRecordingSort extends Action {
         sort: api.TRecordingSort
         type: recordingActions.sort
@@ -95,8 +104,17 @@ declare module 'movie-db-client' {
         type: recordingActions.setGenreFilter
     }
 
+    interface ISetRecordingSeriesFilter extends Action {
+        ids: string[]
+        type: recordingActions.setSeriesFilter
+    }
+
     interface ISetRecordingRentToFilter extends Action {
         rent: boolean
         type: recordingActions.setRentFilter
+    }
+
+    interface IResetRecordingFilter extends Action {
+        type: recordingActions.resetFilter
     }
 }

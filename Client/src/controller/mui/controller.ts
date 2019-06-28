@@ -48,7 +48,9 @@ export function getInitialState(): IMuiState {
             noSelect: '(alle Sprachen)',
         },
         recording: {
-            anyRent: '(Verleih egal)',
+            anyRent: '(verliehen egal)',
+            clear: 'Neue Suche',
+            count: '{count} von {total}',
             created: 'Erstellt',
             genres: 'Kategorien',
             languages: 'Sprachen',
@@ -62,6 +64,9 @@ export function getInitialState(): IMuiState {
         },
         save: 'Speichern',
         search: 'Suche...',
+        series: {
+            noSelect: '(alle Serien)',
+        },
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
     }

@@ -23,6 +23,8 @@ declare module 'movie-db-client' {
         }
         readonly recording: {
             readonly anyRent: string
+            readonly clear: string
+            readonly count: string
             readonly created: string
             readonly genres: string
             readonly languages: string
@@ -36,6 +38,9 @@ declare module 'movie-db-client' {
         }
         readonly save: string
         readonly search: string
+        readonly series: {
+            readonly noSelect: string
+        }
         readonly validationError: string
         readonly webError: string
     }

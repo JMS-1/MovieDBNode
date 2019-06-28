@@ -15,13 +15,16 @@ type TRecordingActions =
     | local.ILoadSchemas
     | local.IQueryRecordings
     | local.IRecordingSaved
+    | local.IResetRecordingFilter
     | local.ISaveRecording
     | local.ISelectRecording
     | local.ISetRecordingGenreFilter
     | local.ISetRecordingLanguageFilter
     | local.ISetRecordingPage
+    | local.ISetRecordingPageSize
     | local.ISetRecordingProperty<any>
     | local.ISetRecordingRentToFilter
+    | local.ISetRecordingSeriesFilter
     | local.ISetRecordingTextFilter
     | local.IToggleRecordingSort
 
@@ -34,6 +37,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.cancel]: this.cancelEdit,
             [local.recordingActions.query]: this.query,
             [local.recordingActions.queryDone]: this.load,
+            [local.recordingActions.resetFilter]: this.resetFilter,
             [local.recordingActions.save]: this.startSave,
             [local.recordingActions.saveDone]: this.saveDone,
             [local.recordingActions.select]: this.select,
@@ -42,6 +46,8 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.setPage]: this.setPage,
             [local.recordingActions.setProp]: this.setProperty,
             [local.recordingActions.setRentFilter]: this.setRentFilter,
+            [local.recordingActions.setSeriesFilter]: this.setSeriesFilter,
+            [local.recordingActions.setSize]: this.setPageSize,
             [local.recordingActions.setTextFilter]: this.setTextFilter,
             [local.recordingActions.sort]: this.setSort,
         }
@@ -61,6 +67,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             rent: undefined,
             resetAfterLoad: undefined,
             search: '',
+            series: [],
             sort: 'fullName',
             sortOrder: 'ascending',
             total: 0,
@@ -75,6 +82,23 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return state
     }
 
+    private resetFilter(state: local.IRecordingState, request: local.IResetRecordingFilter): local.IRecordingState {
+        return this.sendQuery(
+            {
+                ...state,
+                genres: [],
+                language: '',
+                pageSize: 15,
+                rent: undefined,
+                search: '',
+                series: [],
+                sort: 'fullName',
+                sortOrder: 'ascending',
+            },
+            true,
+        )
+    }
+
     private sendQuery(state: local.IRecordingState, reset: boolean = false): local.IRecordingState {
         const req: api.IRecordingQueryRequest = {
             correlationId: uuid(),
@@ -84,6 +108,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             language: state.language,
             pageSize: state.pageSize,
             rent: state.rent,
+            series: state.series,
             sort: state.sort,
             sortOrder: state.sortOrder,
         }
@@ -106,6 +131,14 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         }
 
         return this.sendQuery({ ...state, page })
+    }
+
+    private setPageSize(state: local.IRecordingState, request: local.ISetRecordingPageSize): local.IRecordingState {
+        if (request.size === state.pageSize) {
+            return state
+        }
+
+        return this.sendQuery({ ...state, pageSize: request.size }, true)
     }
 
     private setSort(state: local.IRecordingState, request: local.IToggleRecordingSort): local.IRecordingState {
@@ -157,6 +190,13 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         request: local.ISetRecordingGenreFilter,
     ): local.IRecordingState {
         return this.sendQuery({ ...state, genres: request.ids || [] }, true)
+    }
+
+    private setSeriesFilter(
+        state: local.IRecordingState,
+        request: local.ISetRecordingSeriesFilter,
+    ): local.IRecordingState {
+        return this.sendQuery({ ...state, series: request.ids || [] }, true)
     }
 
     protected load(state: local.IRecordingState, response: local.ILoadRecordings): local.IRecordingState {
