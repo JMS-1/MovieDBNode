@@ -2,7 +2,10 @@ import * as React from 'react'
 import { Route } from 'react-router'
 import { Dimmer, Header, Loader, Menu, Message } from 'semantic-ui-react'
 
+import { routes } from 'movie-db-client'
+
 import { ContainerRoute } from '../../routes/container/containerRedux'
+import { Recording } from '../../routes/recording/details/detailsRedux'
 import { RecordingRoute } from '../../routes/recording/recordingRedux'
 
 export interface IRootUiProps {}
@@ -23,14 +26,11 @@ export interface IRootActions {
 
 export type TRootProps = IRootProps & IRootUiProps & IRootActions
 
-const containerRoute = '/container'
-const recordingRoute = '/recording'
-
 export class CRoot extends React.PureComponent<TRootProps> {
     render(): JSX.Element {
         const { errors, busy, path } = this.props
-        const container = path.startsWith(containerRoute)
-        const recording = path.startsWith(recordingRoute) || path === '/'
+        const container = path.startsWith(routes.container)
+        const recording = path.startsWith(routes.recording) || path === '/'
 
         return (
             <div className='movie-db-root'>
@@ -54,15 +54,16 @@ export class CRoot extends React.PureComponent<TRootProps> {
                     </Menu.Item>
                 </Menu>
                 <div className='content'>
-                    <Route path={`${containerRoute}/:id?`} component={ContainerRoute} />
-                    <Route path={`${recordingRoute}/:id?`} component={RecordingRoute} />
+                    <Route path={`${routes.container}/:id?`} component={ContainerRoute} />
+                    <Route path={`${routes.recording}/:id`} component={Recording} />
+                    <Route path={routes.recording} exact component={RecordingRoute} />
                     <Route path='/' exact component={RecordingRoute} />
                 </div>
             </div>
         )
     }
 
-    private readonly gotoContainer = (): void => this.props.goto(containerRoute)
+    private readonly gotoContainer = (): void => this.props.goto(routes.container)
 
-    private readonly gotoRecordings = (): void => this.props.goto(recordingRoute)
+    private readonly gotoRecordings = (): void => this.props.goto(routes.recording)
 }

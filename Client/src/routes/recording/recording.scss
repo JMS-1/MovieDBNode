@@ -1,50 +1,36 @@
 @import '../../mixins';
 
 .movie-db-recording-route {
-    overflow: auto;
+    overflow: hidden;
     height: calc(100% - 1em);
     padding: 0.5em;
     display: flex;
     flex-direction: column;
 
-    > .filter {
-        flex-shrink: 0;
-
-        > .search {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-
-            > .movie-db-search {
-                flex-grow: 1;
-                flex-basis: 0;
-            }
-
-            > .ui.button {
-                flex-shrink: 0;
-            }
-        }
-    }
-
-    > .pager {
-        align-items: center;
-        align-self: flex-start;
+    > .filter > .search {
         display: flex;
         flex-direction: row;
-        flex-shrink: 0;
+        align-items: center;
 
-        > .ui.segment {
-            margin: 0 1em 0 0;
+        > .movie-db-search {
+            flex-grow: 1;
+            flex-basis: 0;
+        }
+
+        > .ui.button {
+            flex-shrink: 0;
         }
     }
 
+    > .pager,
+    > .count,
     > .page-size {
         align-self: flex-start;
     }
 
     > .table {
-        flex-grow: 1;
-        flex-basis: 0;
+        overflow: auto;
+        margin-top: 0.5em;
 
         > .ui.table {
             > thead > tr > th,
@@ -77,4 +63,5 @@
     }
 }
 
+@import 'details/details';
 @import 'item/item';

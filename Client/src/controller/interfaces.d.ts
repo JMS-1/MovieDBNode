@@ -65,4 +65,9 @@ declare module 'movie-db-client' {
         item: TItem
         errors: IValidationError[]
     }
+
+    const enum routes {
+        container = '/container',
+        recording = '/recording',
+    }
 }

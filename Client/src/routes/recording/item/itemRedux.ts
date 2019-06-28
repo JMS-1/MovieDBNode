@@ -1,7 +1,8 @@
+import { routerActions } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
 
-import { IClientState } from 'movie-db-client'
+import { IClientState, routes } from 'movie-db-client'
 
 import * as local from './item'
 
@@ -37,7 +38,9 @@ function mapDispatchToProps(
     dispatch: Dispatch<Action>,
     props: local.IRecordingItemUiProps,
 ): local.IRecordingItemActions {
-    return {}
+    return {
+        select: () => dispatch(routerActions.push(`${routes.recording}/${props.id}`)),
+    }
 }
 
 export const RecordingItem = connect(

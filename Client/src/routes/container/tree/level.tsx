@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Icon, Label, List, SemanticICONS } from 'semantic-ui-react'
 
+import { routes } from 'movie-db-client'
+
 export interface IContainerNodeUiProps {
     detail: string
     scope: string
@@ -23,7 +25,7 @@ export class CContainerNode extends React.PureComponent<TContainerNodeProps> {
         return (
             <List className='movie-db-container-tree-level'>
                 {name && (
-                    <Label as='a' active={scope === this.props.detail} href={`#/container/${scope}`}>
+                    <Label as='a' active={scope === this.props.detail} href={`#${routes.container}/${scope}`}>
                         <Icon name={this.props.type} />
                         {name}
                     </Label>

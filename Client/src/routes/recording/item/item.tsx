@@ -19,7 +19,9 @@ export interface IRecordingItemProps {
     rentTo: string
 }
 
-export interface IRecordingItemActions {}
+export interface IRecordingItemActions {
+    select(): void
+}
 
 export type TRecordingItemProps = IRecordingItemProps & IRecordingItemUiProps & IRecordingItemActions
 
@@ -29,7 +31,7 @@ export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
 
         return (
             <Table.Row className='movie-db-recording-item'>
-                <Table.Cell className='name'>
+                <Table.Cell className='name' selectable onClick={this.props.select}>
                     <div>{this.props.name}</div>
                     {rentTo && <Icon name='user outline' title={rentTo} />}
                 </Table.Cell>

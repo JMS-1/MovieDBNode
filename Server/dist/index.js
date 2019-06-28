@@ -249,19 +249,18 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const containerRedux_1 = __webpack_require__(/*! ../../routes/container/containerRedux */ "./Client/src/routes/container/containerRedux.ts");
+const detailsRedux_1 = __webpack_require__(/*! ../../routes/recording/details/detailsRedux */ "./Client/src/routes/recording/details/detailsRedux.ts");
 const recordingRedux_1 = __webpack_require__(/*! ../../routes/recording/recordingRedux */ "./Client/src/routes/recording/recordingRedux.ts");
-const containerRoute = '/container';
-const recordingRoute = '/recording';
 class CRoot extends React.PureComponent {
     constructor() {
         super(...arguments);
-        this.gotoContainer = () => this.props.goto(containerRoute);
-        this.gotoRecordings = () => this.props.goto(recordingRoute);
+        this.gotoContainer = () => this.props.goto("/container");
+        this.gotoRecordings = () => this.props.goto("/recording");
     }
     render() {
         const { errors, busy, path } = this.props;
-        const container = path.startsWith(containerRoute);
-        const recording = path.startsWith(recordingRoute) || path === '/';
+        const container = path.startsWith("/container");
+        const recording = path.startsWith("/recording") || path === '/';
         return (React.createElement("div", { className: 'movie-db-root' },
             React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: busy || errors.length > 0 },
                 React.createElement(semantic_ui_react_1.Loader, { disabled: !busy }),
@@ -272,8 +271,9 @@ class CRoot extends React.PureComponent {
                 React.createElement(semantic_ui_react_1.Menu.Item, { active: recording, onClick: this.gotoRecordings }, this.props.recordingRoute),
                 React.createElement(semantic_ui_react_1.Menu.Item, { active: container, onClick: this.gotoContainer }, this.props.containerRoute)),
             React.createElement("div", { className: 'content' },
-                React.createElement(react_router_1.Route, { path: `${containerRoute}/:id?`, component: containerRedux_1.ContainerRoute }),
-                React.createElement(react_router_1.Route, { path: `${recordingRoute}/:id?`, component: recordingRedux_1.RecordingRoute }),
+                React.createElement(react_router_1.Route, { path: `${"/container"}/:id?`, component: containerRedux_1.ContainerRoute }),
+                React.createElement(react_router_1.Route, { path: `${"/recording"}/:id`, component: detailsRedux_1.Recording }),
+                React.createElement(react_router_1.Route, { path: "/recording", exact: true, component: recordingRedux_1.RecordingRoute }),
                 React.createElement(react_router_1.Route, { path: '/', exact: true, component: recordingRedux_1.RecordingRoute }))));
     }
 }
@@ -1675,20 +1675,17 @@ exports.getSeriesChildMap = reselect_1.createSelector((state) => state.series.al
     }
     return map;
 });
-function buildOptions(scope, prefix, list, tree, lookup) {
-    if (scope) {
-        prefix += '\xa0\xa0\xa0\xa0';
-    }
+function buildOptions(scope, list, tree, lookup) {
     const children = (tree[scope] || []).map(id => lookup[id]).filter(s => s);
     for (let child of children) {
         const series = child.raw;
-        list.push({ key: series._id, text: `${prefix}${child.name}`, value: series._id });
-        buildOptions(series._id, prefix, list, tree, lookup);
+        list.push({ key: series._id, text: child.name, value: series._id });
+        buildOptions(series._id, list, tree, lookup);
     }
 }
 exports.getSeriesOptions = reselect_1.createSelector(exports.getSeriesChildMap, exports.getSeriesMap, (tree, map) => {
     const list = [];
-    buildOptions('', '', list, tree, map);
+    buildOptions('', list, tree, map);
     return list;
 });
 
@@ -1901,7 +1898,7 @@ class CContainerNode extends React.PureComponent {
     render() {
         const { name, scope } = this.props;
         return (React.createElement(semantic_ui_react_1.List, { className: 'movie-db-container-tree-level' },
-            name && (React.createElement(semantic_ui_react_1.Label, { as: 'a', active: scope === this.props.detail, href: `#/container/${scope}` },
+            name && (React.createElement(semantic_ui_react_1.Label, { as: 'a', active: scope === this.props.detail, href: `#${"/container"}/${scope}` },
                 React.createElement(semantic_ui_react_1.Icon, { name: this.props.type }),
                 name)),
             this.props.list));
@@ -1993,6 +1990,50 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 /***/ }),
 
+/***/ "./Client/src/routes/recording/details/details.tsx":
+/*!*********************************************************!*\
+  !*** ./Client/src/routes/recording/details/details.tsx ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CRecording extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-recording-edit' }, this.props.match.params.id);
+    }
+}
+exports.CRecording = CRecording;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/details/detailsRedux.ts":
+/*!*************************************************************!*\
+  !*** ./Client/src/routes/recording/details/detailsRedux.ts ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./details */ "./Client/src/routes/recording/details/details.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.Recording = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecording);
+
+
+/***/ }),
+
 /***/ "./Client/src/routes/recording/item/item.tsx":
 /*!***************************************************!*\
   !*** ./Client/src/routes/recording/item/item.tsx ***!
@@ -2011,7 +2052,7 @@ class CRecordingItem extends React.PureComponent {
     render() {
         const { rentTo } = this.props;
         return (React.createElement(semantic_ui_react_1.Table.Row, { className: 'movie-db-recording-item' },
-            React.createElement(semantic_ui_react_1.Table.Cell, { className: 'name' },
+            React.createElement(semantic_ui_react_1.Table.Cell, { className: 'name', selectable: true, onClick: this.props.select },
                 React.createElement("div", null, this.props.name),
                 rentTo && React.createElement(semantic_ui_react_1.Icon, { name: 'user outline', title: rentTo })),
             React.createElement(semantic_ui_react_1.Table.Cell, { className: 'created' }, this.props.created),
@@ -2054,6 +2095,7 @@ exports.CRecordingItem = CRecordingItem;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./item */ "./Client/src/routes/recording/item/item.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
@@ -2077,7 +2119,9 @@ function mapStateToProps(state, props) {
     };
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        select: () => dispatch(connected_react_router_1.routerActions.push(`${"/recording"}/${props.id}`)),
+    };
 }
 exports.RecordingItem = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingItem);
 
@@ -2121,6 +2165,7 @@ class CRecordingRoute extends React.PureComponent {
     render() {
         const { pageSize } = this.props;
         return (React.createElement("div", { className: 'movie-db-recording-route' },
+            React.createElement(semanticUiReact.Segment, { className: 'count' }, this.props.count),
             React.createElement(semanticUiReact.Segment, { className: 'filter' },
                 React.createElement("div", { className: 'search' },
                     React.createElement(searchRedux_1.RecordingSearch, { fluid: true }),
@@ -2136,6 +2181,8 @@ class CRecordingRoute extends React.PureComponent {
                 React.createElement(semanticUiReact.MenuItem, { active: pageSize === 75, onClick: this.setPageSize75 }, "75"),
                 React.createElement(semanticUiReact.MenuItem, { active: pageSize === 100, onClick: this.setPageSize100 }, "100"),
                 React.createElement(semanticUiReact.MenuItem, { active: pageSize === 250, onClick: this.setPageSize250 }, "250")),
+            React.createElement("div", { className: 'pager' },
+                React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })),
             React.createElement("div", { className: 'table' },
                 React.createElement(semanticUiReact.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },
                     React.createElement(semanticUiReact.Table.Header, null,
@@ -2144,10 +2191,7 @@ class CRecordingRoute extends React.PureComponent {
                             React.createElement(semanticUiReact.Table.HeaderCell, { className: 'created', onClick: this.sortCreated, sorted: this.props.createdSort }, this.props.createdHeader),
                             React.createElement(semanticUiReact.Table.HeaderCell, { className: 'languages' }, this.props.languageHeader),
                             React.createElement(semanticUiReact.Table.HeaderCell, { className: 'genres' }, this.props.genreHeader))),
-                    React.createElement(semanticUiReact.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r })))))),
-            React.createElement("div", { className: 'pager' },
-                React.createElement(semanticUiReact.Segment, null, this.props.count),
-                React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage }))));
+                    React.createElement(semanticUiReact.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r }))))))));
     }
 }
 exports.CRecordingRoute = CRecordingRoute;

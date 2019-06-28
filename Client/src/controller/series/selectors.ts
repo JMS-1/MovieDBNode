@@ -87,25 +87,15 @@ export const getSeriesChildMap = createSelector(
     },
 )
 
-function buildOptions(
-    scope: string,
-    prefix: string,
-    list: ISelectOption[],
-    tree: ISeriesChildMap,
-    lookup: ISeriesMap,
-): void {
-    if (scope) {
-        prefix += '\xa0\xa0\xa0\xa0'
-    }
-
+function buildOptions(scope: string, list: ISelectOption[], tree: ISeriesChildMap, lookup: ISeriesMap): void {
     const children = (tree[scope] || []).map(id => lookup[id]).filter(s => s)
 
     for (let child of children) {
         const series = child.raw
 
-        list.push({ key: series._id, text: `${prefix}${child.name}`, value: series._id })
+        list.push({ key: series._id, text: child.name, value: series._id })
 
-        buildOptions(series._id, prefix, list, tree, lookup)
+        buildOptions(series._id, list, tree, lookup)
     }
 }
 
@@ -115,7 +105,7 @@ export const getSeriesOptions = createSelector(
     (tree, map): ISelectOption[] => {
         const list: ISelectOption[] = []
 
-        buildOptions('', '', list, tree, map)
+        buildOptions('', list, tree, map)
 
         return list
     },

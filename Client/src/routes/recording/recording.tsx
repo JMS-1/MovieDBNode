@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
 import * as semanticUiReact from 'semantic-ui-react'
 
 import { TRecordingSort, TSortOrder } from 'movie-db-api'
@@ -10,11 +9,7 @@ import { RecordingItem } from './item/itemRedux'
 import { RecordingSearch } from '../../components/search/searchRedux'
 import { ISeriesMap } from '../../controller'
 
-export interface IRecordingRouteParams {
-    id?: string
-}
-
-export interface IRecordingRouteUiProps extends RouteComponentProps<IRecordingRouteParams> {}
+export interface IRecordingRouteUiProps {}
 
 export interface IRecordingRouteProps {
     clear: string
@@ -63,6 +58,7 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
 
         return (
             <div className='movie-db-recording-route'>
+                <semanticUiReact.Segment className='count'>{this.props.count}</semanticUiReact.Segment>
                 <semanticUiReact.Segment className='filter'>
                     <div className='search'>
                         <RecordingSearch fluid />
@@ -135,6 +131,13 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         250
                     </semanticUiReact.MenuItem>
                 </semanticUiReact.Menu>
+                <div className='pager'>
+                    <semanticUiReact.Pagination
+                        activePage={this.props.page}
+                        totalPages={this.props.lastPage}
+                        onPageChange={this.onPage}
+                    />
+                </div>
                 <div className='table'>
                     <semanticUiReact.Table unstackable celled striped sortable compact fixed collapsing>
                         <semanticUiReact.Table.Header>
@@ -167,14 +170,6 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                             ))}
                         </semanticUiReact.Table.Body>
                     </semanticUiReact.Table>
-                </div>
-                <div className='pager'>
-                    <semanticUiReact.Segment>{this.props.count}</semanticUiReact.Segment>
-                    <semanticUiReact.Pagination
-                        activePage={this.props.page}
-                        totalPages={this.props.lastPage}
-                        onPageChange={this.onPage}
-                    />
                 </div>
             </div>
         )
