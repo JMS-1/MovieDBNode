@@ -1,7 +1,7 @@
 declare module 'movie-db-client' {
     import { Action } from 'redux'
     import { RouterState } from 'connected-react-router'
-    import { SemanticICONS } from 'semantic-ui-react'
+    import { SemanticICONS, DropdownItemProps } from 'semantic-ui-react'
 
     import { IValidationError, IValidatableSchema } from 'movie-db-api'
 
@@ -23,13 +23,13 @@ declare module 'movie-db-client' {
         Series = ' > ',
     }
 
-    interface ISelectOption<TValue = string> {
-        readonly key: TValue | string
+    interface ISelectOption<TValue extends string | number | boolean = string> extends DropdownItemProps {
+        readonly key: TValue
         readonly text: string
         readonly value: TValue
     }
 
-    interface IIconSelectOption<TValue = string> extends ISelectOption<TValue> {
+    interface IIconSelectOption<TValue extends string | number | boolean = string> extends ISelectOption<TValue> {
         readonly icon: { name: SemanticICONS }
     }
 
