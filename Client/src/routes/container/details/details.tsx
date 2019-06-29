@@ -54,7 +54,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     <Input input='text' value={this.props.parent || ''} readOnly disabled />
                 </Form.Field>
                 <ContainerTextInput prop='name' required />
-                <Form.Field>
+                <Form.Field required>
                     <label>{this.props.typeLabel}</label>
                     <Dropdown
                         onChange={this.setType}
