@@ -1648,7 +1648,6 @@ store_1.ServerApi.get('genre', genre_1.GenreActions.load);
 store_1.ServerApi.get('language', controller.LanguageActions.load);
 store_1.ServerApi.get('schemas', controller.ApplicationActions.loadSchemas);
 store_1.ServerApi.get('series', controller.SeriesActions.load);
-store.dispatch(controller.RecordingActions.query());
 const css = document.querySelector('head > link[rel="stylesheet"][href="index.css"]');
 document.addEventListener('keydown', (ev) => ev.ctrlKey && ev.key === 'F12' && (css.href = css.href));
 
@@ -2110,6 +2109,9 @@ class CRecordingRoute extends React.PureComponent {
                             React.createElement(semanticUiReact.Table.HeaderCell, { className: 'genres' }, this.props.genreHeader))),
                     React.createElement(semanticUiReact.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r }))))))));
     }
+    componentWillMount() {
+        this.props.query();
+    }
 }
 exports.CRecordingRoute = CRecordingRoute;
 
@@ -2163,6 +2165,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, props) {
     return {
         clearFilter: () => dispatch(controller.RecordingActions.resetFilter()),
+        query: () => dispatch(controller.RecordingActions.query()),
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),
         setPage: page => dispatch(controller.RecordingActions.setPage(page)),

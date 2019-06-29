@@ -25,8 +25,6 @@ ServerApi.get('language', controller.LanguageActions.load)
 ServerApi.get('schemas', controller.ApplicationActions.loadSchemas)
 ServerApi.get('series', controller.SeriesActions.load)
 
-store.dispatch(controller.RecordingActions.query())
-
 // Kleine Hilfe zum Styling während der Entwicklung.
 
 const css: HTMLLinkElement = document.querySelector('head > link[rel="stylesheet"][href="index.css"]')

@@ -46,6 +46,7 @@ function mapDispatchToProps(
 ): local.IRecordingRouteActions {
     return {
         clearFilter: () => dispatch(controller.RecordingActions.resetFilter()),
+        query: () => dispatch(controller.RecordingActions.query()),
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),
         setPage: page => dispatch(controller.RecordingActions.setPage(page)),

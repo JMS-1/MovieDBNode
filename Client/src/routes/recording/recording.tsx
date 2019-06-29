@@ -42,6 +42,7 @@ export interface IRecordingRouteProps {
 
 export interface IRecordingRouteActions {
     clearFilter(): void
+    query(): void
     setGenres(ids: string[]): void
     setLanguage(id: string): void
     setPage(page: number): void
@@ -181,5 +182,9 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
         const series = typeof data.value === 'string' && this.props.seriesMap[data.value]
 
         this.props.setSeries((series && series.children) || [])
+    }
+
+    componentWillMount(): void {
+        this.props.query()
     }
 }
