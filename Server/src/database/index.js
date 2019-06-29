@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const container_1 = require("./container");
 const genre_1 = require("./genre");
 const language_1 = require("./language");
-const media_1 = require("./media");
 const recording_1 = require("./recording");
 const schema_1 = require("./schema");
 const series_1 = require("./series");
@@ -14,7 +13,6 @@ async function initializeDatabase() {
         container_1.containerCollection,
         genre_1.genreCollection,
         language_1.languageCollection,
-        media_1.mediaCollection,
         recording_1.recordingCollection,
         series_1.seriesCollection,
     ];

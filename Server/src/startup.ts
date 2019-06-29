@@ -10,7 +10,7 @@ import { getError } from './utils'
 async function startup(): Promise<void> {
     await initializeDatabase()
 
-    //await runMigration()
+    // await runMigration()
 
     const app = express()
 

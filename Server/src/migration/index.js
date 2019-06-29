@@ -4,11 +4,11 @@ const fs = require("fs");
 const path_1 = require("path");
 const util_1 = require("util");
 const links_1 = require("./links");
+const media_1 = require("./media");
 const relation_1 = require("./relation");
 const container_1 = require("../database/container");
 const genre_1 = require("../database/genre");
 const language_1 = require("../database/language");
-const media_1 = require("../database/media");
 const recording_1 = require("../database/recording");
 const series_1 = require("../database/series");
 const validation_1 = require("../database/validation");
@@ -19,6 +19,7 @@ const languageLinks = new (class extends relation_1.RelationCollection {
 })('Language');
 async function runMigration() {
     validation_1.addSchema(links_1.linkCollection.schema);
+    validation_1.addSchema(media_1.mediaCollection.schema);
     validation_1.addSchema(relation_1.RelationSchema);
     const collections = {
         Containers: container_1.containerCollection,
@@ -114,7 +115,20 @@ async function runMigration() {
             recording.links[link.ordinal].description = link.description;
         }
     }
+    const mediaMigrationMap = recording_1.recordingCollection.mediaMigration;
+    const mediaMap = media_1.mediaCollection.migrationMap;
     for (let recording of Object.values(recordings)) {
+        const media = mediaMap[mediaMigrationMap[recording._id]];
+        if (!media) {
+            throw new Error(`no media information for ${recording._id}`);
+        }
+        recording.containerType = media.type;
+        if (media.containerId) {
+            recording.containerId = media.containerId;
+        }
+        if (media.position) {
+            recording.containerPosition = media.position;
+        }
         const test = validation_1.validate(recording, recording_1.recordingCollection.schema);
         if (test) {
             throw new Error(JSON.stringify(test));

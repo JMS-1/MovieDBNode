@@ -10,7 +10,6 @@ declare module 'movie-db-client' {
         readonly container: IContainerState
         readonly genre: IGenreState
         readonly language: ILanguageState
-        readonly media: IMediaState
         readonly mui: IMuiState
         readonly router: RouterState
         readonly series: ISeriesState

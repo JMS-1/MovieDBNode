@@ -31,5 +31,4 @@ exports.mediaCollection = new (class extends utils_1.CollectionBase {
         this.cacheMigrated(media);
     }
 })();
-
 //# sourceMappingURL=media.js.map

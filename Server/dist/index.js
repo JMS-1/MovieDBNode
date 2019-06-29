@@ -985,7 +985,6 @@ __export(__webpack_require__(/*! ./app */ "./Client/src/controller/app/index.ts"
 __export(__webpack_require__(/*! ./container */ "./Client/src/controller/container/index.ts"));
 __export(__webpack_require__(/*! ./genre */ "./Client/src/controller/genre/index.ts"));
 __export(__webpack_require__(/*! ./language */ "./Client/src/controller/language/index.ts"));
-__export(__webpack_require__(/*! ./media */ "./Client/src/controller/media/index.ts"));
 __export(__webpack_require__(/*! ./mui */ "./Client/src/controller/mui/index.ts"));
 __export(__webpack_require__(/*! ./series */ "./Client/src/controller/series/index.ts"));
 __export(__webpack_require__(/*! ./recording */ "./Client/src/controller/recording/index.ts"));
@@ -1100,76 +1099,6 @@ exports.getLanguageOptions = reselect_1.createSelector((state) => state.language
     options.sort((l, r) => l.text.localeCompare(r.text));
     return options;
 });
-
-
-/***/ }),
-
-/***/ "./Client/src/controller/media/actions.ts":
-/*!************************************************!*\
-  !*** ./Client/src/controller/media/actions.ts ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-class MediaActions {
-    static load(response) {
-        return { media: response.media, type: "movie-db.media.load" };
-    }
-}
-exports.MediaActions = MediaActions;
-
-
-/***/ }),
-
-/***/ "./Client/src/controller/media/controller.ts":
-/*!***************************************************!*\
-  !*** ./Client/src/controller/media/controller.ts ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
-const controller = new (class extends controller_1.Controller {
-    getReducerMap() {
-        return {
-            ["movie-db.media.load"]: this.load,
-        };
-    }
-    getInitialState() {
-        return {
-            all: [],
-        };
-    }
-    load(state, response) {
-        return Object.assign({}, state, { all: response.media || [] });
-    }
-})();
-exports.MediaReducer = controller.reducer;
-
-
-/***/ }),
-
-/***/ "./Client/src/controller/media/index.ts":
-/*!**********************************************!*\
-  !*** ./Client/src/controller/media/index.ts ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./actions */ "./Client/src/controller/media/actions.ts"));
-__export(__webpack_require__(/*! ./controller */ "./Client/src/controller/media/controller.ts"));
 
 
 /***/ }),
@@ -1717,7 +1646,6 @@ react_dom_1.render(React.createElement(react_redux_1.Provider, { store: store },
 store_1.ServerApi.get('container', controller.ContainerActions.load);
 store_1.ServerApi.get('genre', genre_1.GenreActions.load);
 store_1.ServerApi.get('language', controller.LanguageActions.load);
-store_1.ServerApi.get('media', controller.MediaActions.load);
 store_1.ServerApi.get('schemas', controller.ApplicationActions.loadSchemas);
 store_1.ServerApi.get('series', controller.SeriesActions.load);
 store.dispatch(controller.RecordingActions.query());
@@ -2322,7 +2250,6 @@ function initializeStore() {
         container: controller.ContainerReducer,
         genre: controller.GenreReducer,
         language: controller.LanguageReducer,
-        media: controller.MediaReducer,
         mui: controller.MuiReducer,
         router: connected_react_router_1.connectRouter(exports.history),
         series: controller.SeriesReducer,
@@ -68305,7 +68232,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -17,7 +17,6 @@ export function initializeStore(): Store<IClientState> {
             container: controller.ContainerReducer,
             genre: controller.GenreReducer,
             language: controller.LanguageReducer,
-            media: controller.MediaReducer,
             mui: controller.MuiReducer,
             router: connectRouter(history),
             series: controller.SeriesReducer,

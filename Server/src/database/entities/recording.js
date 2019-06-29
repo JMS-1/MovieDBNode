@@ -73,11 +73,6 @@ exports.RecordingSchema = {
             message: 'Verweise sind ungültig',
             type: 'array',
         },
-        media: {
-            message: 'Medium fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
-            type: 'string',
-        },
         name: {
             maxLength: 200,
             message: 'Name nicht angegeben oder zu lang',
@@ -94,8 +89,30 @@ exports.RecordingSchema = {
             pattern: utils_1.uniqueId,
             type: 'string',
         },
+        containerId: {
+            message: 'Ablage ist ungültig',
+            pattern: utils_1.uniqueId,
+            type: 'string',
+        },
+        containerPosition: {
+            maxLength: 100,
+            message: 'Standort zu lang',
+            type: 'string',
+        },
+        containerType: {
+            message: 'Medienart fehlt oder ist unzulässig',
+            type: 'integer',
+            enum: [
+                5,
+                4,
+                3,
+                2,
+                0,
+                1,
+            ],
+        },
     },
-    required: ['_id', 'name', 'created', 'media', 'genres', 'languages', 'links'],
+    required: ['_id', 'name', 'created', 'genres', 'languages', 'links', 'containerType'],
 };
 function linkToProtocol(link) {
     return link;
@@ -117,15 +134,21 @@ exports.toProtocol = toProtocol;
 function toEntity(recording, id, created) {
     const dbRecording = {
         _id: id,
+        containerType: recording.containerType,
         created,
         genres: recording.genres || [],
         languages: recording.languages || [],
         links: (recording.links || []).map(linkToEntity),
-        media: recording.media,
         name: recording.name,
     };
     if (recording.description) {
         dbRecording.description = recording.description;
+    }
+    if (recording.containerId) {
+        dbRecording.containerId = recording.containerId;
+    }
+    if (recording.containerPosition) {
+        dbRecording.containerPosition = recording.containerPosition;
     }
     if (recording.rentTo) {
         dbRecording.rentTo = recording.rentTo;

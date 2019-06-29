@@ -3,12 +3,12 @@ import { join } from 'path'
 import { promisify } from 'util'
 
 import { linkCollection } from './links'
+import { mediaCollection } from './media'
 import { RelationCollection, RelationSchema } from './relation'
 
 import { containerCollection } from '../database/container'
 import { genreCollection } from '../database/genre'
 import { languageCollection } from '../database/language'
-import { mediaCollection } from '../database/media'
 import { recordingCollection } from '../database/recording'
 import { seriesCollection } from '../database/series'
 import { addSchema, validate } from '../database/validation'
@@ -21,6 +21,7 @@ const languageLinks = new (class extends RelationCollection {})('Language')
 
 export async function runMigration(): Promise<void> {
     addSchema(linkCollection.schema)
+    addSchema(mediaCollection.schema)
     addSchema(RelationSchema)
 
     const collections = {
@@ -149,7 +150,26 @@ export async function runMigration(): Promise<void> {
         }
     }
 
+    const mediaMigrationMap = recordingCollection.mediaMigration
+    const mediaMap = mediaCollection.migrationMap
+
     for (let recording of Object.values(recordings)) {
+        const media = mediaMap[mediaMigrationMap[recording._id]]
+
+        if (!media) {
+            throw new Error(`no media information for ${recording._id}`)
+        }
+
+        recording.containerType = media.type
+
+        if (media.containerId) {
+            recording.containerId = media.containerId
+        }
+
+        if (media.position) {
+            recording.containerPosition = media.position
+        }
+
         const test = validate(recording, recordingCollection.schema)
 
         if (test) {

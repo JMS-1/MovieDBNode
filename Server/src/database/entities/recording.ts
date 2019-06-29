@@ -1,6 +1,6 @@
 import { url } from 'inspector'
 
-import { INewRecording, IRecording, IRecordingLink } from 'movie-db-api'
+import { INewRecording, IRecording, IRecordingLink, mediaType } from 'movie-db-api'
 
 import { IObjectFieldSchema, ISchema, isoDate, uniqueId } from './utils'
 
@@ -81,11 +81,6 @@ export const RecordingSchema: ISchema<IDbRecording> = {
             message: 'Verweise sind ungültig',
             type: 'array',
         },
-        media: {
-            message: 'Medium fehlt oder ist ungültig',
-            pattern: uniqueId,
-            type: 'string',
-        },
         name: {
             maxLength: 200,
             message: 'Name nicht angegeben oder zu lang',
@@ -102,8 +97,30 @@ export const RecordingSchema: ISchema<IDbRecording> = {
             pattern: uniqueId,
             type: 'string',
         },
+        containerId: {
+            message: 'Ablage ist ungültig',
+            pattern: uniqueId,
+            type: 'string',
+        },
+        containerPosition: {
+            maxLength: 100,
+            message: 'Standort zu lang',
+            type: 'string',
+        },
+        containerType: {
+            message: 'Medienart fehlt oder ist unzulässig',
+            type: 'integer',
+            enum: [
+                mediaType.BluRay,
+                mediaType.DVD,
+                mediaType.RecordedDVD,
+                mediaType.SuperVideoCD,
+                mediaType.Undefined,
+                mediaType.VideoCD,
+            ],
+        },
     },
-    required: ['_id', 'name', 'created', 'media', 'genres', 'languages', 'links'],
+    required: ['_id', 'name', 'created', 'genres', 'languages', 'links', 'containerType'],
 }
 
 function linkToProtocol(link: IDbLink): IRecordingLink {
@@ -130,16 +147,24 @@ export function toProtocol(recording: IDbRecording): IRecording {
 export function toEntity(recording: INewRecording, id: string, created: string): IDbRecording {
     const dbRecording: IDbRecording = {
         _id: id,
+        containerType: recording.containerType,
         created,
         genres: recording.genres || [],
         languages: recording.languages || [],
         links: (recording.links || []).map(linkToEntity),
-        media: recording.media,
         name: recording.name,
     }
 
     if (recording.description) {
         dbRecording.description = recording.description
+    }
+
+    if (recording.containerId) {
+        dbRecording.containerId = recording.containerId
+    }
+
+    if (recording.containerPosition) {
+        dbRecording.containerPosition = recording.containerPosition
     }
 
     if (recording.rentTo) {

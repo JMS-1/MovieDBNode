@@ -57,5 +57,4 @@ function toEntity(media, id) {
     return dbMedia;
 }
 exports.toEntity = toEntity;
-
 //# sourceMappingURL=media.js.map

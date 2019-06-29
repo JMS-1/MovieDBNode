@@ -9,5 +9,4 @@ exports.mediaApi = express_1.Router().use('/media', express_1.Router().get('/', 
         media: media.map(media_1.toProtocol),
     };
 }, request, response)));
-
 //# sourceMappingURL=media.js.map

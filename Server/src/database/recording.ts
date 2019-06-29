@@ -30,16 +30,18 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
 
     readonly schema = RecordingSchema
 
+    readonly mediaMigration: { [id: string]: string } = {}
+
     fromSql(sql: any): void {
         const date = dateReg.exec(sql.Created)
 
         const recording: IDbRecording = {
             _id: sql.Id,
+            containerType: api.mediaType.Undefined,
             created: (date && `${date[1]}Z`) || sql.Created,
             genres: [],
             languages: [],
             links: [],
-            media: sql.Media,
             name: sql.Name,
         }
 
@@ -62,6 +64,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         }
 
         this.cacheMigrated(recording)
+        this.mediaMigration[recording._id] = sql.Media
     }
 
     async query(req: api.IRecordingQueryRequest): Promise<api.IRecordingQueryResponse> {

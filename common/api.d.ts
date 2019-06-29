@@ -22,7 +22,6 @@ declare module 'movie-db-api' {
         container: IValidatableSchema
         genre: IValidatableSchema
         language: IValidatableSchema
-        media: IValidatableSchema
         recording: IValidatableSchema
         series: IValidatableSchema
     }
@@ -92,16 +91,6 @@ declare module 'movie-db-api' {
         _id: string
     }
 
-    interface INewMedia {
-        containerId?: string
-        position?: string
-        type: mediaType
-    }
-
-    interface IMedia extends INewMedia {
-        _id: string
-    }
-
     interface INewSeries {
         name: string
         description?: string
@@ -118,10 +107,6 @@ declare module 'movie-db-api' {
 
     interface ILanguageResponse {
         languages: ILanguage[]
-    }
-
-    interface IMediaResponse {
-        media: IMedia[]
     }
 
     interface ISeriesResponse {
@@ -157,11 +142,13 @@ declare module 'movie-db-api' {
     }
 
     interface INewRecording {
+        containerId?: string
+        containerPosition?: string
+        containerType: mediaType
         description?: string
         genres: string[]
         languages: string[]
         links: IRecordingLink[]
-        media: string
         name: string
         rentTo?: string
         series?: string

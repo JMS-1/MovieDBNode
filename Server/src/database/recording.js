@@ -17,16 +17,17 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         super(...arguments);
         this.name = recording_1.collectionName;
         this.schema = recording_1.RecordingSchema;
+        this.mediaMigration = {};
     }
     fromSql(sql) {
         const date = dateReg.exec(sql.Created);
         const recording = {
             _id: sql.Id,
+            containerType: 0,
             created: (date && `${date[1]}Z`) || sql.Created,
             genres: [],
             languages: [],
             links: [],
-            media: sql.Media,
             name: sql.Name,
         };
         if (sql.Description) {
@@ -43,6 +44,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             throw new Error(JSON.stringify(errors));
         }
         this.cacheMigrated(recording);
+        this.mediaMigration[recording._id] = sql.Media;
     }
     async query(req) {
         const filter = {};

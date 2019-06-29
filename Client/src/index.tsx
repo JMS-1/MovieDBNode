@@ -22,7 +22,6 @@ render(
 ServerApi.get('container', controller.ContainerActions.load)
 ServerApi.get('genre', GenreActions.load)
 ServerApi.get('language', controller.LanguageActions.load)
-ServerApi.get('media', controller.MediaActions.load)
 ServerApi.get('schemas', controller.ApplicationActions.loadSchemas)
 ServerApi.get('series', controller.SeriesActions.load)
 
