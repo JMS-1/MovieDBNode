@@ -26,6 +26,7 @@ type TRecordingActions =
     | local.ISetRecordingRentToFilter
     | local.ISetRecordingSeriesFilter
     | local.ISetRecordingTextFilter
+    | local.IStartRecordingEdit
     | local.IToggleRecordingSort
 
 const controller = new (class extends EditController<api.IRecording, TRecordingActions, local.IRecordingState> {
@@ -50,6 +51,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.setSize]: this.setPageSize,
             [local.recordingActions.setTextFilter]: this.setTextFilter,
             [local.recordingActions.sort]: this.setSort,
+            [local.recordingActions.startEdit]: this.startEdit,
         }
     }
 
@@ -58,6 +60,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             ...super.getInitialState(),
             correlationId: undefined,
             count: 0,
+            edit: undefined,
             genreInfo: [],
             genres: [],
             language: '',
@@ -219,6 +222,26 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             resetAfterLoad: undefined,
             total: response.total,
         }
+    }
+
+    protected select(state: local.IRecordingState, request: local.ISelectRecording): local.IRecordingState {
+        state = super.select(state, request)
+
+        ServerApi.get(`recording/${request.id}`, RecordingActions.startEdit)
+
+        return { ...state, edit: request.id }
+    }
+
+    protected getWorkingCopy(state: local.IRecordingState): api.IRecording {
+        return typeof state.edit !== 'string' && state.edit
+    }
+
+    protected startEdit(state: local.IRecordingState, request: local.IStartRecordingEdit): local.IRecordingState {
+        if (state.edit !== request.recording._id) {
+            return state
+        }
+
+        return { ...state, edit: request.recording }
     }
 })()
 

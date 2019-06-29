@@ -27,3 +27,9 @@ export const getRentOptions = createSelector(
     (state: IClientState) => state.mui.recording,
     (mui): ISelectOption[] => [{ key: '1', text: mui.yesRent, value: '1' }, { key: '0', text: mui.noRent, value: '0' }],
 )
+
+export const getRecordingEdit = createSelector(
+    (state: IClientState) => state.recording.workingCopy,
+    (state: IClientState) => state.recording.edit,
+    (copy, initial) => copy || (typeof initial !== 'string' && initial),
+)

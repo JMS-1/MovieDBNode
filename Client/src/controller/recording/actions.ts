@@ -41,6 +41,10 @@ export class RecordingActions {
         return { item: response.recording, errors: response.errors, type: local.recordingActions.saveDone }
     }
 
+    static startEdit(recording: api.IRecording): local.IStartRecordingEdit {
+        return { recording, type: local.recordingActions.startEdit }
+    }
+
     static cancelEdit(): local.ICancelRecordingEdit {
         return { type: local.recordingActions.cancel }
     }

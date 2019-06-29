@@ -1,7 +1,7 @@
 declare module 'movie-db-client' {
     import { SemanticICONS } from 'semantic-ui-react'
 
-    import { IContainer, containerType } from 'movie-db-api'
+    import { IContainer, containerType, IRecording } from 'movie-db-api'
 
     interface IContainerTypeMui {
         readonly title: string
@@ -26,6 +26,7 @@ declare module 'movie-db-client' {
             readonly clear: string
             readonly count: string
             readonly created: string
+            readonly edit: IItemMui<IRecording>
             readonly genres: string
             readonly languages: string
             readonly name: string

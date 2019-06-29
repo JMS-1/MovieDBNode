@@ -433,25 +433,43 @@ exports.CTextInput = CTextInput;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./textInput */ "./Client/src/components/textInput/textInput.tsx");
-const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
+const controller = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 class CContainerTextInput extends local.CTextInput {
     static mapProps(state, props) {
         const route = state.container;
-        const edit = controller_1.getContainerEdit(state);
+        const edit = controller.getContainerEdit(state);
         const value = edit && edit[props.prop];
         return {
-            errors: controller_1.getErrors(route.validation, props.prop, edit),
+            errors: controller.getErrors(route.validation, props.prop, edit),
             label: state.mui.container.edit[props.prop],
             value: typeof value === 'string' ? value : undefined,
         };
     }
     static mapActions(dispatch, props) {
         return {
-            setValue: (prop, value) => dispatch(controller_1.ContainerActions.setProperty(prop, value)),
+            setValue: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
+        };
+    }
+}
+class CRecordingTextInput extends local.CTextInput {
+    static mapProps(state, props) {
+        const route = state.recording;
+        const edit = controller.getRecordingEdit(state);
+        const value = edit && edit[props.prop];
+        return {
+            errors: controller.getErrors(route.validation, props.prop, edit),
+            label: state.mui.recording.edit[props.prop],
+            value: typeof value === 'string' ? value : undefined,
+        };
+    }
+    static mapActions(dispatch, props) {
+        return {
+            setValue: (prop, value) => dispatch(controller.RecordingActions.setProperty(prop, value)),
         };
     }
 }
 exports.ContainerTextInput = react_redux_1.connect(CContainerTextInput.mapProps, CContainerTextInput.mapActions)(CContainerTextInput);
+exports.RecordingTextInput = react_redux_1.connect(CRecordingTextInput.mapProps, CRecordingTextInput.mapActions)(CRecordingTextInput);
 
 
 /***/ }),
@@ -801,6 +819,9 @@ class Controller {
 }
 exports.Controller = Controller;
 class EditController extends Controller {
+    getWorkingCopy(state) {
+        return state.all.find(c => c._id === state.selected);
+    }
     getInitialState() {
         return {
             all: [],
@@ -826,7 +847,7 @@ class EditController extends Controller {
         return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
     }
     setProperty(state, request) {
-        const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected);
+        const workingCopy = state.workingCopy || this.getWorkingCopy(state);
         if (!workingCopy) {
             return state;
         }
@@ -1181,6 +1202,20 @@ function getInitialState() {
             clear: 'Neue Suche',
             count: '{count} von {total}',
             created: 'Erstellt',
+            edit: {
+                _id: 'Eindeutige Kennung',
+                containerId: 'Ablage',
+                containerPosition: 'Position',
+                containerType: 'Art der Ablage',
+                created: 'Erstellt',
+                description: 'Beschreibung',
+                genres: 'Kategorien',
+                languages: 'Sprachen',
+                links: 'Verweise',
+                name: 'Name',
+                rentTo: 'Verliehen an',
+                series: 'Serie',
+            },
             genres: 'Kategorien',
             languages: 'Sprachen',
             name: 'Name',
@@ -1271,6 +1306,9 @@ class RecordingActions {
     static saveDone(response) {
         return { item: response.recording, errors: response.errors, type: "movie-db.recordings.save-done" };
     }
+    static startEdit(recording) {
+        return { recording, type: "movie-db.recordings.start-edit" };
+    }
     static cancelEdit() {
         return { type: "movie-db.recordings.cancel-edit" };
     }
@@ -1342,10 +1380,11 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.set-page-size"]: this.setPageSize,
             ["movie-db.recordings.filter-text"]: this.setTextFilter,
             ["movie-db.recordings.toggle-sort"]: this.setSort,
+            ["movie-db.recordings.start-edit"]: this.startEdit,
         };
     }
     getInitialState() {
-        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending', total: 0 });
+        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, edit: undefined, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending', total: 0 });
     }
     startSave(state, request) {
         if (state.workingCopy) {
@@ -1429,6 +1468,20 @@ const controller = new (class extends controller_1.EditController {
         }
         return Object.assign({}, state, { correlationId: undefined, count: response.count, genreInfo: response.genres || [], languageInfo: response.languages || [], resetAfterLoad: undefined, total: response.total });
     }
+    select(state, request) {
+        state = super.select(state, request);
+        store_1.ServerApi.get(`recording/${request.id}`, actions_1.RecordingActions.startEdit);
+        return Object.assign({}, state, { edit: request.id });
+    }
+    getWorkingCopy(state) {
+        return typeof state.edit !== 'string' && state.edit;
+    }
+    startEdit(state, request) {
+        if (state.edit !== request.recording._id) {
+            return state;
+        }
+        return Object.assign({}, state, { edit: request.recording });
+    }
 })();
 exports.RecordingReducer = controller.reducer;
 
@@ -1473,6 +1526,7 @@ exports.getRecordingMap = reselect_1.createSelector((state) => state.recording.a
 });
 exports.getRecordings = reselect_1.createSelector((state) => state.recording.all, (all) => all.map(r => r._id));
 exports.getRentOptions = reselect_1.createSelector((state) => state.mui.recording, (mui) => [{ key: '1', text: mui.yesRent, value: '1' }, { key: '0', text: mui.noRent, value: '0' }]);
+exports.getRecordingEdit = reselect_1.createSelector((state) => state.recording.workingCopy, (state) => state.recording.edit, (copy, initial) => copy || (typeof initial !== 'string' && initial));
 
 
 /***/ }),
@@ -1928,9 +1982,18 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CRecording extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-recording-edit' }, this.props.match.params.id);
+        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-recording-edit' },
+            React.createElement(semantic_ui_react_1.Form.Field, null,
+                React.createElement("label", null, this.props.idLabel),
+                React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.match.params.id || '', readOnly: true, disabled: true })),
+            React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true })));
+    }
+    componentWillMount() {
+        this.props.loadRecording();
     }
 }
 exports.CRecording = CRecording;
@@ -1950,11 +2013,18 @@ exports.CRecording = CRecording;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/recording/details/details.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    const mui = state.mui.recording;
+    const emui = mui.edit;
+    return {
+        idLabel: emui._id,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        loadRecording: () => dispatch(controller_1.RecordingActions.select(props.match.params.id)),
+    };
 }
 exports.Recording = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecording);
 
@@ -68235,7 +68305,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

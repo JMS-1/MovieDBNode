@@ -46,6 +46,10 @@ export abstract class EditController<
 > extends Controller<TActions, TState> {
     protected abstract readonly schema: keyof ISchemaResponse
 
+    protected getWorkingCopy(state: TState): TItem {
+        return state.all.find(c => c._id === state.selected)
+    }
+
     protected getInitialState(): TState {
         return <TState>{
             all: [],
@@ -80,7 +84,7 @@ export abstract class EditController<
         state: TState,
         request: local.ISetGenericProperty<TItem, TProp>,
     ): TState {
-        const workingCopy = state.workingCopy || state.all.find(c => c._id === state.selected)
+        const workingCopy = state.workingCopy || this.getWorkingCopy(state)
 
         if (!workingCopy) {
             return state

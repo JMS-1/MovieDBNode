@@ -6,6 +6,7 @@ declare module 'movie-db-client' {
     interface IRecordingState extends IEditState<api.IRecordingInfo> {
         readonly correlationId: string
         readonly count: number
+        readonly edit: string | api.IRecording
         readonly genreInfo: api.IQueryCountInfo[]
         readonly genres: string[]
         readonly language: string
@@ -23,6 +24,7 @@ declare module 'movie-db-client' {
 
     const enum recordingActions {
         cancel = 'movie-db.recordings.cancel-edit',
+        startEdit = 'movie-db.recordings.start-edit',
         query = 'movie-db.recordings.query',
         queryDone = 'movie-db.recordings.query-done',
         resetFilter = 'movie-db.recordings.reset-filter',
@@ -116,5 +118,10 @@ declare module 'movie-db-client' {
 
     interface IResetRecordingFilter extends Action {
         type: recordingActions.resetFilter
+    }
+
+    interface IStartRecordingEdit extends Action {
+        recording: api.IRecording
+        type: recordingActions.startEdit
     }
 }

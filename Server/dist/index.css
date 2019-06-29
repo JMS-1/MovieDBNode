@@ -120,6 +120,10 @@ body {
       .movie-db-recording-route > .table > .ui.table > thead > tr > th.languages, .movie-db-recording-route > .table > .ui.table > thead > tr > th.genres {
         cursor: default; }
 
+.movie-db-recording-edit {
+  padding: 1em;
+  overflow: auto; }
+
 .movie-db-recording-item > td {
   white-space: nowrap;
   overflow: hidden;
