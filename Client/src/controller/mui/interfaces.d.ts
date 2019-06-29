@@ -31,6 +31,7 @@ declare module 'movie-db-client' {
             readonly languages: string
             readonly name: string
             readonly noRent: string
+            readonly saveAndBack: string
             readonly yesRent: string
         }
         readonly routes: {

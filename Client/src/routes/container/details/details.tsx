@@ -44,28 +44,30 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
         const { hasChanges, hasError } = this.props
 
         return (
-            <Form className='movie-db-container-details' error={hasError}>
-                <Form.Field>
-                    <label>{this.props.idLabel}</label>
-                    <Input input='text' value={this.props.id || ''} readOnly disabled />
-                </Form.Field>
-                <Form.Field>
-                    <label>{this.props.parentLabel}</label>
-                    <Input input='text' value={this.props.parent || ''} readOnly disabled />
-                </Form.Field>
-                <ContainerTextInput prop='name' required />
-                <Form.Field required>
-                    <label>{this.props.typeLabel}</label>
-                    <Dropdown
-                        onChange={this.setType}
-                        options={this.props.typeOptions}
-                        selection
-                        value={this.props.type}
-                    />
-                    <ReportError errors={this.props.typeErrors} />
-                </Form.Field>
-                <ContainerTextInput prop='description' textarea />
-                <ContainerTextInput prop='parentLocation' />
+            <div className='movie-db-container-details'>
+                <Form error={hasError}>
+                    <Form.Field>
+                        <label>{this.props.idLabel}</label>
+                        <Input input='text' value={this.props.id || ''} readOnly disabled />
+                    </Form.Field>
+                    <Form.Field>
+                        <label>{this.props.parentLabel}</label>
+                        <Input input='text' value={this.props.parent || ''} readOnly disabled />
+                    </Form.Field>
+                    <ContainerTextInput prop='name' required />
+                    <Form.Field required>
+                        <label>{this.props.typeLabel}</label>
+                        <Dropdown
+                            onChange={this.setType}
+                            options={this.props.typeOptions}
+                            selection
+                            value={this.props.type}
+                        />
+                        <ReportError errors={this.props.typeErrors} />
+                    </Form.Field>
+                    <ContainerTextInput prop='description' textarea />
+                    <ContainerTextInput prop='parentLocation' />
+                </Form>
                 <Button.Group>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
@@ -74,7 +76,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                         {this.props.saveLabel}
                     </Button>
                 </Button.Group>
-            </Form>
+            </div>
         )
     }
 

@@ -32,6 +32,10 @@ function getMessage(error: any): string {
     return typeof error === 'string' ? error : error.message || 'failed'
 }
 
+export function delayedDispatch(action: Action): void {
+    setTimeout(() => store.dispatch(action), 0)
+}
+
 export class ServerApi {
     private static process(webMethod: string, method: string, data: any, process: (data: any) => Action): void {
         window.setTimeout(() => {

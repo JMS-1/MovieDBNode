@@ -1,3 +1,4 @@
+import { routerActions } from 'connected-react-router'
 import { v4 as uuid } from 'uuid'
 
 import * as api from 'movie-db-api'
@@ -7,7 +8,7 @@ import { RecordingActions } from './actions'
 
 import { EditController } from '../controller'
 
-import { ServerApi } from '../../store'
+import { delayedDispatch, ServerApi } from '../../store'
 
 type TRecordingActions =
     | local.ICancelRecordingEdit
@@ -31,6 +32,8 @@ type TRecordingActions =
 
 const controller = new (class extends EditController<api.IRecording, TRecordingActions, local.IRecordingState> {
     protected readonly schema = 'recording'
+
+    protected readonly updateAllAfterSave = false
 
     protected getReducerMap(): local.IActionHandlerMap<TRecordingActions, local.IRecordingState> {
         return {
@@ -58,6 +61,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
     protected getInitialState(): local.IRecordingState {
         return {
             ...super.getInitialState(),
+            afterSave: undefined,
             correlationId: undefined,
             count: 0,
             edit: undefined,
@@ -82,7 +86,11 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, RecordingActions.saveDone)
         }
 
-        return state
+        if (request.after === state.afterSave) {
+            return state
+        }
+
+        return { ...state, afterSave: request.after }
     }
 
     private resetFilter(state: local.IRecordingState, request: local.IResetRecordingFilter): local.IRecordingState {
@@ -242,6 +250,30 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         }
 
         return { ...state, edit: request.recording }
+    }
+
+    protected saveDone(state: local.IRecordingState, response: local.IRecordingSaved): local.IRecordingState {
+        state = super.saveDone(state, response)
+
+        if (state.workingCopy) {
+            return state
+        }
+
+        switch (state.afterSave) {
+            case 'list':
+                delayedDispatch(routerActions.push(local.routes.recording))
+                break
+        }
+
+        return state
+    }
+
+    protected cancelEdit(state: local.IRecordingState, request: local.ICancelRecordingEdit): local.IRecordingState {
+        state = super.cancelEdit(state, request)
+
+        delayedDispatch(routerActions.push(local.routes.recording))
+
+        return state
     }
 })()
 

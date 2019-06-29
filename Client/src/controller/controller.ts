@@ -46,6 +46,8 @@ export abstract class EditController<
 > extends Controller<TActions, TState> {
     protected abstract readonly schema: keyof ISchemaResponse
 
+    protected readonly updateAllAfterSave: boolean = true
+
     protected getWorkingCopy(state: TState): TItem {
         return state.all.find(c => c._id === state.selected)
     }
@@ -84,17 +86,25 @@ export abstract class EditController<
         state: TState,
         request: local.ISetGenericProperty<TItem, TProp>,
     ): TState {
-        const workingCopy = state.workingCopy || this.getWorkingCopy(state)
+        const current = state.workingCopy || this.getWorkingCopy(state)
 
-        if (!workingCopy) {
+        if (!current) {
             return state
         }
 
-        if (workingCopy[request.prop] === request.value) {
+        if (current[request.prop] === request.value) {
             return state
         }
 
-        return this.validateItem({ ...state, workingCopy: { ...workingCopy, [request.prop]: request.value } })
+        const workingCopy = { ...current }
+
+        if (request.value === undefined) {
+            delete workingCopy[request.prop]
+        } else {
+            workingCopy[request.prop] = request.value
+        }
+
+        return this.validateItem({ ...state, workingCopy })
     }
 
     protected loadSchema(state: TState, response: local.ILoadSchemas): TState {
@@ -116,6 +126,12 @@ export abstract class EditController<
 
         const { _id } = response.item
 
+        state = { ...state, selected: _id, workingCopy: undefined, validation: undefined }
+
+        if (!this.updateAllAfterSave) {
+            return state
+        }
+
         const all = [...state.all]
         const index = all.findIndex(c => c._id === _id)
 
@@ -123,6 +139,6 @@ export abstract class EditController<
             all[index] = response.item
         }
 
-        return { ...state, all, selected: _id, workingCopy: undefined, validation: undefined }
+        return { ...state, all }
     }
 }

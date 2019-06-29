@@ -186,4 +186,14 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             view: (firstRes && firstRes.view) || [],
         }
     }
+
+    async findOneAndReplace(recording: IDbRecording): Promise<api.IValidationError[]> {
+        const existing = await this.findOne(recording._id)
+
+        if (existing) {
+            recording = { ...recording, created: existing.created }
+        }
+
+        return super.findOneAndReplace(recording)
+    }
 })()

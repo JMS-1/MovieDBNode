@@ -49,8 +49,8 @@ export class RecordingActions {
         return { type: local.recordingActions.cancel }
     }
 
-    static save(): local.ISaveRecording {
-        return { type: local.recordingActions.save }
+    static save(after: local.TAfterRecordingSave): local.ISaveRecording {
+        return { after, type: local.recordingActions.save }
     }
 
     static query(): local.IQueryRecordings {

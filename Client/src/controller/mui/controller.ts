@@ -55,7 +55,7 @@ export function getInitialState(): IMuiState {
             edit: {
                 _id: 'Eindeutige Kennung',
                 containerId: 'Ablage',
-                containerPosition: 'Position',
+                containerPosition: 'Standort',
                 containerType: 'Art der Ablage',
                 created: 'Erstellt',
                 description: 'Beschreibung',
@@ -70,6 +70,7 @@ export function getInitialState(): IMuiState {
             languages: 'Sprachen',
             name: 'Name',
             noRent: 'nicht verliehen',
+            saveAndBack: 'Speichern und zurück',
             yesRent: 'verliehen',
         },
         routes: {

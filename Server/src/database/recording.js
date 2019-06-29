@@ -146,6 +146,13 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             view: (firstRes && firstRes.view) || [],
         };
     }
+    async findOneAndReplace(recording) {
+        const existing = await this.findOne(recording._id);
+        if (existing) {
+            recording = Object.assign({}, recording, { created: existing.created });
+        }
+        return super.findOneAndReplace(recording);
+    }
 })();
 
 //# sourceMappingURL=recording.js.map

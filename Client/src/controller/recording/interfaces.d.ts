@@ -3,7 +3,10 @@ declare module 'movie-db-client' {
 
     import * as api from 'movie-db-api'
 
+    type TAfterRecordingSave = 'list'
+
     interface IRecordingState extends IEditState<api.IRecordingInfo> {
+        readonly afterSave: TAfterRecordingSave
         readonly correlationId: string
         readonly count: number
         readonly edit: string | api.IRecording
@@ -69,6 +72,7 @@ declare module 'movie-db-client' {
     }
 
     interface ISaveRecording extends Action {
+        after: TAfterRecordingSave
         type: recordingActions.save
     }
 

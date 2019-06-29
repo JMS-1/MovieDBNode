@@ -819,6 +819,10 @@ class Controller {
 }
 exports.Controller = Controller;
 class EditController extends Controller {
+    constructor() {
+        super(...arguments);
+        this.updateAllAfterSave = true;
+    }
     getWorkingCopy(state) {
         return state.all.find(c => c._id === state.selected);
     }
@@ -847,14 +851,21 @@ class EditController extends Controller {
         return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
     }
     setProperty(state, request) {
-        const workingCopy = state.workingCopy || this.getWorkingCopy(state);
-        if (!workingCopy) {
+        const current = state.workingCopy || this.getWorkingCopy(state);
+        if (!current) {
             return state;
         }
-        if (workingCopy[request.prop] === request.value) {
+        if (current[request.prop] === request.value) {
             return state;
         }
-        return this.validateItem(Object.assign({}, state, { workingCopy: Object.assign({}, workingCopy, { [request.prop]: request.value }) }));
+        const workingCopy = Object.assign({}, current);
+        if (request.value === undefined) {
+            delete workingCopy[request.prop];
+        }
+        else {
+            workingCopy[request.prop] = request.value;
+        }
+        return this.validateItem(Object.assign({}, state, { workingCopy }));
     }
     loadSchema(state, response) {
         return this.validateItem(Object.assign({}, state, { validator: response.schemas[this.schema] }));
@@ -870,12 +881,16 @@ class EditController extends Controller {
             return Object.assign({}, state, { validation: response.errors });
         }
         const { _id } = response.item;
+        state = Object.assign({}, state, { selected: _id, workingCopy: undefined, validation: undefined });
+        if (!this.updateAllAfterSave) {
+            return state;
+        }
         const all = [...state.all];
         const index = all.findIndex(c => c._id === _id);
         if (index >= 0) {
             all[index] = response.item;
         }
-        return Object.assign({}, state, { all, selected: _id, workingCopy: undefined, validation: undefined });
+        return Object.assign({}, state, { all });
     }
 }
 exports.EditController = EditController;
@@ -1205,7 +1220,7 @@ function getInitialState() {
             edit: {
                 _id: 'Eindeutige Kennung',
                 containerId: 'Ablage',
-                containerPosition: 'Position',
+                containerPosition: 'Standort',
                 containerType: 'Art der Ablage',
                 created: 'Erstellt',
                 description: 'Beschreibung',
@@ -1220,6 +1235,7 @@ function getInitialState() {
             languages: 'Sprachen',
             name: 'Name',
             noRent: 'nicht verliehen',
+            saveAndBack: 'Speichern und zurück',
             yesRent: 'verliehen',
         },
         routes: {
@@ -1312,8 +1328,8 @@ class RecordingActions {
     static cancelEdit() {
         return { type: "movie-db.recordings.cancel-edit" };
     }
-    static save() {
-        return { type: "movie-db.recordings.save" };
+    static save(after) {
+        return { after, type: "movie-db.recordings.save" };
     }
     static query() {
         return { type: "movie-db.recordings.query" };
@@ -1352,6 +1368,7 @@ exports.RecordingActions = RecordingActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
 const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
 const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/recording/actions.ts");
 const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
@@ -1360,6 +1377,7 @@ const controller = new (class extends controller_1.EditController {
     constructor() {
         super(...arguments);
         this.schema = 'recording';
+        this.updateAllAfterSave = false;
     }
     getReducerMap() {
         return {
@@ -1384,13 +1402,16 @@ const controller = new (class extends controller_1.EditController {
         };
     }
     getInitialState() {
-        return Object.assign({}, super.getInitialState(), { correlationId: undefined, count: 0, edit: undefined, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending', total: 0 });
+        return Object.assign({}, super.getInitialState(), { afterSave: undefined, correlationId: undefined, count: 0, edit: undefined, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending', total: 0 });
     }
     startSave(state, request) {
         if (state.workingCopy) {
             store_1.ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, actions_1.RecordingActions.saveDone);
         }
-        return state;
+        if (request.after === state.afterSave) {
+            return state;
+        }
+        return Object.assign({}, state, { afterSave: request.after });
     }
     resetFilter(state, request) {
         return this.sendQuery(Object.assign({}, state, { genres: [], language: '', pageSize: 15, rent: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending' }), true);
@@ -1481,6 +1502,23 @@ const controller = new (class extends controller_1.EditController {
             return state;
         }
         return Object.assign({}, state, { edit: request.recording });
+    }
+    saveDone(state, response) {
+        state = super.saveDone(state, response);
+        if (state.workingCopy) {
+            return state;
+        }
+        switch (state.afterSave) {
+            case 'list':
+                store_1.delayedDispatch(connected_react_router_1.routerActions.push("/recording"));
+                break;
+        }
+        return state;
+    }
+    cancelEdit(state, request) {
+        state = super.cancelEdit(state, request);
+        store_1.delayedDispatch(connected_react_router_1.routerActions.push("/recording"));
+        return state;
     }
 })();
 exports.RecordingReducer = controller.reducer;
@@ -1783,20 +1821,21 @@ class CContainerDetails extends React.PureComponent {
             return null;
         }
         const { hasChanges, hasError } = this.props;
-        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-container-details', error: hasError },
-            React.createElement(semantic_ui_react_1.Form.Field, null,
-                React.createElement("label", null, this.props.idLabel),
-                React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.id || '', readOnly: true, disabled: true })),
-            React.createElement(semantic_ui_react_1.Form.Field, null,
-                React.createElement("label", null, this.props.parentLabel),
-                React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.parent || '', readOnly: true, disabled: true })),
-            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'name', required: true }),
-            React.createElement(semantic_ui_react_1.Form.Field, { required: true },
-                React.createElement("label", null, this.props.typeLabel),
-                React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: this.props.type }),
-                React.createElement(messageRedux_1.ReportError, { errors: this.props.typeErrors })),
-            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
-            React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' }),
+        return (React.createElement("div", { className: 'movie-db-container-details' },
+            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.idLabel),
+                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.id || '', readOnly: true, disabled: true })),
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.parentLabel),
+                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.parent || '', readOnly: true, disabled: true })),
+                React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'name', required: true }),
+                React.createElement(semantic_ui_react_1.Form.Field, { required: true },
+                    React.createElement("label", null, this.props.typeLabel),
+                    React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: this.props.type }),
+                    React.createElement(messageRedux_1.ReportError, { errors: this.props.typeErrors })),
+                React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
+                React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' })),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel))));
@@ -1985,12 +2024,29 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CRecording extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.setSeries = (ev, data) => {
+            this.props.setProp('series', (typeof data.value === 'string' ? data.value : '') || undefined);
+        };
+    }
     render() {
-        return (React.createElement(semantic_ui_react_1.Form, { className: 'movie-db-recording-edit' },
-            React.createElement(semantic_ui_react_1.Form.Field, null,
-                React.createElement("label", null, this.props.idLabel),
-                React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.match.params.id || '', readOnly: true, disabled: true })),
-            React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true })));
+        const { hasChanges, hasError } = this.props;
+        return (React.createElement("div", { className: 'movie-db-recording-edit' },
+            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.idLabel),
+                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.match.params.id || '', readOnly: true, disabled: true })),
+                React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true }),
+                React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'description', textarea: true }),
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.seriesLabel),
+                    React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, search: true, selection: true, scrolling: true, value: this.props.series || '' })),
+                React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'containerPosition' }),
+                React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'rentTo' })),
+            React.createElement(semantic_ui_react_1.Button.Group, null,
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndBack, disabled: hasError || !hasChanges }, this.props.saveAndBackLabel))));
     }
     componentWillMount() {
         this.props.loadRecording();
@@ -2017,13 +2073,25 @@ const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/sr
 function mapStateToProps(state, props) {
     const mui = state.mui.recording;
     const emui = mui.edit;
+    const route = state.recording;
+    const edit = controller_1.getRecordingEdit(state);
     return {
+        cancelLabel: state.mui.cancel,
+        hasChanges: !!route.workingCopy,
+        hasError: route.validation && route.validation.length > 0,
         idLabel: emui._id,
+        saveAndBackLabel: mui.saveAndBack,
+        series: edit && edit.series,
+        seriesLabel: emui.series,
+        seriesOptions: controller_1.getSeriesOptions(state),
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
+        cancel: () => dispatch(controller_1.RecordingActions.cancelEdit()),
         loadRecording: () => dispatch(controller_1.RecordingActions.select(props.match.params.id)),
+        saveAndBack: () => dispatch(controller_1.RecordingActions.save('list')),
+        setProp: (prop, value) => dispatch(controller_1.RecordingActions.setProperty(prop, value)),
     };
 }
 exports.Recording = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecording);
@@ -2334,6 +2402,10 @@ exports.initializeStore = initializeStore;
 function getMessage(error) {
     return typeof error === 'string' ? error : error.message || 'failed';
 }
+function delayedDispatch(action) {
+    setTimeout(() => store.dispatch(action), 0);
+}
+exports.delayedDispatch = delayedDispatch;
 class ServerApi {
     static process(webMethod, method, data, process) {
         window.setTimeout(() => {
