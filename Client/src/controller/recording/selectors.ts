@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-import { IRecordingInfo } from 'movie-db-api'
+import { IRecordingInfo, mediaType } from 'movie-db-api'
 import { IClientState, ISelectOption } from 'movie-db-client'
 
 export interface IRecordingMap {
@@ -32,4 +32,19 @@ export const getRecordingEdit = createSelector(
     (state: IClientState) => state.recording.workingCopy,
     (state: IClientState) => state.recording.edit,
     (copy, initial) => copy || (typeof initial !== 'string' && initial),
+)
+
+const optionOrder: mediaType[] = [
+    mediaType.Undefined,
+    mediaType.VideoCD,
+    mediaType.SuperVideoCD,
+    mediaType.RecordedDVD,
+    mediaType.DVD,
+    mediaType.BluRay,
+]
+
+export const getMediaTypeOptions = createSelector(
+    (state: IClientState) => state.mui.media.types,
+    (mui): ISelectOption<mediaType>[] =>
+        optionOrder.map(t => <ISelectOption<mediaType>>{ key: t, text: mui[t], value: t }),
 )

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 
 import { containerType, IContainer } from 'movie-db-api'
-import { IClientState, IIconSelectOption, Separators } from 'movie-db-client'
+import { IClientState, IIconSelectOption, ISelectOption, Separators } from 'movie-db-client'
 
 export interface IContainerInfo {
     name: string
@@ -145,4 +145,12 @@ export const getContainerTypeOptions = createSelector(
                     value: c,
                 },
         ),
+)
+
+export const getAllConatinerOptions = createSelector(
+    getContainerMap,
+    (all): ISelectOption[] =>
+        Object.values(all)
+            .map(c => <ISelectOption>{ key: c.raw._id, text: c.name || c.raw._id, value: c.raw._id })
+            .sort((l, r) => l.text.localeCompare(r.text)),
 )

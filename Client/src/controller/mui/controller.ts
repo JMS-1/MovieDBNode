@@ -1,4 +1,4 @@
-import { containerType } from 'movie-db-api'
+import { containerType, mediaType } from 'movie-db-api'
 import { IMuiState } from 'movie-db-client'
 
 export function getInitialState(): IMuiState {
@@ -47,6 +47,16 @@ export function getInitialState(): IMuiState {
         language: {
             noSelect: '(alle Sprachen)',
         },
+        media: {
+            types: {
+                [mediaType.BluRay]: 'Blu-Ray',
+                [mediaType.DVD]: 'Gekaufte DVD',
+                [mediaType.RecordedDVD]: 'Selbstaufgenommene DVD',
+                [mediaType.SuperVideoCD]: 'Super-Video CD',
+                [mediaType.Undefined]: '(Unbekannt)',
+                [mediaType.VideoCD]: 'Video CD',
+            },
+        },
         recording: {
             anyRent: '(verliehen egal)',
             clear: 'Neue Suche',
@@ -66,10 +76,12 @@ export function getInitialState(): IMuiState {
                 rentTo: 'Verliehen an',
                 series: 'Serie',
             },
-            genres: 'Kategorien',
+            editContainer: '(Ablage zuordnen)',
             editGenres: '(Kategorien zuordnen)',
             editLanguages: '(Sprachen zuordnen)',
             editSeries: '(Serie zuordnen)',
+            editType: '(Ablageart auswählen)',
+            genres: 'Kategorien',
             languages: 'Sprachen',
             name: 'Name',
             noRent: 'nicht verliehen',

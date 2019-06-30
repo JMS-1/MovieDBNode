@@ -779,6 +779,9 @@ exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui
     text: mui[c].title,
     value: c,
 })));
+exports.getAllConatinerOptions = reselect_1.createSelector(exports.getContainerMap, (all) => Object.values(all)
+    .map(c => ({ key: c.raw._id, text: c.name || c.raw._id, value: c.raw._id }))
+    .sort((l, r) => l.text.localeCompare(r.text)));
 
 
 /***/ }),
@@ -1218,6 +1221,16 @@ function getInitialState() {
         language: {
             noSelect: '(alle Sprachen)',
         },
+        media: {
+            types: {
+                [5]: 'Blu-Ray',
+                [4]: 'Gekaufte DVD',
+                [3]: 'Selbstaufgenommene DVD',
+                [2]: 'Super-Video CD',
+                [0]: '(Unbekannt)',
+                [1]: 'Video CD',
+            },
+        },
         recording: {
             anyRent: '(verliehen egal)',
             clear: 'Neue Suche',
@@ -1237,10 +1250,12 @@ function getInitialState() {
                 rentTo: 'Verliehen an',
                 series: 'Serie',
             },
-            genres: 'Kategorien',
+            editContainer: '(Ablage zuordnen)',
             editGenres: '(Kategorien zuordnen)',
             editLanguages: '(Sprachen zuordnen)',
             editSeries: '(Serie zuordnen)',
+            editType: '(Ablageart auswählen)',
+            genres: 'Kategorien',
             languages: 'Sprachen',
             name: 'Name',
             noRent: 'nicht verliehen',
@@ -1574,6 +1589,15 @@ exports.getRecordingMap = reselect_1.createSelector((state) => state.recording.a
 exports.getRecordings = reselect_1.createSelector((state) => state.recording.all, (all) => all.map(r => r._id));
 exports.getRentOptions = reselect_1.createSelector((state) => state.mui.recording, (mui) => [{ key: '1', text: mui.yesRent, value: '1' }, { key: '0', text: mui.noRent, value: '0' }]);
 exports.getRecordingEdit = reselect_1.createSelector((state) => state.recording.workingCopy, (state) => state.recording.edit, (copy, initial) => copy || (typeof initial !== 'string' && initial));
+const optionOrder = [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+];
+exports.getMediaTypeOptions = reselect_1.createSelector((state) => state.mui.media.types, (mui) => optionOrder.map(t => ({ key: t, text: mui[t], value: t })));
 
 
 /***/ }),
@@ -1831,6 +1855,9 @@ class CContainerDetails extends React.PureComponent {
         }
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-container-details' },
+            React.createElement(semantic_ui_react_1.Button.Group, null,
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.idLabel),
@@ -1844,10 +1871,7 @@ class CContainerDetails extends React.PureComponent {
                     React.createElement(semantic_ui_react_1.Dropdown, { onChange: this.setType, options: this.props.typeOptions, selection: true, value: this.props.type }),
                     React.createElement(messageRedux_1.ReportError, { errors: this.props.typeErrors })),
                 React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'description', textarea: true }),
-                React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' })),
-            React.createElement(semantic_ui_react_1.Button.Group, null,
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel))));
+                React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'parentLocation' }))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);
@@ -2039,12 +2063,21 @@ class CRecording extends React.PureComponent {
         this.setSeries = (ev, data) => {
             this.props.setProp('series', (typeof data.value === 'string' ? data.value : '') || undefined);
         };
+        this.setContainer = (ev, data) => {
+            this.props.setProp('containerId', (typeof data.value === 'string' ? data.value : '') || undefined);
+        };
+        this.setType = (ev, data) => {
+            this.props.setProp('containerType', typeof data.value === 'number' ? data.value : 0);
+        };
         this.setGenres = (ev, data) => this.props.setProp('genres', util_1.isArray(data.value) ? data.value : []);
         this.setLanguages = (ev, data) => this.props.setProp('languages', util_1.isArray(data.value) ? data.value : []);
     }
     render() {
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-recording-edit' },
+            React.createElement(semantic_ui_react_1.Button.Group, null,
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndBack, disabled: hasError || !hasChanges }, this.props.saveAndBackLabel)),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.idLabel),
@@ -2055,16 +2088,19 @@ class CRecording extends React.PureComponent {
                     React.createElement("label", null, this.props.seriesLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, placeholder: this.props.seriesHint, search: true, selection: true, scrolling: true, value: this.props.series || '' })),
                 React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.typeLabel),
+                    React.createElement(semantic_ui_react_1.Dropdown, { fluid: true, onChange: this.setType, options: this.props.typeOptions, placeholder: this.props.typeHint, search: true, selection: true, scrolling: true, value: this.props.type || 0 })),
+                React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.genreLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenres, options: this.props.genreOptions, placeholder: this.props.genreHint, search: true, selection: true, scrolling: true, value: this.props.genres })),
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.languageLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setLanguages, options: this.props.languageOptions, placeholder: this.props.languageHint, search: true, selection: true, scrolling: true, value: this.props.languages })),
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.containerLabel),
+                    React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setContainer, options: this.props.containerOptions, placeholder: this.props.containerHint, search: true, selection: true, scrolling: true, value: this.props.container || '' })),
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'containerPosition' }),
-                React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'rentTo' })),
-            React.createElement(semantic_ui_react_1.Button.Group, null,
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndBack, disabled: hasError || !hasChanges }, this.props.saveAndBackLabel))));
+                React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'rentTo' }))));
     }
     componentWillMount() {
         this.props.loadRecording();
@@ -2096,6 +2132,10 @@ function mapStateToProps(state, props) {
     const edit = controller.getRecordingEdit(state);
     return {
         cancelLabel: state.mui.cancel,
+        container: edit && edit.containerId,
+        containerHint: mui.editContainer,
+        containerLabel: emui.containerId,
+        containerOptions: controller.getAllConatinerOptions(state),
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
         genreOptions: controller.getAllGenreOptions(state),
@@ -2112,6 +2152,10 @@ function mapStateToProps(state, props) {
         seriesHint: mui.editSeries,
         seriesLabel: emui.series,
         seriesOptions: controller.getSeriesOptions(state),
+        type: edit ? edit.containerType : 0,
+        typeHint: mui.editType,
+        typeLabel: emui.containerType,
+        typeOptions: controller.getMediaTypeOptions(state),
     };
 }
 function mapDispatchToProps(dispatch, props) {

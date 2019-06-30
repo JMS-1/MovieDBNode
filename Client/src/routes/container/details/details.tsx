@@ -45,6 +45,14 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
 
         return (
             <div className='movie-db-container-details'>
+                <Button.Group>
+                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
+                        {this.props.cancelLabel}
+                    </Button>
+                    <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
+                        {this.props.saveLabel}
+                    </Button>
+                </Button.Group>
                 <Form error={hasError}>
                     <Form.Field>
                         <label>{this.props.idLabel}</label>
@@ -68,14 +76,6 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     <ContainerTextInput prop='description' textarea />
                     <ContainerTextInput prop='parentLocation' />
                 </Form>
-                <Button.Group>
-                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
-                        {this.props.cancelLabel}
-                    </Button>
-                    <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
-                        {this.props.saveLabel}
-                    </Button>
-                </Button.Group>
             </div>
         )
     }

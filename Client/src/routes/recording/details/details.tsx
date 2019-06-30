@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router'
 import { Button, Dropdown, DropdownProps, Form, Input } from 'semantic-ui-react'
 import { isArray } from 'util'
 
-import { IRecording } from 'movie-db-api'
+import { IRecording, mediaType } from 'movie-db-api'
 import { ISelectOption } from 'movie-db-client'
 
 import { RecordingTextInput } from '../../../components/textInput/textInputRedux'
@@ -16,6 +16,10 @@ export interface IRecordingUiProps extends RouteComponentProps<IRecordingParams>
 
 export interface IRecordingProps {
     cancelLabel: string
+    container: string
+    containerHint: string
+    containerLabel: string
+    containerOptions: ISelectOption[]
     genreHint: string
     genreLabel: string
     genreOptions: ISelectOption[]
@@ -32,6 +36,10 @@ export interface IRecordingProps {
     seriesHint: string
     seriesLabel: string
     seriesOptions: ISelectOption[]
+    type: mediaType
+    typeHint: string
+    typeLabel: string
+    typeOptions: ISelectOption<mediaType>[]
 }
 
 export interface IRecordingActions {
@@ -49,6 +57,14 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
 
         return (
             <div className='movie-db-recording-edit'>
+                <Button.Group>
+                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
+                        {this.props.cancelLabel}
+                    </Button>
+                    <Button onClick={this.props.saveAndBack} disabled={hasError || !hasChanges}>
+                        {this.props.saveAndBackLabel}
+                    </Button>
+                </Button.Group>
                 <Form error={hasError}>
                     <Form.Field>
                         <label>{this.props.idLabel}</label>
@@ -68,6 +84,19 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
                             selection
                             scrolling
                             value={this.props.series || ''}
+                        />
+                    </Form.Field>
+                    <Form.Field>
+                        <label>{this.props.typeLabel}</label>
+                        <Dropdown
+                            fluid
+                            onChange={this.setType}
+                            options={this.props.typeOptions}
+                            placeholder={this.props.typeHint}
+                            search
+                            selection
+                            scrolling
+                            value={this.props.type || mediaType.Undefined}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -100,23 +129,37 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
                             value={this.props.languages}
                         />
                     </Form.Field>
+                    <Form.Field>
+                        <label>{this.props.containerLabel}</label>
+                        <Dropdown
+                            clearable
+                            fluid
+                            onChange={this.setContainer}
+                            options={this.props.containerOptions}
+                            placeholder={this.props.containerHint}
+                            search
+                            selection
+                            scrolling
+                            value={this.props.container || ''}
+                        />
+                    </Form.Field>
                     <RecordingTextInput prop='containerPosition' />
                     <RecordingTextInput prop='rentTo' />
                 </Form>
-                <Button.Group>
-                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
-                        {this.props.cancelLabel}
-                    </Button>
-                    <Button onClick={this.props.saveAndBack} disabled={hasError || !hasChanges}>
-                        {this.props.saveAndBackLabel}
-                    </Button>
-                </Button.Group>
             </div>
         )
     }
 
     private readonly setSeries = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
         this.props.setProp('series', (typeof data.value === 'string' ? data.value : '') || undefined)
+    }
+
+    private readonly setContainer = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
+        this.props.setProp('containerId', (typeof data.value === 'string' ? data.value : '') || undefined)
+    }
+
+    private readonly setType = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
+        this.props.setProp('containerType', typeof data.value === 'number' ? data.value : mediaType.Undefined)
     }
 
     private readonly setGenres = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void =>

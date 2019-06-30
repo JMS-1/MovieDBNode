@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
 
+import { mediaType } from 'movie-db-api'
 import { IClientState } from 'movie-db-client'
 
 import * as local from './details'
@@ -17,6 +18,10 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
 
     return {
         cancelLabel: state.mui.cancel,
+        container: edit && edit.containerId,
+        containerHint: mui.editContainer,
+        containerLabel: emui.containerId,
+        containerOptions: controller.getAllConatinerOptions(state),
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
         genreOptions: controller.getAllGenreOptions(state),
@@ -33,6 +38,10 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         seriesHint: mui.editSeries,
         seriesLabel: emui.series,
         seriesOptions: controller.getSeriesOptions(state),
+        type: edit ? edit.containerType : mediaType.Undefined,
+        typeHint: mui.editType,
+        typeLabel: emui.containerType,
+        typeOptions: controller.getMediaTypeOptions(state),
     }
 }
 
