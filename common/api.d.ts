@@ -4,6 +4,7 @@ declare module 'movie-db-api' {
     }
 
     interface IValidationScope {
+        readonly items?: any
         readonly message?: string
         readonly properties?: any
     }

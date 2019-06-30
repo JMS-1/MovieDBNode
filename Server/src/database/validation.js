@@ -12,7 +12,7 @@ function addSchema(schema) {
             const found = match && match[1];
             if (found) {
                 props.push(found);
-                scope = (scope.properties || {})[found] || {};
+                scope = (scope.properties || (scope.items && scope.items.properties) || {})[found] || {};
             }
         }
         return `{ errors.push({ constraint: "${errorType}", property: "${props.join('.') ||

@@ -19,7 +19,7 @@ export function addSchema<TSchema extends IValidatableSchema>(schema: TSchema): 
             if (found) {
                 props.push(found)
 
-                scope = (scope.properties || {})[found] || {}
+                scope = (scope.properties || (scope.items && scope.items.properties) || {})[found] || {}
             }
         }
 

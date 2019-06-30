@@ -2326,7 +2326,8 @@ class CRecordingLinks extends React.PureComponent {
         const hasUrlError = urlErrors && urlErrors.length > 0;
         const hasDescriptionError = descriptionErrors && descriptionErrors.length > 0;
         const hasLinkError = errors && errors.length > 0;
-        return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-container-links', error: hasLinkError },
+        const hasError = hasLinkError || hasNameError || hasUrlError || hasDescriptionError;
+        return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-container-links', error: hasError },
             React.createElement("label", null,
                 this.props.label,
                 React.createElement(semantic_ui_react_1.Icon, { name: edit ? 'eye' : 'edit', link: true, onClick: this.toggleEdit })),
@@ -2708,7 +2709,7 @@ function addSchema(schema) {
             const found = match && match[1];
             if (found) {
                 props.push(found);
-                scope = (scope.properties || {})[found] || {};
+                scope = (scope.properties || (scope.items && scope.items.properties) || {})[found] || {};
             }
         }
         return `{ errors.push({ constraint: "${errorType}", property: "${props.join('.') ||

@@ -60,9 +60,10 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
         const hasUrlError = urlErrors && urlErrors.length > 0
         const hasDescriptionError = descriptionErrors && descriptionErrors.length > 0
         const hasLinkError = errors && errors.length > 0
+        const hasError = hasLinkError || hasNameError || hasUrlError || hasDescriptionError
 
         return (
-            <Form.Field className='movie-db-container-links' error={hasLinkError}>
+            <Form.Field className='movie-db-container-links' error={hasError}>
                 <label>
                     {this.props.label}
                     <Icon name={edit ? 'eye' : 'edit'} link onClick={this.toggleEdit} />
