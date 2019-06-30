@@ -19,7 +19,7 @@ const LinkSubSchema = {
         },
         url: {
             maxLength: 2000,
-            message: 'Verweis ist zu lang',
+            message: 'Verweis nicht angegeben oder zu lang',
             minLength: 1,
             type: 'string',
         },
