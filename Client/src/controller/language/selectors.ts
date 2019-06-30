@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect'
+import { DropdownItemProps } from 'semantic-ui-react'
 
 import { ILanguage, IQueryCountInfo } from 'movie-db-api'
-import { IClientState, ISelectOption } from 'movie-db-client'
+import { IClientState } from 'movie-db-client'
 
 export interface ILanguageMap {
     [id: string]: ILanguage
@@ -19,7 +20,7 @@ export const getLanguageMap = createSelector(
         all.forEach(l => (map[l._id] = l))
 
         return map
-    },
+    }
 )
 
 export const getLanguageCountMap = createSelector(
@@ -30,31 +31,31 @@ export const getLanguageCountMap = createSelector(
         all.forEach(l => (map[l._id] = l))
 
         return map
-    },
+    }
 )
 
 export const getLanguageOptions = createSelector(
     (state: IClientState) => state.language.all,
     getLanguageCountMap,
-    (all, counts): ISelectOption[] => {
-        const options: ISelectOption[] = all
+    (all, counts): DropdownItemProps[] => {
+        const options: DropdownItemProps[] = all
             .map(l => {
                 const info = counts[l._id]
 
-                return info && info.count && { key: l._id, text: l.name || l._id, value: l._id }
+                return info && info.count && { key: l._id, sort: l.name || l._id, text: l.name || l._id, value: l._id }
             })
             .filter(o => o)
 
-        options.sort((l, r) => l.text.localeCompare(r.text))
+        options.sort((l, r) => l.sort.localeCompare(r.sort))
 
         return options
-    },
+    }
 )
 
 export const getAllLanguageOptions = createSelector(
     (state: IClientState) => state.language.all,
-    (all): ISelectOption[] =>
+    (all): DropdownItemProps[] =>
         all
-            .map(l => <ISelectOption>{ key: l._id, text: l.name || l._id, value: l._id })
-            .sort((l, r) => l.text.localeCompare(r.text)),
+            .map(l => <DropdownItemProps>{ key: l._id, sort: l.name || l._id, text: l.name || l._id, value: l._id })
+            .sort((l, r) => l.sort.localeCompare(r.sort))
 )

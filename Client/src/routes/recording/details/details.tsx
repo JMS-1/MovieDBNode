@@ -1,10 +1,11 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Button, Dropdown, DropdownProps, Form, Input } from 'semantic-ui-react'
+import { Button, Dropdown, DropdownItemProps, DropdownProps, Form, Input } from 'semantic-ui-react'
 import { isArray } from 'util'
 
 import { IRecording, mediaType } from 'movie-db-api'
-import { ISelectOption } from 'movie-db-client'
+
+import { RecordingLinks } from '../links/linksRedux'
 
 import { RecordingTextInput } from '../../../components/textInput/textInputRedux'
 
@@ -19,27 +20,27 @@ export interface IRecordingProps {
     container: string
     containerHint: string
     containerLabel: string
-    containerOptions: ISelectOption[]
+    containerOptions: DropdownItemProps[]
     genreHint: string
     genreLabel: string
-    genreOptions: ISelectOption[]
+    genreOptions: DropdownItemProps[]
     genres: string[]
     hasChanges: boolean
     hasError: boolean
     idLabel: string
     languageHint: string
     languageLabel: string
-    languageOptions: ISelectOption[]
+    languageOptions: DropdownItemProps[]
     languages: string[]
     saveAndBackLabel: string
     series: string
     seriesHint: string
     seriesLabel: string
-    seriesOptions: ISelectOption[]
+    seriesOptions: DropdownItemProps[]
     type: mediaType
     typeHint: string
     typeLabel: string
-    typeOptions: ISelectOption<mediaType>[]
+    typeOptions: DropdownItemProps[]
 }
 
 export interface IRecordingActions {
@@ -71,6 +72,7 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
                         <Input input='text' value={this.props.match.params.id || ''} readOnly disabled />
                     </Form.Field>
                     <RecordingTextInput prop='name' required />
+                    <RecordingLinks />
                     <RecordingTextInput prop='description' textarea />
                     <Form.Field>
                         <label>{this.props.seriesLabel}</label>
@@ -86,7 +88,7 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
                             value={this.props.series || ''}
                         />
                     </Form.Field>
-                    <Form.Field>
+                    <Form.Field required>
                         <label>{this.props.typeLabel}</label>
                         <Dropdown
                             fluid

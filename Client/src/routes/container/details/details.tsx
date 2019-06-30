@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { Button, Dropdown, DropdownProps, Form, Input } from 'semantic-ui-react'
+import { Button, Dropdown, DropdownItemProps, DropdownProps, Form, Input } from 'semantic-ui-react'
 
 import { containerType, IContainer } from 'movie-db-api'
-import { IIconSelectOption } from 'movie-db-client'
 
 import { ReportError } from '../../../components/message/messageRedux'
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
@@ -23,7 +22,7 @@ export interface IContainerDetailsProps {
     type: containerType
     typeErrors: string[]
     typeLabel: string
-    typeOptions: IIconSelectOption<containerType>[]
+    typeOptions: DropdownItemProps[]
 }
 
 export interface IContainerDetailsActions {

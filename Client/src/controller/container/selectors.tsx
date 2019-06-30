@@ -1,7 +1,9 @@
+import * as React from 'react'
 import { createSelector } from 'reselect'
+import { DropdownItemProps, Icon } from 'semantic-ui-react'
 
 import { containerType, IContainer } from 'movie-db-api'
-import { IClientState, IIconSelectOption, ISelectOption, Separators } from 'movie-db-client'
+import { IClientState, Separators } from 'movie-db-client'
 
 export interface IContainerInfo {
     name: string
@@ -135,22 +137,32 @@ const optionOrder: containerType[] = [
 
 export const getContainerTypeOptions = createSelector(
     (state: IClientState) => state.mui.container.types,
-    (mui): IIconSelectOption<containerType>[] =>
-        optionOrder.map(
-            c =>
-                <IIconSelectOption<containerType>>{
-                    icon: { name: mui[c].icon },
-                    key: c,
-                    text: mui[c].title,
-                    value: c,
-                },
-        ),
+    (mui): DropdownItemProps[] =>
+        optionOrder.map(c => ({
+            key: c,
+            text: (
+                <span>
+                    <Icon name={mui[c].icon} /> {mui[c].title}
+                </span>
+            ),
+            value: c,
+        })),
 )
 
 export const getAllConatinerOptions = createSelector(
     getContainerMap,
-    (all): ISelectOption[] =>
+    (state: IClientState) => state.mui.container.types,
+    (all, types): DropdownItemProps[] =>
         Object.values(all)
-            .map(c => <ISelectOption>{ key: c.raw._id, text: c.name || c.raw._id, value: c.raw._id })
-            .sort((l, r) => l.text.localeCompare(r.text)),
+            .map(c => ({
+                key: c.raw._id,
+                sort: c.name || c.raw._id,
+                text: (
+                    <span>
+                        <Icon name={(types[c.raw.type] && types[c.raw.type].icon) || 'help'} /> {c.name || c.raw._id}
+                    </span>
+                ),
+                value: c.raw._id,
+            }))
+            .sort((l, r) => l.sort.localeCompare(r.sort)),
 )

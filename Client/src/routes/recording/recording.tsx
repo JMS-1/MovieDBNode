@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as semanticUiReact from 'semantic-ui-react'
 
 import { TRecordingSort, TSortOrder } from 'movie-db-api'
-import { ISelectOption } from 'movie-db-client'
 
 import { RecordingItem } from './item/itemRedux'
 import { PageSizeSelector } from './size/sizeRedux'
@@ -19,25 +18,25 @@ export interface IRecordingRouteProps {
     createdSort: TSortOrder
     genreHeader: string
     genreHint: string
-    genreOptions: ISelectOption[]
+    genreOptions: semanticUiReact.DropdownItemProps[]
     genres: string[]
     language: string
     languageHeader: string
     languageHint: string
-    languageOptions: ISelectOption[]
+    languageOptions: semanticUiReact.DropdownItemProps[]
     lastPage: number
     list: string[]
     nameHeader: string
     nameSort: TSortOrder
     page: number
     pageSize: number
-    rentOptions: ISelectOption[]
+    rentOptions: semanticUiReact.DropdownItemProps[]
     rentTo: boolean
     rentToHint: string
     series: string[]
     seriesHint: string
     seriesMap: ISeriesMap
-    seriesOptions: ISelectOption[]
+    seriesOptions: semanticUiReact.DropdownItemProps[]
 }
 
 export interface IRecordingRouteActions {

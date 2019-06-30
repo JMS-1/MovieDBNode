@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect'
+import { DropdownItemProps } from 'semantic-ui-react'
 
 import { IRecordingInfo, mediaType } from 'movie-db-api'
-import { IClientState, ISelectOption } from 'movie-db-client'
+import { IClientState } from 'movie-db-client'
 
 export interface IRecordingMap {
     [id: string]: IRecordingInfo
@@ -25,7 +26,10 @@ export const getRecordings = createSelector(
 
 export const getRentOptions = createSelector(
     (state: IClientState) => state.mui.recording,
-    (mui): ISelectOption[] => [{ key: '1', text: mui.yesRent, value: '1' }, { key: '0', text: mui.noRent, value: '0' }],
+    (mui): DropdownItemProps[] => [
+        { key: '1', text: mui.yesRent, value: '1' },
+        { key: '0', text: mui.noRent, value: '0' },
+    ],
 )
 
 export const getRecordingEdit = createSelector(
@@ -45,6 +49,5 @@ const optionOrder: mediaType[] = [
 
 export const getMediaTypeOptions = createSelector(
     (state: IClientState) => state.mui.media.types,
-    (mui): ISelectOption<mediaType>[] =>
-        optionOrder.map(t => <ISelectOption<mediaType>>{ key: t, text: mui[t], value: t }),
+    (mui): DropdownItemProps[] => optionOrder.map(t => <DropdownItemProps>{ key: t, text: mui[t], value: t }),
 )

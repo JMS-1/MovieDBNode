@@ -685,22 +685,24 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(/*! ./actions */ "./Client/src/controller/container/actions.ts"));
 __export(__webpack_require__(/*! ./controller */ "./Client/src/controller/container/controller.ts"));
-__export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/container/selectors.ts"));
+__export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/container/selectors.tsx"));
 
 
 /***/ }),
 
-/***/ "./Client/src/controller/container/selectors.ts":
-/*!******************************************************!*\
-  !*** ./Client/src/controller/container/selectors.ts ***!
-  \******************************************************/
+/***/ "./Client/src/controller/container/selectors.tsx":
+/*!*******************************************************!*\
+  !*** ./Client/src/controller/container/selectors.tsx ***!
+  \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 function getFullContainerName(id, map) {
     const info = map[id];
     if (!info) {
@@ -774,14 +776,24 @@ const optionOrder = [
     0,
 ];
 exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui.container.types, (mui) => optionOrder.map(c => ({
-    icon: { name: mui[c].icon },
     key: c,
-    text: mui[c].title,
+    text: (React.createElement("span", null,
+        React.createElement(semantic_ui_react_1.Icon, { name: mui[c].icon }),
+        " ",
+        mui[c].title)),
     value: c,
 })));
-exports.getAllConatinerOptions = reselect_1.createSelector(exports.getContainerMap, (all) => Object.values(all)
-    .map(c => ({ key: c.raw._id, text: c.name || c.raw._id, value: c.raw._id }))
-    .sort((l, r) => l.text.localeCompare(r.text)));
+exports.getAllConatinerOptions = reselect_1.createSelector(exports.getContainerMap, (state) => state.mui.container.types, (all, types) => Object.values(all)
+    .map(c => ({
+    key: c.raw._id,
+    sort: c.name || c.raw._id,
+    text: (React.createElement("span", null,
+        React.createElement(semantic_ui_react_1.Icon, { name: (types[c.raw.type] && types[c.raw.type].icon) || 'help' }),
+        " ",
+        c.name || c.raw._id)),
+    value: c.raw._id,
+}))
+    .sort((l, r) => l.sort.localeCompare(r.sort)));
 
 
 /***/ }),
@@ -997,15 +1009,15 @@ exports.getGenreOptions = reselect_1.createSelector((state) => state.genre.all, 
     const options = all
         .map(g => {
         const info = counts[g._id];
-        return info && info.count && { key: g._id, text: g.name || g._id, value: g._id };
+        return info && info.count && { key: g._id, sort: g.name || g._id, text: g.name || g._id, value: g._id };
     })
         .filter(o => o);
-    options.sort((l, r) => l.text.localeCompare(r.text));
+    options.sort((l, r) => l.sort.localeCompare(r.sort));
     return options;
 });
 exports.getAllGenreOptions = reselect_1.createSelector((state) => state.genre.all, (all) => all
-    .map(g => ({ key: g._id, text: g.name || g._id, value: g._id }))
-    .sort((l, r) => l.text.localeCompare(r.text)));
+    .map(g => ({ key: g._id, sort: g.name || g._id, text: g.name || g._id, value: g._id }))
+    .sort((l, r) => l.sort.localeCompare(r.sort)));
 
 
 /***/ }),
@@ -1135,15 +1147,15 @@ exports.getLanguageOptions = reselect_1.createSelector((state) => state.language
     const options = all
         .map(l => {
         const info = counts[l._id];
-        return info && info.count && { key: l._id, text: l.name || l._id, value: l._id };
+        return info && info.count && { key: l._id, sort: l.name || l._id, text: l.name || l._id, value: l._id };
     })
         .filter(o => o);
-    options.sort((l, r) => l.text.localeCompare(r.text));
+    options.sort((l, r) => l.sort.localeCompare(r.sort));
     return options;
 });
 exports.getAllLanguageOptions = reselect_1.createSelector((state) => state.language.all, (all) => all
-    .map(l => ({ key: l._id, text: l.name || l._id, value: l._id }))
-    .sort((l, r) => l.text.localeCompare(r.text)));
+    .map(l => ({ key: l._id, sort: l.name || l._id, text: l.name || l._id, value: l._id }))
+    .sort((l, r) => l.sort.localeCompare(r.sort)));
 
 
 /***/ }),
@@ -1587,7 +1599,10 @@ exports.getRecordingMap = reselect_1.createSelector((state) => state.recording.a
     return map;
 });
 exports.getRecordings = reselect_1.createSelector((state) => state.recording.all, (all) => all.map(r => r._id));
-exports.getRentOptions = reselect_1.createSelector((state) => state.mui.recording, (mui) => [{ key: '1', text: mui.yesRent, value: '1' }, { key: '0', text: mui.noRent, value: '0' }]);
+exports.getRentOptions = reselect_1.createSelector((state) => state.mui.recording, (mui) => [
+    { key: '1', text: mui.yesRent, value: '1' },
+    { key: '0', text: mui.noRent, value: '0' },
+]);
 exports.getRecordingEdit = reselect_1.createSelector((state) => state.recording.workingCopy, (state) => state.recording.edit, (copy, initial) => copy || (typeof initial !== 'string' && initial));
 const optionOrder = [
     0,
@@ -2056,6 +2071,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const util_1 = __webpack_require__(/*! util */ "./node_modules/util/util.js");
+const linksRedux_1 = __webpack_require__(/*! ../links/linksRedux */ "./Client/src/routes/recording/links/linksRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CRecording extends React.PureComponent {
     constructor() {
@@ -2083,11 +2099,12 @@ class CRecording extends React.PureComponent {
                     React.createElement("label", null, this.props.idLabel),
                     React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.match.params.id || '', readOnly: true, disabled: true })),
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true }),
+                React.createElement(linksRedux_1.RecordingLinks, null),
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'description', textarea: true }),
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.seriesLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, placeholder: this.props.seriesHint, search: true, selection: true, scrolling: true, value: this.props.series || '' })),
-                React.createElement(semantic_ui_react_1.Form.Field, null,
+                React.createElement(semantic_ui_react_1.Form.Field, { required: true },
                     React.createElement("label", null, this.props.typeLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { fluid: true, onChange: this.setType, options: this.props.typeOptions, placeholder: this.props.typeHint, search: true, selection: true, scrolling: true, value: this.props.type || 0 })),
                 React.createElement(semantic_ui_react_1.Form.Field, null,
@@ -2261,6 +2278,51 @@ function mapDispatchToProps(dispatch, props) {
     };
 }
 exports.RecordingItem = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingItem);
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/links/links.tsx":
+/*!*****************************************************!*\
+  !*** ./Client/src/routes/recording/links/links.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+class CRecordingLinks extends React.PureComponent {
+    render() {
+        return React.createElement(semantic_ui_react_1.Form.Group, { className: 'movie-db-container-links' }, "[LINKS]");
+    }
+}
+exports.CRecordingLinks = CRecordingLinks;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/recording/links/linksRedux.ts":
+/*!*********************************************************!*\
+  !*** ./Client/src/routes/recording/links/linksRedux.ts ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./links */ "./Client/src/routes/recording/links/links.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.RecordingLinks = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingLinks);
 
 
 /***/ }),

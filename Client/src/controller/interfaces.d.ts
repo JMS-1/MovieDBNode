@@ -23,16 +23,6 @@ declare module 'movie-db-client' {
         Series = ' > ',
     }
 
-    interface ISelectOption<TValue extends string | number | boolean = string> extends DropdownItemProps {
-        readonly key: TValue
-        readonly text: string
-        readonly value: TValue
-    }
-
-    interface IIconSelectOption<TValue extends string | number | boolean = string> extends ISelectOption<TValue> {
-        readonly icon: { name: SemanticICONS }
-    }
-
     type IActionHandlerMap<TActions extends Action, TState> = {
         [TType in TActions['type']]: (state: TState, action: { type: TType }) => TState
     }

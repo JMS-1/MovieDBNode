@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect'
+import { DropdownItemProps } from 'semantic-ui-react'
 
 import { ISeries } from 'movie-db-api'
-import { IClientState, ISelectOption, Separators } from 'movie-db-client'
+import { IClientState, Separators } from 'movie-db-client'
 
 export interface ISeriesInfo {
     name: string
@@ -87,7 +88,7 @@ export const getSeriesChildMap = createSelector(
     },
 )
 
-function buildOptions(scope: string, list: ISelectOption[], tree: ISeriesChildMap, lookup: ISeriesMap): void {
+function buildOptions(scope: string, list: DropdownItemProps[], tree: ISeriesChildMap, lookup: ISeriesMap): void {
     const children = (tree[scope] || []).map(id => lookup[id]).filter(s => s)
 
     for (let child of children) {
@@ -102,8 +103,8 @@ function buildOptions(scope: string, list: ISelectOption[], tree: ISeriesChildMa
 export const getSeriesOptions = createSelector(
     getSeriesChildMap,
     getSeriesMap,
-    (tree, map): ISelectOption[] => {
-        const list: ISelectOption[] = []
+    (tree, map): DropdownItemProps[] => {
+        const list: DropdownItemProps[] = []
 
         buildOptions('', list, tree, map)
 

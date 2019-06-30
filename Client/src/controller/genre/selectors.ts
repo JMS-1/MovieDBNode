@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect'
+import { DropdownItemProps } from 'semantic-ui-react'
 
 import { IGenre, IQueryCountInfo } from 'movie-db-api'
-import { IClientState, ISelectOption } from 'movie-db-client'
+import { IClientState } from 'movie-db-client'
 
 export interface IGenreMap {
     [id: string]: IGenre
@@ -36,16 +37,16 @@ export const getGenreCountMap = createSelector(
 export const getGenreOptions = createSelector(
     (state: IClientState) => state.genre.all,
     getGenreCountMap,
-    (all, counts): ISelectOption[] => {
-        const options: ISelectOption[] = all
+    (all, counts): DropdownItemProps[] => {
+        const options: DropdownItemProps[] = all
             .map(g => {
                 const info = counts[g._id]
 
-                return info && info.count && { key: g._id, text: g.name || g._id, value: g._id }
+                return info && info.count && { key: g._id, sort: g.name || g._id, text: g.name || g._id, value: g._id }
             })
             .filter(o => o)
 
-        options.sort((l, r) => l.text.localeCompare(r.text))
+        options.sort((l, r) => l.sort.localeCompare(r.sort))
 
         return options
     },
@@ -53,8 +54,8 @@ export const getGenreOptions = createSelector(
 
 export const getAllGenreOptions = createSelector(
     (state: IClientState) => state.genre.all,
-    (all): ISelectOption[] =>
+    (all): DropdownItemProps[] =>
         all
-            .map(g => <ISelectOption>{ key: g._id, text: g.name || g._id, value: g._id })
-            .sort((l, r) => l.text.localeCompare(r.text)),
+            .map(g => <DropdownItemProps>{ key: g._id, sort: g.name || g._id, text: g.name || g._id, value: g._id })
+            .sort((l, r) => l.sort.localeCompare(r.sort)),
 )
