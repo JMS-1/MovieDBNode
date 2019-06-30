@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { v4 as uuid } from 'uuid'
 
 import { IContainerResponse, INewContainer, IUpdateContainerResponse } from 'movie-db-api'
 
@@ -30,6 +31,20 @@ export const containerApi = Router().use(
                     return <IUpdateContainerResponse>{
                         container: toProtocol(container),
                         errors: await containerCollection.findOneAndReplace(container),
+                    }
+                },
+                request,
+                response,
+            ),
+        )
+        .post('/', (request, response, next) =>
+            processApiRequest(
+                async (req: INewContainer) => {
+                    const container = toEntity(req, uuid())
+
+                    return <IUpdateContainerResponse>{
+                        container: toProtocol(container),
+                        errors: await containerCollection.insertOne(container),
                     }
                 },
                 request,

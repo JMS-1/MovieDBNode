@@ -48,6 +48,8 @@ export abstract class EditController<
 
     protected readonly updateAllAfterSave: boolean = true
 
+    protected abstract createEmpty(): TItem
+
     protected getWorkingCopy(state: TState): TItem {
         return state.all.find(c => c._id === state.selected)
     }
@@ -74,9 +76,19 @@ export abstract class EditController<
         return { ...state, all: response.list || [], validation: undefined }
     }
 
+    private createNew(state: TState): TState {
+        const workingCopy = this.createEmpty()
+
+        return { ...state, selected: undefined, validation: validate(workingCopy, state.validator), workingCopy }
+    }
+
     protected select(state: TState, request: local.IGenericSelect): TState {
-        if (state.selected === request.id) {
+        if (state.selected === request.id && !state.validation && !state.workingCopy) {
             return state
+        }
+
+        if (request.id === 'NEW') {
+            return this.createNew(state)
         }
 
         return { ...state, selected: request.id, validation: undefined, workingCopy: undefined }
@@ -116,6 +128,10 @@ export abstract class EditController<
             return state
         }
 
+        if (!state.workingCopy._id) {
+            return this.createNew(state)
+        }
+
         return { ...state, validation: undefined, workingCopy: undefined }
     }
 
@@ -135,10 +151,16 @@ export abstract class EditController<
         const all = [...state.all]
         const index = all.findIndex(c => c._id === _id)
 
-        if (index >= 0) {
-            all[index] = response.item
+        state = { ...state, all }
+
+        if (index < 0) {
+            all.push(response.item)
+
+            return this.createNew(state)
         }
 
-        return { ...state, all }
+        all[index] = response.item
+
+        return state
     }
 }

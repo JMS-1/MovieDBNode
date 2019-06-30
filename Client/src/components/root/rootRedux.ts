@@ -10,11 +10,15 @@ import { ApplicationActions } from '../../controller'
 
 function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.IRootProps {
     const mui = state.mui.routes
+    const cmui = mui.create
     const route = state.application
 
     return {
         busy: route.requests > 0,
         containerRoute: mui.container,
+        createContainer: cmui.container,
+        createRecording: cmui.recording,
+        createRoute: cmui.title,
         errors: route.errors,
         path: state.router.location.pathname,
         recordingRoute: mui.recording,
@@ -31,5 +35,5 @@ function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRootUiProp
 
 export const Root = connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(local.CRoot)

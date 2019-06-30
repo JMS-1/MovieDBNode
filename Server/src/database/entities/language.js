@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("./utils");
 exports.collectionName = 'languages';
 exports.LanguageSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -10,8 +9,6 @@ exports.LanguageSchema = {
     message: 'Sprache unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
             type: 'string',
         },
         name: {
@@ -21,7 +18,7 @@ exports.LanguageSchema = {
             type: 'string',
         },
     },
-    required: ['_id', 'name'],
+    required: ['name'],
 };
 function toProtocol(language) {
     return language;

@@ -1,6 +1,6 @@
 import { ILanguage, INewLanguage } from 'movie-db-api'
 
-import { ISchema, uniqueId } from './utils'
+import { ISchema } from './utils'
 
 export const collectionName = 'languages'
 
@@ -14,8 +14,6 @@ export const LanguageSchema: ISchema<IDbLanguage> = {
     message: 'Sprache unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: uniqueId,
             type: 'string',
         },
         name: {
@@ -25,7 +23,7 @@ export const LanguageSchema: ISchema<IDbLanguage> = {
             type: 'string',
         },
     },
-    required: ['_id', 'name'],
+    required: ['name'],
 }
 
 export function toProtocol(language: IDbLanguage): ILanguage {

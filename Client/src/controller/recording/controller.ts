@@ -58,6 +58,18 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         }
     }
 
+    protected createEmpty(): api.IRecording {
+        return {
+            _id: '',
+            containerType: api.mediaType.Undefined,
+            created: '',
+            genres: [],
+            languages: [],
+            links: [],
+            name: '',
+        }
+    }
+
     protected getInitialState(): local.IRecordingState {
         return {
             ...super.getInitialState(),
@@ -83,7 +95,11 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     private startSave(state: local.IRecordingState, request: local.ISaveRecording): local.IRecordingState {
         if (state.workingCopy) {
-            ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, RecordingActions.saveDone)
+            if (state.workingCopy._id) {
+                ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, RecordingActions.saveDone)
+            } else {
+                ServerApi.post('recording', state.workingCopy, RecordingActions.saveDone)
+            }
         }
 
         if (request.after === state.afterSave) {
@@ -235,6 +251,10 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
     protected select(state: local.IRecordingState, request: local.ISelectRecording): local.IRecordingState {
         state = super.select(state, request)
 
+        if (state.workingCopy) {
+            return { ...state, edit: state.workingCopy }
+        }
+
         ServerApi.get(`recording/${request.id}`, RecordingActions.startEdit)
 
         return { ...state, edit: request.id }
@@ -270,6 +290,10 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     protected cancelEdit(state: local.IRecordingState, request: local.ICancelRecordingEdit): local.IRecordingState {
         state = super.cancelEdit(state, request)
+
+        if (state.workingCopy) {
+            return { ...state, edit: state.workingCopy }
+        }
 
         delayedDispatch(routerActions.push(local.routes.recording))
 

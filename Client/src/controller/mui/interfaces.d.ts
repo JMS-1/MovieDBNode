@@ -12,9 +12,11 @@ declare module 'movie-db-client' {
         readonly cancel: string
         readonly container: {
             readonly edit: IItemMui<IContainer>
+            readonly noId: string
             readonly noParent: string
             readonly types: { readonly [type in containerType]: IContainerTypeMui }
         }
+        readonly create: string
         readonly language: {
             readonly noSelect: string
         }
@@ -39,12 +41,19 @@ declare module 'movie-db-client' {
             readonly languages: string
             readonly linkEdit: IItemMui<IRecordingLink>
             readonly name: string
+            readonly noId: string
             readonly noRent: string
             readonly saveAndBack: string
             readonly yesRent: string
         }
+        readonly reset: string
         readonly routes: {
             readonly container: string
+            readonly create: {
+                readonly container: string
+                readonly recording: string
+                readonly title: string
+            }
             readonly recording: string
         }
         readonly save: string

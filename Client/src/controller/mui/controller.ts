@@ -13,34 +13,36 @@ export function getInitialState(): IMuiState {
                 parentLocation: 'Position in der übergeordneten Ablage',
                 type: 'Art der Ablage',
             },
+            noId: '(noch keine)',
             noParent: '(keine)',
             types: {
                 [containerType.Box]: {
                     icon: 'zip',
-                    title: 'Große Box',
+                    title: 'Große DVD Box',
                 },
                 [containerType.Disk]: {
                     icon: 'hdd',
-                    title: 'Festplatte',
+                    title: '(Externe) Festplatte',
                 },
                 [containerType.FeatureSet]: {
                     icon: 'briefcase',
-                    title: 'Kleine Box',
+                    title: 'Kleine DVD Box',
                 },
                 [containerType.Folder]: {
                     icon: 'folder',
-                    title: 'Dateiordner',
+                    title: 'Dateiverzeichnis',
                 },
                 [containerType.Shelf]: {
                     icon: 'building',
-                    title: 'Schrank',
+                    title: 'Regal(fach)',
                 },
                 [containerType.Undefined]: {
                     icon: 'help',
-                    title: 'Unbekannt',
+                    title: '(unbekannt)',
                 },
             },
         },
+        create: 'Neu anlegen',
         genre: {
             noSelect: '(alle Kategorien)',
         },
@@ -89,12 +91,19 @@ export function getInitialState(): IMuiState {
                 url: 'Verweis',
             },
             name: 'Name',
+            noId: '(noch keine)',
             noRent: 'nicht verliehen',
             saveAndBack: 'Speichern und zurück',
             yesRent: 'verliehen',
         },
+        reset: 'Zurücksetzen',
         routes: {
             container: 'Ablagen',
+            create: {
+                container: 'Ablage erstellen',
+                recording: 'Aufzeichnung erstellen',
+                title: 'Neu',
+            },
             recording: 'Aufzeichnungen',
         },
         save: 'Speichern',

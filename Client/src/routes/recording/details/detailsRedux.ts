@@ -17,11 +17,11 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
     const edit = controller.getRecordingEdit(state)
 
     return {
-        cancelLabel: state.mui.cancel,
+        cancelLabel: edit && edit._id ? state.mui.cancel : state.mui.reset,
         container: edit && edit.containerId,
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
-        containerOptions: controller.getAllConatinerOptions(state),
+        containerOptions: controller.getAllContainerOptions(state),
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
         genreOptions: controller.getAllGenreOptions(state),
@@ -33,6 +33,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         languageLabel: emui.languages,
         languageOptions: controller.getAllLanguageOptions(state),
         languages: (edit && edit.languages) || noSelection,
+        realId: (edit && edit._id) || mui.noId,
         saveAndBackLabel: mui.saveAndBack,
         series: edit && edit.series,
         seriesHint: mui.editSeries,

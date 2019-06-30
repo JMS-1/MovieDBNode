@@ -259,17 +259,25 @@ class CRoot extends React.PureComponent {
     }
     render() {
         const { errors, busy, path } = this.props;
-        const container = path.startsWith("/container");
-        const recording = path.startsWith("/recording") || path === '/';
+        const createContainer = path === `${"/container"}/NEW`;
+        const createRecording = path === `${"/recording"}/NEW`;
+        const create = createContainer || createRecording;
+        const container = path.startsWith("/container") && !create;
+        const recording = (path.startsWith("/recording") || path === '/') && !create;
         return (React.createElement("div", { className: 'movie-db-root' },
             React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: busy || errors.length > 0 },
                 React.createElement(semantic_ui_react_1.Loader, { disabled: !busy }),
                 React.createElement(semantic_ui_react_1.Message, { negative: true, hidden: errors.length < 1, onDismiss: this.props.clearErrors },
                     React.createElement(semantic_ui_react_1.Header, null, this.props.title),
                     React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
-            React.createElement(semantic_ui_react_1.Menu, { borderless: true, pointing: true },
-                React.createElement(semantic_ui_react_1.Menu.Item, { active: recording, onClick: this.gotoRecordings }, this.props.recordingRoute),
-                React.createElement(semantic_ui_react_1.Menu.Item, { active: container, onClick: this.gotoContainer }, this.props.containerRoute)),
+            React.createElement(semantic_ui_react_1.Menu, { borderless: true },
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: recording, onClick: recording ? undefined : this.gotoRecordings }, this.props.recordingRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: container, onClick: container ? undefined : this.gotoContainer }, this.props.containerRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: create },
+                    React.createElement(semantic_ui_react_1.Dropdown, { text: this.props.createRoute },
+                        React.createElement(semantic_ui_react_1.Dropdown.Menu, null,
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createRecording, as: 'a', href: `#${"/recording"}/NEW` }, this.props.createRecording),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createContainer, as: 'a', href: `#${"/container"}/NEW` }, this.props.createContainer))))),
             React.createElement("div", { className: 'content' },
                 React.createElement(react_router_1.Route, { path: `${"/container"}/:id?`, component: containerRedux_1.ContainerRoute }),
                 React.createElement(react_router_1.Route, { path: `${"/recording"}/:id`, component: detailsRedux_1.Recording }),
@@ -298,10 +306,14 @@ const local = __webpack_require__(/*! ./root */ "./Client/src/components/root/ro
 const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
     const mui = state.mui.routes;
+    const cmui = mui.create;
     const route = state.application;
     return {
         busy: route.requests > 0,
         containerRoute: mui.container,
+        createContainer: cmui.container,
+        createRecording: cmui.recording,
+        createRoute: cmui.title,
         errors: route.errors,
         path: state.router.location.pathname,
         recordingRoute: mui.recording,
@@ -649,6 +661,13 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.containers.set-prop"]: this.setProperty,
         };
     }
+    createEmpty() {
+        return {
+            _id: '',
+            name: '',
+            type: 0,
+        };
+    }
     getInitialState() {
         return Object.assign({}, super.getInitialState(), { filter: '' });
     }
@@ -660,7 +679,12 @@ const controller = new (class extends controller_1.EditController {
     }
     startSave(state, request) {
         if (state.workingCopy) {
-            store_1.ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, actions_1.ContainerActions.saveDone);
+            if (state.workingCopy._id) {
+                store_1.ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, actions_1.ContainerActions.saveDone);
+            }
+            else {
+                store_1.ServerApi.post('container', state.workingCopy, actions_1.ContainerActions.saveDone);
+            }
         }
         return state;
     }
@@ -768,12 +792,12 @@ exports.getFilteredContainerChildMap = reselect_1.createSelector((state) => stat
 });
 exports.getContainerEdit = reselect_1.createSelector((state) => state.container.workingCopy, (state) => state.container.selected, exports.getContainerMap, (edit, selected, map) => edit || (map[selected] && map[selected].raw));
 const optionOrder = [
-    5,
+    0,
     1,
     2,
-    4,
     3,
-    0,
+    5,
+    4,
 ];
 exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui.container.types, (mui) => optionOrder.map(c => ({
     key: c,
@@ -783,17 +807,14 @@ exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui
         mui[c].title)),
     value: c,
 })));
-exports.getAllConatinerOptions = reselect_1.createSelector(exports.getContainerMap, (state) => state.mui.container.types, (all, types) => Object.values(all)
+exports.getAllContainerOptions = reselect_1.createSelector(exports.getContainerMap, (state) => state.mui.container.types, (all, types) => Object.values(all)
     .map(c => ({
     key: c.raw._id,
-    sort: c.name || c.raw._id,
-    text: (React.createElement("span", null,
-        React.createElement(semantic_ui_react_1.Icon, { name: (types[c.raw.type] && types[c.raw.type].icon) || 'help' }),
-        " ",
-        c.name || c.raw._id)),
+    icon: { name: (types[c.raw.type] && types[c.raw.type].icon) || 'help' },
+    text: c.name || c.raw._id,
     value: c.raw._id,
 }))
-    .sort((l, r) => l.sort.localeCompare(r.sort)));
+    .sort((l, r) => l.text.localeCompare(r.text)));
 
 
 /***/ }),
@@ -859,9 +880,16 @@ class EditController extends Controller {
     load(state, response) {
         return Object.assign({}, state, { all: response.list || [], validation: undefined });
     }
+    createNew(state) {
+        const workingCopy = this.createEmpty();
+        return Object.assign({}, state, { selected: undefined, validation: validation_1.validate(workingCopy, state.validator), workingCopy });
+    }
     select(state, request) {
-        if (state.selected === request.id) {
+        if (state.selected === request.id && !state.validation && !state.workingCopy) {
             return state;
+        }
+        if (request.id === 'NEW') {
+            return this.createNew(state);
         }
         return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
     }
@@ -889,6 +917,9 @@ class EditController extends Controller {
         if (!state.workingCopy) {
             return state;
         }
+        if (!state.workingCopy._id) {
+            return this.createNew(state);
+        }
         return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
     }
     saveDone(state, response) {
@@ -902,10 +933,13 @@ class EditController extends Controller {
         }
         const all = [...state.all];
         const index = all.findIndex(c => c._id === _id);
-        if (index >= 0) {
-            all[index] = response.item;
+        state = Object.assign({}, state, { all });
+        if (index < 0) {
+            all.push(response.item);
+            return this.createNew(state);
         }
-        return Object.assign({}, state, { all });
+        all[index] = response.item;
+        return state;
     }
 }
 exports.EditController = EditController;
@@ -1199,34 +1233,36 @@ function getInitialState() {
                 parentLocation: 'Position in der übergeordneten Ablage',
                 type: 'Art der Ablage',
             },
+            noId: '(noch keine)',
             noParent: '(keine)',
             types: {
                 [2]: {
                     icon: 'zip',
-                    title: 'Große Box',
+                    title: 'Große DVD Box',
                 },
                 [4]: {
                     icon: 'hdd',
-                    title: 'Festplatte',
+                    title: '(Externe) Festplatte',
                 },
                 [1]: {
                     icon: 'briefcase',
-                    title: 'Kleine Box',
+                    title: 'Kleine DVD Box',
                 },
                 [5]: {
                     icon: 'folder',
-                    title: 'Dateiordner',
+                    title: 'Dateiverzeichnis',
                 },
                 [3]: {
                     icon: 'building',
-                    title: 'Schrank',
+                    title: 'Regal(fach)',
                 },
                 [0]: {
                     icon: 'help',
-                    title: 'Unbekannt',
+                    title: '(unbekannt)',
                 },
             },
         },
+        create: 'Neu anlegen',
         genre: {
             noSelect: '(alle Kategorien)',
         },
@@ -1275,12 +1311,19 @@ function getInitialState() {
                 url: 'Verweis',
             },
             name: 'Name',
+            noId: '(noch keine)',
             noRent: 'nicht verliehen',
             saveAndBack: 'Speichern und zurück',
             yesRent: 'verliehen',
         },
+        reset: 'Zurücksetzen',
         routes: {
             container: 'Ablagen',
+            create: {
+                container: 'Ablage erstellen',
+                recording: 'Aufzeichnung erstellen',
+                title: 'Neu',
+            },
             recording: 'Aufzeichnungen',
         },
         save: 'Speichern',
@@ -1442,12 +1485,28 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.start-edit"]: this.startEdit,
         };
     }
+    createEmpty() {
+        return {
+            _id: '',
+            containerType: 0,
+            created: '',
+            genres: [],
+            languages: [],
+            links: [],
+            name: '',
+        };
+    }
     getInitialState() {
         return Object.assign({}, super.getInitialState(), { afterSave: undefined, correlationId: undefined, count: 0, edit: undefined, genreInfo: [], genres: [], language: '', languageInfo: [], page: 1, pageSize: 15, rent: undefined, resetAfterLoad: undefined, search: '', series: [], sort: 'fullName', sortOrder: 'ascending', total: 0 });
     }
     startSave(state, request) {
         if (state.workingCopy) {
-            store_1.ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, actions_1.RecordingActions.saveDone);
+            if (state.workingCopy._id) {
+                store_1.ServerApi.put(`recording/${state.workingCopy._id}`, state.workingCopy, actions_1.RecordingActions.saveDone);
+            }
+            else {
+                store_1.ServerApi.post('recording', state.workingCopy, actions_1.RecordingActions.saveDone);
+            }
         }
         if (request.after === state.afterSave) {
             return state;
@@ -1532,6 +1591,9 @@ const controller = new (class extends controller_1.EditController {
     }
     select(state, request) {
         state = super.select(state, request);
+        if (state.workingCopy) {
+            return Object.assign({}, state, { edit: state.workingCopy });
+        }
         store_1.ServerApi.get(`recording/${request.id}`, actions_1.RecordingActions.startEdit);
         return Object.assign({}, state, { edit: request.id });
     }
@@ -1558,6 +1620,9 @@ const controller = new (class extends controller_1.EditController {
     }
     cancelEdit(state, request) {
         state = super.cancelEdit(state, request);
+        if (state.workingCopy) {
+            return Object.assign({}, state, { edit: state.workingCopy });
+        }
         store_1.delayedDispatch(connected_react_router_1.routerActions.push("/recording"));
         return state;
     }
@@ -1868,12 +1933,15 @@ class CContainerDetails extends React.PureComponent {
         this.setType = (ev, props) => {
             this.props.setProp('type', props.value);
         };
+        this.setContainer = (ev, data) => {
+            this.props.setProp('parentId', (typeof data.value === 'string' ? data.value : '') || undefined);
+        };
     }
     render() {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError } = this.props;
+        const { hasChanges, hasError, realId } = this.props;
         return (React.createElement("div", { className: 'movie-db-container-details' },
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
@@ -1881,10 +1949,10 @@ class CContainerDetails extends React.PureComponent {
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.idLabel),
-                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.id || '', readOnly: true, disabled: true })),
+                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: realId || '', readOnly: true, disabled: true })),
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.parentLabel),
-                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.parent || '', readOnly: true, disabled: true })),
+                    React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setContainer, options: this.props.containerOptions, placeholder: this.props.containerHint, search: true, selection: true, scrolling: true, value: this.props.parent || '' })),
                 React.createElement(textInputRedux_1.ContainerTextInput, { prop: 'name', required: true }),
                 React.createElement(semantic_ui_react_1.Form.Field, { required: true },
                     React.createElement("label", null, this.props.typeLabel),
@@ -1925,16 +1993,18 @@ function mapStateToProps(state, props) {
     const emui = mui.edit;
     const route = state.container;
     const container = controller.getContainerEdit(state);
-    const parent = controller.getContainerMap(state)[container && container.parentId];
     const errors = route.validation;
     return {
-        cancelLabel: state.mui.cancel,
+        cancelLabel: container && container._id ? state.mui.cancel : state.mui.reset,
+        containerHint: mui.noParent,
+        containerOptions: controller.getAllContainerOptions(state),
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         idLabel: emui._id,
         lost: !container,
-        parent: (parent && parent.name) || mui.noParent,
+        parent: container && container.parentId,
         parentLabel: emui.parentId,
+        realId: (container && container._id) || mui.noId,
         saveLabel: state.mui.save,
         type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
@@ -2102,7 +2172,7 @@ class CRecording extends React.PureComponent {
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.idLabel),
-                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.match.params.id || '', readOnly: true, disabled: true })),
+                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.realId || '', readOnly: true, disabled: true })),
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true }),
                 React.createElement(linksRedux_1.RecordingLinks, null),
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'description', textarea: true }),
@@ -2153,11 +2223,11 @@ function mapStateToProps(state, props) {
     const route = state.recording;
     const edit = controller.getRecordingEdit(state);
     return {
-        cancelLabel: state.mui.cancel,
+        cancelLabel: edit && edit._id ? state.mui.cancel : state.mui.reset,
         container: edit && edit.containerId,
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
-        containerOptions: controller.getAllConatinerOptions(state),
+        containerOptions: controller.getAllContainerOptions(state),
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
         genreOptions: controller.getAllGenreOptions(state),
@@ -2169,6 +2239,7 @@ function mapStateToProps(state, props) {
         languageLabel: emui.languages,
         languageOptions: controller.getAllLanguageOptions(state),
         languages: (edit && edit.languages) || noSelection,
+        realId: (edit && edit._id) || mui.noId,
         saveAndBackLabel: mui.saveAndBack,
         series: edit && edit.series,
         seriesHint: mui.editSeries,

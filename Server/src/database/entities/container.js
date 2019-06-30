@@ -10,8 +10,6 @@ exports.ContainerSchema = {
     message: 'Ablage unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
             type: 'string',
         },
         description: {
@@ -48,7 +46,7 @@ exports.ContainerSchema = {
             ],
         },
     },
-    required: ['_id', 'name', 'type'],
+    required: ['name', 'type'],
 };
 function toProtocol(container) {
     return container;

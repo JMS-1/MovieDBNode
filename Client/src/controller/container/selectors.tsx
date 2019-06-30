@@ -127,12 +127,12 @@ export const getContainerEdit = createSelector(
 )
 
 const optionOrder: containerType[] = [
-    containerType.Folder,
+    containerType.Undefined,
     containerType.FeatureSet,
     containerType.Box,
-    containerType.Disk,
     containerType.Shelf,
-    containerType.Undefined,
+    containerType.Folder,
+    containerType.Disk,
 ]
 
 export const getContainerTypeOptions = createSelector(
@@ -149,20 +149,16 @@ export const getContainerTypeOptions = createSelector(
         })),
 )
 
-export const getAllConatinerOptions = createSelector(
+export const getAllContainerOptions = createSelector(
     getContainerMap,
     (state: IClientState) => state.mui.container.types,
     (all, types): DropdownItemProps[] =>
         Object.values(all)
             .map(c => ({
                 key: c.raw._id,
-                sort: c.name || c.raw._id,
-                text: (
-                    <span>
-                        <Icon name={(types[c.raw.type] && types[c.raw.type].icon) || 'help'} /> {c.name || c.raw._id}
-                    </span>
-                ),
+                icon: { name: (types[c.raw.type] && types[c.raw.type].icon) || 'help' },
+                text: c.name || c.raw._id,
                 value: c.raw._id,
             }))
-            .sort((l, r) => l.sort.localeCompare(r.sort)),
+            .sort((l, r) => l.text.localeCompare(r.text)),
 )

@@ -1,6 +1,6 @@
 import { IGenre, INewGenre } from 'movie-db-api'
 
-import { ISchema, uniqueId } from './utils'
+import { ISchema } from './utils'
 
 export const collectionName = 'genres'
 
@@ -14,8 +14,6 @@ export const GenreSchema: ISchema<IDbGenre> = {
     message: 'Genre unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: uniqueId,
             type: 'string',
         },
         name: {
@@ -25,7 +23,7 @@ export const GenreSchema: ISchema<IDbGenre> = {
             type: 'string',
         },
     },
-    required: ['_id', 'name'],
+    required: ['name'],
 }
 
 export function toProtocol(genre: IDbGenre): IGenre {

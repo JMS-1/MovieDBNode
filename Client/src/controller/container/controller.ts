@@ -33,6 +33,14 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
         }
     }
 
+    protected createEmpty(): api.IContainer {
+        return {
+            _id: '',
+            name: '',
+            type: api.containerType.Undefined,
+        }
+    }
+
     protected getInitialState(): local.IContainerState {
         return {
             ...super.getInitialState(),
@@ -50,7 +58,11 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
 
     private startSave(state: local.IContainerState, request: local.ISaveContainer): local.IContainerState {
         if (state.workingCopy) {
-            ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, ContainerActions.saveDone)
+            if (state.workingCopy._id) {
+                ServerApi.put(`container/${state.workingCopy._id}`, state.workingCopy, ContainerActions.saveDone)
+            } else {
+                ServerApi.post('container', state.workingCopy, ContainerActions.saveDone)
+            }
         }
 
         return state

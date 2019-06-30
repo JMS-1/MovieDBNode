@@ -14,8 +14,6 @@ export const SeriesSchema: ISchema<IDbSeries> = {
     message: 'Serie unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: uniqueId,
             type: 'string',
         },
         description: {
@@ -35,7 +33,7 @@ export const SeriesSchema: ISchema<IDbSeries> = {
             type: 'string',
         },
     },
-    required: ['_id', 'name'],
+    required: ['name'],
 }
 
 export function toProtocol(series: IDbSeries): ISeries {

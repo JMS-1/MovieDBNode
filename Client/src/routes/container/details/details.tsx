@@ -12,12 +12,15 @@ export interface IContainerDetailsUiProps {
 
 export interface IContainerDetailsProps {
     cancelLabel: string
+    containerHint: string
+    containerOptions: DropdownItemProps[]
     hasChanges: boolean
     hasError: boolean
     idLabel: string
     lost: boolean
     parent: string
     parentLabel: string
+    realId: string
     saveLabel: string
     type: containerType
     typeErrors: string[]
@@ -40,7 +43,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
             return null
         }
 
-        const { hasChanges, hasError } = this.props
+        const { hasChanges, hasError, realId } = this.props
 
         return (
             <div className='movie-db-container-details'>
@@ -55,11 +58,21 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                 <Form error={hasError}>
                     <Form.Field>
                         <label>{this.props.idLabel}</label>
-                        <Input input='text' value={this.props.id || ''} readOnly disabled />
+                        <Input input='text' value={realId || ''} readOnly disabled />
                     </Form.Field>
                     <Form.Field>
                         <label>{this.props.parentLabel}</label>
-                        <Input input='text' value={this.props.parent || ''} readOnly disabled />
+                        <Dropdown
+                            clearable
+                            fluid
+                            onChange={this.setContainer}
+                            options={this.props.containerOptions}
+                            placeholder={this.props.containerHint}
+                            search
+                            selection
+                            scrolling
+                            value={this.props.parent || ''}
+                        />
                     </Form.Field>
                     <ContainerTextInput prop='name' required />
                     <Form.Field required>
@@ -81,6 +94,10 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
 
     private readonly setType = (ev: React.SyntheticEvent<HTMLElement>, props: DropdownProps): void => {
         this.props.setProp('type', props.value as number)
+    }
+
+    private readonly setContainer = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
+        this.props.setProp('parentId', (typeof data.value === 'string' ? data.value : '') || undefined)
     }
 
     componentWillMount(): void {

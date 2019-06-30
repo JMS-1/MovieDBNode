@@ -34,13 +34,9 @@ exports.RecordingSchema = {
     message: 'Aufzeichnung unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
             type: 'string',
         },
         created: {
-            message: 'Zeitpunkt fehlt oder ist ungültig',
-            pattern: utils_1.isoDate,
             type: 'string',
         },
         description: {
@@ -112,7 +108,7 @@ exports.RecordingSchema = {
             ],
         },
     },
-    required: ['_id', 'name', 'created', 'genres', 'languages', 'links', 'containerType'],
+    required: ['name', 'genres', 'languages', 'links', 'containerType'],
 };
 function linkToProtocol(link) {
     return link;

@@ -32,6 +32,7 @@ export interface IRecordingProps {
     languageLabel: string
     languageOptions: DropdownItemProps[]
     languages: string[]
+    realId: string
     saveAndBackLabel: string
     series: string
     seriesHint: string
@@ -69,7 +70,7 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
                 <Form error={hasError}>
                     <Form.Field>
                         <label>{this.props.idLabel}</label>
-                        <Input input='text' value={this.props.match.params.id || ''} readOnly disabled />
+                        <Input input='text' value={this.props.realId || ''} readOnly disabled />
                     </Form.Field>
                     <RecordingTextInput prop='name' required />
                     <RecordingLinks />

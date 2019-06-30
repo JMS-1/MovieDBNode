@@ -1,6 +1,6 @@
 import { INewRecording, IRecording, IRecordingLink, mediaType } from 'movie-db-api'
 
-import { IObjectFieldSchema, ISchema, isoDate, uniqueId } from './utils'
+import { IObjectFieldSchema, ISchema, uniqueId } from './utils'
 
 export const collectionName = 'recordings'
 
@@ -41,13 +41,9 @@ export const RecordingSchema: ISchema<IDbRecording> = {
     message: 'Aufzeichnung unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: uniqueId,
             type: 'string',
         },
         created: {
-            message: 'Zeitpunkt fehlt oder ist ungültig',
-            pattern: isoDate,
             type: 'string',
         },
         description: {
@@ -119,7 +115,7 @@ export const RecordingSchema: ISchema<IDbRecording> = {
             ],
         },
     },
-    required: ['_id', 'name', 'created', 'genres', 'languages', 'links', 'containerType'],
+    required: ['name', 'genres', 'languages', 'links', 'containerType'],
 }
 
 function linkToProtocol(link: IDbLink): IRecordingLink {

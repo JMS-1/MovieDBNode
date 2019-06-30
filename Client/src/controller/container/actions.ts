@@ -16,7 +16,7 @@ export class ContainerActions {
 
     static setProperty<TProp extends keyof api.IContainer>(
         prop: TProp,
-        value: api.IContainer[TProp]
+        value: api.IContainer[TProp],
     ): local.ISetContainerProperty<TProp> {
         return { prop, value, type: local.containerActions.setProp }
     }

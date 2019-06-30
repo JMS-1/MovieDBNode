@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Route } from 'react-router'
-import { Dimmer, Header, Loader, Menu, Message } from 'semantic-ui-react'
+import { Dimmer, Dropdown, Header, Loader, Menu, Message } from 'semantic-ui-react'
 
 import { routes } from 'movie-db-client'
 
@@ -13,6 +13,9 @@ export interface IRootUiProps {}
 export interface IRootProps {
     busy: boolean
     containerRoute: string
+    createContainer: string
+    createRecording: string
+    createRoute: string
     errors: string[]
     path: string
     recordingRoute: string
@@ -29,8 +32,11 @@ export type TRootProps = IRootProps & IRootUiProps & IRootActions
 export class CRoot extends React.PureComponent<TRootProps> {
     render(): JSX.Element {
         const { errors, busy, path } = this.props
-        const container = path.startsWith(routes.container)
-        const recording = path.startsWith(routes.recording) || path === '/'
+        const createContainer = path === `${routes.container}/NEW`
+        const createRecording = path === `${routes.recording}/NEW`
+        const create = createContainer || createRecording
+        const container = path.startsWith(routes.container) && !create
+        const recording = (path.startsWith(routes.recording) || path === '/') && !create
 
         return (
             <div className='movie-db-root'>
@@ -45,12 +51,24 @@ export class CRoot extends React.PureComponent<TRootProps> {
                         </Message.List>
                     </Message>
                 </Dimmer>
-                <Menu borderless pointing>
-                    <Menu.Item active={recording} onClick={this.gotoRecordings}>
+                <Menu borderless>
+                    <Menu.Item active={recording} onClick={recording ? undefined : this.gotoRecordings}>
                         {this.props.recordingRoute}
                     </Menu.Item>
-                    <Menu.Item active={container} onClick={this.gotoContainer}>
+                    <Menu.Item active={container} onClick={container ? undefined : this.gotoContainer}>
                         {this.props.containerRoute}
+                    </Menu.Item>
+                    <Menu.Item active={create}>
+                        <Dropdown text={this.props.createRoute}>
+                            <Dropdown.Menu>
+                                <Dropdown.Item active={createRecording} as='a' href={`#${routes.recording}/NEW`}>
+                                    {this.props.createRecording}
+                                </Dropdown.Item>
+                                <Dropdown.Item active={createContainer} as='a' href={`#${routes.container}/NEW`}>
+                                    {this.props.createContainer}
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </Menu.Item>
                 </Menu>
                 <div className='content'>

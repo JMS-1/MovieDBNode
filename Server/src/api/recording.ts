@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { v4 as uuid } from 'uuid'
 
 import { INewRecording, IRecordingQueryRequest, IUpdateRecordingResponse } from 'movie-db-api'
 
@@ -29,8 +30,22 @@ export const recordingApi = Router().use(
                     const recording = toEntity(req, request.params.id, undefined)
 
                     return <IUpdateRecordingResponse>{
-                        recording: toProtocol(recording),
                         errors: await recordingCollection.findOneAndReplace(recording),
+                        recording: toProtocol(recording),
+                    }
+                },
+                request,
+                response,
+            ),
+        )
+        .post('/', (request, response, next) =>
+            processApiRequest(
+                async (req: INewRecording) => {
+                    const recording = toEntity(req, uuid(), new Date().toISOString())
+
+                    return <IUpdateRecordingResponse>{
+                        errors: await recordingCollection.insertOne(recording),
+                        recording: toProtocol(recording),
                     }
                 },
                 request,

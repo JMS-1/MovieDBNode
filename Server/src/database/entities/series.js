@@ -10,8 +10,6 @@ exports.SeriesSchema = {
     message: 'Serie unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
             type: 'string',
         },
         description: {
@@ -31,7 +29,7 @@ exports.SeriesSchema = {
             type: 'string',
         },
     },
-    required: ['_id', 'name'],
+    required: ['name'],
 };
 function toProtocol(series) {
     return series;

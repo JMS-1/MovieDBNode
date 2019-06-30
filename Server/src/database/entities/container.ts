@@ -14,8 +14,6 @@ export const ContainerSchema: ISchema<IDbContainer> = {
     message: 'Ablage unvollständig',
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: uniqueId,
             type: 'string',
         },
         description: {
@@ -52,7 +50,7 @@ export const ContainerSchema: ISchema<IDbContainer> = {
             ],
         },
     },
-    required: ['_id', 'name', 'type'],
+    required: ['name', 'type'],
 }
 
 export function toProtocol(container: IDbContainer): IContainer {
