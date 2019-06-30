@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const inspector_1 = require("inspector");
 const utils_1 = require("./utils");
 exports.collectionName = 'recordings';
 const LinkSubSchema = {
@@ -120,7 +119,7 @@ function linkToProtocol(link) {
 function linkToEntity(link) {
     const dbLink = {
         name: link.name,
-        url: inspector_1.url.name,
+        url: link.url,
     };
     if (link.description) {
         dbLink.description = link.description;

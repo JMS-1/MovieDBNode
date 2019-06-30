@@ -412,7 +412,7 @@ class CTextInput extends React.PureComponent {
         const { errors } = this.props;
         return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-input-text', error: errors && errors.length > 0, required: this.props.required },
             React.createElement("label", null, this.props.label),
-            this.props.textarea ? (React.createElement(semantic_ui_react_1.TextArea, { input: 'text', onChange: this.setValue, value: this.props.value || '' })) : (React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setValue, value: this.props.value || '' })),
+            this.props.textarea ? (React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setValue, value: this.props.value || '' })) : (React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setValue, value: this.props.value || '' })),
             React.createElement(messageRedux_1.ReportError, { errors: errors })));
     }
 }
@@ -1269,6 +1269,11 @@ function getInitialState() {
             editType: '(Ablageart auswählen)',
             genres: 'Kategorien',
             languages: 'Sprachen',
+            linkEdit: {
+                description: 'Beschreibug',
+                name: 'Kurzname',
+                url: 'Verweis',
+            },
             name: 'Name',
             noRent: 'nicht verliehen',
             saveAndBack: 'Speichern und zurück',
@@ -2294,9 +2299,72 @@ exports.RecordingItem = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
-class CRecordingLinks extends React.PureComponent {
+const messageRedux_1 = __webpack_require__(/*! ../../../components/message/messageRedux */ "./Client/src/components/message/messageRedux.ts");
+class EditButton extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.onClick = () => this.props.select(this.props.index);
+    }
     render() {
-        return React.createElement(semantic_ui_react_1.Form.Group, { className: 'movie-db-container-links' }, "[LINKS]");
+        return (React.createElement(semantic_ui_react_1.Button, { title: this.props.description, active: this.props.selected, onClick: this.onClick }, this.props.name || React.createElement(React.Fragment, null, "\u00A0")));
+    }
+}
+class CRecordingLinks extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.toggleEdit = () => this.setState({ edit: !this.state.edit });
+        this.select = (selected) => this.setState({ selected });
+        this.setName = (ev) => this.setProp('name', ev.currentTarget.value);
+        this.setDescription = (ev) => this.setProp('description', ev.currentTarget.value);
+        this.setUrl = (ev) => this.setProp('url', ev.currentTarget.value);
+    }
+    render() {
+        const { edit, selected } = this.state;
+        const { links, nameErrors, errors, descriptionErrors, urlErrors } = this.props;
+        const link = links[selected];
+        const hasNameError = nameErrors && nameErrors.length > 0;
+        const hasUrlError = urlErrors && urlErrors.length > 0;
+        const hasDescriptionError = descriptionErrors && descriptionErrors.length > 0;
+        const hasLinkError = errors && errors.length > 0;
+        return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-container-links', error: hasLinkError },
+            React.createElement("label", null,
+                this.props.label,
+                React.createElement(semantic_ui_react_1.Icon, { name: edit ? 'eye' : 'edit', link: true, onClick: this.toggleEdit })),
+            edit ? (React.createElement(React.Fragment, null,
+                React.createElement(semantic_ui_react_1.Button.Group, null, links.map((l, i) => (React.createElement(EditButton, { description: l.description, index: i, key: i, name: l.name, select: this.select, selected: i === selected })))),
+                React.createElement("div", { className: 'link-edit' },
+                    React.createElement(semantic_ui_react_1.Form.Field, { error: hasNameError, required: true },
+                        React.createElement("label", null, this.props.name),
+                        React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setName, value: (link && link.name) || '' }),
+                        React.createElement(messageRedux_1.ReportError, { errors: nameErrors })),
+                    React.createElement(semantic_ui_react_1.Form.Field, { error: hasUrlError, required: true },
+                        React.createElement("label", null, this.props.url),
+                        React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setUrl, value: (link && link.url) || '' }),
+                        React.createElement(messageRedux_1.ReportError, { errors: urlErrors })),
+                    React.createElement(semantic_ui_react_1.Form.Field, { error: hasDescriptionError },
+                        React.createElement("label", null, this.props.description),
+                        React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setDescription, value: (link && link.description) || '' }),
+                        React.createElement(messageRedux_1.ReportError, { errors: descriptionErrors }))))) : (React.createElement(semantic_ui_react_1.Button.Group, null, links.map((l, i) => (React.createElement(semantic_ui_react_1.Button, { as: 'a', key: i, title: l.description, href: l.url, target: '_blank' }, l.name || React.createElement(React.Fragment, null, "\u00A0")))))),
+            React.createElement(messageRedux_1.ReportError, { errors: errors })));
+    }
+    setProp(prop, value) {
+        const links = [...this.props.links];
+        let { selected } = this.state;
+        let edit = links[selected];
+        if (!edit) {
+            selected = links.length;
+            edit = { name: '', url: '' };
+            links.push(edit);
+            this.setState({ selected });
+        }
+        if (edit[prop] === value) {
+            return;
+        }
+        links[selected] = Object.assign({}, edit, { [prop]: value });
+        this.props.setLinks(links);
+    }
+    componentWillMount() {
+        this.setState({ edit: false, selected: 0 });
     }
 }
 exports.CRecordingLinks = CRecordingLinks;
@@ -2316,11 +2384,29 @@ exports.CRecordingLinks = CRecordingLinks;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./links */ "./Client/src/routes/recording/links/links.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+const noLinks = [];
 function mapStateToProps(state, props) {
-    return {};
+    const mui = state.mui.recording;
+    const emui = mui.linkEdit;
+    const edit = controller_1.getRecordingEdit(state);
+    const route = state.recording;
+    return {
+        description: emui.description,
+        descriptionErrors: controller_1.getErrors(route.validation, 'links.description', undefined),
+        errors: controller_1.getErrors(route.validation, 'links', undefined),
+        label: mui.edit.links,
+        links: (edit && edit.links) || noLinks,
+        name: emui.name,
+        nameErrors: controller_1.getErrors(route.validation, 'links.name', undefined),
+        url: emui.url,
+        urlErrors: controller_1.getErrors(route.validation, 'links.url', undefined),
+    };
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        setLinks: links => dispatch(controller_1.RecordingActions.setProperty('links', links)),
+    };
 }
 exports.RecordingLinks = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRecordingLinks);
 

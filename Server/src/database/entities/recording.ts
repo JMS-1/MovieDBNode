@@ -1,5 +1,3 @@
-import { url } from 'inspector'
-
 import { INewRecording, IRecording, IRecordingLink, mediaType } from 'movie-db-api'
 
 import { IObjectFieldSchema, ISchema, isoDate, uniqueId } from './utils'
@@ -130,7 +128,7 @@ function linkToProtocol(link: IDbLink): IRecordingLink {
 function linkToEntity(link: IRecordingLink): IDbLink {
     const dbLink: IDbLink = {
         name: link.name,
-        url: url.name,
+        url: link.url,
     }
 
     if (link.description) {

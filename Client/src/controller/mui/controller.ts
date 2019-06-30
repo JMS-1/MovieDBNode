@@ -83,6 +83,11 @@ export function getInitialState(): IMuiState {
             editType: '(Ablageart auswählen)',
             genres: 'Kategorien',
             languages: 'Sprachen',
+            linkEdit: {
+                description: 'Beschreibug',
+                name: 'Kurzname',
+                url: 'Verweis',
+            },
             name: 'Name',
             noRent: 'nicht verliehen',
             saveAndBack: 'Speichern und zurück',

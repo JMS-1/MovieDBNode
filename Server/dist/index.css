@@ -136,7 +136,8 @@ body {
     display: flex;
     flex-direction: row;
     align-self: center;
-    justify-content: space-between; }
+    justify-content: space-between;
+    cursor: pointer; }
     .movie-db-recording-item > td.name > div {
       flex-grow: 1;
       flex-basis: 0;
@@ -145,3 +146,9 @@ body {
       text-overflow: ellipsis; }
     .movie-db-recording-item > td.name > .ui.icon {
       flex-shrink: 0; }
+
+.movie-db-container-links > label > .icon {
+  margin-left: 0.3em; }
+
+.movie-db-container-links > .link-edit {
+  margin-left: 2em; }

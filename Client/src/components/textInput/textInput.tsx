@@ -33,7 +33,7 @@ export class CTextInput<TItem> extends React.PureComponent<TTextInputProps<TItem
             >
                 <label>{this.props.label}</label>
                 {this.props.textarea ? (
-                    <TextArea input='text' onChange={this.setValue} value={this.props.value || ''} />
+                    <TextArea onChange={this.setValue} value={this.props.value || ''} />
                 ) : (
                     <Input input='text' onChange={this.setValue} value={this.props.value || ''} />
                 )}
