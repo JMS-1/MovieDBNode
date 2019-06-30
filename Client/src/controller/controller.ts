@@ -1,8 +1,10 @@
+import { routerActions } from 'connected-react-router'
 import { Action } from 'redux'
 
 import { ISchemaResponse } from 'movie-db-api'
 import * as local from 'movie-db-client'
 
+import { delayedDispatch } from '../store'
 import { validate } from '../validation'
 
 export abstract class Controller<TActions extends Action, TState> {
@@ -50,6 +52,10 @@ export abstract class EditController<
 
     protected abstract createEmpty(): TItem
 
+    protected abstract readonly afterCancel: string
+
+    protected abstract readonly afterSave: string
+
     protected getWorkingCopy(state: TState): TItem {
         return state.all.find(c => c._id === state.selected)
     }
@@ -83,15 +89,18 @@ export abstract class EditController<
     }
 
     protected select(state: TState, request: local.IGenericSelect): TState {
-        if (state.selected === request.id && !state.validation && !state.workingCopy) {
+        const isNew = request.id === 'NEW'
+        const id = isNew ? undefined : request.id
+
+        if (state.selected === id && state.workingCopy && (state.workingCopy._id || isNew)) {
             return state
         }
 
-        if (request.id === 'NEW') {
+        if (isNew) {
             return this.createNew(state)
         }
 
-        return { ...state, selected: request.id, validation: undefined, workingCopy: undefined }
+        return { ...state, selected: id, validation: undefined, workingCopy: undefined }
     }
 
     protected setProperty<TProp extends keyof TItem>(
@@ -128,38 +137,38 @@ export abstract class EditController<
             return state
         }
 
-        if (!state.workingCopy._id) {
-            return this.createNew(state)
+        if (this.afterCancel) {
+            delayedDispatch(routerActions.push(this.afterCancel))
         }
 
         return { ...state, validation: undefined, workingCopy: undefined }
     }
 
     protected saveDone(state: TState, response: local.IGenericSaveDone<TItem>): TState {
-        if (response.errors) {
+        if (response.errors && response.errors.length > 0) {
             return { ...state, validation: response.errors }
         }
 
         const { _id } = response.item
 
-        state = { ...state, selected: _id, workingCopy: undefined, validation: undefined }
+        state = { ...state, selected: undefined, workingCopy: undefined, validation: undefined }
 
-        if (!this.updateAllAfterSave) {
-            return state
+        if (this.updateAllAfterSave) {
+            const all = [...state.all]
+            const index = all.findIndex(c => c._id === _id)
+
+            if (index < 0) {
+                all.push(response.item)
+            } else {
+                all[index] = response.item
+            }
+
+            state = { ...state, all }
         }
 
-        const all = [...state.all]
-        const index = all.findIndex(c => c._id === _id)
-
-        state = { ...state, all }
-
-        if (index < 0) {
-            all.push(response.item)
-
-            return this.createNew(state)
+        if (this.afterSave) {
+            delayedDispatch(routerActions.push(`${this.afterSave}/${_id}`))
         }
-
-        all[index] = response.item
 
         return state
     }

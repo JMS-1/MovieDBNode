@@ -20,6 +20,10 @@ type TContainerActions =
 const controller = new (class extends EditController<api.IContainer, TContainerActions, local.IContainerState> {
     protected readonly schema = 'container'
 
+    protected readonly afterCancel = local.routes.container
+
+    protected readonly afterSave = local.routes.container
+
     protected getReducerMap(): local.IActionHandlerMap<TContainerActions, local.IContainerState> {
         return {
             [local.applicationActions.loadSchema]: this.loadSchema,

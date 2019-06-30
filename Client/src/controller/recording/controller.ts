@@ -35,6 +35,10 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     protected readonly updateAllAfterSave = false
 
+    protected readonly afterCancel = local.routes.recording
+
+    protected readonly afterSave = ''
+
     protected getReducerMap(): local.IActionHandlerMap<TRecordingActions, local.IRecordingState> {
         return {
             [local.applicationActions.loadSchema]: this.loadSchema,
@@ -241,10 +245,14 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             ...state,
             correlationId: undefined,
             count: response.count,
+            edit: undefined,
             genreInfo: response.genres || [],
             languageInfo: response.languages || [],
             resetAfterLoad: undefined,
+            selected: undefined,
             total: response.total,
+            validation: undefined,
+            workingCopy: undefined,
         }
     }
 
@@ -253,6 +261,10 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
         if (state.workingCopy) {
             return { ...state, edit: state.workingCopy }
+        }
+
+        if (state.edit && typeof state.edit !== 'string' && state.edit._id === request.id) {
+            return state
         }
 
         ServerApi.get(`recording/${request.id}`, RecordingActions.startEdit)
@@ -275,7 +287,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
     protected saveDone(state: local.IRecordingState, response: local.IRecordingSaved): local.IRecordingState {
         state = super.saveDone(state, response)
 
-        if (state.workingCopy) {
+        if (state.validation && state.validation.length > 0) {
             return state
         }
 
@@ -284,18 +296,6 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
                 delayedDispatch(routerActions.push(local.routes.recording))
                 break
         }
-
-        return state
-    }
-
-    protected cancelEdit(state: local.IRecordingState, request: local.ICancelRecordingEdit): local.IRecordingState {
-        state = super.cancelEdit(state, request)
-
-        if (state.workingCopy) {
-            return { ...state, edit: state.workingCopy }
-        }
-
-        delayedDispatch(routerActions.push(local.routes.recording))
 
         return state
     }

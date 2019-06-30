@@ -96,7 +96,7 @@ export function getInitialState(): IMuiState {
             saveAndBack: 'Speichern und zurück',
             yesRent: 'verliehen',
         },
-        reset: 'Zurücksetzen',
+        reset: 'Abbrechen',
         routes: {
             container: 'Ablagen',
             create: {

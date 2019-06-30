@@ -648,6 +648,8 @@ const controller = new (class extends controller_1.EditController {
     constructor() {
         super(...arguments);
         this.schema = 'container';
+        this.afterCancel = "/container";
+        this.afterSave = "/container";
     }
     getReducerMap() {
         return {
@@ -829,6 +831,8 @@ exports.getAllContainerOptions = reselect_1.createSelector(exports.getContainerM
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
+const store_1 = __webpack_require__(/*! ../store */ "./Client/src/store.ts");
 const validation_1 = __webpack_require__(/*! ../validation */ "./Client/src/validation.ts");
 class Controller {
     constructor() {
@@ -885,13 +889,15 @@ class EditController extends Controller {
         return Object.assign({}, state, { selected: undefined, validation: validation_1.validate(workingCopy, state.validator), workingCopy });
     }
     select(state, request) {
-        if (state.selected === request.id && !state.validation && !state.workingCopy) {
+        const isNew = request.id === 'NEW';
+        const id = isNew ? undefined : request.id;
+        if (state.selected === id && state.workingCopy && (state.workingCopy._id || isNew)) {
             return state;
         }
-        if (request.id === 'NEW') {
+        if (isNew) {
             return this.createNew(state);
         }
-        return Object.assign({}, state, { selected: request.id, validation: undefined, workingCopy: undefined });
+        return Object.assign({}, state, { selected: id, validation: undefined, workingCopy: undefined });
     }
     setProperty(state, request) {
         const current = state.workingCopy || this.getWorkingCopy(state);
@@ -917,28 +923,31 @@ class EditController extends Controller {
         if (!state.workingCopy) {
             return state;
         }
-        if (!state.workingCopy._id) {
-            return this.createNew(state);
+        if (this.afterCancel) {
+            store_1.delayedDispatch(connected_react_router_1.routerActions.push(this.afterCancel));
         }
         return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
     }
     saveDone(state, response) {
-        if (response.errors) {
+        if (response.errors && response.errors.length > 0) {
             return Object.assign({}, state, { validation: response.errors });
         }
         const { _id } = response.item;
-        state = Object.assign({}, state, { selected: _id, workingCopy: undefined, validation: undefined });
-        if (!this.updateAllAfterSave) {
-            return state;
+        state = Object.assign({}, state, { selected: undefined, workingCopy: undefined, validation: undefined });
+        if (this.updateAllAfterSave) {
+            const all = [...state.all];
+            const index = all.findIndex(c => c._id === _id);
+            if (index < 0) {
+                all.push(response.item);
+            }
+            else {
+                all[index] = response.item;
+            }
+            state = Object.assign({}, state, { all });
         }
-        const all = [...state.all];
-        const index = all.findIndex(c => c._id === _id);
-        state = Object.assign({}, state, { all });
-        if (index < 0) {
-            all.push(response.item);
-            return this.createNew(state);
+        if (this.afterSave) {
+            store_1.delayedDispatch(connected_react_router_1.routerActions.push(`${this.afterSave}/${_id}`));
         }
-        all[index] = response.item;
         return state;
     }
 }
@@ -1316,7 +1325,7 @@ function getInitialState() {
             saveAndBack: 'Speichern und zurück',
             yesRent: 'verliehen',
         },
-        reset: 'Zurücksetzen',
+        reset: 'Abbrechen',
         routes: {
             container: 'Ablagen',
             create: {
@@ -1462,6 +1471,8 @@ const controller = new (class extends controller_1.EditController {
         super(...arguments);
         this.schema = 'recording';
         this.updateAllAfterSave = false;
+        this.afterCancel = "/recording";
+        this.afterSave = '';
     }
     getReducerMap() {
         return {
@@ -1587,12 +1598,15 @@ const controller = new (class extends controller_1.EditController {
         if (state.resetAfterLoad) {
             state = Object.assign({}, state, { page: 1 });
         }
-        return Object.assign({}, state, { correlationId: undefined, count: response.count, genreInfo: response.genres || [], languageInfo: response.languages || [], resetAfterLoad: undefined, total: response.total });
+        return Object.assign({}, state, { correlationId: undefined, count: response.count, edit: undefined, genreInfo: response.genres || [], languageInfo: response.languages || [], resetAfterLoad: undefined, selected: undefined, total: response.total, validation: undefined, workingCopy: undefined });
     }
     select(state, request) {
         state = super.select(state, request);
         if (state.workingCopy) {
             return Object.assign({}, state, { edit: state.workingCopy });
+        }
+        if (state.edit && typeof state.edit !== 'string' && state.edit._id === request.id) {
+            return state;
         }
         store_1.ServerApi.get(`recording/${request.id}`, actions_1.RecordingActions.startEdit);
         return Object.assign({}, state, { edit: request.id });
@@ -1608,7 +1622,7 @@ const controller = new (class extends controller_1.EditController {
     }
     saveDone(state, response) {
         state = super.saveDone(state, response);
-        if (state.workingCopy) {
+        if (state.validation && state.validation.length > 0) {
             return state;
         }
         switch (state.afterSave) {
@@ -1616,14 +1630,6 @@ const controller = new (class extends controller_1.EditController {
                 store_1.delayedDispatch(connected_react_router_1.routerActions.push("/recording"));
                 break;
         }
-        return state;
-    }
-    cancelEdit(state, request) {
-        state = super.cancelEdit(state, request);
-        if (state.workingCopy) {
-            return Object.assign({}, state, { edit: state.workingCopy });
-        }
-        store_1.delayedDispatch(connected_react_router_1.routerActions.push("/recording"));
         return state;
     }
 })();
