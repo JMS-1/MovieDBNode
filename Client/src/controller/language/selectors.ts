@@ -50,3 +50,11 @@ export const getLanguageOptions = createSelector(
         return options
     },
 )
+
+export const getAllLanguageOptions = createSelector(
+    (state: IClientState) => state.language.all,
+    (all): ISelectOption[] =>
+        all
+            .map(l => <ISelectOption>{ key: l._id, text: l.name || l._id, value: l._id })
+            .sort((l, r) => l.text.localeCompare(r.text)),
+)

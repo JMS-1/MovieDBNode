@@ -50,3 +50,11 @@ export const getGenreOptions = createSelector(
         return options
     },
 )
+
+export const getAllGenreOptions = createSelector(
+    (state: IClientState) => state.genre.all,
+    (all): ISelectOption[] =>
+        all
+            .map(g => <ISelectOption>{ key: g._id, text: g.name || g._id, value: g._id })
+            .sort((l, r) => l.text.localeCompare(r.text)),
+)

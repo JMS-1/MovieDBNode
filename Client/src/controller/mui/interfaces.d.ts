@@ -27,6 +27,9 @@ declare module 'movie-db-client' {
             readonly count: string
             readonly created: string
             readonly edit: IItemMui<IRecording>
+            readonly editGenres: string
+            readonly editLanguages: string
+            readonly editSeries: string
             readonly genres: string
             readonly languages: string
             readonly name: string
