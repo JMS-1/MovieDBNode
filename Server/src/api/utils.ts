@@ -1,14 +1,16 @@
 import { Request, Response, Router } from 'express'
 import { v4 as uuid } from 'uuid'
 
-import { IApiQueryResponse, IApiUpdateResponse, IValidationError, TItem } from 'movie-db-api'
+import {
+    IApiDeleteResponse, IApiQueryResponse, IApiUpdateResponse, IValidationError, TItem,
+} from 'movie-db-api'
 
 import { apiError, getError } from '../utils'
 
 export function processApiRequest<TResponse, TRequest = {}>(
     processor: (body?: TRequest) => TResponse | Promise<TResponse>,
     request: Request,
-    response: Response,
+    response: Response
 ): void {
     function onError(error: any): void {
         const message = getError(error)
@@ -40,6 +42,7 @@ export function processApiRequest<TResponse, TRequest = {}>(
 }
 
 interface IApiCollection<TDbItem> {
+    deleteOne(id: string): Promise<IValidationError[]>
     find(): Promise<TDbItem[]>
     findOneAndReplace(item: TDbItem): Promise<IValidationError[]>
     insertOne(item: TDbItem): Promise<IValidationError[]>
@@ -50,7 +53,7 @@ class Api<TNewItem, TFullItem extends TItem<TNewItem>, TDbItem> {
         private readonly _path: string,
         private readonly _db: IApiCollection<TDbItem>,
         private readonly _toProtocol: (dbItem: TDbItem) => TFullItem,
-        private readonly _toEntity: (item: TNewItem, id: string) => TDbItem,
+        private readonly _toEntity: (item: TNewItem, id: string) => TDbItem
     ) {}
 
     private readonly query = async (): Promise<IApiQueryResponse<TFullItem>> => {
@@ -79,15 +82,23 @@ class Api<TNewItem, TFullItem extends TItem<TNewItem>, TDbItem> {
         }
     }
 
+    private readonly remove = async (id: string): Promise<IApiDeleteResponse> => {
+        return <IApiDeleteResponse>{
+            id,
+            errors: await this._db.deleteOne(id),
+        }
+    }
+
     createRouter(): Router {
         return Router().use(
             this._path,
             Router()
                 .get('/', (req, res) => processApiRequest(this.query, req, res))
                 .post('/', (req, res) => processApiRequest(this.create, req, res))
+                .delete('/:id', (req, res) => processApiRequest(async () => this.remove(req.params.id), req, res))
                 .put('/:id', (req, res) =>
-                    processApiRequest(async (item: TNewItem) => this.update(item, req.params.id), req, res),
-                ),
+                    processApiRequest(async (item: TNewItem) => this.update(item, req.params.id), req, res)
+                )
         )
     }
 }
@@ -96,7 +107,7 @@ export function createApiRouter<TNewItem, TFullItem extends TItem<TNewItem>, TDb
     path: string,
     db: IApiCollection<TDbItem>,
     toProtocol: (dbItem: TDbItem) => TFullItem,
-    toEntity: (item: TNewItem, id: string) => TDbItem,
+    toEntity: (item: TNewItem, id: string) => TDbItem
 ): Router {
     const api = new Api(path, db, toProtocol, toEntity)
 

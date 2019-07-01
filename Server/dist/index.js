@@ -3440,6 +3440,9 @@ class ServerApi {
     static get(method, process) {
         ServerApi.process(method, 'GET', undefined, process);
     }
+    static delete(method, process) {
+        ServerApi.process(method, 'DELETE', undefined, process);
+    }
     static put(method, data, process) {
         ServerApi.process(method, 'PUT', data, process);
     }

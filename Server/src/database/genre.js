@@ -24,6 +24,9 @@ exports.genreCollection = new (class extends utils_1.CollectionBase {
         }
         this.cacheMigrated(genre);
     }
+    async deleteOne(id) {
+        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    }
 })();
 
 //# sourceMappingURL=genre.js.map

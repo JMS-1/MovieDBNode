@@ -16,7 +16,7 @@ render(
             <Root />
         </ConnectedRouter>
     </Provider>,
-    document.querySelector('client-root'),
+    document.querySelector('client-root')
 )
 
 ServerApi.get('container', controller.ContainerActions.load)

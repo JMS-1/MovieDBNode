@@ -34,6 +34,9 @@ exports.containerCollection = new (class extends utils_1.CollectionBase {
         }
         this.cacheMigrated(container);
     }
+    async deleteOne(id) {
+        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    }
 })();
 
 //# sourceMappingURL=container.js.map

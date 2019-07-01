@@ -153,6 +153,9 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         }
         return super.findOneAndReplace(recording);
     }
+    async deleteOne(id) {
+        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    }
 })();
 
 //# sourceMappingURL=recording.js.map

@@ -59,11 +59,18 @@ class Api {
                 errors: await this._db.findOneAndReplace(dbItem),
             };
         };
+        this.remove = async (id) => {
+            return {
+                id,
+                errors: await this._db.deleteOne(id),
+            };
+        };
     }
     createRouter() {
         return express_1.Router().use(this._path, express_1.Router()
             .get('/', (req, res) => processApiRequest(this.query, req, res))
             .post('/', (req, res) => processApiRequest(this.create, req, res))
+            .delete('/:id', (req, res) => processApiRequest(async () => this.remove(req.params.id), req, res))
             .put('/:id', (req, res) => processApiRequest(async (item) => this.update(item, req.params.id), req, res)));
     }
 }

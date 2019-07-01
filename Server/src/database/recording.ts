@@ -196,4 +196,8 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
 
         return super.findOneAndReplace(recording)
     }
+
+    async deleteOne(id: string): Promise<api.IValidationError[]> {
+        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }]
+    }
 })()

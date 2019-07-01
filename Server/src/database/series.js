@@ -30,6 +30,9 @@ exports.seriesCollection = new (class extends utils_1.CollectionBase {
         }
         this.cacheMigrated(series);
     }
+    async deleteOne(id) {
+        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    }
 })();
 
 //# sourceMappingURL=series.js.map

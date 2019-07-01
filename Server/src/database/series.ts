@@ -1,3 +1,5 @@
+import { IValidationError } from 'movie-db-api'
+
 import { collectionName, IDbSeries, SeriesSchema } from './entities/series'
 import { CollectionBase } from './utils'
 import { validate } from './validation'
@@ -30,5 +32,9 @@ export const seriesCollection = new (class extends CollectionBase<IDbSeries> {
         }
 
         this.cacheMigrated(series)
+    }
+
+    async deleteOne(id: string): Promise<IValidationError[]> {
+        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }]
     }
 })()

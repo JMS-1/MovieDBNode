@@ -24,6 +24,9 @@ exports.languageCollection = new (class extends utils_1.CollectionBase {
         }
         this.cacheMigrated(language);
     }
+    async deleteOne(id) {
+        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    }
 })();
 
 //# sourceMappingURL=language.js.map
