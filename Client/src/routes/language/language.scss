@@ -1,0 +1,14 @@
+.movie-db-language-route {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    > .movie-db-language-list {
+        flex-shrink: 0;
+    }
+
+    > .movie-db-language-details {
+        flex-grow: 1;
+        flex-basis: 0;
+    }
+}

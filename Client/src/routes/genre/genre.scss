@@ -1,0 +1,14 @@
+.movie-db-genre-route {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    > .movie-db-genre-list {
+        flex-shrink: 0;
+    }
+
+    > .movie-db-genre-details {
+        flex-grow: 1;
+        flex-basis: 0;
+    }
+}

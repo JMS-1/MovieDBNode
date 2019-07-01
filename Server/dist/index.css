@@ -75,6 +75,26 @@ body {
 .movie-db-container-tree-level > .ui.label {
   width: 100%; }
 
+.movie-db-genre-route {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden; }
+  .movie-db-genre-route > .movie-db-genre-list {
+    flex-shrink: 0; }
+  .movie-db-genre-route > .movie-db-genre-details {
+    flex-grow: 1;
+    flex-basis: 0; }
+
+.movie-db-language-route {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden; }
+  .movie-db-language-route > .movie-db-language-list {
+    flex-shrink: 0; }
+  .movie-db-language-route > .movie-db-language-details {
+    flex-grow: 1;
+    flex-basis: 0; }
+
 .movie-db-recording-route {
   overflow: hidden;
   height: calc(100% - 1em);
@@ -152,3 +172,13 @@ body {
 
 .movie-db-container-links > .link-edit {
   margin-left: 2em; }
+
+.movie-db-series-route {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden; }
+  .movie-db-series-route > .movie-db-series-tree {
+    flex-shrink: 0; }
+  .movie-db-series-route > .movie-db-series-details {
+    flex-grow: 1;
+    flex-basis: 0; }

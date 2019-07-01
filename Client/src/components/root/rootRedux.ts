@@ -17,11 +17,17 @@ function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.
         busy: route.requests > 0,
         containerRoute: mui.container,
         createContainer: cmui.container,
+        createGenre: cmui.genre,
+        createLanguage: cmui.language,
         createRecording: cmui.recording,
         createRoute: cmui.title,
+        createSeries: cmui.series,
         errors: route.errors,
+        genreRoute: mui.genre,
+        languageRoute: mui.language,
         path: state.router.location.pathname,
         recordingRoute: mui.recording,
+        seriesRoute: mui.series,
         title: state.mui.webError,
     }
 }
@@ -35,5 +41,5 @@ function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRootUiProp
 
 export const Root = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(local.CRoot)

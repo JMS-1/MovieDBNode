@@ -51,10 +51,16 @@ declare module 'movie-db-client' {
             readonly container: string
             readonly create: {
                 readonly container: string
+                readonly genre: string
+                readonly language: string
                 readonly recording: string
+                readonly series: string
                 readonly title: string
             }
+            readonly genre: string
+            readonly language: string
             readonly recording: string
+            readonly series: string
         }
         readonly save: string
         readonly search: string

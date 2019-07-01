@@ -249,21 +249,33 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const containerRedux_1 = __webpack_require__(/*! ../../routes/container/containerRedux */ "./Client/src/routes/container/containerRedux.ts");
+const genreRedux_1 = __webpack_require__(/*! ../../routes/genre/genreRedux */ "./Client/src/routes/genre/genreRedux.ts");
+const languageRedux_1 = __webpack_require__(/*! ../../routes/language/languageRedux */ "./Client/src/routes/language/languageRedux.ts");
 const detailsRedux_1 = __webpack_require__(/*! ../../routes/recording/details/detailsRedux */ "./Client/src/routes/recording/details/detailsRedux.ts");
 const recordingRedux_1 = __webpack_require__(/*! ../../routes/recording/recordingRedux */ "./Client/src/routes/recording/recordingRedux.ts");
+const seriesRedux_1 = __webpack_require__(/*! ../../routes/series/seriesRedux */ "./Client/src/routes/series/seriesRedux.ts");
 class CRoot extends React.PureComponent {
     constructor() {
         super(...arguments);
         this.gotoContainer = () => this.props.goto("/container");
         this.gotoRecordings = () => this.props.goto("/recording");
+        this.gotoSeries = () => this.props.goto("/series");
+        this.gotoLanguage = () => this.props.goto("/language");
+        this.gotoGenre = () => this.props.goto("/genre");
     }
     render() {
         const { errors, busy, path } = this.props;
         const createContainer = path === `${"/container"}/NEW`;
         const createRecording = path === `${"/recording"}/NEW`;
-        const create = createContainer || createRecording;
+        const createSeries = path === `${"/series"}/NEW`;
+        const createGenre = path === `${"/genre"}/NEW`;
+        const createLanguage = path === `${"/language"}/NEW`;
+        const create = createContainer || createRecording || createSeries || createGenre || createLanguage;
         const container = path.startsWith("/container") && !create;
+        const genre = path.startsWith("/genre") && !create;
+        const language = path.startsWith("/language") && !create;
         const recording = (path.startsWith("/recording") || path === '/') && !create;
+        const series = path.startsWith("/series") && !create;
         return (React.createElement("div", { className: 'movie-db-root' },
             React.createElement(semantic_ui_react_1.Dimmer, { page: true, active: busy || errors.length > 0 },
                 React.createElement(semantic_ui_react_1.Loader, { disabled: !busy }),
@@ -272,17 +284,26 @@ class CRoot extends React.PureComponent {
                     React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
             React.createElement(semantic_ui_react_1.Menu, { borderless: true },
                 React.createElement(semantic_ui_react_1.Menu.Item, { active: recording, onClick: recording ? undefined : this.gotoRecordings }, this.props.recordingRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: series, onClick: series ? undefined : this.gotoSeries }, this.props.seriesRoute),
                 React.createElement(semantic_ui_react_1.Menu.Item, { active: container, onClick: container ? undefined : this.gotoContainer }, this.props.containerRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: language, onClick: language ? undefined : this.gotoLanguage }, this.props.languageRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: genre, onClick: genre ? undefined : this.gotoGenre }, this.props.genreRoute),
                 React.createElement(semantic_ui_react_1.Menu.Item, { active: create },
                     React.createElement(semantic_ui_react_1.Dropdown, { text: this.props.createRoute },
                         React.createElement(semantic_ui_react_1.Dropdown.Menu, null,
                             React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createRecording, as: 'a', href: `#${"/recording"}/NEW` }, this.props.createRecording),
-                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createContainer, as: 'a', href: `#${"/container"}/NEW` }, this.props.createContainer))))),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createSeries, as: 'a', href: `#${"/series"}/NEW` }, this.props.createSeries),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createContainer, as: 'a', href: `#${"/container"}/NEW` }, this.props.createContainer),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createLanguage, as: 'a', href: `#${"/language"}/NEW` }, this.props.createLanguage),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createGenre, as: 'a', href: `#${"/genre"}/NEW` }, this.props.createGenre))))),
             React.createElement("div", { className: 'content' },
+                React.createElement(react_router_1.Route, { path: '/', exact: true, component: recordingRedux_1.RecordingRoute }),
                 React.createElement(react_router_1.Route, { path: `${"/container"}/:id?`, component: containerRedux_1.ContainerRoute }),
+                React.createElement(react_router_1.Route, { path: `${"/genre"}/:id?`, component: genreRedux_1.GenreRoute }),
+                React.createElement(react_router_1.Route, { path: `${"/language"}/:id?`, component: languageRedux_1.LanguageRoute }),
                 React.createElement(react_router_1.Route, { path: `${"/recording"}/:id`, component: detailsRedux_1.Recording }),
-                React.createElement(react_router_1.Route, { path: "/recording", exact: true, component: recordingRedux_1.RecordingRoute }),
-                React.createElement(react_router_1.Route, { path: '/', exact: true, component: recordingRedux_1.RecordingRoute }))));
+                React.createElement(react_router_1.Route, { path: `${"/series"}/:id?`, component: seriesRedux_1.SeriesRoute }),
+                React.createElement(react_router_1.Route, { path: "/recording", exact: true, component: recordingRedux_1.RecordingRoute }))));
     }
 }
 exports.CRoot = CRoot;
@@ -312,11 +333,17 @@ function mapStateToProps(state, props) {
         busy: route.requests > 0,
         containerRoute: mui.container,
         createContainer: cmui.container,
+        createGenre: cmui.genre,
+        createLanguage: cmui.language,
         createRecording: cmui.recording,
         createRoute: cmui.title,
+        createSeries: cmui.series,
         errors: route.errors,
+        genreRoute: mui.genre,
+        languageRoute: mui.language,
         path: state.router.location.pathname,
         recordingRoute: mui.recording,
+        seriesRoute: mui.series,
         title: state.mui.webError,
     };
 }
@@ -1330,10 +1357,16 @@ function getInitialState() {
             container: 'Ablagen',
             create: {
                 container: 'Ablage erstellen',
+                genre: 'Kategorie hinzufügen',
+                language: 'Sprache hinzufügen',
                 recording: 'Aufzeichnung erstellen',
+                series: 'Serie erstellen',
                 title: 'Neu',
             },
+            genre: 'Kategorien',
+            language: 'Sprachen',
             recording: 'Aufzeichnungen',
+            series: 'Serien',
         },
         save: 'Speichern',
         search: 'Suche...',
@@ -2139,6 +2172,94 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 /***/ }),
 
+/***/ "./Client/src/routes/genre/genre.tsx":
+/*!*******************************************!*\
+  !*** ./Client/src/routes/genre/genre.tsx ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CGenreRoute extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-genre-route' }, "[GENRE]");
+    }
+}
+exports.CGenreRoute = CGenreRoute;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/genre/genreRedux.ts":
+/*!***********************************************!*\
+  !*** ./Client/src/routes/genre/genreRedux.ts ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./genre */ "./Client/src/routes/genre/genre.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.GenreRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CGenreRoute);
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/language/language.tsx":
+/*!*************************************************!*\
+  !*** ./Client/src/routes/language/language.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CLanguageRoute extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-language-route' }, "[LANGUAGE]");
+    }
+}
+exports.CLanguageRoute = CLanguageRoute;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/language/languageRedux.ts":
+/*!*****************************************************!*\
+  !*** ./Client/src/routes/language/languageRedux.ts ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./language */ "./Client/src/routes/language/language.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.LanguageRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CLanguageRoute);
+
+
+/***/ }),
+
 /***/ "./Client/src/routes/recording/details/details.tsx":
 /*!*********************************************************!*\
   !*** ./Client/src/routes/recording/details/details.tsx ***!
@@ -2663,6 +2784,50 @@ function mapDispatchToProps(dispatch, props) {
     };
 }
 exports.PageSizeSelector = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CPageSizeSelector);
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/series/series.tsx":
+/*!*********************************************!*\
+  !*** ./Client/src/routes/series/series.tsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CSeriesRoute extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-series-route movie-db-route' }, "[SERIES]");
+    }
+}
+exports.CSeriesRoute = CSeriesRoute;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/series/seriesRedux.ts":
+/*!*************************************************!*\
+  !*** ./Client/src/routes/series/seriesRedux.ts ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./series */ "./Client/src/routes/series/series.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.SeriesRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CSeriesRoute);
 
 
 /***/ }),
@@ -68870,7 +69035,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
