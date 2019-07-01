@@ -132,6 +132,7 @@ export function getInitialState(): IMuiState {
                 parentId: 'Übergeordnete Serie',
             },
             noId: '(noch keine)',
+            noParent: '(keine)',
             noSelect: '(alle Serien)',
         },
         validationError: 'Bitte Eingaben kontrollieren',

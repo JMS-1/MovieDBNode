@@ -71,6 +71,7 @@ declare module 'movie-db-client' {
         readonly series: {
             readonly edit: IItemMui<api.ISeries>
             readonly noId: string
+            readonly noParent: string
             readonly noSelect: string
         }
         readonly validationError: string

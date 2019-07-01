@@ -28,12 +28,10 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         genres: (edit && edit.genres) || noSelection,
         hasChanges: !!route.workingCopy,
         hasError: route.validation && route.validation.length > 0,
-        idLabel: emui._id,
         languageHint: mui.editLanguages,
         languageLabel: emui.languages,
         languageOptions: controller.getAllLanguageOptions(state),
         languages: (edit && edit.languages) || noSelection,
-        realId: (edit && edit._id) || mui.noId,
         saveAndBackLabel: mui.saveAndBack,
         series: edit && edit.series,
         seriesHint: mui.editSeries,
@@ -57,5 +55,5 @@ function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRecordingU
 
 export const Recording = connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(local.CRecording)

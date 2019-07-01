@@ -105,7 +105,7 @@ export abstract class EditController<
 
     protected setProperty<TProp extends keyof TItem>(
         state: TState,
-        request: local.ISetGenericProperty<TItem, TProp>,
+        request: local.ISetGenericProperty<TItem, TProp>
     ): TState {
         const current = state.workingCopy || this.getWorkingCopy(state)
 
@@ -151,7 +151,7 @@ export abstract class EditController<
 
         const { _id } = response.item
 
-        state = { ...state, selected: undefined, workingCopy: undefined, validation: undefined }
+        state = { ...state, selected: _id, workingCopy: undefined, validation: undefined }
 
         if (this.updateAllAfterSave) {
             const all = [...state.all]

@@ -7,6 +7,5 @@
     "semi": false,
     "singleQuote": true,
     "tabWidth": 4,
-    "trailingComma": "es5",
-    "tslintIntegration": true
+    "trailingComma": "es5"
 }

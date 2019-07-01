@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, Dropdown, DropdownItemProps, DropdownProps, Form, Input } from 'semantic-ui-react'
+import { Button, Dropdown, DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react'
 
 import { containerType, IContainer } from 'movie-db-api'
 
@@ -16,11 +16,9 @@ export interface IContainerDetailsProps {
     containerOptions: DropdownItemProps[]
     hasChanges: boolean
     hasError: boolean
-    idLabel: string
     lost: boolean
     parent: string
     parentLabel: string
-    realId: string
     saveLabel: string
     type: containerType
     typeErrors: string[]
@@ -43,7 +41,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
             return null
         }
 
-        const { hasChanges, hasError, realId } = this.props
+        const { hasChanges, hasError } = this.props
 
         return (
             <div className='movie-db-container-details'>
@@ -56,10 +54,6 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     </Button>
                 </Button.Group>
                 <Form error={hasError}>
-                    <Form.Field>
-                        <label>{this.props.idLabel}</label>
-                        <Input input='text' value={realId || ''} readOnly disabled />
-                    </Form.Field>
                     <Form.Field>
                         <label>{this.props.parentLabel}</label>
                         <Dropdown

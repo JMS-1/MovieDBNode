@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, Form, Input } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 
 import { GenreTextInput } from '../../../components/textInput/textInputRedux'
 
@@ -11,9 +11,7 @@ export interface IGenreDetailsProps {
     cancelLabel: string
     hasChanges: boolean
     hasError: boolean
-    idLabel: string
     lost: boolean
-    realId: string
     saveLabel: string
 }
 
@@ -31,7 +29,7 @@ export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
             return null
         }
 
-        const { hasChanges, hasError, realId } = this.props
+        const { hasChanges, hasError } = this.props
 
         return (
             <div className='movie-db-genre-details'>
@@ -44,10 +42,6 @@ export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
                     </Button>
                 </Button.Group>
                 <Form error={hasError}>
-                    <Form.Field>
-                        <label>{this.props.idLabel}</label>
-                        <Input input='text' value={realId || ''} readOnly disabled />
-                    </Form.Field>
                     <GenreTextInput prop='name' required />
                 </Form>
             </div>

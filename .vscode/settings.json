@@ -10,7 +10,6 @@
     "scss.lint.idSelector": "warning",
     "scss.lint.universalSelector": "warning",
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
-    "tslint.autoFixOnSave": true,
     "tslint.suppressWhileTypeErrorsPresent": true,
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "files.exclude": {

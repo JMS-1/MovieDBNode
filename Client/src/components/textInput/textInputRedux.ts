@@ -56,7 +56,7 @@ class CGenreTextInput extends local.CTextInput<IGenre> {
 
 class CSeriesTextInput extends local.CTextInput<ISeries> {
     static mapProps(state: IClientState, props: local.ITextInputUiProps<ISeries>): local.ITextInputProps {
-        const route = state.genre
+        const route = state.series
         const series = controller.getSeriesEdit(state)
         const value = series && series[props.prop]
 
@@ -79,7 +79,7 @@ class CSeriesTextInput extends local.CTextInput<ISeries> {
 
 class CLanguageTextInput extends local.CTextInput<ILanguage> {
     static mapProps(state: IClientState, props: local.ITextInputUiProps<ILanguage>): local.ITextInputProps {
-        const route = state.genre
+        const route = state.language
         const language = controller.getLanguageEdit(state)
         const value = language && language[props.prop]
 

@@ -511,7 +511,7 @@ class CGenreTextInput extends local.CTextInput {
 }
 class CSeriesTextInput extends local.CTextInput {
     static mapProps(state, props) {
-        const route = state.genre;
+        const route = state.series;
         const series = controller.getSeriesEdit(state);
         const value = series && series[props.prop];
         return {
@@ -528,7 +528,7 @@ class CSeriesTextInput extends local.CTextInput {
 }
 class CLanguageTextInput extends local.CTextInput {
     static mapProps(state, props) {
-        const route = state.genre;
+        const route = state.language;
         const language = controller.getLanguageEdit(state);
         const value = language && language[props.prop];
         return {
@@ -1062,7 +1062,7 @@ class EditController extends Controller {
             return Object.assign({}, state, { validation: response.errors });
         }
         const { _id } = response.item;
-        state = Object.assign({}, state, { selected: undefined, workingCopy: undefined, validation: undefined });
+        state = Object.assign({}, state, { selected: _id, workingCopy: undefined, validation: undefined });
         if (this.updateAllAfterSave) {
             const all = [...state.all];
             const index = all.findIndex(c => c._id === _id);
@@ -1568,6 +1568,7 @@ function getInitialState() {
                 parentId: 'Übergeordnete Serie',
             },
             noId: '(noch keine)',
+            noParent: '(keine)',
             noSelect: '(alle Serien)',
         },
         validationError: 'Bitte Eingaben kontrollieren',
@@ -2084,19 +2085,16 @@ exports.getSeriesMap = reselect_1.createSelector((state) => state.series.all, (a
     return map;
 });
 exports.getSeriesChildMap = reselect_1.createSelector((state) => state.series.all, exports.getSeriesMap, (all, lookup) => utils_1.sortChildMap(utils_1.createChildMap(all), lookup));
-function buildOptions(scope, list, tree, lookup) {
-    const children = (tree[scope] || []).map(id => lookup[id]).filter(s => s);
+function buildOptions(scope, list, tree, lookup, exclude) {
+    const children = (tree[scope] || []).map(id => id !== exclude && lookup[id]).filter(s => s);
     for (let child of children) {
         const series = child.raw;
         list.push({ key: series._id, text: child.name, value: series._id });
-        buildOptions(series._id, list, tree, lookup);
+        buildOptions(series._id, list, tree, lookup, exclude);
     }
-}
-exports.getSeriesOptions = reselect_1.createSelector(exports.getSeriesChildMap, exports.getSeriesMap, (tree, map) => {
-    const list = [];
-    buildOptions('', list, tree, map);
     return list;
-});
+}
+exports.getSeriesOptions = reselect_1.createSelector(exports.getSeriesChildMap, exports.getSeriesMap, (tree, map) => buildOptions('', [], tree, map));
 exports.getFilteredSeriesChildMap = reselect_1.createSelector((state) => state.series.all, (state) => state.series.filter, exports.getSeriesMap, (all, filter, lookup) => {
     const map = utils_1.createChildMap(all);
     if (filter) {
@@ -2105,6 +2103,7 @@ exports.getFilteredSeriesChildMap = reselect_1.createSelector((state) => state.s
     return utils_1.sortChildMap(map, lookup);
 });
 exports.getSeriesEdit = reselect_1.createSelector((state) => state.series.workingCopy, (state) => state.series.selected, exports.getSeriesMap, (edit, selected, map) => edit || (map[selected] && map[selected].raw));
+exports.getSeriesOptionsNoEdit = reselect_1.createSelector(exports.getSeriesChildMap, exports.getSeriesMap, exports.getSeriesEdit, (tree, map, edit) => buildOptions('', [], tree, map, edit && edit._id));
 
 
 /***/ }),
@@ -2273,15 +2272,12 @@ class CContainerDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError, realId } = this.props;
+        const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-container-details' },
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
-                React.createElement(semantic_ui_react_1.Form.Field, null,
-                    React.createElement("label", null, this.props.idLabel),
-                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: realId || '', readOnly: true, disabled: true })),
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.parentLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setContainer, options: this.props.containerOptions, placeholder: this.props.containerHint, search: true, selection: true, scrolling: true, value: this.props.parent || '' })),
@@ -2332,11 +2328,9 @@ function mapStateToProps(state, props) {
         containerOptions: controller.getAllContainerOptions(state),
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
-        idLabel: emui._id,
         lost: !container,
         parent: container && container.parentId,
         parentLabel: emui.parentId,
-        realId: (container && container._id) || mui.noId,
         saveLabel: state.mui.save,
         type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
@@ -2423,15 +2417,12 @@ class CGenreDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError, realId } = this.props;
+        const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-genre-details' },
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
-                React.createElement(semantic_ui_react_1.Form.Field, null,
-                    React.createElement("label", null, this.props.idLabel),
-                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: realId || '', readOnly: true, disabled: true })),
                 React.createElement(textInputRedux_1.GenreTextInput, { prop: 'name', required: true }))));
     }
     componentWillMount() {
@@ -2462,8 +2453,6 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/genre/details/details.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    const mui = state.mui.genre;
-    const emui = mui.edit;
     const route = state.genre;
     const genre = controller_1.getGenreEdit(state);
     const errors = route.validation;
@@ -2471,9 +2460,7 @@ function mapStateToProps(state, props) {
         cancelLabel: genre && genre._id ? state.mui.cancel : state.mui.reset,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
-        idLabel: emui._id,
         lost: !genre,
-        realId: (genre && genre._id) || mui.noId,
         saveLabel: state.mui.save,
     };
 }
@@ -2560,15 +2547,12 @@ class CLanguageDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError, realId } = this.props;
+        const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-language-details' },
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
-                React.createElement(semantic_ui_react_1.Form.Field, null,
-                    React.createElement("label", null, this.props.idLabel),
-                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: realId || '', readOnly: true, disabled: true })),
                 React.createElement(textInputRedux_1.LanguageTextInput, { prop: 'name', required: true }))));
     }
     componentWillMount() {
@@ -2599,8 +2583,6 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/language/details/details.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    const mui = state.mui.language;
-    const emui = mui.edit;
     const route = state.language;
     const language = controller_1.getLanguageEdit(state);
     const errors = route.validation;
@@ -2608,9 +2590,7 @@ function mapStateToProps(state, props) {
         cancelLabel: language && language._id ? state.mui.cancel : state.mui.reset,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
-        idLabel: emui._id,
         lost: !language,
-        realId: (language && language._id) || mui.noId,
         saveLabel: state.mui.save,
     };
 }
@@ -2716,9 +2696,6 @@ class CRecording extends React.PureComponent {
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndBack, disabled: hasError || !hasChanges }, this.props.saveAndBackLabel)),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
-                React.createElement(semantic_ui_react_1.Form.Field, null,
-                    React.createElement("label", null, this.props.idLabel),
-                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: this.props.realId || '', readOnly: true, disabled: true })),
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true }),
                 React.createElement(linksRedux_1.RecordingLinks, null),
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'description', textarea: true }),
@@ -2780,12 +2757,10 @@ function mapStateToProps(state, props) {
         genres: (edit && edit.genres) || noSelection,
         hasChanges: !!route.workingCopy,
         hasError: route.validation && route.validation.length > 0,
-        idLabel: emui._id,
         languageHint: mui.editLanguages,
         languageLabel: emui.languages,
         languageOptions: controller.getAllLanguageOptions(state),
         languages: (edit && edit.languages) || noSelection,
-        realId: (edit && edit._id) || mui.noId,
         saveAndBackLabel: mui.saveAndBack,
         series: edit && edit.series,
         seriesHint: mui.editSeries,
@@ -3218,9 +3193,30 @@ exports.PageSizeSelector = react_redux_1.connect(mapStateToProps, mapDispatchToP
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CSeriesDetails extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.setParent = (ev, data) => {
+            this.props.setProp('parentId', (typeof data.value === 'string' ? data.value : '') || undefined);
+        };
+    }
     render() {
-        return React.createElement("div", { className: 'movie-db-series-details' }, "[DETAILS]");
+        if (this.props.lost) {
+            return null;
+        }
+        const { hasChanges, hasError } = this.props;
+        return (React.createElement("div", { className: 'movie-db-series-details' },
+            React.createElement(semantic_ui_react_1.Button.Group, null,
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
+            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.parentLabel),
+                    React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setParent, options: this.props.parentOptions, placeholder: this.props.parentHint, search: true, selection: true, scrolling: true, value: this.props.parent || '' })),
+                React.createElement(textInputRedux_1.SeriesTextInput, { prop: 'name', required: true }),
+                React.createElement(textInputRedux_1.SeriesTextInput, { prop: 'description', textarea: true }))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);
@@ -3250,11 +3246,29 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/series/details/details.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    const mui = state.mui.series;
+    const emui = mui.edit;
+    const route = state.series;
+    const series = controller_1.getSeriesEdit(state);
+    const errors = route.validation;
+    return {
+        cancelLabel: series && series._id ? state.mui.cancel : state.mui.reset,
+        hasChanges: !!route.workingCopy,
+        hasError: errors && errors.length > 0,
+        lost: !series,
+        saveLabel: state.mui.save,
+        parent: series && series.parentId,
+        parentHint: mui.noParent,
+        parentLabel: emui.parentId,
+        parentOptions: controller_1.getSeriesOptionsNoEdit(state),
+    };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
+        cancel: () => dispatch(controller_1.SeriesActions.cancelEdit()),
         loadDetails: id => dispatch(controller_1.SeriesActions.select(id)),
+        save: () => dispatch(controller_1.SeriesActions.save()),
+        setProp: (prop, value) => dispatch(controller_1.SeriesActions.setProperty(prop, value)),
     };
 }
 exports.SeriesDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CSeriesDetails);
@@ -69562,7 +69576,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

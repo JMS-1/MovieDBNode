@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { Button, Dropdown, DropdownItemProps, DropdownProps, Form, Input } from 'semantic-ui-react'
+import { Button, Dropdown, DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react'
 import { isArray } from 'util'
 
 import { IRecording, mediaType } from 'movie-db-api'
@@ -27,12 +27,10 @@ export interface IRecordingProps {
     genres: string[]
     hasChanges: boolean
     hasError: boolean
-    idLabel: string
     languageHint: string
     languageLabel: string
     languageOptions: DropdownItemProps[]
     languages: string[]
-    realId: string
     saveAndBackLabel: string
     series: string
     seriesHint: string
@@ -68,10 +66,6 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
                     </Button>
                 </Button.Group>
                 <Form error={hasError}>
-                    <Form.Field>
-                        <label>{this.props.idLabel}</label>
-                        <Input input='text' value={this.props.realId || ''} readOnly disabled />
-                    </Form.Field>
                     <RecordingTextInput prop='name' required />
                     <RecordingLinks />
                     <RecordingTextInput prop='description' textarea />
