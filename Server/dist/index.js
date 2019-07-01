@@ -1043,7 +1043,22 @@ exports.EditController = EditController;
 Object.defineProperty(exports, "__esModule", { value: true });
 class GenreActions {
     static load(response) {
-        return { genres: response.list, type: "movie-db.genres.load" };
+        return { list: response.list, type: "movie-db.genres.load" };
+    }
+    static select(id) {
+        return { id, type: "movie-db.genres.select" };
+    }
+    static setProperty(prop, value) {
+        return { prop, value, type: "movie-db.genres.set-prop" };
+    }
+    static saveDone(response) {
+        return { item: response.item, errors: response.errors, type: "movie-db.genres.save-done" };
+    }
+    static cancelEdit() {
+        return { type: "movie-db.genres.cancel-edit" };
+    }
+    static save() {
+        return { type: "movie-db.genres.save" };
     }
 }
 exports.GenreActions = GenreActions;
@@ -1061,20 +1076,43 @@ exports.GenreActions = GenreActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/genre/actions.ts");
 const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
-const controller = new (class extends controller_1.Controller {
+const store_1 = __webpack_require__(/*! ../../store */ "./Client/src/store.ts");
+const controller = new (class extends controller_1.EditController {
+    constructor() {
+        super(...arguments);
+        this.schema = 'genre';
+        this.afterCancel = "/genre";
+        this.afterSave = "/genre";
+    }
     getReducerMap() {
         return {
+            ["movie-db.application.load-schemas"]: this.loadSchema,
+            ["movie-db.genres.cancel-edit"]: this.cancelEdit,
             ["movie-db.genres.load"]: this.load,
+            ["movie-db.genres.save"]: this.startSave,
+            ["movie-db.genres.save-done"]: this.saveDone,
+            ["movie-db.genres.select"]: this.select,
+            ["movie-db.genres.set-prop"]: this.setProperty,
         };
     }
-    getInitialState() {
+    createEmpty() {
         return {
-            all: [],
+            _id: '',
+            name: '',
         };
     }
-    load(state, response) {
-        return Object.assign({}, state, { all: response.genres || [] });
+    startSave(state, request) {
+        if (state.workingCopy) {
+            if (state.workingCopy._id) {
+                store_1.ServerApi.put(`genre/${state.workingCopy._id}`, state.workingCopy, actions_1.GenreActions.saveDone);
+            }
+            else {
+                store_1.ServerApi.post('genre', state.workingCopy, actions_1.GenreActions.saveDone);
+            }
+        }
+        return state;
     }
 })();
 exports.GenreReducer = controller.reducer;
@@ -1181,7 +1219,22 @@ exports.getErrors = getErrors;
 Object.defineProperty(exports, "__esModule", { value: true });
 class LanguageActions {
     static load(response) {
-        return { languages: response.list, type: "movie-db.languages.load" };
+        return { list: response.list, type: "movie-db.languages.load" };
+    }
+    static select(id) {
+        return { id, type: "movie-db.languages.select" };
+    }
+    static setProperty(prop, value) {
+        return { prop, value, type: "movie-db.languages.set-prop" };
+    }
+    static saveDone(response) {
+        return { item: response.item, errors: response.errors, type: "movie-db.languages.save-done" };
+    }
+    static cancelEdit() {
+        return { type: "movie-db.languages.cancel-edit" };
+    }
+    static save() {
+        return { type: "movie-db.languages.save" };
     }
 }
 exports.LanguageActions = LanguageActions;
@@ -1199,20 +1252,43 @@ exports.LanguageActions = LanguageActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/language/actions.ts");
 const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
-const controller = new (class extends controller_1.Controller {
+const store_1 = __webpack_require__(/*! ../../store */ "./Client/src/store.ts");
+const controller = new (class extends controller_1.EditController {
+    constructor() {
+        super(...arguments);
+        this.schema = 'language';
+        this.afterCancel = "/language";
+        this.afterSave = "/language";
+    }
     getReducerMap() {
         return {
+            ["movie-db.application.load-schemas"]: this.loadSchema,
+            ["movie-db.languages.cancel-edit"]: this.cancelEdit,
             ["movie-db.languages.load"]: this.load,
+            ["movie-db.languages.save"]: this.startSave,
+            ["movie-db.languages.save-done"]: this.saveDone,
+            ["movie-db.languages.select"]: this.select,
+            ["movie-db.languages.set-prop"]: this.setProperty,
         };
     }
-    getInitialState() {
+    createEmpty() {
         return {
-            all: [],
+            _id: '',
+            name: '',
         };
     }
-    load(state, response) {
-        return Object.assign({}, state, { all: response.languages || [] });
+    startSave(state, request) {
+        if (state.workingCopy) {
+            if (state.workingCopy._id) {
+                store_1.ServerApi.put(`language/${state.workingCopy._id}`, state.workingCopy, actions_1.LanguageActions.saveDone);
+            }
+            else {
+                store_1.ServerApi.post('language', state.workingCopy, actions_1.LanguageActions.saveDone);
+            }
+        }
+        return state;
     }
 })();
 exports.LanguageReducer = controller.reducer;
@@ -1786,10 +1862,25 @@ exports.getMediaTypeOptions = reselect_1.createSelector((state) => state.mui.med
 Object.defineProperty(exports, "__esModule", { value: true });
 class SeriesActions {
     static load(response) {
-        return { series: response.list, type: "movie-db.series.load" };
+        return { list: response.list, type: "movie-db.series.load" };
     }
     static setFilter(filter) {
         return { filter, type: "movie-db.series.set-filter" };
+    }
+    static select(id) {
+        return { id, type: "movie-db.series.select" };
+    }
+    static setProperty(prop, value) {
+        return { prop, value, type: "movie-db.series.set-prop" };
+    }
+    static saveDone(response) {
+        return { item: response.item, errors: response.errors, type: "movie-db.series.save-done" };
+    }
+    static cancelEdit() {
+        return { type: "movie-db.series.cancel-edit" };
+    }
+    static save() {
+        return { type: "movie-db.series.save" };
     }
 }
 exports.SeriesActions = SeriesActions;
@@ -1807,28 +1898,53 @@ exports.SeriesActions = SeriesActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const actions_1 = __webpack_require__(/*! ./actions */ "./Client/src/controller/series/actions.ts");
 const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
-const controller = new (class extends controller_1.Controller {
+const store_1 = __webpack_require__(/*! ../../store */ "./Client/src/store.ts");
+const controller = new (class extends controller_1.EditController {
+    constructor() {
+        super(...arguments);
+        this.schema = 'series';
+        this.afterCancel = "/series";
+        this.afterSave = "/series";
+    }
     getReducerMap() {
         return {
+            ["movie-db.application.load-schemas"]: this.loadSchema,
+            ["movie-db.series.cancel-edit"]: this.cancelEdit,
             ["movie-db.series.set-filter"]: this.setFilter,
             ["movie-db.series.load"]: this.load,
+            ["movie-db.series.save"]: this.startSave,
+            ["movie-db.series.save-done"]: this.saveDone,
+            ["movie-db.series.select"]: this.select,
+            ["movie-db.series.set-prop"]: this.setProperty,
         };
     }
     getInitialState() {
-        return {
-            all: [],
-            filter: '',
-        };
-    }
-    load(state, response) {
-        return Object.assign({}, state, { all: response.series || [] });
+        return Object.assign({}, super.getInitialState(), { filter: '' });
     }
     setFilter(state, request) {
         if (request.filter === state.filter) {
             return state;
         }
         return Object.assign({}, state, { filter: request.filter });
+    }
+    createEmpty() {
+        return {
+            _id: '',
+            name: '',
+        };
+    }
+    startSave(state, request) {
+        if (state.workingCopy) {
+            if (state.workingCopy._id) {
+                store_1.ServerApi.put(`series/${state.workingCopy._id}`, state.workingCopy, actions_1.SeriesActions.saveDone);
+            }
+            else {
+                store_1.ServerApi.post('series', state.workingCopy, actions_1.SeriesActions.saveDone);
+            }
+        }
+        return state;
     }
 })();
 exports.SeriesReducer = controller.reducer;
@@ -2215,6 +2331,61 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 /***/ }),
 
+/***/ "./Client/src/routes/genre/details/details.tsx":
+/*!*****************************************************!*\
+  !*** ./Client/src/routes/genre/details/details.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CGenreDetails extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-genre-details' }, "[DETAILS]");
+    }
+    componentWillMount() {
+        this.props.loadDetails(this.props.id);
+    }
+    componentWillReceiveProps(props, context) {
+        if (props.id !== this.props.id) {
+            this.props.loadDetails(props.id);
+        }
+    }
+}
+exports.CGenreDetails = CGenreDetails;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/genre/details/detailsRedux.ts":
+/*!*********************************************************!*\
+  !*** ./Client/src/routes/genre/details/detailsRedux.ts ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./details */ "./Client/src/routes/genre/details/details.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {
+        loadDetails: id => dispatch(controller_1.GenreActions.select(id)),
+    };
+}
+exports.GenreDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CGenreDetails);
+
+
+/***/ }),
+
 /***/ "./Client/src/routes/genre/genre.tsx":
 /*!*******************************************!*\
   !*** ./Client/src/routes/genre/genre.tsx ***!
@@ -2227,13 +2398,14 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Client/src/routes/genre/details/detailsRedux.ts");
 class CGenreRoute extends React.PureComponent {
     render() {
-        const { selected } = this.props;
+        const { id } = this.props.match.params;
         return (React.createElement("div", { className: 'movie-db-genre-route movie-db-route' },
             React.createElement("div", { className: 'movie-db-genre-list' },
-                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.genreOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === selected, as: 'a', href: `#${"/genre"}/${l.key}`, key: l.key }, l.text))))),
-            React.createElement("div", { className: 'movie-db-genre-details' }, "[DETAILS]")));
+                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.genreOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === id, as: 'a', href: `#${"/genre"}/${l.key}`, key: l.key }, l.text))))),
+            React.createElement(detailsRedux_1.GenreDetails, { id: id })));
     }
 }
 exports.CGenreRoute = CGenreRoute;
@@ -2257,13 +2429,67 @@ const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/c
 function mapStateToProps(state, props) {
     return {
         genreOptions: controller_1.getAllGenreOptions(state),
-        selected: props.match.params.id,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {};
 }
 exports.GenreRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CGenreRoute);
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/language/details/details.tsx":
+/*!********************************************************!*\
+  !*** ./Client/src/routes/language/details/details.tsx ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CLanguageDetails extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-language-details' }, "[DETAILS]");
+    }
+    componentWillMount() {
+        this.props.loadDetails(this.props.id);
+    }
+    componentWillReceiveProps(props, context) {
+        if (props.id !== this.props.id) {
+            this.props.loadDetails(props.id);
+        }
+    }
+}
+exports.CLanguageDetails = CLanguageDetails;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/language/details/detailsRedux.ts":
+/*!************************************************************!*\
+  !*** ./Client/src/routes/language/details/detailsRedux.ts ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./details */ "./Client/src/routes/language/details/details.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {
+        loadDetails: id => dispatch(controller_1.LanguageActions.select(id)),
+    };
+}
+exports.LanguageDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CLanguageDetails);
 
 
 /***/ }),
@@ -2280,13 +2506,14 @@ exports.GenreRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Client/src/routes/language/details/detailsRedux.ts");
 class CLanguageRoute extends React.PureComponent {
     render() {
-        const { selected } = this.props;
+        const { id } = this.props.match.params;
         return (React.createElement("div", { className: 'movie-db-language-route movie-db-route' },
             React.createElement("div", { className: 'movie-db-language-list' },
-                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.languageOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === selected, as: 'a', href: `#${"/language"}/${l.key}`, key: l.key }, l.text))))),
-            React.createElement("div", { className: 'movie-db-language-details' }, "[DETAILS]")));
+                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.languageOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === id, as: 'a', href: `#${"/language"}/${l.key}`, key: l.key }, l.text))))),
+            React.createElement(detailsRedux_1.LanguageDetails, { id: id })));
     }
 }
 exports.CLanguageRoute = CLanguageRoute;
@@ -2310,7 +2537,6 @@ const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/c
 function mapStateToProps(state, props) {
     return {
         languageOptions: controller_1.getAllLanguageOptions(state),
-        selected: props.match.params.id,
     };
 }
 function mapDispatchToProps(dispatch, props) {
@@ -2864,6 +3090,14 @@ class CSeriesDetails extends React.PureComponent {
     render() {
         return React.createElement("div", { className: 'movie-db-series-details' }, "[DETAILS]");
     }
+    componentWillMount() {
+        this.props.loadDetails(this.props.id);
+    }
+    componentWillReceiveProps(props, context) {
+        if (props.id !== this.props.id) {
+            this.props.loadDetails(props.id);
+        }
+    }
 }
 exports.CSeriesDetails = CSeriesDetails;
 
@@ -2882,11 +3116,14 @@ exports.CSeriesDetails = CSeriesDetails;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/series/details/details.tsx");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
     return {};
 }
 function mapDispatchToProps(dispatch, props) {
-    return {};
+    return {
+        loadDetails: id => dispatch(controller_1.SeriesActions.select(id)),
+    };
 }
 exports.SeriesDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CSeriesDetails);
 
@@ -2908,9 +3145,10 @@ const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Clie
 const treeRedux_1 = __webpack_require__(/*! ./tree/treeRedux */ "./Client/src/routes/series/tree/treeRedux.ts");
 class CSeriesRoute extends React.PureComponent {
     render() {
+        const { id } = this.props.match.params;
         return (React.createElement("div", { className: 'movie-db-series-route movie-db-route' },
-            React.createElement(treeRedux_1.SeriesTree, { id: this.props.match.params.id }),
-            React.createElement(detailsRedux_1.SeriesDetails, { id: this.props.match.params.id })));
+            React.createElement(treeRedux_1.SeriesTree, { id: id }),
+            React.createElement(detailsRedux_1.SeriesDetails, { id: id })));
     }
 }
 exports.CSeriesRoute = CSeriesRoute;

@@ -5,6 +5,8 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './details'
 
+import { SeriesActions } from '../../../controller'
+
 function mapStateToProps(state: IClientState, props: local.ISeriesDetailsUiProps): local.ISeriesDetailsProps {
     return {}
 }
@@ -13,7 +15,9 @@ function mapDispatchToProps(
     dispatch: Dispatch<Action>,
     props: local.ISeriesDetailsUiProps,
 ): local.ISeriesDetailsActions {
-    return {}
+    return {
+        loadDetails: id => dispatch(SeriesActions.select(id)),
+    }
 }
 
 export const SeriesDetails = connect(

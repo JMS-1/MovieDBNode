@@ -3,10 +3,33 @@ import * as local from 'movie-db-client'
 
 export class SeriesActions {
     static load(response: api.ISeriesResponse): local.ILoadSeries {
-        return { series: response.list, type: local.seriesActions.load }
+        return { list: response.list, type: local.seriesActions.load }
     }
 
     static setFilter(filter: string): local.ISetSeriesTreeFilter {
         return { filter, type: local.seriesActions.filter }
+    }
+
+    static select(id: string): local.ISelectSeries {
+        return { id, type: local.seriesActions.select }
+    }
+
+    static setProperty<TProp extends keyof api.ILanguage>(
+        prop: TProp,
+        value: api.ILanguage[TProp],
+    ): local.ISetSeriesProperty<TProp> {
+        return { prop, value, type: local.seriesActions.setProp }
+    }
+
+    static saveDone(response: api.IUpdateSeriesResponse): local.ISeriesSaved {
+        return { item: response.item, errors: response.errors, type: local.seriesActions.saveDone }
+    }
+
+    static cancelEdit(): local.ICancelSeriesEdit {
+        return { type: local.seriesActions.cancel }
+    }
+
+    static save(): local.ISaveSeries {
+        return { type: local.seriesActions.save }
     }
 }

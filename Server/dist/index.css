@@ -55,7 +55,7 @@ body {
     flex-basis: 0; }
 
 .movie-db-container-details {
-  padding: 1em;
+  padding: 0 1em 1em 1em;
   overflow: auto; }
 
 .movie-db-container-tree {
@@ -90,6 +90,10 @@ body {
     flex-grow: 1;
     flex-basis: 0; }
 
+.movie-db-genre-details {
+  padding: 0 1em 1em 1em;
+  overflow: auto; }
+
 .movie-db-language-route {
   display: flex;
   flex-direction: row;
@@ -104,6 +108,10 @@ body {
   .movie-db-language-route > .movie-db-language-details {
     flex-grow: 1;
     flex-basis: 0; }
+
+.movie-db-language-details {
+  padding: 0 1em 1em 1em;
+  overflow: auto; }
 
 .movie-db-recording-route {
   overflow: hidden;
@@ -157,9 +165,9 @@ body {
         cursor: default; }
 
 .movie-db-recording-edit {
-  padding: 1em;
+  padding: 0 1em 1em 1em;
   overflow: auto;
-  height: calc(100% - 2em); }
+  height: calc(100% - 1em); }
 
 .movie-db-recording-item > td {
   white-space: nowrap;
@@ -200,7 +208,7 @@ body {
     flex-basis: 0; }
 
 .movie-db-series-details {
-  padding: 1em;
+  padding: 0 1em 1em 1em;
   overflow: auto; }
 
 .movie-db-series-tree {

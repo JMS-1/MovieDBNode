@@ -18,10 +18,12 @@ export type TSeriesRouteProps = ISeriesRouteProps & ISeriesRouteUiProps & ISerie
 
 export class CSeriesRoute extends React.PureComponent<TSeriesRouteProps> {
     render(): JSX.Element {
+        const { id } = this.props.match.params
+
         return (
             <div className='movie-db-series-route movie-db-route'>
-                <SeriesTree id={this.props.match.params.id} />
-                <SeriesDetails id={this.props.match.params.id} />
+                <SeriesTree id={id} />
+                <SeriesDetails id={id} />
             </div>
         )
     }

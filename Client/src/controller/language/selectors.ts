@@ -20,7 +20,7 @@ export const getLanguageMap = createSelector(
         all.forEach(l => (map[l._id] = l))
 
         return map
-    }
+    },
 )
 
 export const getLanguageCountMap = createSelector(
@@ -31,7 +31,7 @@ export const getLanguageCountMap = createSelector(
         all.forEach(l => (map[l._id] = l))
 
         return map
-    }
+    },
 )
 
 export const getLanguageOptions = createSelector(
@@ -49,7 +49,7 @@ export const getLanguageOptions = createSelector(
         options.sort((l, r) => l.sort.localeCompare(r.sort))
 
         return options
-    }
+    },
 )
 
 export const getAllLanguageOptions = createSelector(
@@ -57,5 +57,5 @@ export const getAllLanguageOptions = createSelector(
     (all): DropdownItemProps[] =>
         all
             .map(l => <DropdownItemProps>{ key: l._id, sort: l.name || l._id, text: l.name || l._id, value: l._id })
-            .sort((l, r) => l.sort.localeCompare(r.sort))
+            .sort((l, r) => l.sort.localeCompare(r.sort)),
 )

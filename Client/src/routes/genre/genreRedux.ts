@@ -10,7 +10,6 @@ import { getAllGenreOptions } from '../../controller'
 function mapStateToProps(state: IClientState, props: local.IGenreRouteUiProps): local.IGenreRouteProps {
     return {
         genreOptions: getAllGenreOptions(state),
-        selected: props.match.params.id,
     }
 }
 

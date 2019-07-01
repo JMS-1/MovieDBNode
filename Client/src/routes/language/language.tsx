@@ -4,6 +4,8 @@ import { DropdownItemProps, List } from 'semantic-ui-react'
 
 import { routes } from 'movie-db-client'
 
+import { LanguageDetails } from './details/detailsRedux'
+
 interface ILanguageRouteParams {
     id?: string
 }
@@ -12,7 +14,6 @@ export interface ILanguageRouteUiProps extends RouteComponentProps<ILanguageRout
 
 export interface ILanguageRouteProps {
     languageOptions: DropdownItemProps[]
-    selected: string
 }
 
 export interface ILanguageRouteActions {}
@@ -21,25 +22,20 @@ export type TLanguageRouteProps = ILanguageRouteProps & ILanguageRouteUiProps & 
 
 export class CLanguageRoute extends React.PureComponent<TLanguageRouteProps> {
     render(): JSX.Element {
-        const { selected } = this.props
+        const { id } = this.props.match.params
 
         return (
             <div className='movie-db-language-route movie-db-route'>
                 <div className='movie-db-language-list'>
                     <List selection>
                         {this.props.languageOptions.map(l => (
-                            <List.Item
-                                active={l.key === selected}
-                                as='a'
-                                href={`#${routes.language}/${l.key}`}
-                                key={l.key}
-                            >
+                            <List.Item active={l.key === id} as='a' href={`#${routes.language}/${l.key}`} key={l.key}>
                                 {l.text}
                             </List.Item>
                         ))}
                     </List>
                 </div>
-                <div className='movie-db-language-details'>[DETAILS]</div>
+                <LanguageDetails id={id} />
             </div>
         )
     }
