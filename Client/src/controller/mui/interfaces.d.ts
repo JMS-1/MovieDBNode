@@ -1,7 +1,7 @@
 declare module 'movie-db-client' {
     import { SemanticICONS } from 'semantic-ui-react'
 
-    import { IContainer, containerType, IRecording, IRecordingLink, mediaType } from 'movie-db-api'
+    import * as api from 'movie-db-api'
 
     interface IContainerTypeMui {
         readonly title: string
@@ -11,27 +11,31 @@ declare module 'movie-db-client' {
     interface IMuiState {
         readonly cancel: string
         readonly container: {
-            readonly edit: IItemMui<IContainer>
+            readonly edit: IItemMui<api.IContainer>
             readonly noId: string
             readonly noParent: string
-            readonly types: { readonly [type in containerType]: IContainerTypeMui }
+            readonly types: { readonly [type in api.containerType]: IContainerTypeMui }
         }
         readonly create: string
         readonly language: {
+            readonly edit: IItemMui<api.ILanguage>
+            readonly noId: string
             readonly noSelect: string
         }
         readonly genre: {
+            readonly edit: IItemMui<api.IGenre>
+            readonly noId: string
             readonly noSelect: string
         }
         readonly media: {
-            readonly types: { readonly [type in mediaType]: string }
+            readonly types: { readonly [type in api.mediaType]: string }
         }
         readonly recording: {
             readonly anyRent: string
             readonly clear: string
             readonly count: string
             readonly created: string
-            readonly edit: IItemMui<IRecording>
+            readonly edit: IItemMui<api.IRecording>
             readonly editContainer: string
             readonly editGenres: string
             readonly editLanguages: string
@@ -39,7 +43,7 @@ declare module 'movie-db-client' {
             readonly editType: string
             readonly genres: string
             readonly languages: string
-            readonly linkEdit: IItemMui<IRecordingLink>
+            readonly linkEdit: IItemMui<api.IRecordingLink>
             readonly name: string
             readonly noId: string
             readonly noRent: string
@@ -65,6 +69,8 @@ declare module 'movie-db-client' {
         readonly save: string
         readonly search: string
         readonly series: {
+            readonly edit: IItemMui<api.ISeries>
+            readonly noId: string
             readonly noSelect: string
         }
         readonly validationError: string

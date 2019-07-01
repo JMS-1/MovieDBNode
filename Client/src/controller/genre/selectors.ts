@@ -59,3 +59,10 @@ export const getAllGenreOptions = createSelector(
             .map(g => <DropdownItemProps>{ key: g._id, sort: g.name || g._id, text: g.name || g._id, value: g._id })
             .sort((l, r) => l.sort.localeCompare(r.sort)),
 )
+
+export const getGenreEdit = createSelector(
+    (state: IClientState) => state.genre.workingCopy,
+    (state: IClientState) => state.genre.selected,
+    getGenreMap,
+    (edit, selected, map): IGenre => edit || map[selected],
+)

@@ -59,3 +59,10 @@ export const getAllLanguageOptions = createSelector(
             .map(l => <DropdownItemProps>{ key: l._id, sort: l.name || l._id, text: l.name || l._id, value: l._id })
             .sort((l, r) => l.sort.localeCompare(r.sort)),
 )
+
+export const getLanguageEdit = createSelector(
+    (state: IClientState) => state.language.workingCopy,
+    (state: IClientState) => state.language.selected,
+    getLanguageMap,
+    (edit, selected, map): ILanguage => edit || map[selected],
+)

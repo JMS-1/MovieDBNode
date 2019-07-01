@@ -50,13 +50,13 @@ export const getSeriesMap = createSelector(
         }
 
         return map
-    }
+    },
 )
 
 export const getSeriesChildMap = createSelector(
     (state: IClientState) => state.series.all,
     getSeriesMap,
-    (all, lookup): ITreeStructure => sortChildMap(createChildMap(all), lookup)
+    (all, lookup): ITreeStructure => sortChildMap(createChildMap(all), lookup),
 )
 
 function buildOptions(scope: string, list: DropdownItemProps[], tree: ITreeStructure, lookup: ISeriesMap): void {
@@ -80,7 +80,7 @@ export const getSeriesOptions = createSelector(
         buildOptions('', list, tree, map)
 
         return list
-    }
+    },
 )
 
 export const getFilteredSeriesChildMap = createSelector(
@@ -95,5 +95,12 @@ export const getFilteredSeriesChildMap = createSelector(
         }
 
         return sortChildMap(map, lookup)
-    }
+    },
+)
+
+export const getSeriesEdit = createSelector(
+    (state: IClientState) => state.series.workingCopy,
+    (state: IClientState) => state.series.selected,
+    getSeriesMap,
+    (edit, selected, map): ISeries => edit || (map[selected] && map[selected].raw),
 )

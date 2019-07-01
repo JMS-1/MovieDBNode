@@ -14,9 +14,9 @@ export class SeriesActions {
         return { id, type: local.seriesActions.select }
     }
 
-    static setProperty<TProp extends keyof api.ILanguage>(
+    static setProperty<TProp extends keyof api.ISeries>(
         prop: TProp,
-        value: api.ILanguage[TProp],
+        value: api.ISeries[TProp],
     ): local.ISetSeriesProperty<TProp> {
         return { prop, value, type: local.seriesActions.setProp }
     }

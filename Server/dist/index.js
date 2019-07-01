@@ -492,6 +492,57 @@ class CContainerTextInput extends local.CTextInput {
         };
     }
 }
+class CGenreTextInput extends local.CTextInput {
+    static mapProps(state, props) {
+        const route = state.genre;
+        const genre = controller.getGenreEdit(state);
+        const value = genre && genre[props.prop];
+        return {
+            errors: controller.getErrors(route.validation, props.prop, genre),
+            label: state.mui.genre.edit[props.prop],
+            value: typeof value === 'string' ? value : undefined,
+        };
+    }
+    static mapActions(dispatch, props) {
+        return {
+            setValue: (prop, value) => dispatch(controller.GenreActions.setProperty(prop, value)),
+        };
+    }
+}
+class CSeriesTextInput extends local.CTextInput {
+    static mapProps(state, props) {
+        const route = state.genre;
+        const series = controller.getSeriesEdit(state);
+        const value = series && series[props.prop];
+        return {
+            errors: controller.getErrors(route.validation, props.prop, series),
+            label: state.mui.series.edit[props.prop],
+            value: typeof value === 'string' ? value : undefined,
+        };
+    }
+    static mapActions(dispatch, props) {
+        return {
+            setValue: (prop, value) => dispatch(controller.SeriesActions.setProperty(prop, value)),
+        };
+    }
+}
+class CLanguageTextInput extends local.CTextInput {
+    static mapProps(state, props) {
+        const route = state.genre;
+        const language = controller.getLanguageEdit(state);
+        const value = language && language[props.prop];
+        return {
+            errors: controller.getErrors(route.validation, props.prop, language),
+            label: state.mui.language.edit[props.prop],
+            value: typeof value === 'string' ? value : undefined,
+        };
+    }
+    static mapActions(dispatch, props) {
+        return {
+            setValue: (prop, value) => dispatch(controller.LanguageActions.setProperty(prop, value)),
+        };
+    }
+}
 class CRecordingTextInput extends local.CTextInput {
     static mapProps(state, props) {
         const route = state.recording;
@@ -510,6 +561,9 @@ class CRecordingTextInput extends local.CTextInput {
     }
 }
 exports.ContainerTextInput = react_redux_1.connect(CContainerTextInput.mapProps, CContainerTextInput.mapActions)(CContainerTextInput);
+exports.GenreTextInput = react_redux_1.connect(CGenreTextInput.mapProps, CGenreTextInput.mapActions)(CGenreTextInput);
+exports.LanguageTextInput = react_redux_1.connect(CLanguageTextInput.mapProps, CLanguageTextInput.mapActions)(CLanguageTextInput);
+exports.SeriesTextInput = react_redux_1.connect(CSeriesTextInput.mapProps, CSeriesTextInput.mapActions)(CSeriesTextInput);
 exports.RecordingTextInput = react_redux_1.connect(CRecordingTextInput.mapProps, CRecordingTextInput.mapActions)(CRecordingTextInput);
 
 
@@ -1174,6 +1228,7 @@ exports.getGenreOptions = reselect_1.createSelector((state) => state.genre.all, 
 exports.getAllGenreOptions = reselect_1.createSelector((state) => state.genre.all, (all) => all
     .map(g => ({ key: g._id, sort: g.name || g._id, text: g.name || g._id, value: g._id }))
     .sort((l, r) => l.sort.localeCompare(r.sort)));
+exports.getGenreEdit = reselect_1.createSelector((state) => state.genre.workingCopy, (state) => state.genre.selected, exports.getGenreMap, (edit, selected, map) => edit || map[selected]);
 
 
 /***/ }),
@@ -1350,6 +1405,7 @@ exports.getLanguageOptions = reselect_1.createSelector((state) => state.language
 exports.getAllLanguageOptions = reselect_1.createSelector((state) => state.language.all, (all) => all
     .map(l => ({ key: l._id, sort: l.name || l._id, text: l.name || l._id, value: l._id }))
     .sort((l, r) => l.sort.localeCompare(r.sort)));
+exports.getLanguageEdit = reselect_1.createSelector((state) => state.language.workingCopy, (state) => state.language.selected, exports.getLanguageMap, (edit, selected, map) => edit || map[selected]);
 
 
 /***/ }),
@@ -1424,9 +1480,19 @@ function getInitialState() {
         },
         create: 'Neu anlegen',
         genre: {
+            edit: {
+                _id: 'Eindeutige Kennung',
+                name: 'Kategorie',
+            },
+            noId: '(noch keine)',
             noSelect: '(alle Kategorien)',
         },
         language: {
+            edit: {
+                _id: 'Eindeutige Kennung',
+                name: 'Sprache',
+            },
+            noId: '(noch keine)',
             noSelect: '(alle Sprachen)',
         },
         media: {
@@ -1495,6 +1561,13 @@ function getInitialState() {
         save: 'Speichern',
         search: 'Suche...',
         series: {
+            edit: {
+                _id: 'Eindeutige Kennung',
+                description: 'Beschreibung',
+                name: 'Name',
+                parentId: 'Übergeordnete Serie',
+            },
+            noId: '(noch keine)',
             noSelect: '(alle Serien)',
         },
         validationError: 'Bitte Eingaben kontrollieren',
@@ -2031,6 +2104,7 @@ exports.getFilteredSeriesChildMap = reselect_1.createSelector((state) => state.s
     }
     return utils_1.sortChildMap(map, lookup);
 });
+exports.getSeriesEdit = reselect_1.createSelector((state) => state.series.workingCopy, (state) => state.series.selected, exports.getSeriesMap, (edit, selected, map) => edit || (map[selected] && map[selected].raw));
 
 
 /***/ }),
@@ -2342,9 +2416,23 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CGenreDetails extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-genre-details' }, "[DETAILS]");
+        if (this.props.lost) {
+            return null;
+        }
+        const { hasChanges, hasError, realId } = this.props;
+        return (React.createElement("div", { className: 'movie-db-genre-details' },
+            React.createElement(semantic_ui_react_1.Button.Group, null,
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
+            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.idLabel),
+                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: realId || '', readOnly: true, disabled: true })),
+                React.createElement(textInputRedux_1.GenreTextInput, { prop: 'name', required: true }))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);
@@ -2374,11 +2462,26 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/genre/details/details.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    const mui = state.mui.genre;
+    const emui = mui.edit;
+    const route = state.genre;
+    const genre = controller_1.getGenreEdit(state);
+    const errors = route.validation;
+    return {
+        cancelLabel: genre && genre._id ? state.mui.cancel : state.mui.reset,
+        hasChanges: !!route.workingCopy,
+        hasError: errors && errors.length > 0,
+        idLabel: emui._id,
+        lost: !genre,
+        realId: (genre && genre._id) || mui.noId,
+        saveLabel: state.mui.save,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
+        cancel: () => dispatch(controller_1.GenreActions.cancelEdit()),
         loadDetails: id => dispatch(controller_1.GenreActions.select(id)),
+        save: () => dispatch(controller_1.GenreActions.save()),
     };
 }
 exports.GenreDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CGenreDetails);
@@ -2450,9 +2553,23 @@ exports.GenreRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CLanguageDetails extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-language-details' }, "[DETAILS]");
+        if (this.props.lost) {
+            return null;
+        }
+        const { hasChanges, hasError, realId } = this.props;
+        return (React.createElement("div", { className: 'movie-db-language-details' },
+            React.createElement(semantic_ui_react_1.Button.Group, null,
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
+            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+                React.createElement(semantic_ui_react_1.Form.Field, null,
+                    React.createElement("label", null, this.props.idLabel),
+                    React.createElement(semantic_ui_react_1.Input, { input: 'text', value: realId || '', readOnly: true, disabled: true })),
+                React.createElement(textInputRedux_1.LanguageTextInput, { prop: 'name', required: true }))));
     }
     componentWillMount() {
         this.props.loadDetails(this.props.id);
@@ -2482,11 +2599,26 @@ const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/rea
 const local = __webpack_require__(/*! ./details */ "./Client/src/routes/language/details/details.tsx");
 const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    const mui = state.mui.language;
+    const emui = mui.edit;
+    const route = state.language;
+    const language = controller_1.getLanguageEdit(state);
+    const errors = route.validation;
+    return {
+        cancelLabel: language && language._id ? state.mui.cancel : state.mui.reset,
+        hasChanges: !!route.workingCopy,
+        hasError: errors && errors.length > 0,
+        idLabel: emui._id,
+        lost: !language,
+        realId: (language && language._id) || mui.noId,
+        saveLabel: state.mui.save,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
+        cancel: () => dispatch(controller_1.LanguageActions.cancelEdit()),
         loadDetails: id => dispatch(controller_1.LanguageActions.select(id)),
+        save: () => dispatch(controller_1.LanguageActions.save()),
     };
 }
 exports.LanguageDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CLanguageDetails);
@@ -69430,7 +69562,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

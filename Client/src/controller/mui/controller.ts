@@ -44,9 +44,19 @@ export function getInitialState(): IMuiState {
         },
         create: 'Neu anlegen',
         genre: {
+            edit: {
+                _id: 'Eindeutige Kennung',
+                name: 'Kategorie',
+            },
+            noId: '(noch keine)',
             noSelect: '(alle Kategorien)',
         },
         language: {
+            edit: {
+                _id: 'Eindeutige Kennung',
+                name: 'Sprache',
+            },
+            noId: '(noch keine)',
             noSelect: '(alle Sprachen)',
         },
         media: {
@@ -115,6 +125,13 @@ export function getInitialState(): IMuiState {
         save: 'Speichern',
         search: 'Suche...',
         series: {
+            edit: {
+                _id: 'Eindeutige Kennung',
+                description: 'Beschreibung',
+                name: 'Name',
+                parentId: 'Übergeordnete Serie',
+            },
+            noId: '(noch keine)',
             noSelect: '(alle Serien)',
         },
         validationError: 'Bitte Eingaben kontrollieren',
