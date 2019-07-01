@@ -33,7 +33,6 @@ export interface IRootProps {
 
 export interface IRootActions {
     clearErrors(): void
-    goto(path: string): void
 }
 
 export type TRootProps = IRootProps & IRootUiProps & IRootActions
@@ -67,19 +66,19 @@ export class CRoot extends React.PureComponent<TRootProps> {
                     </Message>
                 </Dimmer>
                 <Menu borderless>
-                    <Menu.Item active={recording} onClick={recording ? undefined : this.gotoRecordings}>
+                    <Menu.Item active={recording} as='a' href={recording ? undefined : `#${routes.recording}`}>
                         {this.props.recordingRoute}
                     </Menu.Item>
-                    <Menu.Item active={series} onClick={series ? undefined : this.gotoSeries}>
+                    <Menu.Item active={series} as='a' href={series ? undefined : `#${routes.series}`}>
                         {this.props.seriesRoute}
                     </Menu.Item>
-                    <Menu.Item active={container} onClick={container ? undefined : this.gotoContainer}>
+                    <Menu.Item active={container} as='a' href={container ? undefined : `#${routes.container}`}>
                         {this.props.containerRoute}
                     </Menu.Item>
-                    <Menu.Item active={language} onClick={language ? undefined : this.gotoLanguage}>
+                    <Menu.Item active={language} as='a' href={language ? undefined : `#${routes.language}`}>
                         {this.props.languageRoute}
                     </Menu.Item>
-                    <Menu.Item active={genre} onClick={genre ? undefined : this.gotoGenre}>
+                    <Menu.Item active={genre} as='a' href={genre ? undefined : `#${routes.genre}`}>
                         {this.props.genreRoute}
                     </Menu.Item>
                     <Menu.Item active={create}>
@@ -116,14 +115,4 @@ export class CRoot extends React.PureComponent<TRootProps> {
             </div>
         )
     }
-
-    private readonly gotoContainer = (): void => this.props.goto(routes.container)
-
-    private readonly gotoRecordings = (): void => this.props.goto(routes.recording)
-
-    private readonly gotoSeries = (): void => this.props.goto(routes.series)
-
-    private readonly gotoLanguage = (): void => this.props.goto(routes.language)
-
-    private readonly gotoGenre = (): void => this.props.goto(routes.genre)
 }

@@ -1,4 +1,3 @@
-import { routerActions } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
 
@@ -35,7 +34,6 @@ function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.
 function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRootUiProps): local.IRootActions {
     return {
         clearErrors: () => dispatch(ApplicationActions.clearErrors()),
-        goto: path => dispatch(routerActions.push(path)),
     }
 }
 

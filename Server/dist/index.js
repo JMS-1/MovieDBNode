@@ -255,14 +255,6 @@ const detailsRedux_1 = __webpack_require__(/*! ../../routes/recording/details/de
 const recordingRedux_1 = __webpack_require__(/*! ../../routes/recording/recordingRedux */ "./Client/src/routes/recording/recordingRedux.ts");
 const seriesRedux_1 = __webpack_require__(/*! ../../routes/series/seriesRedux */ "./Client/src/routes/series/seriesRedux.ts");
 class CRoot extends React.PureComponent {
-    constructor() {
-        super(...arguments);
-        this.gotoContainer = () => this.props.goto("/container");
-        this.gotoRecordings = () => this.props.goto("/recording");
-        this.gotoSeries = () => this.props.goto("/series");
-        this.gotoLanguage = () => this.props.goto("/language");
-        this.gotoGenre = () => this.props.goto("/genre");
-    }
     render() {
         const { errors, busy, path } = this.props;
         const createContainer = path === `${"/container"}/NEW`;
@@ -283,11 +275,11 @@ class CRoot extends React.PureComponent {
                     React.createElement(semantic_ui_react_1.Header, null, this.props.title),
                     React.createElement(semantic_ui_react_1.Message.List, null, errors.map((e, i) => (React.createElement(semantic_ui_react_1.Message.Item, { key: i }, e)))))),
             React.createElement(semantic_ui_react_1.Menu, { borderless: true },
-                React.createElement(semantic_ui_react_1.Menu.Item, { active: recording, onClick: recording ? undefined : this.gotoRecordings }, this.props.recordingRoute),
-                React.createElement(semantic_ui_react_1.Menu.Item, { active: series, onClick: series ? undefined : this.gotoSeries }, this.props.seriesRoute),
-                React.createElement(semantic_ui_react_1.Menu.Item, { active: container, onClick: container ? undefined : this.gotoContainer }, this.props.containerRoute),
-                React.createElement(semantic_ui_react_1.Menu.Item, { active: language, onClick: language ? undefined : this.gotoLanguage }, this.props.languageRoute),
-                React.createElement(semantic_ui_react_1.Menu.Item, { active: genre, onClick: genre ? undefined : this.gotoGenre }, this.props.genreRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: recording, as: 'a', href: recording ? undefined : `#${"/recording"}` }, this.props.recordingRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: series, as: 'a', href: series ? undefined : `#${"/series"}` }, this.props.seriesRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: container, as: 'a', href: container ? undefined : `#${"/container"}` }, this.props.containerRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: language, as: 'a', href: language ? undefined : `#${"/language"}` }, this.props.languageRoute),
+                React.createElement(semantic_ui_react_1.Menu.Item, { active: genre, as: 'a', href: genre ? undefined : `#${"/genre"}` }, this.props.genreRoute),
                 React.createElement(semantic_ui_react_1.Menu.Item, { active: create },
                     React.createElement(semantic_ui_react_1.Dropdown, { text: this.props.createRoute },
                         React.createElement(semantic_ui_react_1.Dropdown.Menu, null,
@@ -321,7 +313,6 @@ exports.CRoot = CRoot;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./root */ "./Client/src/components/root/root.tsx");
 const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
@@ -350,7 +341,6 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, props) {
     return {
         clearErrors: () => dispatch(controller_1.ApplicationActions.clearErrors()),
-        goto: path => dispatch(connected_react_router_1.routerActions.push(path)),
     };
 }
 exports.Root = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRoot);
@@ -69035,7 +69025,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
