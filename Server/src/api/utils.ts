@@ -1,16 +1,14 @@
 import { Request, Response, Router } from 'express'
 import { v4 as uuid } from 'uuid'
 
-import {
-    IApiDeleteResponse, IApiQueryResponse, IApiUpdateResponse, IValidationError, TItem,
-} from 'movie-db-api'
+import * as movieDbApi from 'movie-db-api'
 
 import { apiError, getError } from '../utils'
 
 export function processApiRequest<TResponse, TRequest = {}>(
     processor: (body?: TRequest) => TResponse | Promise<TResponse>,
     request: Request,
-    response: Response
+    response: Response,
 ): void {
     function onError(error: any): void {
         const message = getError(error)
@@ -42,48 +40,48 @@ export function processApiRequest<TResponse, TRequest = {}>(
 }
 
 interface IApiCollection<TDbItem> {
-    deleteOne(id: string): Promise<IValidationError[]>
+    deleteOne(id: string): Promise<movieDbApi.IValidationError[]>
     find(): Promise<TDbItem[]>
-    findOneAndReplace(item: TDbItem): Promise<IValidationError[]>
-    insertOne(item: TDbItem): Promise<IValidationError[]>
+    findOneAndReplace(item: TDbItem): Promise<movieDbApi.IValidationError[]>
+    insertOne(item: TDbItem): Promise<movieDbApi.IValidationError[]>
 }
 
-class Api<TNewItem, TFullItem extends TItem<TNewItem>, TDbItem> {
+class Api<TNewItem, TFullItem extends movieDbApi.TItem<TNewItem>, TDbItem> {
     constructor(
         private readonly _path: string,
         private readonly _db: IApiCollection<TDbItem>,
         private readonly _toProtocol: (dbItem: TDbItem) => TFullItem,
-        private readonly _toEntity: (item: TNewItem, id: string) => TDbItem
+        private readonly _toEntity: (item: TNewItem, id: string) => TDbItem,
     ) {}
 
-    private readonly query = async (): Promise<IApiQueryResponse<TFullItem>> => {
+    private readonly query = async (): Promise<movieDbApi.IApiQueryResponse<TFullItem>> => {
         const list = await this._db.find()
 
-        return <IApiQueryResponse<TFullItem>>{
+        return <movieDbApi.IApiQueryResponse<TFullItem>>{
             list: list.map(this._toProtocol),
         }
     }
 
-    private readonly create = async (item: TNewItem): Promise<IApiUpdateResponse<TFullItem>> => {
+    private readonly create = async (item: TNewItem): Promise<movieDbApi.IApiUpdateResponse<TFullItem>> => {
         const dbItem = this._toEntity(item, uuid())
 
-        return <IApiUpdateResponse<TFullItem>>{
+        return <movieDbApi.IApiUpdateResponse<TFullItem>>{
             item: this._toProtocol(dbItem),
             errors: await this._db.insertOne(dbItem),
         }
     }
 
-    private readonly update = async (item: TNewItem, id: string): Promise<IApiUpdateResponse<TFullItem>> => {
+    private readonly update = async (item: TNewItem, id: string): Promise<movieDbApi.IApiUpdateResponse<TFullItem>> => {
         const dbItem = this._toEntity(item, id)
 
-        return <IApiUpdateResponse<TFullItem>>{
+        return <movieDbApi.IApiUpdateResponse<TFullItem>>{
             item: this._toProtocol(dbItem),
             errors: await this._db.findOneAndReplace(dbItem),
         }
     }
 
-    private readonly remove = async (id: string): Promise<IApiDeleteResponse> => {
-        return <IApiDeleteResponse>{
+    private readonly remove = async (id: string): Promise<movieDbApi.IApiDeleteResponse> => {
+        return <movieDbApi.IApiDeleteResponse>{
             id,
             errors: await this._db.deleteOne(id),
         }
@@ -93,21 +91,19 @@ class Api<TNewItem, TFullItem extends TItem<TNewItem>, TDbItem> {
         return Router().use(
             this._path,
             Router()
+                .delete('/:id', (req, res) => processApiRequest(() => this.remove(req.params.id), req, res))
                 .get('/', (req, res) => processApiRequest(this.query, req, res))
                 .post('/', (req, res) => processApiRequest(this.create, req, res))
-                .delete('/:id', (req, res) => processApiRequest(async () => this.remove(req.params.id), req, res))
-                .put('/:id', (req, res) =>
-                    processApiRequest(async (item: TNewItem) => this.update(item, req.params.id), req, res)
-                )
+                .put('/:id', (req, res) => processApiRequest((i: TNewItem) => this.update(i, req.params.id), req, res)),
         )
     }
 }
 
-export function createApiRouter<TNewItem, TFullItem extends TItem<TNewItem>, TDbItem>(
+export function createApiRouter<TNewItem, TFullItem extends movieDbApi.TItem<TNewItem>, TDbItem>(
     path: string,
     db: IApiCollection<TDbItem>,
     toProtocol: (dbItem: TDbItem) => TFullItem,
-    toEntity: (item: TNewItem, id: string) => TDbItem
+    toEntity: (item: TNewItem, id: string) => TDbItem,
 ): Router {
     const api = new Api(path, db, toProtocol, toEntity)
 
