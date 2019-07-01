@@ -84,12 +84,40 @@ declare module 'movie-db-api' {
         _id: string
     }
 
+    interface IGenreResponse {
+        genres: IGenre[]
+    }
+
+    interface IUpdateGenreResponse {
+        genre: IGenre
+        errors: IValidationError[]
+    }
+
+    interface IDeleteGenreResponse {
+        errors: IValidationError[]
+        id: string
+    }
+
     interface INewLanguage {
         name: string
     }
 
     interface ILanguage extends INewLanguage {
         _id: string
+    }
+
+    interface ILanguageResponse {
+        languages: ILanguage[]
+    }
+
+    interface IUpdateLanguageResponse {
+        language: ILanguage
+        errors: IValidationError[]
+    }
+
+    interface IDeleteLanguageResponse {
+        errors: IValidationError[]
+        id: string
     }
 
     interface INewSeries {
@@ -102,16 +130,18 @@ declare module 'movie-db-api' {
         _id: string
     }
 
-    interface IGenreResponse {
-        genres: IGenre[]
-    }
-
-    interface ILanguageResponse {
-        languages: ILanguage[]
-    }
-
     interface ISeriesResponse {
         series: ISeries[]
+    }
+
+    interface IUpdateSeriesResponse {
+        series: ISeries
+        errors: IValidationError[]
+    }
+
+    interface IDeleteSeriesResponse {
+        errors: IValidationError[]
+        id: string
     }
 
     type TRecordingSort = 'fullName' | 'created'
