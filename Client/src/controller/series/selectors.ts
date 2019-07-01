@@ -2,7 +2,9 @@ import { createSelector } from 'reselect'
 import { DropdownItemProps } from 'semantic-ui-react'
 
 import { ISeries } from 'movie-db-api'
-import { IClientState, Separators } from 'movie-db-client'
+import { IClientState, ITreeStructure, Separators } from 'movie-db-client'
+
+import { createChildMap, filterChildMap, sortChildMap } from '../utils'
 
 export interface ISeriesInfo {
     name: string
@@ -12,10 +14,6 @@ export interface ISeriesInfo {
 
 export interface ISeriesMap {
     [id: string]: ISeriesInfo
-}
-
-export interface ISeriesChildMap {
-    [id: string]: string[]
 }
 
 function processSeries(id: string, map: ISeriesMap): ISeriesInfo {
@@ -52,43 +50,16 @@ export const getSeriesMap = createSelector(
         }
 
         return map
-    },
+    }
 )
 
 export const getSeriesChildMap = createSelector(
     (state: IClientState) => state.series.all,
     getSeriesMap,
-    (all, lookup): ISeriesChildMap => {
-        const map: ISeriesChildMap = {}
-
-        for (let container of all) {
-            const parentId = container.parentId || ''
-
-            let parentInfo = map[parentId]
-
-            if (!parentInfo) {
-                map[parentId] = parentInfo = []
-            }
-
-            parentInfo.push(container._id)
-        }
-
-        for (let children of Object.values(map)) {
-            children.sort((l, r) => {
-                const left = lookup[l]
-                const right = lookup[r]
-
-                return ((left && left.raw.name) || left.raw._id).localeCompare(
-                    (right && right.raw.name) || right.raw._id,
-                )
-            })
-        }
-
-        return map
-    },
+    (all, lookup): ITreeStructure => sortChildMap(createChildMap(all), lookup)
 )
 
-function buildOptions(scope: string, list: DropdownItemProps[], tree: ISeriesChildMap, lookup: ISeriesMap): void {
+function buildOptions(scope: string, list: DropdownItemProps[], tree: ITreeStructure, lookup: ISeriesMap): void {
     const children = (tree[scope] || []).map(id => lookup[id]).filter(s => s)
 
     for (let child of children) {
@@ -109,5 +80,20 @@ export const getSeriesOptions = createSelector(
         buildOptions('', list, tree, map)
 
         return list
-    },
+    }
+)
+
+export const getFilteredSeriesChildMap = createSelector(
+    (state: IClientState) => state.series.all,
+    (state: IClientState) => state.series.filter,
+    getSeriesMap,
+    (all, filter, lookup): ITreeStructure => {
+        const map = createChildMap(all)
+
+        if (filter) {
+            filterChildMap(map, '', filter.toLocaleLowerCase(), lookup)
+        }
+
+        return sortChildMap(map, lookup)
+    }
 )

@@ -22,7 +22,7 @@ export class CContainerRoute extends React.PureComponent<TContainerRouteProps> {
 
         return (
             <div className='movie-db-container-route movie-db-route'>
-                <ContainerTree detail={id} />
+                <ContainerTree id={id} />
                 <ContainerDetails id={id} />
             </div>
         )

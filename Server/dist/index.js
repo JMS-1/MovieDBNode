@@ -402,6 +402,17 @@ function mapContainerActions(dispatch, props) {
         setText: text => dispatch(controller_1.ContainerActions.setFilter(text)),
     };
 }
+function mapSeriesProps(state, props) {
+    return {
+        hint: state.mui.search,
+        text: state.series.filter,
+    };
+}
+function mapSeriesActions(dispatch, props) {
+    return {
+        setText: text => dispatch(controller_1.SeriesActions.setFilter(text)),
+    };
+}
 function mapRecordingProps(state, props) {
     return {
         hint: state.mui.search,
@@ -414,6 +425,7 @@ function mapRecordingActions(dispatch, props) {
     };
 }
 exports.ContainerSearch = react_redux_1.connect(mapContainerProps, mapContainerActions)(local.CSearch);
+exports.SeriesSearch = react_redux_1.connect(mapSeriesProps, mapSeriesActions)(local.CSearch);
 exports.RecordingSearch = react_redux_1.connect(mapRecordingProps, mapRecordingActions)(local.CSearch);
 
 
@@ -499,6 +511,81 @@ class CRecordingTextInput extends local.CTextInput {
 }
 exports.ContainerTextInput = react_redux_1.connect(CContainerTextInput.mapProps, CContainerTextInput.mapActions)(CContainerTextInput);
 exports.RecordingTextInput = react_redux_1.connect(CRecordingTextInput.mapProps, CRecordingTextInput.mapActions)(CRecordingTextInput);
+
+
+/***/ }),
+
+/***/ "./Client/src/components/tree/level.tsx":
+/*!**********************************************!*\
+  !*** ./Client/src/components/tree/level.tsx ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+class CNode extends React.PureComponent {
+    render() {
+        const { name, scope, type } = this.props;
+        return (React.createElement(semantic_ui_react_1.List, { className: 'movie-db-tree-level' },
+            name && (React.createElement(semantic_ui_react_1.Label, { as: 'a', active: scope === this.props.detail, href: `#${this.props.route}/${scope}` },
+                type && React.createElement(semantic_ui_react_1.Icon, { name: type }),
+                name)),
+            this.props.list));
+    }
+}
+exports.CNode = CNode;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/tree/levelRedux.tsx":
+/*!***************************************************!*\
+  !*** ./Client/src/components/tree/levelRedux.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./level */ "./Client/src/components/tree/level.tsx");
+const controller = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
+const noChildren = [];
+exports.ContainerNode = react_redux_1.connect(mapContainerProps, mapContainerActions)(local.CNode);
+function mapContainerProps(state, props) {
+    const container = controller.getContainerMap(state)[props.scope];
+    const list = controller.getFilteredContainerChildMap(state)[props.scope] || noChildren;
+    const type = state.mui.container.types[container && container.raw.type];
+    return {
+        list: list.map(id => React.createElement(exports.ContainerNode, { key: id, scope: id, detail: props.detail })),
+        name: (container && container.raw.name) || props.scope,
+        route: "/container",
+        type: (type && type.icon) || 'help',
+    };
+}
+function mapContainerActions(dispatch, props) {
+    return {};
+}
+exports.SeriesNode = react_redux_1.connect(mapSeriesProps, mapSeriesActions)(local.CNode);
+function mapSeriesProps(state, props) {
+    const series = controller.getSeriesMap(state)[props.scope];
+    const list = controller.getFilteredSeriesChildMap(state)[props.scope] || noChildren;
+    return {
+        list: list.map(id => React.createElement(exports.SeriesNode, { key: id, scope: id, detail: props.detail })),
+        name: (series && series.raw.name) || props.scope,
+        route: "/series",
+        type: undefined,
+    };
+}
+function mapSeriesActions(dispatch, props) {
+    return {};
+}
 
 
 /***/ }),
@@ -746,6 +833,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const utils_1 = __webpack_require__(/*! ../utils */ "./Client/src/controller/utils.ts");
 function getFullContainerName(id, map) {
     const info = map[id];
     if (!info) {
@@ -772,42 +860,12 @@ exports.getContainerMap = reselect_1.createSelector((state) => state.container.a
     }
     return map;
 });
-function filterChildMap(map, scope, filter, lookup) {
-    const children = map[scope] || [];
-    for (let child of children) {
-        filterChildMap(map, child, filter, lookup);
-    }
-    map[scope] = children.filter(c => map[c]);
-    if (map[scope].length > 0) {
-        return;
-    }
-    const self = lookup[scope];
-    const name = self && self.raw.name && self.raw.name.toLocaleLowerCase();
-    if (!name || name.indexOf(filter) < 0) {
-        delete map[scope];
-    }
-}
 exports.getFilteredContainerChildMap = reselect_1.createSelector((state) => state.container.all, (state) => state.container.filter, exports.getContainerMap, (all, filter, lookup) => {
-    const map = {};
-    for (let container of all) {
-        const parentId = container.parentId || '';
-        let parentInfo = map[parentId];
-        if (!parentInfo) {
-            map[parentId] = parentInfo = [];
-        }
-        parentInfo.push(container._id);
-    }
+    const map = utils_1.createChildMap(all);
     if (filter) {
-        filterChildMap(map, '', filter.toLocaleLowerCase(), lookup);
+        utils_1.filterChildMap(map, '', filter.toLocaleLowerCase(), lookup);
     }
-    for (let children of Object.values(map)) {
-        children.sort((l, r) => {
-            const left = lookup[l];
-            const right = lookup[r];
-            return ((left && left.raw.name) || left.raw._id).localeCompare((right && right.raw.name) || right.raw._id);
-        });
-    }
-    return map;
+    return utils_1.sortChildMap(map, lookup);
 });
 exports.getContainerEdit = reselect_1.createSelector((state) => state.container.workingCopy, (state) => state.container.selected, exports.getContainerMap, (edit, selected, map) => edit || (map[selected] && map[selected].raw));
 const optionOrder = [
@@ -1730,6 +1788,9 @@ class SeriesActions {
     static load(response) {
         return { series: response.list, type: "movie-db.series.load" };
     }
+    static setFilter(filter) {
+        return { filter, type: "movie-db.series.set-filter" };
+    }
 }
 exports.SeriesActions = SeriesActions;
 
@@ -1750,16 +1811,24 @@ const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/cont
 const controller = new (class extends controller_1.Controller {
     getReducerMap() {
         return {
+            ["movie-db.series.set-filter"]: this.setFilter,
             ["movie-db.series.load"]: this.load,
         };
     }
     getInitialState() {
         return {
             all: [],
+            filter: '',
         };
     }
     load(state, response) {
         return Object.assign({}, state, { all: response.series || [] });
+    }
+    setFilter(state, request) {
+        if (request.filter === state.filter) {
+            return state;
+        }
+        return Object.assign({}, state, { filter: request.filter });
     }
 })();
 exports.SeriesReducer = controller.reducer;
@@ -1798,6 +1867,7 @@ __export(__webpack_require__(/*! ./selectors */ "./Client/src/controller/series/
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+const utils_1 = __webpack_require__(/*! ../utils */ "./Client/src/controller/utils.ts");
 function processSeries(id, map) {
     const info = map[id];
     if (info && !info.name) {
@@ -1824,25 +1894,7 @@ exports.getSeriesMap = reselect_1.createSelector((state) => state.series.all, (a
     }
     return map;
 });
-exports.getSeriesChildMap = reselect_1.createSelector((state) => state.series.all, exports.getSeriesMap, (all, lookup) => {
-    const map = {};
-    for (let container of all) {
-        const parentId = container.parentId || '';
-        let parentInfo = map[parentId];
-        if (!parentInfo) {
-            map[parentId] = parentInfo = [];
-        }
-        parentInfo.push(container._id);
-    }
-    for (let children of Object.values(map)) {
-        children.sort((l, r) => {
-            const left = lookup[l];
-            const right = lookup[r];
-            return ((left && left.raw.name) || left.raw._id).localeCompare((right && right.raw.name) || right.raw._id);
-        });
-    }
-    return map;
-});
+exports.getSeriesChildMap = reselect_1.createSelector((state) => state.series.all, exports.getSeriesMap, (all, lookup) => utils_1.sortChildMap(utils_1.createChildMap(all), lookup));
 function buildOptions(scope, list, tree, lookup) {
     const children = (tree[scope] || []).map(id => lookup[id]).filter(s => s);
     for (let child of children) {
@@ -1856,6 +1908,67 @@ exports.getSeriesOptions = reselect_1.createSelector(exports.getSeriesChildMap, 
     buildOptions('', list, tree, map);
     return list;
 });
+exports.getFilteredSeriesChildMap = reselect_1.createSelector((state) => state.series.all, (state) => state.series.filter, exports.getSeriesMap, (all, filter, lookup) => {
+    const map = utils_1.createChildMap(all);
+    if (filter) {
+        utils_1.filterChildMap(map, '', filter.toLocaleLowerCase(), lookup);
+    }
+    return utils_1.sortChildMap(map, lookup);
+});
+
+
+/***/ }),
+
+/***/ "./Client/src/controller/utils.ts":
+/*!****************************************!*\
+  !*** ./Client/src/controller/utils.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function filterChildMap(map, scope, filter, lookup) {
+    const children = map[scope] || [];
+    for (let child of children) {
+        filterChildMap(map, child, filter, lookup);
+    }
+    map[scope] = children.filter(c => map[c]);
+    if (map[scope].length > 0) {
+        return;
+    }
+    const self = lookup[scope];
+    const name = self && self.raw.name && self.raw.name.toLocaleLowerCase();
+    if (!name || name.indexOf(filter) < 0) {
+        delete map[scope];
+    }
+}
+exports.filterChildMap = filterChildMap;
+function sortChildMap(map, lookup) {
+    for (let children of Object.values(map)) {
+        children.sort((l, r) => {
+            const left = lookup[l];
+            const right = lookup[r];
+            return ((left && left.raw.name) || left.raw._id).localeCompare((right && right.raw.name) || right.raw._id);
+        });
+    }
+    return map;
+}
+exports.sortChildMap = sortChildMap;
+function createChildMap(all) {
+    const map = {};
+    for (let series of all) {
+        const parentId = series.parentId || '';
+        let parentInfo = map[parentId];
+        if (!parentInfo) {
+            map[parentId] = parentInfo = [];
+        }
+        parentInfo.push(series._id);
+    }
+    return map;
+}
+exports.createChildMap = createChildMap;
 
 
 /***/ }),
@@ -1910,7 +2023,7 @@ class CContainerRoute extends React.PureComponent {
     render() {
         const { id } = this.props.match.params;
         return (React.createElement("div", { className: 'movie-db-container-route movie-db-route' },
-            React.createElement(treeRedux_1.ContainerTree, { detail: id }),
+            React.createElement(treeRedux_1.ContainerTree, { id: id }),
             React.createElement(detailsRedux_1.ContainerDetails, { id: id })));
     }
 }
@@ -2054,66 +2167,6 @@ exports.ContainerDetails = react_redux_1.connect(mapStateToProps, mapDispatchToP
 
 /***/ }),
 
-/***/ "./Client/src/routes/container/tree/level.tsx":
-/*!****************************************************!*\
-  !*** ./Client/src/routes/container/tree/level.tsx ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
-class CContainerNode extends React.PureComponent {
-    render() {
-        const { name, scope } = this.props;
-        return (React.createElement(semantic_ui_react_1.List, { className: 'movie-db-container-tree-level' },
-            name && (React.createElement(semantic_ui_react_1.Label, { as: 'a', active: scope === this.props.detail, href: `#${"/container"}/${scope}` },
-                React.createElement(semantic_ui_react_1.Icon, { name: this.props.type }),
-                name)),
-            this.props.list));
-    }
-}
-exports.CContainerNode = CContainerNode;
-
-
-/***/ }),
-
-/***/ "./Client/src/routes/container/tree/levelRedux.tsx":
-/*!*********************************************************!*\
-  !*** ./Client/src/routes/container/tree/levelRedux.tsx ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-const local = __webpack_require__(/*! ./level */ "./Client/src/routes/container/tree/level.tsx");
-const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
-const noChildren = [];
-exports.ContainerNode = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CContainerNode);
-function mapStateToProps(state, props) {
-    const container = controller_1.getContainerMap(state)[props.scope];
-    const list = controller_1.getFilteredContainerChildMap(state)[props.scope] || noChildren;
-    const type = state.mui.container.types[container && container.raw.type];
-    return {
-        list: list.map(id => React.createElement(exports.ContainerNode, { key: id, scope: id, detail: props.detail })),
-        name: (container && container.raw.name) || props.scope,
-        type: (type && type.icon) || 'help',
-    };
-}
-function mapDispatchToProps(dispatch, props) {
-    return {};
-}
-
-
-/***/ }),
-
 /***/ "./Client/src/routes/container/tree/tree.tsx":
 /*!***************************************************!*\
   !*** ./Client/src/routes/container/tree/tree.tsx ***!
@@ -2125,13 +2178,13 @@ function mapDispatchToProps(dispatch, props) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-const levelRedux_1 = __webpack_require__(/*! ./levelRedux */ "./Client/src/routes/container/tree/levelRedux.tsx");
 const searchRedux_1 = __webpack_require__(/*! ../../../components/search/searchRedux */ "./Client/src/components/search/searchRedux.ts");
+const levelRedux_1 = __webpack_require__(/*! ../../../components/tree/levelRedux */ "./Client/src/components/tree/levelRedux.tsx");
 class CContainerTree extends React.PureComponent {
     render() {
         return (React.createElement("div", { className: 'movie-db-container-tree' },
             React.createElement(searchRedux_1.ContainerSearch, null),
-            React.createElement(levelRedux_1.ContainerNode, { scope: '', detail: this.props.detail })));
+            React.createElement(levelRedux_1.ContainerNode, { scope: '', detail: this.props.id })));
     }
 }
 exports.CContainerTree = CContainerTree;
@@ -2778,6 +2831,50 @@ exports.PageSizeSelector = react_redux_1.connect(mapStateToProps, mapDispatchToP
 
 /***/ }),
 
+/***/ "./Client/src/routes/series/details/details.tsx":
+/*!******************************************************!*\
+  !*** ./Client/src/routes/series/details/details.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CSeriesDetails extends React.PureComponent {
+    render() {
+        return React.createElement("div", { className: 'movie-db-series-details' }, "[DETAILS]");
+    }
+}
+exports.CSeriesDetails = CSeriesDetails;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/series/details/detailsRedux.ts":
+/*!**********************************************************!*\
+  !*** ./Client/src/routes/series/details/detailsRedux.ts ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./details */ "./Client/src/routes/series/details/details.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.SeriesDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CSeriesDetails);
+
+
+/***/ }),
+
 /***/ "./Client/src/routes/series/series.tsx":
 /*!*********************************************!*\
   !*** ./Client/src/routes/series/series.tsx ***!
@@ -2789,9 +2886,13 @@ exports.PageSizeSelector = react_redux_1.connect(mapStateToProps, mapDispatchToP
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Client/src/routes/series/details/detailsRedux.ts");
+const treeRedux_1 = __webpack_require__(/*! ./tree/treeRedux */ "./Client/src/routes/series/tree/treeRedux.ts");
 class CSeriesRoute extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-series-route movie-db-route' }, "[SERIES]");
+        return (React.createElement("div", { className: 'movie-db-series-route movie-db-route' },
+            React.createElement(treeRedux_1.SeriesTree, { id: this.props.match.params.id }),
+            React.createElement(detailsRedux_1.SeriesDetails, { id: this.props.match.params.id })));
     }
 }
 exports.CSeriesRoute = CSeriesRoute;
@@ -2818,6 +2919,54 @@ function mapDispatchToProps(dispatch, props) {
     return {};
 }
 exports.SeriesRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CSeriesRoute);
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/series/tree/tree.tsx":
+/*!************************************************!*\
+  !*** ./Client/src/routes/series/tree/tree.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const searchRedux_1 = __webpack_require__(/*! ../../../components/search/searchRedux */ "./Client/src/components/search/searchRedux.ts");
+const levelRedux_1 = __webpack_require__(/*! ../../../components/tree/levelRedux */ "./Client/src/components/tree/levelRedux.tsx");
+class CSeriesTree extends React.PureComponent {
+    render() {
+        return (React.createElement("div", { className: 'movie-db-series-tree' },
+            React.createElement(searchRedux_1.SeriesSearch, null),
+            React.createElement(levelRedux_1.SeriesNode, { scope: '', detail: this.props.id })));
+    }
+}
+exports.CSeriesTree = CSeriesTree;
+
+
+/***/ }),
+
+/***/ "./Client/src/routes/series/tree/treeRedux.ts":
+/*!****************************************************!*\
+  !*** ./Client/src/routes/series/tree/treeRedux.ts ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./tree */ "./Client/src/routes/series/tree/tree.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.SeriesTree = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CSeriesTree);
 
 
 /***/ }),

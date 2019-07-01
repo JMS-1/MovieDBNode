@@ -62,4 +62,14 @@ declare module 'movie-db-client' {
         recording = '/recording',
         series = '/series',
     }
+
+    interface ITreeItem {
+        _id: string
+        name: string
+        parentId?: string
+    }
+
+    interface ITreeStructure {
+        [id: string]: string[]
+    }
 }

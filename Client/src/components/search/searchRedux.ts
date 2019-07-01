@@ -5,7 +5,7 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './search'
 
-import { ContainerActions, RecordingActions } from '../../controller'
+import { ContainerActions, RecordingActions, SeriesActions } from '../../controller'
 
 function mapContainerProps(state: IClientState, props: local.ISearchUiProps): local.ISearchProps {
     return {
@@ -17,6 +17,19 @@ function mapContainerProps(state: IClientState, props: local.ISearchUiProps): lo
 function mapContainerActions(dispatch: Dispatch<Action>, props: local.ISearchUiProps): local.ISearchActions {
     return {
         setText: text => dispatch(ContainerActions.setFilter(text)),
+    }
+}
+
+function mapSeriesProps(state: IClientState, props: local.ISearchUiProps): local.ISearchProps {
+    return {
+        hint: state.mui.search,
+        text: state.series.filter,
+    }
+}
+
+function mapSeriesActions(dispatch: Dispatch<Action>, props: local.ISearchUiProps): local.ISearchActions {
+    return {
+        setText: text => dispatch(SeriesActions.setFilter(text)),
     }
 }
 
@@ -36,6 +49,11 @@ function mapRecordingActions(dispatch: Dispatch<Action>, props: local.ISearchUiP
 export const ContainerSearch = connect(
     mapContainerProps,
     mapContainerActions,
+)(local.CSearch)
+
+export const SeriesSearch = connect(
+    mapSeriesProps,
+    mapSeriesActions,
 )(local.CSearch)
 
 export const RecordingSearch = connect(

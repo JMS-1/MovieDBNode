@@ -1,24 +1,34 @@
-import { IActionHandlerMap, ILoadSeries, ISeriesState, seriesActions } from 'movie-db-client'
+import * as local from 'movie-db-client'
 
 import { Controller } from '../controller'
 
-type TSeriesActions = ILoadSeries
+type TSeriesActions = local.ILoadSeries | local.ISetSeriesTreeFilter
 
-const controller = new (class extends Controller<TSeriesActions, ISeriesState> {
-    protected getReducerMap(): IActionHandlerMap<TSeriesActions, ISeriesState> {
+const controller = new (class extends Controller<TSeriesActions, local.ISeriesState> {
+    protected getReducerMap(): local.IActionHandlerMap<TSeriesActions, local.ISeriesState> {
         return {
-            [seriesActions.load]: this.load,
+            [local.seriesActions.filter]: this.setFilter,
+            [local.seriesActions.load]: this.load,
         }
     }
 
-    protected getInitialState(): ISeriesState {
+    protected getInitialState(): local.ISeriesState {
         return {
             all: [],
+            filter: '',
         }
     }
 
-    private load(state: ISeriesState, response: ILoadSeries): ISeriesState {
+    private load(state: local.ISeriesState, response: local.ILoadSeries): local.ISeriesState {
         return { ...state, all: response.series || [] }
+    }
+
+    private setFilter(state: local.ISeriesState, request: local.ISetSeriesTreeFilter): local.ISeriesState {
+        if (request.filter === state.filter) {
+            return state
+        }
+
+        return { ...state, filter: request.filter }
     }
 })()
 
