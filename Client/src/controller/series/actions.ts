@@ -3,6 +3,6 @@ import { ILoadSeries, seriesActions } from 'movie-db-client'
 
 export class SeriesActions {
     static load(response: ISeriesResponse): ILoadSeries {
-        return { series: response.series, type: seriesActions.load }
+        return { series: response.list, type: seriesActions.load }
     }
 }

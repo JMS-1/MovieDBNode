@@ -173,7 +173,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         const languageInfo = await me
             .aggregate<api.IQueryCountInfo>(
                 [...baseQuery, { $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
-                { collation },
+                { collation }
             )
             .toArray()
 
@@ -183,7 +183,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             genres: (firstRes && firstRes.genres) || [],
             languages: languageInfo || [],
             total: await me.countDocuments(),
-            view: (firstRes && firstRes.view) || [],
+            list: (firstRes && firstRes.view) || [],
         }
     }
 

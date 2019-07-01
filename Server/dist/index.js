@@ -605,7 +605,7 @@ __export(__webpack_require__(/*! ./controller */ "./Client/src/controller/app/co
 Object.defineProperty(exports, "__esModule", { value: true });
 class ContainerActions {
     static load(response) {
-        return { list: response.containers, type: "movie-db.containers.load" };
+        return { list: response.list, type: "movie-db.containers.load" };
     }
     static setFilter(filter) {
         return { filter, type: "movie-db.containers.set-filter" };
@@ -617,7 +617,7 @@ class ContainerActions {
         return { prop, value, type: "movie-db.containers.set-prop" };
     }
     static saveDone(response) {
-        return { item: response.container, errors: response.errors, type: "movie-db.containers.save-done" };
+        return { item: response.item, errors: response.errors, type: "movie-db.containers.save-done" };
     }
     static cancelEdit() {
         return { type: "movie-db.containers.cancel-edit" };
@@ -968,7 +968,7 @@ exports.EditController = EditController;
 Object.defineProperty(exports, "__esModule", { value: true });
 class GenreActions {
     static load(response) {
-        return { genres: response.genres, type: "movie-db.genres.load" };
+        return { genres: response.list, type: "movie-db.genres.load" };
     }
 }
 exports.GenreActions = GenreActions;
@@ -1106,7 +1106,7 @@ exports.getErrors = getErrors;
 Object.defineProperty(exports, "__esModule", { value: true });
 class LanguageActions {
     static load(response) {
-        return { languages: response.languages, type: "movie-db.languages.load" };
+        return { languages: response.list, type: "movie-db.languages.load" };
     }
 }
 exports.LanguageActions = LanguageActions;
@@ -1392,7 +1392,7 @@ class RecordingActions {
             count: response.count,
             genres: response.genres,
             languages: response.languages,
-            list: response.view,
+            list: response.list,
             total: response.total,
             type: "movie-db.recordings.query-done",
         };
@@ -1413,7 +1413,7 @@ class RecordingActions {
         return { prop, value, type: "movie-db.recordings.set-prop" };
     }
     static saveDone(response) {
-        return { item: response.recording, errors: response.errors, type: "movie-db.recordings.save-done" };
+        return { item: response.item, errors: response.errors, type: "movie-db.recordings.save-done" };
     }
     static startEdit(recording) {
         return { recording, type: "movie-db.recordings.start-edit" };
@@ -1705,7 +1705,7 @@ exports.getMediaTypeOptions = reselect_1.createSelector((state) => state.mui.med
 Object.defineProperty(exports, "__esModule", { value: true });
 class SeriesActions {
     static load(response) {
-        return { series: response.series, type: "movie-db.series.load" };
+        return { series: response.list, type: "movie-db.series.load" };
     }
 }
 exports.SeriesActions = SeriesActions;

@@ -11,14 +11,14 @@ exports.recordingApi = express_1.Router().use('/recording', express_1.Router()
     const recording = recording_1.toEntity(req, request.params.id, undefined);
     return {
         errors: await recording_1.recordingCollection.findOneAndReplace(recording),
-        recording: recording_1.toProtocol(recording),
+        item: recording_1.toProtocol(recording),
     };
 }, request, response))
     .post('/', (request, response, next) => utils_1.processApiRequest(async (req) => {
     const recording = recording_1.toEntity(req, uuid_1.v4(), new Date().toISOString());
     return {
         errors: await recording_1.recordingCollection.insertOne(recording),
-        recording: recording_1.toProtocol(recording),
+        item: recording_1.toProtocol(recording),
     };
 }, request, response)));
 

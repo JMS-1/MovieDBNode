@@ -143,7 +143,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             genres: (firstRes && firstRes.genres) || [],
             languages: languageInfo || [],
             total: await me.countDocuments(),
-            view: (firstRes && firstRes.view) || [],
+            list: (firstRes && firstRes.view) || [],
         };
     }
     async findOneAndReplace(recording) {

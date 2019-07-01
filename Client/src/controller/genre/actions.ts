@@ -3,6 +3,6 @@ import { genreActions, ILoadGenres } from 'movie-db-client'
 
 export class GenreActions {
     static load(response: IGenreResponse): ILoadGenres {
-        return { genres: response.genres, type: genreActions.load }
+        return { genres: response.list, type: genreActions.load }
     }
 }

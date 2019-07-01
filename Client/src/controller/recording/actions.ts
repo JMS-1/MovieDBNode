@@ -8,7 +8,7 @@ export class RecordingActions {
             count: response.count,
             genres: response.genres,
             languages: response.languages,
-            list: response.view,
+            list: response.list,
             total: response.total,
             type: local.recordingActions.queryDone,
         }
@@ -38,7 +38,7 @@ export class RecordingActions {
     }
 
     static saveDone(response: api.IUpdateRecordingResponse): local.IRecordingSaved {
-        return { item: response.recording, errors: response.errors, type: local.recordingActions.saveDone }
+        return { item: response.item, errors: response.errors, type: local.recordingActions.saveDone }
     }
 
     static startEdit(recording: api.IRecording): local.IStartRecordingEdit {
