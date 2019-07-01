@@ -78,9 +78,14 @@ body {
 .movie-db-genre-route {
   display: flex;
   flex-direction: row;
-  overflow: hidden; }
+  overflow: hidden;
+  padding: 0 0.5em 0.5em 0.5em; }
   .movie-db-genre-route > .movie-db-genre-list {
-    flex-shrink: 0; }
+    background: white;
+    flex-shrink: 0;
+    min-width: 10vw;
+    overflow: auto;
+    padding-right: 0.5em; }
   .movie-db-genre-route > .movie-db-genre-details {
     flex-grow: 1;
     flex-basis: 0; }
@@ -88,9 +93,14 @@ body {
 .movie-db-language-route {
   display: flex;
   flex-direction: row;
-  overflow: hidden; }
+  overflow: hidden;
+  padding: 0 0.5em 0.5em 0.5em; }
   .movie-db-language-route > .movie-db-language-list {
-    flex-shrink: 0; }
+    background: white;
+    flex-shrink: 0;
+    min-width: 10vw;
+    overflow: auto;
+    padding-right: 0.5em; }
   .movie-db-language-route > .movie-db-language-details {
     flex-grow: 1;
     flex-basis: 0; }
@@ -114,6 +124,12 @@ body {
   .movie-db-recording-route > .count,
   .movie-db-recording-route > .page-size {
     align-self: flex-start; }
+  .movie-db-recording-route > .pager {
+    display: flex;
+    flex-direction: row;
+    align-items: center; }
+    .movie-db-recording-route > .pager > .ui.menu {
+      margin-bottom: 0; }
   .movie-db-recording-route > .table {
     overflow: auto;
     margin-top: 0.5em; }

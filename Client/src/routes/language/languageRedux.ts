@@ -5,8 +5,13 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './language'
 
+import { getAllLanguageOptions } from '../../controller'
+
 function mapStateToProps(state: IClientState, props: local.ILanguageRouteUiProps): local.ILanguageRouteProps {
-    return {}
+    return {
+        languageOptions: getAllLanguageOptions(state),
+        selected: props.match.params.id,
+    }
 }
 
 function mapDispatchToProps(

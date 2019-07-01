@@ -2,9 +2,14 @@
     display: flex;
     flex-direction: row;
     overflow: hidden;
+    padding: 0 0.5em 0.5em 0.5em;
 
     > .movie-db-genre-list {
+        background: white;
         flex-shrink: 0;
+        min-width: 10vw;
+        overflow: auto;
+        padding-right: 0.5em;
     }
 
     > .movie-db-genre-details {

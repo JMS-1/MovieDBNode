@@ -5,8 +5,13 @@ import { IClientState } from 'movie-db-client'
 
 import * as local from './genre'
 
+import { getAllGenreOptions } from '../../controller'
+
 function mapStateToProps(state: IClientState, props: local.IGenreRouteUiProps): local.IGenreRouteProps {
-    return {}
+    return {
+        genreOptions: getAllGenreOptions(state),
+        selected: props.match.params.id,
+    }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IGenreRouteUiProps): local.IGenreRouteActions {

@@ -2226,9 +2226,14 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 class CGenreRoute extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-genre-route' }, "[GENRE]");
+        const { selected } = this.props;
+        return (React.createElement("div", { className: 'movie-db-genre-route movie-db-route' },
+            React.createElement("div", { className: 'movie-db-genre-list' },
+                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.genreOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === selected, as: 'a', href: `#${"/genre"}/${l.key}`, key: l.key }, l.text))))),
+            React.createElement("div", { className: 'movie-db-genre-details' }, "[DETAILS]")));
     }
 }
 exports.CGenreRoute = CGenreRoute;
@@ -2248,8 +2253,12 @@ exports.CGenreRoute = CGenreRoute;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./genre */ "./Client/src/routes/genre/genre.tsx");
+const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    return {
+        genreOptions: controller_1.getAllGenreOptions(state),
+        selected: props.match.params.id,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
     return {};
@@ -2270,9 +2279,14 @@ exports.GenreRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 class CLanguageRoute extends React.PureComponent {
     render() {
-        return React.createElement("div", { className: 'movie-db-language-route' }, "[LANGUAGE]");
+        const { selected } = this.props;
+        return (React.createElement("div", { className: 'movie-db-language-route movie-db-route' },
+            React.createElement("div", { className: 'movie-db-language-list' },
+                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.languageOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === selected, as: 'a', href: `#${"/language"}/${l.key}`, key: l.key }, l.text))))),
+            React.createElement("div", { className: 'movie-db-language-details' }, "[DETAILS]")));
     }
 }
 exports.CLanguageRoute = CLanguageRoute;
@@ -2292,8 +2306,12 @@ exports.CLanguageRoute = CLanguageRoute;
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 const local = __webpack_require__(/*! ./language */ "./Client/src/routes/language/language.tsx");
+const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
 function mapStateToProps(state, props) {
-    return {};
+    return {
+        languageOptions: controller_1.getAllLanguageOptions(state),
+        selected: props.match.params.id,
+    };
 }
 function mapDispatchToProps(dispatch, props) {
     return {};
@@ -2696,8 +2714,8 @@ class CRecordingRoute extends React.PureComponent {
                 React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, search: true, selection: true, scrolling: true, value: this.props.genres }),
                 React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, placeholder: this.props.seriesHint, search: true, selection: true, scrolling: true, value: this.props.series[0] || '' }),
                 React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setRentTo, options: this.props.rentOptions, placeholder: this.props.rentToHint, selection: true, scrolling: true, value: this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : '' })),
-            React.createElement(semanticUiReact.Menu, { className: 'page-size' }, pageSizes.map(p => (React.createElement(sizeRedux_1.PageSizeSelector, { key: p, size: p })))),
             React.createElement("div", { className: 'pager' },
+                React.createElement(semanticUiReact.Menu, { className: 'page-size' }, pageSizes.map(p => (React.createElement(sizeRedux_1.PageSizeSelector, { key: p, size: p })))),
                 React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })),
             React.createElement("div", { className: 'table' },
                 React.createElement(semanticUiReact.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },

@@ -28,6 +28,16 @@
         align-self: flex-start;
     }
 
+    > .pager {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        > .ui.menu {
+            margin-bottom: 0;
+        }
+    }
+
     > .table {
         overflow: auto;
         margin-top: 0.5em;

@@ -112,12 +112,12 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         value={this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : ''}
                     />
                 </semanticUiReact.Segment>
-                <semanticUiReact.Menu className='page-size'>
-                    {pageSizes.map(p => (
-                        <PageSizeSelector key={p} size={p} />
-                    ))}
-                </semanticUiReact.Menu>
                 <div className='pager'>
+                    <semanticUiReact.Menu className='page-size'>
+                        {pageSizes.map(p => (
+                            <PageSizeSelector key={p} size={p} />
+                        ))}
+                    </semanticUiReact.Menu>
                     <semanticUiReact.Pagination
                         activePage={this.props.page}
                         totalPages={this.props.lastPage}
