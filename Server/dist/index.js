@@ -86,6 +86,136 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./Client/src/components/confirm/confirm.tsx":
+/*!***************************************************!*\
+  !*** ./Client/src/components/confirm/confirm.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+class CDeleteConfirm extends React.PureComponent {
+    render() {
+        return (React.createElement(semantic_ui_react_1.Modal, { className: 'movie-db-confirm-delete', open: this.props.open, onClose: this.props.reject },
+            React.createElement(semantic_ui_react_1.Header, null, this.props.title),
+            React.createElement(semantic_ui_react_1.Modal.Content, null,
+                React.createElement("div", { dangerouslySetInnerHTML: { __html: this.props.html } }),
+                React.createElement("div", { className: 'actions' },
+                    React.createElement(semantic_ui_react_1.Button, { onClick: this.props.reject }, this.props.no),
+                    React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirm }, this.props.yes)))));
+    }
+}
+exports.CDeleteConfirm = CDeleteConfirm;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/confirm/confirmRedux.ts":
+/*!*******************************************************!*\
+  !*** ./Client/src/components/confirm/confirmRedux.ts ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./confirm */ "./Client/src/components/confirm/confirm.tsx");
+const controller = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
+function mapLanguageProps(state, props) {
+    const mui = state.mui;
+    return {
+        html: mui.language.confirmHtml,
+        no: mui.no,
+        open: state.language.deleteOpen,
+        title: mui.confirm,
+        yes: mui.yes,
+    };
+}
+function mapLanguageActions(dispatch, props) {
+    return {
+        confirm: () => dispatch(controller.LanguageActions.confirmDeleteDone(true)),
+        reject: () => dispatch(controller.LanguageActions.confirmDeleteDone(false)),
+    };
+}
+function mapContainerProps(state, props) {
+    const mui = state.mui;
+    return {
+        html: mui.container.confirmHtml,
+        no: mui.no,
+        open: state.container.deleteOpen,
+        title: mui.confirm,
+        yes: mui.yes,
+    };
+}
+function mapContainerActions(dispatch, props) {
+    return {
+        confirm: () => dispatch(controller.ContainerActions.confirmDeleteDone(true)),
+        reject: () => dispatch(controller.ContainerActions.confirmDeleteDone(false)),
+    };
+}
+function mapGenreProps(state, props) {
+    const mui = state.mui;
+    return {
+        html: mui.genre.confirmHtml,
+        no: mui.no,
+        open: state.genre.deleteOpen,
+        title: mui.confirm,
+        yes: mui.yes,
+    };
+}
+function mapGenreActions(dispatch, props) {
+    return {
+        confirm: () => dispatch(controller.GenreActions.confirmDeleteDone(true)),
+        reject: () => dispatch(controller.GenreActions.confirmDeleteDone(false)),
+    };
+}
+function mapRecordingProps(state, props) {
+    const mui = state.mui;
+    return {
+        html: mui.recording.confirmHtml,
+        no: mui.no,
+        open: state.recording.deleteOpen,
+        title: mui.confirm,
+        yes: mui.yes,
+    };
+}
+function mapRecordingActions(dispatch, props) {
+    return {
+        confirm: () => dispatch(controller.RecordingActions.confirmDeleteDone(true)),
+        reject: () => dispatch(controller.RecordingActions.confirmDeleteDone(false)),
+    };
+}
+function mapSeriesProps(state, props) {
+    const mui = state.mui;
+    return {
+        html: mui.series.confirmHtml,
+        no: mui.no,
+        open: state.series.deleteOpen,
+        title: mui.confirm,
+        yes: mui.yes,
+    };
+}
+function mapSeriesActions(dispatch, props) {
+    return {
+        confirm: () => dispatch(controller.SeriesActions.confirmDeleteDone(true)),
+        reject: () => dispatch(controller.SeriesActions.confirmDeleteDone(false)),
+    };
+}
+exports.ConfirmDeleteLanguage = react_redux_1.connect(mapLanguageProps, mapLanguageActions)(local.CDeleteConfirm);
+exports.ConfirmDeleteContainer = react_redux_1.connect(mapContainerProps, mapContainerActions)(local.CDeleteConfirm);
+exports.ConfirmDeleteGenre = react_redux_1.connect(mapGenreProps, mapGenreActions)(local.CDeleteConfirm);
+exports.ConfirmDeleteRecording = react_redux_1.connect(mapRecordingProps, mapRecordingActions)(local.CDeleteConfirm);
+exports.ConfirmDeleteSeries = react_redux_1.connect(mapSeriesProps, mapSeriesActions)(local.CDeleteConfirm);
+
+
+/***/ }),
+
 /***/ "./Client/src/components/genre/genre.tsx":
 /*!***********************************************!*\
   !*** ./Client/src/components/genre/genre.tsx ***!
@@ -692,6 +822,11 @@ const controller = new (class extends controller_1.Controller {
             ["movie-db.application.load-schemas"]: this.loadSchemas,
             ["movie-db.application.clear-errors"]: this.clearErrors,
             ["movie-db.application.begin-request"]: this.beginWebRequest,
+            ["movie-db.containers.delete-done"]: this.containerDeleted,
+            ["movie-db.genres.delete-done"]: this.genreDeleted,
+            ["movie-db.languages.delete-done"]: this.languageDeleted,
+            ["movie-db.recordings.delete-done"]: this.recordingDeleted,
+            ["movie-db.series.delete-done"]: this.seriesDeleted,
         };
     }
     getInitialState() {
@@ -725,6 +860,27 @@ const controller = new (class extends controller_1.Controller {
             state = Object.assign({}, state, { errors: [...state.errors, request.error] });
         }
         return Object.assign({}, state, { requests: state.requests - 1 });
+    }
+    deleteDone(state, response) {
+        if (!response.errors || response.errors.length < 1) {
+            return state;
+        }
+        return Object.assign({}, state, { errors: [...state.errors, ...response.errors.map(e => e.message)] });
+    }
+    genreDeleted(state, response) {
+        return this.deleteDone(state, response);
+    }
+    containerDeleted(state, response) {
+        return this.deleteDone(state, response);
+    }
+    languageDeleted(state, response) {
+        return this.deleteDone(state, response);
+    }
+    recordingDeleted(state, response) {
+        return this.deleteDone(state, response);
+    }
+    seriesDeleted(state, response) {
+        return this.deleteDone(state, response);
     }
 })();
 exports.ApplicationReducer = controller.reducer;
@@ -783,6 +939,15 @@ class ContainerActions {
     static save() {
         return { type: "movie-db.containers.save" };
     }
+    static confirmDelete() {
+        return { type: "movie-db.containers.open-delete" };
+    }
+    static confirmDeleteDone(confirm) {
+        return { confirm, type: "movie-db.containers.close-delete" };
+    }
+    static deleteDone(response) {
+        return { id: response.id, errors: response.errors, type: "movie-db.containers.delete-done" };
+    }
 }
 exports.ContainerActions = ContainerActions;
 
@@ -806,19 +971,21 @@ const controller = new (class extends controller_1.EditController {
     constructor() {
         super(...arguments);
         this.schema = 'container';
-        this.afterCancel = "/container";
-        this.afterSave = "/container";
+        this.listRoute = "/container";
     }
     getReducerMap() {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
             ["movie-db.containers.cancel-edit"]: this.cancelEdit,
+            ["movie-db.containers.delete-done"]: this.deleteDone,
             ["movie-db.containers.set-filter"]: this.setFilter,
+            ["movie-db.containers.close-delete"]: this.closeDelete,
             ["movie-db.containers.load"]: this.load,
             ["movie-db.containers.save"]: this.startSave,
             ["movie-db.containers.save-done"]: this.saveDone,
             ["movie-db.containers.select"]: this.select,
             ["movie-db.containers.set-prop"]: this.setProperty,
+            ["movie-db.containers.open-delete"]: this.openDelete,
         };
     }
     createEmpty() {
@@ -845,6 +1012,13 @@ const controller = new (class extends controller_1.EditController {
             else {
                 store_1.ServerApi.post('container', state.workingCopy, actions_1.ContainerActions.saveDone);
             }
+        }
+        return state;
+    }
+    closeDelete(state, request) {
+        state = super.closeDelete(state, request);
+        if (request.confirm && state.selected) {
+            store_1.ServerApi.delete(`container/${state.selected}`, actions_1.ContainerActions.deleteDone);
         }
         return state;
     }
@@ -990,7 +1164,7 @@ exports.Controller = Controller;
 class EditController extends Controller {
     constructor() {
         super(...arguments);
-        this.updateAllAfterSave = true;
+        this.customSave = false;
     }
     getWorkingCopy(state) {
         return state.all.find(c => c._id === state.selected);
@@ -998,6 +1172,7 @@ class EditController extends Controller {
     getInitialState() {
         return {
             all: [],
+            deleteOpen: false,
             selected: undefined,
             validation: undefined,
             validator: undefined,
@@ -1049,13 +1224,7 @@ class EditController extends Controller {
         return this.validateItem(Object.assign({}, state, { validator: response.schemas[this.schema] }));
     }
     cancelEdit(state, request) {
-        if (!state.workingCopy) {
-            return state;
-        }
-        if (this.afterCancel) {
-            store_1.delayedDispatch(connected_react_router_1.routerActions.push(this.afterCancel));
-        }
-        return Object.assign({}, state, { validation: undefined, workingCopy: undefined });
+        return this.showList(state);
     }
     saveDone(state, response) {
         if (response.errors && response.errors.length > 0) {
@@ -1063,21 +1232,41 @@ class EditController extends Controller {
         }
         const { _id } = response.item;
         state = Object.assign({}, state, { selected: _id, workingCopy: undefined, validation: undefined });
-        if (this.updateAllAfterSave) {
-            const all = [...state.all];
-            const index = all.findIndex(c => c._id === _id);
-            if (index < 0) {
-                all.push(response.item);
-            }
-            else {
-                all[index] = response.item;
-            }
-            state = Object.assign({}, state, { all });
+        if (this.customSave) {
+            return state;
         }
-        if (this.afterSave) {
-            store_1.delayedDispatch(connected_react_router_1.routerActions.push(`${this.afterSave}/${_id}`));
+        store_1.delayedDispatch(connected_react_router_1.routerActions.push(`${this.listRoute}/${_id}`));
+        const all = [...state.all];
+        const index = all.findIndex(c => c._id === _id);
+        if (index < 0) {
+            all.push(response.item);
         }
-        return state;
+        else {
+            all[index] = response.item;
+        }
+        return Object.assign({}, state, { all });
+    }
+    openDelete(state, request) {
+        if (state.deleteOpen) {
+            return state;
+        }
+        return Object.assign({}, state, { deleteOpen: true });
+    }
+    closeDelete(state, request) {
+        if (!state.deleteOpen) {
+            return state;
+        }
+        return Object.assign({}, state, { deleteOpen: false });
+    }
+    showList(state) {
+        store_1.delayedDispatch(connected_react_router_1.routerActions.push(this.listRoute));
+        return Object.assign({}, state, { selected: undefined, workingCopy: undefined, validation: undefined });
+    }
+    deleteDone(state, request) {
+        if (request.errors && request.errors.length > 0) {
+            return state;
+        }
+        return this.showList(state);
     }
 }
 exports.EditController = EditController;
@@ -1114,6 +1303,15 @@ class GenreActions {
     static save() {
         return { type: "movie-db.genres.save" };
     }
+    static confirmDelete() {
+        return { type: "movie-db.genres.open-delete" };
+    }
+    static confirmDeleteDone(confirm) {
+        return { confirm, type: "movie-db.genres.close-delete" };
+    }
+    static deleteDone(response) {
+        return { id: response.id, errors: response.errors, type: "movie-db.genres.delete-done" };
+    }
 }
 exports.GenreActions = GenreActions;
 
@@ -1137,18 +1335,20 @@ const controller = new (class extends controller_1.EditController {
     constructor() {
         super(...arguments);
         this.schema = 'genre';
-        this.afterCancel = "/genre";
-        this.afterSave = "/genre";
+        this.listRoute = "/genre";
     }
     getReducerMap() {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
             ["movie-db.genres.cancel-edit"]: this.cancelEdit,
+            ["movie-db.genres.delete-done"]: this.deleteDone,
+            ["movie-db.genres.close-delete"]: this.closeDelete,
             ["movie-db.genres.load"]: this.load,
             ["movie-db.genres.save"]: this.startSave,
             ["movie-db.genres.save-done"]: this.saveDone,
             ["movie-db.genres.select"]: this.select,
             ["movie-db.genres.set-prop"]: this.setProperty,
+            ["movie-db.genres.open-delete"]: this.openDelete,
         };
     }
     createEmpty() {
@@ -1165,6 +1365,13 @@ const controller = new (class extends controller_1.EditController {
             else {
                 store_1.ServerApi.post('genre', state.workingCopy, actions_1.GenreActions.saveDone);
             }
+        }
+        return state;
+    }
+    closeDelete(state, request) {
+        state = super.closeDelete(state, request);
+        if (request.confirm && state.selected) {
+            store_1.ServerApi.delete(`genre/${state.selected}`, actions_1.GenreActions.deleteDone);
         }
         return state;
     }
@@ -1294,6 +1501,12 @@ class LanguageActions {
     static save() {
         return { type: "movie-db.languages.save" };
     }
+    static confirmDelete() {
+        return { type: "movie-db.languages.open-delete" };
+    }
+    static confirmDeleteDone(confirm) {
+        return { confirm, type: "movie-db.languages.close-delete" };
+    }
 }
 exports.LanguageActions = LanguageActions;
 
@@ -1317,18 +1530,20 @@ const controller = new (class extends controller_1.EditController {
     constructor() {
         super(...arguments);
         this.schema = 'language';
-        this.afterCancel = "/language";
-        this.afterSave = "/language";
+        this.listRoute = "/language";
     }
     getReducerMap() {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
             ["movie-db.languages.cancel-edit"]: this.cancelEdit,
+            ["movie-db.languages.delete-done"]: this.deleteDone,
+            ["movie-db.languages.close-delete"]: this.closeDelete,
             ["movie-db.languages.load"]: this.load,
             ["movie-db.languages.save"]: this.startSave,
             ["movie-db.languages.save-done"]: this.saveDone,
             ["movie-db.languages.select"]: this.select,
             ["movie-db.languages.set-prop"]: this.setProperty,
+            ["movie-db.languages.open-delete"]: this.openDelete,
         };
     }
     createEmpty() {
@@ -1345,6 +1560,13 @@ const controller = new (class extends controller_1.EditController {
             else {
                 store_1.ServerApi.post('language', state.workingCopy, actions_1.LanguageActions.saveDone);
             }
+        }
+        return state;
+    }
+    closeDelete(state, request) {
+        state = super.closeDelete(state, request);
+        if (request.confirm && state.selected) {
+            store_1.ServerApi.delete(`language/${state.selected}`, actions_1.LanguageActions.deleteDone);
         }
         return state;
     }
@@ -1443,7 +1665,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function getInitialState() {
     return {
         cancel: 'Abbrechen',
+        confirm: 'Bestätigung erforderlich',
         container: {
+            confirmHtml: `
+                Das Löschen einer Ablage kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Ablage
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 description: 'Beschreibung',
@@ -1483,6 +1711,11 @@ function getInitialState() {
         },
         create: 'Neu anlegen',
         genre: {
+            confirmHtml: `
+                Das Löschen einer Kategorie kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Kategorie
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 name: 'Kategorie',
@@ -1491,6 +1724,11 @@ function getInitialState() {
             noSelect: '(alle Kategorien)',
         },
         language: {
+            confirmHtml: `
+                Das Löschen einer Sprache kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Sprache
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 name: 'Sprache',
@@ -1508,9 +1746,15 @@ function getInitialState() {
                 [1]: 'Video CD',
             },
         },
+        no: 'Nein',
         recording: {
             anyRent: '(verliehen egal)',
             clear: 'Neue Suche',
+            confirmHtml: `
+                Das Löschen einer Aufzeichung kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Aufzeichung
+                wirklick endgültig entfernt werden?
+                `,
             count: '{count} von {total}',
             created: 'Erstellt',
             edit: {
@@ -1565,6 +1809,11 @@ function getInitialState() {
         save: 'Speichern',
         search: 'Suche...',
         series: {
+            confirmHtml: `
+                Das Löschen einer Serie kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Serie
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 description: 'Beschreibung',
@@ -1577,6 +1826,7 @@ function getInitialState() {
         },
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
+        yes: 'Ja',
     };
 }
 exports.getInitialState = getInitialState;
@@ -1680,6 +1930,15 @@ class RecordingActions {
     static resetFilter() {
         return { type: "movie-db.recordings.reset-filter" };
     }
+    static confirmDelete() {
+        return { type: "movie-db.recordings.open-delete" };
+    }
+    static confirmDeleteDone(confirm) {
+        return { confirm, type: "movie-db.recordings.close-delete" };
+    }
+    static deleteDone(response) {
+        return { id: response.id, errors: response.errors, type: "movie-db.recordings.delete-done" };
+    }
 }
 exports.RecordingActions = RecordingActions;
 
@@ -1706,13 +1965,15 @@ const controller = new (class extends controller_1.EditController {
         super(...arguments);
         this.schema = 'recording';
         this.updateAllAfterSave = false;
-        this.afterCancel = "/recording";
-        this.afterSave = '';
+        this.listRoute = "/recording";
+        this.customSave = true;
     }
     getReducerMap() {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
             ["movie-db.recordings.cancel-edit"]: this.cancelEdit,
+            ["movie-db.recordings.delete-done"]: this.deleteDone,
+            ["movie-db.recordings.close-delete"]: this.closeDelete,
             ["movie-db.recordings.query"]: this.query,
             ["movie-db.recordings.query-done"]: this.load,
             ["movie-db.recordings.reset-filter"]: this.resetFilter,
@@ -1727,6 +1988,7 @@ const controller = new (class extends controller_1.EditController {
             ["movie-db.recordings.filter-series"]: this.setSeriesFilter,
             ["movie-db.recordings.set-page-size"]: this.setPageSize,
             ["movie-db.recordings.filter-text"]: this.setTextFilter,
+            ["movie-db.recordings.open-delete"]: this.openDelete,
             ["movie-db.recordings.toggle-sort"]: this.setSort,
             ["movie-db.recordings.start-edit"]: this.startEdit,
         };
@@ -1867,6 +2129,13 @@ const controller = new (class extends controller_1.EditController {
         }
         return state;
     }
+    closeDelete(state, request) {
+        state = super.closeDelete(state, request);
+        if (request.confirm && state.selected) {
+            store_1.ServerApi.delete(`recording/${state.selected}`, actions_1.RecordingActions.deleteDone);
+        }
+        return state;
+    }
 })();
 exports.RecordingReducer = controller.reducer;
 
@@ -1960,6 +2229,15 @@ class SeriesActions {
     static save() {
         return { type: "movie-db.series.save" };
     }
+    static confirmDelete() {
+        return { type: "movie-db.series.open-delete" };
+    }
+    static confirmDeleteDone(confirm) {
+        return { confirm, type: "movie-db.series.close-delete" };
+    }
+    static deleteDone(response) {
+        return { id: response.id, errors: response.errors, type: "movie-db.series.delete-done" };
+    }
 }
 exports.SeriesActions = SeriesActions;
 
@@ -1983,19 +2261,21 @@ const controller = new (class extends controller_1.EditController {
     constructor() {
         super(...arguments);
         this.schema = 'series';
-        this.afterCancel = "/series";
-        this.afterSave = "/series";
+        this.listRoute = "/series";
     }
     getReducerMap() {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
             ["movie-db.series.cancel-edit"]: this.cancelEdit,
+            ["movie-db.series.delete-done"]: this.deleteDone,
             ["movie-db.series.set-filter"]: this.setFilter,
+            ["movie-db.series.close-delete"]: this.closeDelete,
             ["movie-db.series.load"]: this.load,
             ["movie-db.series.save"]: this.startSave,
             ["movie-db.series.save-done"]: this.saveDone,
             ["movie-db.series.select"]: this.select,
             ["movie-db.series.set-prop"]: this.setProperty,
+            ["movie-db.series.open-delete"]: this.openDelete,
         };
     }
     getInitialState() {
@@ -2021,6 +2301,13 @@ const controller = new (class extends controller_1.EditController {
             else {
                 store_1.ServerApi.post('series', state.workingCopy, actions_1.SeriesActions.saveDone);
             }
+        }
+        return state;
+    }
+    closeDelete(state, request) {
+        state = super.closeDelete(state, request);
+        if (request.confirm && state.selected) {
+            store_1.ServerApi.delete(`series/${state.selected}`, actions_1.SeriesActions.deleteDone);
         }
         return state;
     }
@@ -2260,6 +2547,7 @@ exports.ContainerRoute = react_redux_1.connect(mapStateToProps, mapDispatchToPro
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
 const messageRedux_1 = __webpack_require__(/*! ../../../components/message/messageRedux */ "./Client/src/components/message/messageRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CContainerDetails extends React.PureComponent {
@@ -2278,9 +2566,11 @@ class CContainerDetails extends React.PureComponent {
         }
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-container-details' },
+            React.createElement(confirmRedux_1.ConfirmDeleteContainer, null),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
+                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.parentLabel),
@@ -2330,12 +2620,14 @@ function mapStateToProps(state, props) {
         cancelLabel: container && container._id ? state.mui.cancel : state.mui.reset,
         containerHint: mui.noParent,
         containerOptions: controller.getAllContainerOptions(state),
+        deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !container,
         parent: container && container.parentId,
         parentLabel: emui.parentId,
         saveLabel: state.mui.save,
+        showDelete: container && !!container._id,
         type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
@@ -2345,6 +2637,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, props) {
     return {
         cancel: () => dispatch(controller.ContainerActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.ContainerActions.confirmDelete()),
         loadDetails: id => dispatch(controller.ContainerActions.select(id)),
         save: () => dispatch(controller.ContainerActions.save()),
         setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
@@ -2415,6 +2708,7 @@ exports.ContainerTree = react_redux_1.connect(mapStateToProps, mapDispatchToProp
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CGenreDetails extends React.PureComponent {
     render() {
@@ -2423,9 +2717,11 @@ class CGenreDetails extends React.PureComponent {
         }
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-genre-details' },
+            React.createElement(confirmRedux_1.ConfirmDeleteGenre, null),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
+                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(textInputRedux_1.GenreTextInput, { prop: 'name', required: true }))));
     }
@@ -2462,15 +2758,18 @@ function mapStateToProps(state, props) {
     const errors = route.validation;
     return {
         cancelLabel: genre && genre._id ? state.mui.cancel : state.mui.reset,
+        deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !genre,
         saveLabel: state.mui.save,
+        showDelete: genre && !!genre._id,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
         cancel: () => dispatch(controller_1.GenreActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller_1.GenreActions.confirmDelete()),
         loadDetails: id => dispatch(controller_1.GenreActions.select(id)),
         save: () => dispatch(controller_1.GenreActions.save()),
     };
@@ -2545,26 +2844,20 @@ exports.GenreRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
-const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
-const store_1 = __webpack_require__(/*! ../../../store */ "./Client/src/store.ts");
 class CLanguageDetails extends React.PureComponent {
-    constructor() {
-        super(...arguments);
-        this.onDelete = () => {
-            store_1.ServerApi.delete(`${"/language"}/${this.props.id}`, controller_1.LanguageActions.deleteDone);
-        };
-    }
     render() {
         if (this.props.lost) {
             return null;
         }
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-language-details' },
+            React.createElement(confirmRedux_1.ConfirmDeleteLanguage, null),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
-                this.props.showDelete && React.createElement(semantic_ui_react_1.Button, { onClick: this.onDelete }, this.props.deleteLabel)),
+                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(textInputRedux_1.LanguageTextInput, { prop: 'name', required: true }))));
     }
@@ -2612,6 +2905,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, props) {
     return {
         cancel: () => dispatch(controller_1.LanguageActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller_1.LanguageActions.confirmDelete()),
         loadDetails: id => dispatch(controller_1.LanguageActions.select(id)),
         save: () => dispatch(controller_1.LanguageActions.save()),
     };
@@ -2688,6 +2982,7 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const util_1 = __webpack_require__(/*! util */ "./node_modules/util/util.js");
 const linksRedux_1 = __webpack_require__(/*! ../links/linksRedux */ "./Client/src/routes/recording/links/linksRedux.ts");
+const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CRecording extends React.PureComponent {
     constructor() {
@@ -2707,9 +3002,11 @@ class CRecording extends React.PureComponent {
     render() {
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-recording-edit' },
+            React.createElement(confirmRedux_1.ConfirmDeleteRecording, null),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndBack, disabled: hasError || !hasChanges }, this.props.saveAndBackLabel)),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndBack, disabled: hasError || !hasChanges }, this.props.saveAndBackLabel),
+                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true }),
                 React.createElement(linksRedux_1.RecordingLinks, null),
@@ -2766,6 +3063,7 @@ function mapStateToProps(state, props) {
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
         containerOptions: controller.getAllContainerOptions(state),
+        deleteLabel: state.mui.remove,
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
         genreOptions: controller.getAllGenreOptions(state),
@@ -2781,6 +3079,7 @@ function mapStateToProps(state, props) {
         seriesHint: mui.editSeries,
         seriesLabel: emui.series,
         seriesOptions: controller.getSeriesOptions(state),
+        showDelete: edit && !!edit._id,
         type: edit ? edit.containerType : 0,
         typeHint: mui.editType,
         typeLabel: emui.containerType,
@@ -2790,6 +3089,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, props) {
     return {
         cancel: () => dispatch(controller.RecordingActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.RecordingActions.confirmDelete()),
         loadRecording: () => dispatch(controller.RecordingActions.select(props.match.params.id)),
         saveAndBack: () => dispatch(controller.RecordingActions.save('list')),
         setProp: (prop, value) => dispatch(controller.RecordingActions.setProperty(prop, value)),
@@ -3209,6 +3509,7 @@ exports.PageSizeSelector = react_redux_1.connect(mapStateToProps, mapDispatchToP
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CSeriesDetails extends React.PureComponent {
     constructor() {
@@ -3223,9 +3524,11 @@ class CSeriesDetails extends React.PureComponent {
         }
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-series-details' },
+            React.createElement(confirmRedux_1.ConfirmDeleteSeries, null),
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
+                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.parentLabel),
@@ -3268,19 +3571,22 @@ function mapStateToProps(state, props) {
     const errors = route.validation;
     return {
         cancelLabel: series && series._id ? state.mui.cancel : state.mui.reset,
+        deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !series,
-        saveLabel: state.mui.save,
         parent: series && series.parentId,
         parentHint: mui.noParent,
         parentLabel: emui.parentId,
         parentOptions: controller_1.getSeriesOptionsNoEdit(state),
+        saveLabel: state.mui.save,
+        showDelete: series && !!series._id,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
         cancel: () => dispatch(controller_1.SeriesActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller_1.SeriesActions.confirmDelete()),
         loadDetails: id => dispatch(controller_1.SeriesActions.select(id)),
         save: () => dispatch(controller_1.SeriesActions.save()),
         setProp: (prop, value) => dispatch(controller_1.SeriesActions.setProperty(prop, value)),

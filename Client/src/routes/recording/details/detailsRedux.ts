@@ -22,6 +22,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
         containerOptions: controller.getAllContainerOptions(state),
+        deleteLabel: state.mui.remove,
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
         genreOptions: controller.getAllGenreOptions(state),
@@ -37,6 +38,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         seriesHint: mui.editSeries,
         seriesLabel: emui.series,
         seriesOptions: controller.getSeriesOptions(state),
+        showDelete: edit && !!edit._id,
         type: edit ? edit.containerType : mediaType.Undefined,
         typeHint: mui.editType,
         typeLabel: emui.containerType,
@@ -47,6 +49,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
 function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRecordingUiProps): local.IRecordingActions {
     return {
         cancel: () => dispatch(controller.RecordingActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.RecordingActions.confirmDelete()),
         loadRecording: () => dispatch(controller.RecordingActions.select(props.match.params.id)),
         saveAndBack: () => dispatch(controller.RecordingActions.save('list')),
         setProp: (prop, value) => dispatch(controller.RecordingActions.setProperty(prop, value)),
@@ -55,5 +58,5 @@ function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRecordingU
 
 export const Recording = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(local.CRecording)

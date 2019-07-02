@@ -18,12 +18,14 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
         cancelLabel: container && container._id ? state.mui.cancel : state.mui.reset,
         containerHint: mui.noParent,
         containerOptions: controller.getAllContainerOptions(state),
+        deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !container,
         parent: container && container.parentId,
         parentLabel: emui.parentId,
         saveLabel: state.mui.save,
+        showDelete: container && !!container._id,
         type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, 'type', container),
         typeLabel: emui.type,
@@ -33,10 +35,11 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
 
 function mapDispatchToProps(
     dispatch: Dispatch<Action>,
-    props: local.IContainerDetailsUiProps
+    props: local.IContainerDetailsUiProps,
 ): local.IContainerDetailsActions {
     return {
         cancel: () => dispatch(controller.ContainerActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.ContainerActions.confirmDelete()),
         loadDetails: id => dispatch(controller.ContainerActions.select(id)),
         save: () => dispatch(controller.ContainerActions.save()),
         setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
@@ -45,5 +48,5 @@ function mapDispatchToProps(
 
 export const ContainerDetails = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(local.CContainerDetails)

@@ -32,4 +32,12 @@ export class LanguageActions {
     static save(): local.ISaveLanguage {
         return { type: local.languageActions.save }
     }
+
+    static confirmDelete(): local.IOpenLanguageDelete {
+        return { type: local.languageActions.showConfirm }
+    }
+
+    static confirmDeleteDone(confirm: boolean): local.ICloseLanguageDelete {
+        return { confirm, type: local.languageActions.hideConfirm }
+    }
 }

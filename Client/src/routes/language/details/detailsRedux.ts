@@ -29,6 +29,7 @@ function mapDispatchToProps(
 ): local.ILanguageDetailsActions {
     return {
         cancel: () => dispatch(LanguageActions.cancelEdit()),
+        confirmDelete: () => dispatch(LanguageActions.confirmDelete()),
         loadDetails: id => dispatch(LanguageActions.select(id)),
         save: () => dispatch(LanguageActions.save()),
     }

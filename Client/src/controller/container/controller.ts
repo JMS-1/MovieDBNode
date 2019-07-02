@@ -9,9 +9,12 @@ import { ServerApi } from '../../store'
 
 type TContainerActions =
     | local.ICancelContainerEdit
+    | local.ICloseContainerDelete
+    | local.IContainerDeleted
     | local.IContainerSaved
     | local.ILoadContainers
     | local.ILoadSchemas
+    | local.IOpenContainerDelete
     | local.ISaveContainer
     | local.ISelectContainer
     | local.ISetContainerProperty<any>
@@ -20,20 +23,21 @@ type TContainerActions =
 const controller = new (class extends EditController<api.IContainer, TContainerActions, local.IContainerState> {
     protected readonly schema = 'container'
 
-    protected readonly afterCancel = local.routes.container
-
-    protected readonly afterSave = local.routes.container
+    protected readonly listRoute = local.routes.container
 
     protected getReducerMap(): local.IActionHandlerMap<TContainerActions, local.IContainerState> {
         return {
             [local.applicationActions.loadSchema]: this.loadSchema,
             [local.containerActions.cancel]: this.cancelEdit,
+            [local.containerActions.deleted]: this.deleteDone,
             [local.containerActions.filter]: this.setFilter,
+            [local.containerActions.hideConfirm]: this.closeDelete,
             [local.containerActions.load]: this.load,
             [local.containerActions.save]: this.startSave,
             [local.containerActions.saveDone]: this.saveDone,
             [local.containerActions.select]: this.select,
             [local.containerActions.setProp]: this.setProperty,
+            [local.containerActions.showConfirm]: this.openDelete,
         }
     }
 
@@ -67,6 +71,16 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
             } else {
                 ServerApi.post('container', state.workingCopy, ContainerActions.saveDone)
             }
+        }
+
+        return state
+    }
+
+    protected closeDelete(state: local.IContainerState, request: local.ICloseContainerDelete): local.IContainerState {
+        state = super.closeDelete(state, request)
+
+        if (request.confirm && state.selected) {
+            ServerApi.delete(`container/${state.selected}`, ContainerActions.deleteDone)
         }
 
         return state

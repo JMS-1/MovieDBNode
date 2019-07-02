@@ -9,12 +9,15 @@ declare module 'movie-db-client' {
 
     const enum seriesActions {
         cancel = 'movie-db.series.cancel-edit',
+        deleted = 'movie-db.series.delete-done',
         filter = 'movie-db.series.set-filter',
+        hideConfirm = 'movie-db.series.close-delete',
         load = 'movie-db.series.load',
         save = 'movie-db.series.save',
         saveDone = 'movie-db.series.save-done',
         select = 'movie-db.series.select',
         setProp = 'movie-db.series.set-prop',
+        showConfirm = 'movie-db.series.open-delete',
     }
 
     interface ILoadSeries extends IGenericLoad<ISeries> {
@@ -38,11 +41,23 @@ declare module 'movie-db-client' {
         type: seriesActions.saveDone
     }
 
+    interface ISeriesDeleted extends IGenericDeleteDone {
+        type: seriesActions.deleted
+    }
+
     interface ICancelSeriesEdit extends IGenericCancelEdit {
         type: seriesActions.cancel
     }
 
     interface ISaveSeries extends Action {
         type: seriesActions.save
+    }
+
+    interface IOpenSeriesDelete extends IGenericDeleteOpen {
+        type: seriesActions.showConfirm
+    }
+
+    interface ICloseSeriesDelete extends IGenericDeleteClose {
+        type: seriesActions.hideConfirm
     }
 }

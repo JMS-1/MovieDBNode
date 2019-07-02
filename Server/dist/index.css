@@ -27,6 +27,15 @@ client-root {
 body {
   margin: 0; }
 
+.movie-db-confirm-delete > .content > .actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1em; }
+  .movie-db-confirm-delete > .content > .actions > .ui.button {
+    margin: 0; }
+
 .movie-db-root {
   height: 100%;
   display: flex;

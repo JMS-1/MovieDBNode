@@ -9,9 +9,12 @@ import { ServerApi } from '../../store'
 
 type TGenreActions =
     | local.ICancelGenreEdit
+    | local.ICloseGenreDelete
+    | local.IGenreDeleted
     | local.IGenreSaved
     | local.ILoadGenres
     | local.ILoadSchemas
+    | local.IOpenGenreDelete
     | local.ISaveGenre
     | local.ISelectGenre
     | local.ISetGenreProperty<any>
@@ -19,19 +22,20 @@ type TGenreActions =
 const controller = new (class extends EditController<IGenre, TGenreActions, local.IGenreState> {
     protected readonly schema = 'genre'
 
-    protected readonly afterCancel = local.routes.genre
-
-    protected readonly afterSave = local.routes.genre
+    protected readonly listRoute = local.routes.genre
 
     protected getReducerMap(): local.IActionHandlerMap<TGenreActions, local.IGenreState> {
         return {
             [local.applicationActions.loadSchema]: this.loadSchema,
             [local.genreActions.cancel]: this.cancelEdit,
+            [local.genreActions.deleted]: this.deleteDone,
+            [local.genreActions.hideConfirm]: this.closeDelete,
             [local.genreActions.load]: this.load,
             [local.genreActions.save]: this.startSave,
             [local.genreActions.saveDone]: this.saveDone,
             [local.genreActions.select]: this.select,
             [local.genreActions.setProp]: this.setProperty,
+            [local.genreActions.showConfirm]: this.openDelete,
         }
     }
 
@@ -49,6 +53,16 @@ const controller = new (class extends EditController<IGenre, TGenreActions, loca
             } else {
                 ServerApi.post('genre', state.workingCopy, GenreActions.saveDone)
             }
+        }
+
+        return state
+    }
+
+    protected closeDelete(state: local.IGenreState, request: local.ICloseGenreDelete): local.IGenreState {
+        state = super.closeDelete(state, request)
+
+        if (request.confirm && state.selected) {
+            ServerApi.delete(`genre/${state.selected}`, GenreActions.deleteDone)
         }
 
         return state

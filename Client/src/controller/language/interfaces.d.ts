@@ -8,11 +8,13 @@ declare module 'movie-db-client' {
     const enum languageActions {
         cancel = 'movie-db.languages.cancel-edit',
         deleted = 'movie-db.languages.delete-done',
+        hideConfirm = 'movie-db.languages.close-delete',
         load = 'movie-db.languages.load',
         save = 'movie-db.languages.save',
         saveDone = 'movie-db.languages.save-done',
         select = 'movie-db.languages.select',
         setProp = 'movie-db.languages.set-prop',
+        showConfirm = 'movie-db.languages.open-delete',
     }
 
     interface ILoadLanguages extends IGenericLoad<ILanguage> {
@@ -41,5 +43,13 @@ declare module 'movie-db-client' {
 
     interface ISaveLanguage extends Action {
         type: languageActions.save
+    }
+
+    interface IOpenLanguageDelete extends IGenericDeleteOpen {
+        type: languageActions.showConfirm
+    }
+
+    interface ICloseLanguageDelete extends IGenericDeleteClose {
+        type: languageActions.hideConfirm
     }
 }

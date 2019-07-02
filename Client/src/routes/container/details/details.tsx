@@ -3,6 +3,7 @@ import { Button, Dropdown, DropdownItemProps, DropdownProps, Form } from 'semant
 
 import { containerType, IContainer } from 'movie-db-api'
 
+import { ConfirmDeleteContainer } from '../../../components/confirm/confirmRedux'
 import { ReportError } from '../../../components/message/messageRedux'
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
 
@@ -14,12 +15,14 @@ export interface IContainerDetailsProps {
     cancelLabel: string
     containerHint: string
     containerOptions: DropdownItemProps[]
+    deleteLabel: string
     hasChanges: boolean
     hasError: boolean
     lost: boolean
     parent: string
     parentLabel: string
     saveLabel: string
+    showDelete: boolean
     type: containerType
     typeErrors: string[]
     typeLabel: string
@@ -28,6 +31,7 @@ export interface IContainerDetailsProps {
 
 export interface IContainerDetailsActions {
     cancel(): void
+    confirmDelete(): void
     loadDetails(id: string): void
     save(): void
     setProp<TProp extends keyof IContainer>(prop: TProp, value: IContainer[TProp]): void
@@ -45,6 +49,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
 
         return (
             <div className='movie-db-container-details'>
+                <ConfirmDeleteContainer />
                 <Button.Group>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
@@ -52,6 +57,9 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
                         {this.props.saveLabel}
                     </Button>
+                    {this.props.showDelete && (
+                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
+                    )}
                 </Button.Group>
                 <Form error={hasError}>
                     <Form.Field>

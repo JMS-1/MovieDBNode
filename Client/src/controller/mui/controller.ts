@@ -4,7 +4,13 @@ import { IMuiState } from 'movie-db-client'
 export function getInitialState(): IMuiState {
     return {
         cancel: 'Abbrechen',
+        confirm: 'Bestätigung erforderlich',
         container: {
+            confirmHtml: `
+                Das Löschen einer Ablage kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Ablage
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 description: 'Beschreibung',
@@ -44,6 +50,11 @@ export function getInitialState(): IMuiState {
         },
         create: 'Neu anlegen',
         genre: {
+            confirmHtml: `
+                Das Löschen einer Kategorie kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Kategorie
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 name: 'Kategorie',
@@ -52,6 +63,11 @@ export function getInitialState(): IMuiState {
             noSelect: '(alle Kategorien)',
         },
         language: {
+            confirmHtml: `
+                Das Löschen einer Sprache kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Sprache
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 name: 'Sprache',
@@ -69,9 +85,15 @@ export function getInitialState(): IMuiState {
                 [mediaType.VideoCD]: 'Video CD',
             },
         },
+        no: 'Nein',
         recording: {
             anyRent: '(verliehen egal)',
             clear: 'Neue Suche',
+            confirmHtml: `
+                Das Löschen einer Aufzeichung kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Aufzeichung
+                wirklick endgültig entfernt werden?
+                `,
             count: '{count} von {total}',
             created: 'Erstellt',
             edit: {
@@ -126,6 +148,11 @@ export function getInitialState(): IMuiState {
         save: 'Speichern',
         search: 'Suche...',
         series: {
+            confirmHtml: `
+                Das Löschen einer Serie kann <b>nicht</b>
+                rückgängig gemacht werden. Soll die Serie
+                wirklick endgültig entfernt werden?
+                `,
             edit: {
                 _id: 'Eindeutige Kennung',
                 description: 'Beschreibung',
@@ -138,5 +165,6 @@ export function getInitialState(): IMuiState {
         },
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
+        yes: 'Ja',
     }
 }

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Button, Form } from 'semantic-ui-react'
 
+import { ConfirmDeleteGenre } from '../../../components/confirm/confirmRedux'
 import { GenreTextInput } from '../../../components/textInput/textInputRedux'
 
 export interface IGenreDetailsUiProps {
@@ -9,14 +10,17 @@ export interface IGenreDetailsUiProps {
 
 export interface IGenreDetailsProps {
     cancelLabel: string
+    deleteLabel: string
     hasChanges: boolean
     hasError: boolean
     lost: boolean
     saveLabel: string
+    showDelete: boolean
 }
 
 export interface IGenreDetailsActions {
     cancel(): void
+    confirmDelete(): void
     loadDetails(id: string): void
     save(): void
 }
@@ -33,6 +37,7 @@ export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
 
         return (
             <div className='movie-db-genre-details'>
+                <ConfirmDeleteGenre />
                 <Button.Group>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
@@ -40,6 +45,9 @@ export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
                     <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
                         {this.props.saveLabel}
                     </Button>
+                    {this.props.showDelete && (
+                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
+                    )}
                 </Button.Group>
                 <Form error={hasError}>
                     <GenreTextInput prop='name' required />

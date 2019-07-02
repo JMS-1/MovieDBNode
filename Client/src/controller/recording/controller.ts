@@ -12,9 +12,12 @@ import { delayedDispatch, ServerApi } from '../../store'
 
 type TRecordingActions =
     | local.ICancelRecordingEdit
+    | local.ICloseRecordingDelete
     | local.ILoadRecordings
     | local.ILoadSchemas
+    | local.IOpenRecordingDelete
     | local.IQueryRecordings
+    | local.IRecordingDeleted
     | local.IRecordingSaved
     | local.IResetRecordingFilter
     | local.ISaveRecording
@@ -35,14 +38,16 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     protected readonly updateAllAfterSave = false
 
-    protected readonly afterCancel = local.routes.recording
+    protected readonly listRoute = local.routes.recording
 
-    protected readonly afterSave = ''
+    protected readonly customSave = true
 
     protected getReducerMap(): local.IActionHandlerMap<TRecordingActions, local.IRecordingState> {
         return {
             [local.applicationActions.loadSchema]: this.loadSchema,
             [local.recordingActions.cancel]: this.cancelEdit,
+            [local.recordingActions.deleted]: this.deleteDone,
+            [local.recordingActions.hideConfirm]: this.closeDelete,
             [local.recordingActions.query]: this.query,
             [local.recordingActions.queryDone]: this.load,
             [local.recordingActions.resetFilter]: this.resetFilter,
@@ -57,6 +62,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             [local.recordingActions.setSeriesFilter]: this.setSeriesFilter,
             [local.recordingActions.setSize]: this.setPageSize,
             [local.recordingActions.setTextFilter]: this.setTextFilter,
+            [local.recordingActions.showConfirm]: this.openDelete,
             [local.recordingActions.sort]: this.setSort,
             [local.recordingActions.startEdit]: this.startEdit,
         }
@@ -295,6 +301,16 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
             case 'list':
                 delayedDispatch(routerActions.push(local.routes.recording))
                 break
+        }
+
+        return state
+    }
+
+    protected closeDelete(state: local.IRecordingState, request: local.ICloseRecordingDelete): local.IRecordingState {
+        state = super.closeDelete(state, request)
+
+        if (request.confirm && state.selected) {
+            ServerApi.delete(`recording/${state.selected}`, RecordingActions.deleteDone)
         }
 
         return state

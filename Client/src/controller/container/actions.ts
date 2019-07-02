@@ -16,7 +16,7 @@ export class ContainerActions {
 
     static setProperty<TProp extends keyof api.IContainer>(
         prop: TProp,
-        value: api.IContainer[TProp]
+        value: api.IContainer[TProp],
     ): local.ISetContainerProperty<TProp> {
         return { prop, value, type: local.containerActions.setProp }
     }
@@ -31,5 +31,17 @@ export class ContainerActions {
 
     static save(): local.ISaveContainer {
         return { type: local.containerActions.save }
+    }
+
+    static confirmDelete(): local.IOpenContainerDelete {
+        return { type: local.containerActions.showConfirm }
+    }
+
+    static confirmDeleteDone(confirm: boolean): local.ICloseContainerDelete {
+        return { confirm, type: local.containerActions.hideConfirm }
+    }
+
+    static deleteDone(response: api.IDeleteContainerResponse): local.IContainerDeleted {
+        return { id: response.id, errors: response.errors, type: local.containerActions.deleted }
     }
 }

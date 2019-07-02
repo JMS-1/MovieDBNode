@@ -1,11 +1,8 @@
 import * as React from 'react'
 import { Button, Form } from 'semantic-ui-react'
 
-import { routes } from 'movie-db-client'
-
+import { ConfirmDeleteLanguage } from '../../../components/confirm/confirmRedux'
 import { LanguageTextInput } from '../../../components/textInput/textInputRedux'
-import { LanguageActions } from '../../../controller'
-import { ServerApi } from '../../../store'
 
 export interface ILanguageDetailsUiProps {
     id: string
@@ -23,6 +20,7 @@ export interface ILanguageDetailsProps {
 
 export interface ILanguageDetailsActions {
     cancel(): void
+    confirmDelete(): void
     loadDetails(id: string): void
     save(): void
 }
@@ -39,6 +37,7 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
 
         return (
             <div className='movie-db-language-details'>
+                <ConfirmDeleteLanguage />
                 <Button.Group>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
@@ -46,7 +45,9 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
                     <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
                         {this.props.saveLabel}
                     </Button>
-                    {this.props.showDelete && <Button onClick={this.onDelete}>{this.props.deleteLabel}</Button>}
+                    {this.props.showDelete && (
+                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
+                    )}
                 </Button.Group>
                 <Form error={hasError}>
                     <LanguageTextInput prop='name' required />
@@ -63,9 +64,5 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
         if (props.id !== this.props.id) {
             this.props.loadDetails(props.id)
         }
-    }
-
-    private readonly onDelete = (): void => {
-        ServerApi.delete(`${routes.language}/${this.props.id}`, LanguageActions.deleteDone)
     }
 }

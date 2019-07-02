@@ -32,4 +32,16 @@ export class SeriesActions {
     static save(): local.ISaveSeries {
         return { type: local.seriesActions.save }
     }
+
+    static confirmDelete(): local.IOpenSeriesDelete {
+        return { type: local.seriesActions.showConfirm }
+    }
+
+    static confirmDeleteDone(confirm: boolean): local.ICloseSeriesDelete {
+        return { confirm, type: local.seriesActions.hideConfirm }
+    }
+
+    static deleteDone(response: api.IDeleteSeriesResponse): local.ISeriesDeleted {
+        return { id: response.id, errors: response.errors, type: local.seriesActions.deleted }
+    }
 }

@@ -28,4 +28,16 @@ export class GenreActions {
     static save(): local.ISaveGenre {
         return { type: local.genreActions.save }
     }
+
+    static confirmDelete(): local.IOpenGenreDelete {
+        return { type: local.genreActions.showConfirm }
+    }
+
+    static confirmDeleteDone(confirm: boolean): local.ICloseGenreDelete {
+        return { confirm, type: local.genreActions.hideConfirm }
+    }
+
+    static deleteDone(response: api.IDeleteGenreResponse): local.IGenreDeleted {
+        return { id: response.id, errors: response.errors, type: local.genreActions.deleted }
+    }
 }

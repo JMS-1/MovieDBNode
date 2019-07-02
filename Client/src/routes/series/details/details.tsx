@@ -3,6 +3,7 @@ import { Button, Dropdown, DropdownItemProps, DropdownProps, Form } from 'semant
 
 import { ISeries } from 'movie-db-api'
 
+import { ConfirmDeleteSeries } from '../../../components/confirm/confirmRedux'
 import { SeriesTextInput } from '../../../components/textInput/textInputRedux'
 
 export interface ISeriesDetailsUiProps {
@@ -11,6 +12,7 @@ export interface ISeriesDetailsUiProps {
 
 export interface ISeriesDetailsProps {
     cancelLabel: string
+    deleteLabel: string
     hasChanges: boolean
     hasError: boolean
     lost: boolean
@@ -19,10 +21,12 @@ export interface ISeriesDetailsProps {
     parentLabel: string
     parentOptions: DropdownItemProps[]
     saveLabel: string
+    showDelete: boolean
 }
 
 export interface ISeriesDetailsActions {
     cancel(): void
+    confirmDelete(): void
     loadDetails(id: string): void
     save(): void
     setProp<TProp extends keyof ISeries>(prop: TProp, value: ISeries[TProp]): void
@@ -40,6 +44,7 @@ export class CSeriesDetails extends React.PureComponent<TSeriesDetailsProps> {
 
         return (
             <div className='movie-db-series-details'>
+                <ConfirmDeleteSeries />
                 <Button.Group>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
@@ -47,6 +52,9 @@ export class CSeriesDetails extends React.PureComponent<TSeriesDetailsProps> {
                     <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
                         {this.props.saveLabel}
                     </Button>
+                    {this.props.showDelete && (
+                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
+                    )}
                 </Button.Group>
                 <Form error={hasError}>
                     <Form.Field>

@@ -27,7 +27,8 @@ declare module 'movie-db-client' {
 
     const enum recordingActions {
         cancel = 'movie-db.recordings.cancel-edit',
-        startEdit = 'movie-db.recordings.start-edit',
+        deleted = 'movie-db.recordings.delete-done',
+        hideConfirm = 'movie-db.recordings.close-delete',
         query = 'movie-db.recordings.query',
         queryDone = 'movie-db.recordings.query-done',
         resetFilter = 'movie-db.recordings.reset-filter',
@@ -42,7 +43,9 @@ declare module 'movie-db-client' {
         setSeriesFilter = 'movie-db.recordings.filter-series',
         setSize = 'movie-db.recordings.set-page-size',
         setTextFilter = 'movie-db.recordings.filter-text',
+        showConfirm = 'movie-db.recordings.open-delete',
         sort = 'movie-db.recordings.toggle-sort',
+        startEdit = 'movie-db.recordings.start-edit',
     }
 
     interface ILoadRecordings extends IGenericLoad<api.IRecording> {
@@ -65,6 +68,10 @@ declare module 'movie-db-client' {
 
     interface IRecordingSaved extends IGenericSaveDone<api.IRecording> {
         type: recordingActions.saveDone
+    }
+
+    interface IRecordingDeleted extends IGenericDeleteDone {
+        type: recordingActions.deleted
     }
 
     interface ICancelRecordingEdit extends IGenericCancelEdit {
@@ -127,5 +134,13 @@ declare module 'movie-db-client' {
     interface IStartRecordingEdit extends Action {
         recording: api.IRecording
         type: recordingActions.startEdit
+    }
+
+    interface IOpenRecordingDelete extends IGenericDeleteOpen {
+        type: recordingActions.showConfirm
+    }
+
+    interface ICloseRecordingDelete extends IGenericDeleteClose {
+        type: recordingActions.hideConfirm
     }
 }

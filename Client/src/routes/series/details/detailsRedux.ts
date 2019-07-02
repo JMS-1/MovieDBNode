@@ -16,23 +16,26 @@ function mapStateToProps(state: IClientState, props: local.ISeriesDetailsUiProps
 
     return {
         cancelLabel: series && series._id ? state.mui.cancel : state.mui.reset,
+        deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !series,
-        saveLabel: state.mui.save,
         parent: series && series.parentId,
         parentHint: mui.noParent,
         parentLabel: emui.parentId,
         parentOptions: getSeriesOptionsNoEdit(state),
+        saveLabel: state.mui.save,
+        showDelete: series && !!series._id,
     }
 }
 
 function mapDispatchToProps(
     dispatch: Dispatch<Action>,
-    props: local.ISeriesDetailsUiProps
+    props: local.ISeriesDetailsUiProps,
 ): local.ISeriesDetailsActions {
     return {
         cancel: () => dispatch(SeriesActions.cancelEdit()),
+        confirmDelete: () => dispatch(SeriesActions.confirmDelete()),
         loadDetails: id => dispatch(SeriesActions.select(id)),
         save: () => dispatch(SeriesActions.save()),
         setProp: (prop, value) => dispatch(SeriesActions.setProperty(prop, value)),
@@ -41,5 +44,5 @@ function mapDispatchToProps(
 
 export const SeriesDetails = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(local.CSeriesDetails)

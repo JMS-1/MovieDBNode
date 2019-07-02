@@ -6,8 +6,13 @@ import { addSchema } from '../../validation'
 
 type TApplicationActions =
     | local.IClearWebRequestErrors
+    | local.IContainerDeleted
     | local.IDoneWebRequest
+    | local.IGenreDeleted
+    | local.ILanguageDeleted
     | local.ILoadSchemas
+    | local.IRecordingDeleted
+    | local.ISeriesDeleted
     | local.IStartWebRequest
 
 const controller = new (class extends Controller<TApplicationActions, local.IApplicationState> {
@@ -17,6 +22,11 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
             [local.applicationActions.loadSchema]: this.loadSchemas,
             [local.applicationActions.resetErrors]: this.clearErrors,
             [local.applicationActions.startReq]: this.beginWebRequest,
+            [local.containerActions.deleted]: this.containerDeleted,
+            [local.genreActions.deleted]: this.genreDeleted,
+            [local.languageActions.deleted]: this.languageDeleted,
+            [local.recordingActions.deleted]: this.recordingDeleted,
+            [local.seriesActions.deleted]: this.seriesDeleted,
         }
     }
 
@@ -62,6 +72,48 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
         }
 
         return { ...state, requests: state.requests - 1 }
+    }
+
+    private deleteDone(
+        state: local.IApplicationState,
+        response:
+            | local.IContainerDeleted
+            | local.IGenreDeleted
+            | local.ILanguageDeleted
+            | local.IRecordingDeleted
+            | local.ISeriesDeleted,
+    ): local.IApplicationState {
+        if (!response.errors || response.errors.length < 1) {
+            return state
+        }
+
+        return { ...state, errors: [...state.errors, ...response.errors.map(e => e.message)] }
+    }
+
+    private genreDeleted(state: local.IApplicationState, response: local.IGenreDeleted): local.IApplicationState {
+        return this.deleteDone(state, response)
+    }
+
+    private containerDeleted(
+        state: local.IApplicationState,
+        response: local.IContainerDeleted,
+    ): local.IApplicationState {
+        return this.deleteDone(state, response)
+    }
+
+    private languageDeleted(state: local.IApplicationState, response: local.ILanguageDeleted): local.IApplicationState {
+        return this.deleteDone(state, response)
+    }
+
+    private recordingDeleted(
+        state: local.IApplicationState,
+        response: local.IRecordingDeleted,
+    ): local.IApplicationState {
+        return this.deleteDone(state, response)
+    }
+
+    private seriesDeleted(state: local.IApplicationState, response: local.ISeriesDeleted): local.IApplicationState {
+        return this.deleteDone(state, response)
     }
 })()
 

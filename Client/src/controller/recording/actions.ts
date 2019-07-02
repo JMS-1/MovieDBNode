@@ -80,4 +80,16 @@ export class RecordingActions {
     static resetFilter(): local.IResetRecordingFilter {
         return { type: local.recordingActions.resetFilter }
     }
+
+    static confirmDelete(): local.IOpenRecordingDelete {
+        return { type: local.recordingActions.showConfirm }
+    }
+
+    static confirmDeleteDone(confirm: boolean): local.ICloseRecordingDelete {
+        return { confirm, type: local.recordingActions.hideConfirm }
+    }
+
+    static deleteDone(response: api.IDeleteRecordingResponse): local.IRecordingDeleted {
+        return { id: response.id, errors: response.errors, type: local.recordingActions.deleted }
+    }
 }

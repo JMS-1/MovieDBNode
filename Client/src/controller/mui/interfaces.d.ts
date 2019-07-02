@@ -10,7 +10,9 @@ declare module 'movie-db-client' {
 
     interface IMuiState {
         readonly cancel: string
+        readonly confirm: string
         readonly container: {
+            readonly confirmHtml: string
             readonly edit: IItemMui<api.IContainer>
             readonly noId: string
             readonly noParent: string
@@ -18,11 +20,13 @@ declare module 'movie-db-client' {
         }
         readonly create: string
         readonly language: {
+            readonly confirmHtml: string
             readonly edit: IItemMui<api.ILanguage>
             readonly noId: string
             readonly noSelect: string
         }
         readonly genre: {
+            readonly confirmHtml: string
             readonly edit: IItemMui<api.IGenre>
             readonly noId: string
             readonly noSelect: string
@@ -30,9 +34,11 @@ declare module 'movie-db-client' {
         readonly media: {
             readonly types: { readonly [type in api.mediaType]: string }
         }
+        readonly no: string
         readonly recording: {
             readonly anyRent: string
             readonly clear: string
+            readonly confirmHtml: string
             readonly count: string
             readonly created: string
             readonly edit: IItemMui<api.IRecording>
@@ -70,6 +76,7 @@ declare module 'movie-db-client' {
         readonly save: string
         readonly search: string
         readonly series: {
+            readonly confirmHtml: string
             readonly edit: IItemMui<api.ISeries>
             readonly noId: string
             readonly noParent: string
@@ -77,5 +84,6 @@ declare module 'movie-db-client' {
         }
         readonly validationError: string
         readonly webError: string
+        readonly yes: string
     }
 }

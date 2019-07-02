@@ -29,6 +29,7 @@ declare module 'movie-db-client' {
 
     interface IEditState<TItem> {
         readonly all: TItem[]
+        readonly deleteOpen: boolean
         readonly selected: string
         readonly validation: IValidationError[]
         readonly validator: IValidatableSchema
@@ -58,6 +59,12 @@ declare module 'movie-db-client' {
     interface IGenericDeleteDone extends Action {
         id: string
         errors: IValidationError[]
+    }
+
+    interface IGenericDeleteOpen extends Action {}
+
+    interface IGenericDeleteClose extends Action {
+        confirm: boolean
     }
 
     const enum routes {

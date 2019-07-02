@@ -48,13 +48,11 @@ export abstract class EditController<
 > extends Controller<TActions, TState> {
     protected abstract readonly schema: keyof ISchemaResponse
 
-    protected readonly updateAllAfterSave: boolean = true
-
     protected abstract createEmpty(): TItem
 
-    protected abstract readonly afterCancel: string
+    protected abstract readonly listRoute: string
 
-    protected abstract readonly afterSave: string
+    protected readonly customSave: boolean = false
 
     protected getWorkingCopy(state: TState): TItem {
         return state.all.find(c => c._id === state.selected)
@@ -63,6 +61,7 @@ export abstract class EditController<
     protected getInitialState(): TState {
         return <TState>{
             all: [],
+            deleteOpen: false,
             selected: undefined,
             validation: undefined,
             validator: undefined,
@@ -105,7 +104,7 @@ export abstract class EditController<
 
     protected setProperty<TProp extends keyof TItem>(
         state: TState,
-        request: local.ISetGenericProperty<TItem, TProp>
+        request: local.ISetGenericProperty<TItem, TProp>,
     ): TState {
         const current = state.workingCopy || this.getWorkingCopy(state)
 
@@ -133,15 +132,7 @@ export abstract class EditController<
     }
 
     protected cancelEdit(state: TState, request: local.IGenericCancelEdit): TState {
-        if (!state.workingCopy) {
-            return state
-        }
-
-        if (this.afterCancel) {
-            delayedDispatch(routerActions.push(this.afterCancel))
-        }
-
-        return { ...state, validation: undefined, workingCopy: undefined }
+        return this.showList(state)
     }
 
     protected saveDone(state: TState, response: local.IGenericSaveDone<TItem>): TState {
@@ -153,23 +144,51 @@ export abstract class EditController<
 
         state = { ...state, selected: _id, workingCopy: undefined, validation: undefined }
 
-        if (this.updateAllAfterSave) {
-            const all = [...state.all]
-            const index = all.findIndex(c => c._id === _id)
-
-            if (index < 0) {
-                all.push(response.item)
-            } else {
-                all[index] = response.item
-            }
-
-            state = { ...state, all }
+        if (this.customSave) {
+            return state
         }
 
-        if (this.afterSave) {
-            delayedDispatch(routerActions.push(`${this.afterSave}/${_id}`))
+        delayedDispatch(routerActions.push(`${this.listRoute}/${_id}`))
+
+        const all = [...state.all]
+        const index = all.findIndex(c => c._id === _id)
+
+        if (index < 0) {
+            all.push(response.item)
+        } else {
+            all[index] = response.item
         }
 
-        return state
+        return { ...state, all }
+    }
+
+    protected openDelete(state: TState, request: local.IGenericDeleteOpen): TState {
+        if (state.deleteOpen) {
+            return state
+        }
+
+        return { ...state, deleteOpen: true }
+    }
+
+    protected closeDelete(state: TState, request: local.IGenericDeleteClose): TState {
+        if (!state.deleteOpen) {
+            return state
+        }
+
+        return { ...state, deleteOpen: false }
+    }
+
+    private showList(state: TState): TState {
+        delayedDispatch(routerActions.push(this.listRoute))
+
+        return { ...state, selected: undefined, workingCopy: undefined, validation: undefined }
+    }
+
+    protected deleteDone(state: TState, request: local.IGenericDeleteDone): TState {
+        if (request.errors && request.errors.length > 0) {
+            return state
+        }
+
+        return this.showList(state)
     }
 }

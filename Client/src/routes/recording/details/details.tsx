@@ -7,6 +7,7 @@ import { IRecording, mediaType } from 'movie-db-api'
 
 import { RecordingLinks } from '../links/linksRedux'
 
+import { ConfirmDeleteRecording } from '../../../components/confirm/confirmRedux'
 import { RecordingTextInput } from '../../../components/textInput/textInputRedux'
 
 export interface IRecordingParams {
@@ -21,6 +22,7 @@ export interface IRecordingProps {
     containerHint: string
     containerLabel: string
     containerOptions: DropdownItemProps[]
+    deleteLabel: string
     genreHint: string
     genreLabel: string
     genreOptions: DropdownItemProps[]
@@ -36,6 +38,7 @@ export interface IRecordingProps {
     seriesHint: string
     seriesLabel: string
     seriesOptions: DropdownItemProps[]
+    showDelete: boolean
     type: mediaType
     typeHint: string
     typeLabel: string
@@ -44,6 +47,7 @@ export interface IRecordingProps {
 
 export interface IRecordingActions {
     cancel(): void
+    confirmDelete(): void
     loadRecording(): void
     saveAndBack(): void
     setProp<TProp extends keyof IRecording>(prop: TProp, value: IRecording[TProp]): void
@@ -57,6 +61,7 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
 
         return (
             <div className='movie-db-recording-edit'>
+                <ConfirmDeleteRecording />
                 <Button.Group>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
@@ -64,6 +69,9 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
                     <Button onClick={this.props.saveAndBack} disabled={hasError || !hasChanges}>
                         {this.props.saveAndBackLabel}
                     </Button>
+                    {this.props.showDelete && (
+                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
+                    )}
                 </Button.Group>
                 <Form error={hasError}>
                     <RecordingTextInput prop='name' required />
