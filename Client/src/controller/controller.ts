@@ -132,7 +132,11 @@ export abstract class EditController<
     }
 
     protected cancelEdit(state: TState, request: local.IGenericCancelEdit): TState {
-        return this.showList(state)
+        if (!state.selected) {
+            return this.showList(state)
+        }
+
+        return { ...state, workingCopy: undefined, validation: undefined }
     }
 
     protected saveDone(state: TState, response: local.IGenericSaveDone<TItem>): TState {

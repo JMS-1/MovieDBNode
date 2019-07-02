@@ -85,6 +85,16 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
 
         return state
     }
+
+    protected deleteDone(state: local.IContainerState, request: local.IContainerDeleted): local.IContainerState {
+        state = super.deleteDone(state, request)
+
+        if (!request.errors || request.errors.length < 1) {
+            ServerApi.get('container', ContainerActions.load)
+        }
+
+        return state
+    }
 })()
 
 export const ContainerReducer = controller.reducer

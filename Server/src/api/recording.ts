@@ -1,7 +1,9 @@
 import { Router } from 'express'
 import { v4 as uuid } from 'uuid'
 
-import { INewRecording, IRecordingQueryRequest, IUpdateRecordingResponse } from 'movie-db-api'
+import {
+    IApiDeleteResponse, INewRecording, IRecordingQueryRequest, IUpdateRecordingResponse,
+} from 'movie-db-api'
 
 import { processApiRequest } from './utils'
 
@@ -13,6 +15,17 @@ export const recordingApi = Router().use(
         .get('/:id', (request, response, next) =>
             processApiRequest(
                 async () => toProtocol(await recordingCollection.findOne(request.params.id)),
+                request,
+                response,
+            ),
+        )
+        .delete('/:id', (request, response) =>
+            processApiRequest(
+                async () =>
+                    <IApiDeleteResponse>{
+                        id: request.params.id,
+                        errors: await recordingCollection.deleteOne(request.params.id),
+                    },
                 request,
                 response,
             ),

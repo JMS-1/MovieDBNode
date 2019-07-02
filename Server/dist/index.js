@@ -1022,6 +1022,13 @@ const controller = new (class extends controller_1.EditController {
         }
         return state;
     }
+    deleteDone(state, request) {
+        state = super.deleteDone(state, request);
+        if (!request.errors || request.errors.length < 1) {
+            store_1.ServerApi.get('container', actions_1.ContainerActions.load);
+        }
+        return state;
+    }
 })();
 exports.ContainerReducer = controller.reducer;
 
@@ -1224,7 +1231,10 @@ class EditController extends Controller {
         return this.validateItem(Object.assign({}, state, { validator: response.schemas[this.schema] }));
     }
     cancelEdit(state, request) {
-        return this.showList(state);
+        if (!state.selected) {
+            return this.showList(state);
+        }
+        return Object.assign({}, state, { workingCopy: undefined, validation: undefined });
     }
     saveDone(state, response) {
         if (response.errors && response.errors.length > 0) {
@@ -2308,6 +2318,13 @@ const controller = new (class extends controller_1.EditController {
         state = super.closeDelete(state, request);
         if (request.confirm && state.selected) {
             store_1.ServerApi.delete(`series/${state.selected}`, actions_1.SeriesActions.deleteDone);
+        }
+        return state;
+    }
+    deleteDone(state, request) {
+        state = super.deleteDone(state, request);
+        if (!request.errors || request.errors.length < 1) {
+            store_1.ServerApi.get('series', actions_1.SeriesActions.load);
         }
         return state;
     }
