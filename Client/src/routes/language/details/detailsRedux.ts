@@ -14,16 +14,18 @@ function mapStateToProps(state: IClientState, props: local.ILanguageDetailsUiPro
 
     return {
         cancelLabel: language && language._id ? state.mui.cancel : state.mui.reset,
+        deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !language,
         saveLabel: state.mui.save,
+        showDelete: language && !!language._id,
     }
 }
 
 function mapDispatchToProps(
     dispatch: Dispatch<Action>,
-    props: local.ILanguageDetailsUiProps
+    props: local.ILanguageDetailsUiProps,
 ): local.ILanguageDetailsActions {
     return {
         cancel: () => dispatch(LanguageActions.cancelEdit()),
@@ -34,5 +36,5 @@ function mapDispatchToProps(
 
 export const LanguageDetails = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(local.CLanguageDetails)

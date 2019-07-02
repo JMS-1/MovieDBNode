@@ -153,8 +153,17 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         }
         return super.findOneAndReplace(recording);
     }
-    async deleteOne(id) {
-        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    async inUse(property, id, scope) {
+        const me = await this.getCollection();
+        const count = await me.countDocuments({ [property]: typeof id === 'string' && id });
+        switch (count) {
+            case 0:
+                return undefined;
+            case 1:
+                return `${scope} wird noch für eine Aufzeichnung verwendet`;
+            default:
+                return `${scope} wird noch für ${count} Aufzeichnungen verwendet`;
+        }
     }
 })();
 

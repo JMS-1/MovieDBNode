@@ -173,7 +173,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         const languageInfo = await me
             .aggregate<api.IQueryCountInfo>(
                 [...baseQuery, { $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
-                { collation }
+                { collation },
             )
             .toArray()
 
@@ -197,7 +197,17 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         return super.findOneAndReplace(recording)
     }
 
-    async deleteOne(id: string): Promise<api.IValidationError[]> {
-        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }]
+    async inUse<TProp extends keyof IDbRecording>(property: TProp, id: string, scope: string): Promise<string> {
+        const me = await this.getCollection()
+        const count = await me.countDocuments({ [property]: typeof id === 'string' && id })
+
+        switch (count) {
+            case 0:
+                return undefined
+            case 1:
+                return `${scope} wird noch für eine Aufzeichnung verwendet`
+            default:
+                return `${scope} wird noch für ${count} Aufzeichnungen verwendet`
+        }
     }
 })()

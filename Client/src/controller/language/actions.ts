@@ -21,6 +21,10 @@ export class LanguageActions {
         return { item: response.item, errors: response.errors, type: local.languageActions.saveDone }
     }
 
+    static deleteDone(response: api.IDeleteLanguageResponse): local.ILanguageDeleted {
+        return { id: response.id, errors: response.errors, type: local.languageActions.deleted }
+    }
+
     static cancelEdit(): local.ICancelLanguageEdit {
         return { type: local.languageActions.cancel }
     }

@@ -55,6 +55,11 @@ declare module 'movie-db-client' {
         errors: IValidationError[]
     }
 
+    interface IGenericDeleteDone extends Action {
+        id: string
+        errors: IValidationError[]
+    }
+
     const enum routes {
         container = '/container',
         genre = '/genre',

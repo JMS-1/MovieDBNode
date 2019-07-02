@@ -4,6 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const language_1 = require("./entities/language");
+const recording_1 = require("./recording");
 const utils_1 = require("./utils");
 const validation_1 = require("./validation");
 __export(require("./entities/language"));
@@ -24,8 +25,8 @@ exports.languageCollection = new (class extends utils_1.CollectionBase {
         }
         this.cacheMigrated(language);
     }
-    async deleteOne(id) {
-        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    async canDelete(id) {
+        return recording_1.recordingCollection.inUse('languages', id, 'Sprache');
     }
 })();
 

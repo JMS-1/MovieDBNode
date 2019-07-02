@@ -4,6 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const genre_1 = require("./entities/genre");
+const recording_1 = require("./recording");
 const utils_1 = require("./utils");
 const validation_1 = require("./validation");
 __export(require("./entities/genre"));
@@ -24,8 +25,8 @@ exports.genreCollection = new (class extends utils_1.CollectionBase {
         }
         this.cacheMigrated(genre);
     }
-    async deleteOne(id) {
-        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    async canDelete(id) {
+        return recording_1.recordingCollection.inUse('genres', id, 'Kategorie');
     }
 })();
 

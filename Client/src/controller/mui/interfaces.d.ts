@@ -50,6 +50,7 @@ declare module 'movie-db-client' {
             readonly saveAndBack: string
             readonly yesRent: string
         }
+        readonly remove: string
         readonly reset: string
         readonly routes: {
             readonly container: string

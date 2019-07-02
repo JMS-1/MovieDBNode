@@ -1285,6 +1285,9 @@ class LanguageActions {
     static saveDone(response) {
         return { item: response.item, errors: response.errors, type: "movie-db.languages.save-done" };
     }
+    static deleteDone(response) {
+        return { id: response.id, errors: response.errors, type: "movie-db.languages.delete-done" };
+    }
     static cancelEdit() {
         return { type: "movie-db.languages.cancel-edit" };
     }
@@ -1543,6 +1546,7 @@ function getInitialState() {
             yesRent: 'verliehen',
         },
         reset: 'Abbrechen',
+        remove: 'Löschen',
         routes: {
             container: 'Ablagen',
             create: {
@@ -2542,7 +2546,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
+const controller_1 = __webpack_require__(/*! ../../../controller */ "./Client/src/controller/index.ts");
+const store_1 = __webpack_require__(/*! ../../../store */ "./Client/src/store.ts");
 class CLanguageDetails extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.onDelete = () => {
+            store_1.ServerApi.delete(`${"/language"}/${this.props.id}`, controller_1.LanguageActions.deleteDone);
+        };
+    }
     render() {
         if (this.props.lost) {
             return null;
@@ -2551,7 +2563,8 @@ class CLanguageDetails extends React.PureComponent {
         return (React.createElement("div", { className: 'movie-db-language-details' },
             React.createElement(semantic_ui_react_1.Button.Group, null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel)),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
+                this.props.showDelete && React.createElement(semantic_ui_react_1.Button, { onClick: this.onDelete }, this.props.deleteLabel)),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(textInputRedux_1.LanguageTextInput, { prop: 'name', required: true }))));
     }
@@ -2588,10 +2601,12 @@ function mapStateToProps(state, props) {
     const errors = route.validation;
     return {
         cancelLabel: language && language._id ? state.mui.cancel : state.mui.reset,
+        deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !language,
         saveLabel: state.mui.save,
+        showDelete: language && !!language._id,
     };
 }
 function mapDispatchToProps(dispatch, props) {

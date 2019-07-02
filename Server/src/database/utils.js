@@ -111,6 +111,30 @@ class CollectionBase {
         const me = await this.getCollection();
         return me.findOne({ _id: id.toString() });
     }
+    canDelete(id) {
+        return Promise.resolve(undefined);
+    }
+    postDelete(id) {
+        return Promise.resolve(undefined);
+    }
+    async deleteOne(id) {
+        try {
+            const forbidDelete = await this.canDelete(id);
+            if (forbidDelete) {
+                return [{ constraint: 'delete', property: '*', message: forbidDelete }];
+            }
+            const me = await this.getCollection();
+            const deleted = await me.deleteOne({ _id: typeof id === 'string' && id });
+            if (deleted.deletedCount !== 1) {
+                return [{ constraint: 'delete', property: '*', message: 'nicht gefunden' }];
+            }
+            await this.postDelete(id);
+            return undefined;
+        }
+        catch (error) {
+            return [{ constraint: 'database', property: '*', message: utils_1.getError(error) }];
+        }
+    }
 }
 exports.CollectionBase = CollectionBase;
 

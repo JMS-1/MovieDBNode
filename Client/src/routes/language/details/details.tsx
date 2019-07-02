@@ -1,7 +1,11 @@
 import * as React from 'react'
 import { Button, Form } from 'semantic-ui-react'
 
+import { routes } from 'movie-db-client'
+
 import { LanguageTextInput } from '../../../components/textInput/textInputRedux'
+import { LanguageActions } from '../../../controller'
+import { ServerApi } from '../../../store'
 
 export interface ILanguageDetailsUiProps {
     id: string
@@ -9,6 +13,8 @@ export interface ILanguageDetailsUiProps {
 
 export interface ILanguageDetailsProps {
     cancelLabel: string
+    showDelete: boolean
+    deleteLabel: string
     hasChanges: boolean
     hasError: boolean
     lost: boolean
@@ -40,6 +46,7 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
                     <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
                         {this.props.saveLabel}
                     </Button>
+                    {this.props.showDelete && <Button onClick={this.onDelete}>{this.props.deleteLabel}</Button>}
                 </Button.Group>
                 <Form error={hasError}>
                     <LanguageTextInput prop='name' required />
@@ -56,5 +63,9 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
         if (props.id !== this.props.id) {
             this.props.loadDetails(props.id)
         }
+    }
+
+    private readonly onDelete = (): void => {
+        ServerApi.delete(`${routes.language}/${this.props.id}`, LanguageActions.deleteDone)
     }
 }

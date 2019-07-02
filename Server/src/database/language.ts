@@ -1,6 +1,5 @@
-import { IValidationError } from 'movie-db-api'
-
 import { collectionName, IDbLanguage, LanguageSchema } from './entities/language'
+import { recordingCollection } from './recording'
 import { CollectionBase } from './utils'
 import { validate } from './validation'
 
@@ -26,7 +25,7 @@ export const languageCollection = new (class extends CollectionBase<IDbLanguage>
         this.cacheMigrated(language)
     }
 
-    async deleteOne(id: string): Promise<IValidationError[]> {
-        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }]
+    protected async canDelete(id: string): Promise<string> {
+        return recordingCollection.inUse('languages', id, 'Sprache')
     }
 })()

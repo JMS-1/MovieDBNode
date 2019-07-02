@@ -107,6 +107,7 @@ export function getInitialState(): IMuiState {
             yesRent: 'verliehen',
         },
         reset: 'Abbrechen',
+        remove: 'Löschen',
         routes: {
             container: 'Ablagen',
             create: {

@@ -145,4 +145,35 @@ export abstract class CollectionBase<TType extends { _id: string }> {
 
         return me.findOne({ _id: id.toString() })
     }
+
+    protected canDelete(id: string): Promise<string> {
+        return Promise.resolve<string>(undefined)
+    }
+
+    protected postDelete(id: string): Promise<void> {
+        return Promise.resolve<void>(undefined)
+    }
+
+    async deleteOne(id: string): Promise<IValidationError[]> {
+        try {
+            const forbidDelete = await this.canDelete(id)
+
+            if (forbidDelete) {
+                return [{ constraint: 'delete', property: '*', message: forbidDelete }]
+            }
+
+            const me = await this.getCollection()
+            const deleted = await me.deleteOne({ _id: typeof id === 'string' && id })
+
+            if (deleted.deletedCount !== 1) {
+                return [{ constraint: 'delete', property: '*', message: 'nicht gefunden' }]
+            }
+
+            await this.postDelete(id)
+
+            return undefined
+        } catch (error) {
+            return [{ constraint: 'database', property: '*', message: getError(error) }]
+        }
+    }
 }

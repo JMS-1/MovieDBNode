@@ -4,6 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const container_1 = require("./entities/container");
+const recording_1 = require("./recording");
 const utils_1 = require("./utils");
 const validation_1 = require("./validation");
 __export(require("./entities/container"));
@@ -34,8 +35,12 @@ exports.containerCollection = new (class extends utils_1.CollectionBase {
         }
         this.cacheMigrated(container);
     }
-    async deleteOne(id) {
-        return [{ constraint: 'database', property: '*', message: 'not yet implemented' }];
+    async canDelete(id) {
+        return recording_1.recordingCollection.inUse('containerId', id, 'Ablage');
+    }
+    async postDelete(id) {
+        const me = await this.getCollection();
+        await me.updateMany({ parentId: typeof id === 'string' && id }, { $unset: { parentId: null } });
     }
 })();
 

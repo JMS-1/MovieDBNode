@@ -7,6 +7,7 @@ declare module 'movie-db-client' {
 
     const enum languageActions {
         cancel = 'movie-db.languages.cancel-edit',
+        deleted = 'movie-db.languages.delete-done',
         load = 'movie-db.languages.load',
         save = 'movie-db.languages.save',
         saveDone = 'movie-db.languages.save-done',
@@ -28,6 +29,10 @@ declare module 'movie-db-client' {
 
     interface ILanguageSaved extends IGenericSaveDone<ILanguage> {
         type: languageActions.saveDone
+    }
+
+    interface ILanguageDeleted extends IGenericDeleteDone {
+        type: languageActions.deleted
     }
 
     interface ICancelLanguageEdit extends IGenericCancelEdit {

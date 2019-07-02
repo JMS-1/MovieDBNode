@@ -14,15 +14,15 @@ export const recordingApi = Router().use(
             processApiRequest(
                 async () => toProtocol(await recordingCollection.findOne(request.params.id)),
                 request,
-                response
-            )
+                response,
+            ),
         )
         .post('/search', (request, response, next) =>
             processApiRequest(
                 async (req: IRecordingQueryRequest) => await recordingCollection.query(req),
                 request,
-                response
-            )
+                response,
+            ),
         )
         .put('/:id', (request, response, next) =>
             processApiRequest(
@@ -35,8 +35,8 @@ export const recordingApi = Router().use(
                     }
                 },
                 request,
-                response
-            )
+                response,
+            ),
         )
         .post('/', (request, response, next) =>
             processApiRequest(
@@ -49,7 +49,7 @@ export const recordingApi = Router().use(
                     }
                 },
                 request,
-                response
-            )
-        )
+                response,
+            ),
+        ),
 )
