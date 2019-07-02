@@ -38,7 +38,7 @@ export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
         return (
             <div className='movie-db-genre-details'>
                 <ConfirmDeleteGenre />
-                <Button.Group>
+                <div>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
                     </Button>
@@ -48,7 +48,7 @@ export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
                     {this.props.showDelete && (
                         <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
                     )}
-                </Button.Group>
+                </div>
                 <Form error={hasError}>
                     <GenreTextInput prop='name' required />
                 </Form>

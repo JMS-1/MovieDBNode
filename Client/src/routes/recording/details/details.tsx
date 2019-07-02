@@ -22,6 +22,7 @@ export interface IRecordingProps {
     containerHint: string
     containerLabel: string
     containerOptions: DropdownItemProps[]
+    copyLabel: string
     deleteLabel: string
     genreHint: string
     genreLabel: string
@@ -34,10 +35,12 @@ export interface IRecordingProps {
     languageOptions: DropdownItemProps[]
     languages: string[]
     saveAndBackLabel: string
+    saveAndCopyLabel: string
     series: string
     seriesHint: string
     seriesLabel: string
     seriesOptions: DropdownItemProps[]
+    showCopy: boolean
     showDelete: boolean
     type: mediaType
     typeHint: string
@@ -48,8 +51,10 @@ export interface IRecordingProps {
 export interface IRecordingActions {
     cancel(): void
     confirmDelete(): void
+    createCopy(): void
     loadRecording(): void
     saveAndBack(): void
+    saveAndCopy(): void
     setProp<TProp extends keyof IRecording>(prop: TProp, value: IRecording[TProp]): void
 }
 
@@ -62,17 +67,21 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
         return (
             <div className='movie-db-recording-edit'>
                 <ConfirmDeleteRecording />
-                <Button.Group>
+                <div>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
                     </Button>
                     <Button onClick={this.props.saveAndBack} disabled={hasError || !hasChanges}>
                         {this.props.saveAndBackLabel}
                     </Button>
+                    <Button onClick={this.props.saveAndCopy} disabled={hasError || !hasChanges}>
+                        {this.props.saveAndCopyLabel}
+                    </Button>
+                    {this.props.showCopy && <Button onClick={this.props.createCopy}>{this.props.copyLabel}</Button>}
                     {this.props.showDelete && (
                         <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
                     )}
-                </Button.Group>
+                </div>
                 <Form error={hasError}>
                     <RecordingTextInput prop='name' required />
                     <RecordingLinks />
@@ -175,5 +184,11 @@ export class CRecording extends React.PureComponent<TRecordingProps> {
 
     componentWillMount(): void {
         this.props.loadRecording()
+    }
+
+    componentDidUpdate(prev: Readonly<TRecordingProps>): void {
+        if (this.props.match.params.id !== prev.match.params.id) {
+            this.props.loadRecording()
+        }
     }
 }

@@ -95,6 +95,7 @@ export function getInitialState(): IMuiState {
                 wirklick endgültig entfernt werden?
                 `,
             count: '{count} von {total}',
+            createCopy: 'Kopie erstellen',
             created: 'Erstellt',
             edit: {
                 _id: 'Eindeutige Kennung',
@@ -126,6 +127,7 @@ export function getInitialState(): IMuiState {
             noId: '(noch keine)',
             noRent: 'nicht verliehen',
             saveAndBack: 'Speichern und zurück',
+            saveAndCopy: 'Speichern und neue Kopie',
             yesRent: 'verliehen',
         },
         reset: 'Abbrechen',

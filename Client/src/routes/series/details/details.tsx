@@ -45,7 +45,7 @@ export class CSeriesDetails extends React.PureComponent<TSeriesDetailsProps> {
         return (
             <div className='movie-db-series-details'>
                 <ConfirmDeleteSeries />
-                <Button.Group>
+                <div>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
                     </Button>
@@ -55,7 +55,7 @@ export class CSeriesDetails extends React.PureComponent<TSeriesDetailsProps> {
                     {this.props.showDelete && (
                         <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
                     )}
-                </Button.Group>
+                </div>
                 <Form error={hasError}>
                     <Form.Field>
                         <label>{this.props.parentLabel}</label>

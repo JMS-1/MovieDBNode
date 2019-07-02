@@ -1766,6 +1766,7 @@ function getInitialState() {
                 wirklick endgültig entfernt werden?
                 `,
             count: '{count} von {total}',
+            createCopy: 'Kopie erstellen',
             created: 'Erstellt',
             edit: {
                 _id: 'Eindeutige Kennung',
@@ -1797,6 +1798,7 @@ function getInitialState() {
             noId: '(noch keine)',
             noRent: 'nicht verliehen',
             saveAndBack: 'Speichern und zurück',
+            saveAndCopy: 'Speichern und neue Kopie',
             yesRent: 'verliehen',
         },
         reset: 'Abbrechen',
@@ -1940,6 +1942,9 @@ class RecordingActions {
     static resetFilter() {
         return { type: "movie-db.recordings.reset-filter" };
     }
+    static createCopy() {
+        return { type: "movie-db.recordings.copy" };
+    }
     static confirmDelete() {
         return { type: "movie-db.recordings.open-delete" };
     }
@@ -1982,6 +1987,7 @@ const controller = new (class extends controller_1.EditController {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
             ["movie-db.recordings.cancel-edit"]: this.cancelEdit,
+            ["movie-db.recordings.copy"]: this.createCopy,
             ["movie-db.recordings.delete-done"]: this.deleteDone,
             ["movie-db.recordings.close-delete"]: this.closeDelete,
             ["movie-db.recordings.query"]: this.query,
@@ -2118,6 +2124,14 @@ const controller = new (class extends controller_1.EditController {
         store_1.ServerApi.get(`recording/${request.id}`, actions_1.RecordingActions.startEdit);
         return Object.assign({}, state, { edit: request.id });
     }
+    createCopy(state, request) {
+        store_1.delayedDispatch(connected_react_router_1.routerActions.push(`${"/recording"}/NEW`));
+        const edit = state.workingCopy || (typeof state.edit !== 'string' && state.edit);
+        if (!edit) {
+            return state;
+        }
+        return Object.assign({}, state, { selected: undefined, workingCopy: Object.assign({}, edit, { _id: '', name: `Kopie von ${edit.name || ''}` }) });
+    }
     getWorkingCopy(state) {
         return typeof state.edit !== 'string' && state.edit;
     }
@@ -2135,6 +2149,11 @@ const controller = new (class extends controller_1.EditController {
         switch (state.afterSave) {
             case 'list':
                 store_1.delayedDispatch(connected_react_router_1.routerActions.push("/recording"));
+                break;
+            case 'copy':
+                const { item } = response;
+                state = Object.assign({}, state, { selected: undefined, workingCopy: Object.assign({}, item, { _id: '', name: `Kopie von ${item.name || ''}` }) });
+                store_1.delayedDispatch(connected_react_router_1.routerActions.push(`${"/recording"}/NEW`));
                 break;
         }
         return state;
@@ -2584,7 +2603,7 @@ class CContainerDetails extends React.PureComponent {
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-container-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteContainer, null),
-            React.createElement(semantic_ui_react_1.Button.Group, null,
+            React.createElement("div", null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
                 this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
@@ -2735,7 +2754,7 @@ class CGenreDetails extends React.PureComponent {
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-genre-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteGenre, null),
-            React.createElement(semantic_ui_react_1.Button.Group, null,
+            React.createElement("div", null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
                 this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
@@ -2871,7 +2890,7 @@ class CLanguageDetails extends React.PureComponent {
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-language-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteLanguage, null),
-            React.createElement(semantic_ui_react_1.Button.Group, null,
+            React.createElement("div", null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
                 this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
@@ -3020,9 +3039,11 @@ class CRecording extends React.PureComponent {
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-recording-edit' },
             React.createElement(confirmRedux_1.ConfirmDeleteRecording, null),
-            React.createElement(semantic_ui_react_1.Button.Group, null,
+            React.createElement("div", null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndBack, disabled: hasError || !hasChanges }, this.props.saveAndBackLabel),
+                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.saveAndCopy, disabled: hasError || !hasChanges }, this.props.saveAndCopyLabel),
+                this.props.showCopy && React.createElement(semantic_ui_react_1.Button, { onClick: this.props.createCopy }, this.props.copyLabel),
                 this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
             React.createElement(semantic_ui_react_1.Form, { error: hasError },
                 React.createElement(textInputRedux_1.RecordingTextInput, { prop: 'name', required: true }),
@@ -3048,6 +3069,11 @@ class CRecording extends React.PureComponent {
     }
     componentWillMount() {
         this.props.loadRecording();
+    }
+    componentDidUpdate(prev) {
+        if (this.props.match.params.id !== prev.match.params.id) {
+            this.props.loadRecording();
+        }
     }
 }
 exports.CRecording = CRecording;
@@ -3080,6 +3106,7 @@ function mapStateToProps(state, props) {
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
         containerOptions: controller.getAllContainerOptions(state),
+        copyLabel: mui.createCopy,
         deleteLabel: state.mui.remove,
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
@@ -3092,10 +3119,12 @@ function mapStateToProps(state, props) {
         languageOptions: controller.getAllLanguageOptions(state),
         languages: (edit && edit.languages) || noSelection,
         saveAndBackLabel: mui.saveAndBack,
+        saveAndCopyLabel: mui.saveAndCopy,
         series: edit && edit.series,
         seriesHint: mui.editSeries,
         seriesLabel: emui.series,
         seriesOptions: controller.getSeriesOptions(state),
+        showCopy: edit && !!edit._id,
         showDelete: edit && !!edit._id,
         type: edit ? edit.containerType : 0,
         typeHint: mui.editType,
@@ -3107,8 +3136,10 @@ function mapDispatchToProps(dispatch, props) {
     return {
         cancel: () => dispatch(controller.RecordingActions.cancelEdit()),
         confirmDelete: () => dispatch(controller.RecordingActions.confirmDelete()),
+        createCopy: () => dispatch(controller.RecordingActions.createCopy()),
         loadRecording: () => dispatch(controller.RecordingActions.select(props.match.params.id)),
         saveAndBack: () => dispatch(controller.RecordingActions.save('list')),
+        saveAndCopy: () => dispatch(controller.RecordingActions.save('copy')),
         setProp: (prop, value) => dispatch(controller.RecordingActions.setProperty(prop, value)),
     };
 }
@@ -3241,6 +3272,17 @@ class CRecordingLinks extends React.PureComponent {
         this.setName = (ev) => this.setProp('name', ev.currentTarget.value);
         this.setDescription = (ev) => this.setProp('description', ev.currentTarget.value);
         this.setUrl = (ev) => this.setProp('url', ev.currentTarget.value);
+        this.addLink = () => {
+            const links = [...this.props.links, { name: '', url: '' }];
+            this.props.setLinks(links);
+            this.setState({ selected: links.length - 1 });
+        };
+        this.delLink = () => {
+            const links = [...this.props.links];
+            links.splice(this.state.selected, 1);
+            this.props.setLinks(links);
+            this.setState({ selected: 0 });
+        };
     }
     render() {
         const { edit, selected } = this.state;
@@ -3254,22 +3296,21 @@ class CRecordingLinks extends React.PureComponent {
         return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-container-links', error: hasError },
             React.createElement("label", null,
                 this.props.label,
-                React.createElement(semantic_ui_react_1.Icon, { name: edit ? 'eye' : 'edit', link: true, onClick: this.toggleEdit })),
+                React.createElement(semantic_ui_react_1.Icon, { name: edit ? 'eye' : 'edit', link: true, onClick: this.toggleEdit }),
+                edit && React.createElement(semantic_ui_react_1.Icon, { name: 'add', link: true, onClick: this.addLink })),
             edit ? (React.createElement(React.Fragment, null,
-                React.createElement(semantic_ui_react_1.Button.Group, null, links.map((l, i) => (React.createElement(EditButton, { description: l.description, index: i, key: i, name: l.name, select: this.select, selected: i === selected })))),
+                React.createElement("div", null, links.map((l, i) => (React.createElement(EditButton, { description: l.description, index: i, key: i, name: l.name, select: this.select, selected: i === selected })))),
                 React.createElement("div", { className: 'link-edit' },
-                    React.createElement(semantic_ui_react_1.Form.Field, { error: hasNameError, required: true },
+                    React.createElement(semantic_ui_react_1.Form.Field, { required: true },
                         React.createElement("label", null, this.props.name),
-                        React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setName, value: (link && link.name) || '' }),
-                        React.createElement(messageRedux_1.ReportError, { errors: nameErrors })),
-                    React.createElement(semantic_ui_react_1.Form.Field, { error: hasUrlError, required: true },
+                        React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setName, value: (link && link.name) || '' })),
+                    React.createElement(semantic_ui_react_1.Form.Field, { required: true },
                         React.createElement("label", null, this.props.url),
-                        React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setUrl, value: (link && link.url) || '' }),
-                        React.createElement(messageRedux_1.ReportError, { errors: urlErrors })),
-                    React.createElement(semantic_ui_react_1.Form.Field, { error: hasDescriptionError },
+                        React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setUrl, value: (link && link.url) || '' })),
+                    React.createElement(semantic_ui_react_1.Form.Field, null,
                         React.createElement("label", null, this.props.description),
-                        React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setDescription, value: (link && link.description) || '' }),
-                        React.createElement(messageRedux_1.ReportError, { errors: descriptionErrors }))))) : (React.createElement(semantic_ui_react_1.Button.Group, null, links.map((l, i) => (React.createElement(semantic_ui_react_1.Button, { as: 'a', key: i, title: l.description, href: l.url, target: '_blank' }, l.name || React.createElement(React.Fragment, null, "\u00A0")))))),
+                        React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setDescription, value: (link && link.description) || '' })),
+                    React.createElement(semantic_ui_react_1.Button, { onClick: this.delLink }, this.props.deleteLabel)))) : (React.createElement("div", null, links.map((l, i) => (React.createElement(semantic_ui_react_1.Button, { as: 'a', key: i, title: l.description, href: l.url, target: '_blank' }, l.name || React.createElement(React.Fragment, null, "\u00A0")))))),
             React.createElement(messageRedux_1.ReportError, { errors: errors })));
     }
     setProp(prop, value) {
@@ -3317,6 +3358,7 @@ function mapStateToProps(state, props) {
     const edit = controller_1.getRecordingEdit(state);
     const route = state.recording;
     return {
+        deleteLabel: state.mui.remove,
         description: emui.description,
         descriptionErrors: controller_1.getErrors(route.validation, 'links.description', undefined),
         errors: controller_1.getErrors(route.validation, 'links', undefined),
@@ -3542,7 +3584,7 @@ class CSeriesDetails extends React.PureComponent {
         const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-series-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteSeries, null),
-            React.createElement(semantic_ui_react_1.Button.Group, null,
+            React.createElement("div", null,
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
                 React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
                 this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),

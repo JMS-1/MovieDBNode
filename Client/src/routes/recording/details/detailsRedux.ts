@@ -22,6 +22,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
         containerOptions: controller.getAllContainerOptions(state),
+        copyLabel: mui.createCopy,
         deleteLabel: state.mui.remove,
         genreHint: mui.editGenres,
         genreLabel: emui.genres,
@@ -34,10 +35,12 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         languageOptions: controller.getAllLanguageOptions(state),
         languages: (edit && edit.languages) || noSelection,
         saveAndBackLabel: mui.saveAndBack,
+        saveAndCopyLabel: mui.saveAndCopy,
         series: edit && edit.series,
         seriesHint: mui.editSeries,
         seriesLabel: emui.series,
         seriesOptions: controller.getSeriesOptions(state),
+        showCopy: edit && !!edit._id,
         showDelete: edit && !!edit._id,
         type: edit ? edit.containerType : mediaType.Undefined,
         typeHint: mui.editType,
@@ -50,8 +53,10 @@ function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRecordingU
     return {
         cancel: () => dispatch(controller.RecordingActions.cancelEdit()),
         confirmDelete: () => dispatch(controller.RecordingActions.confirmDelete()),
+        createCopy: () => dispatch(controller.RecordingActions.createCopy()),
         loadRecording: () => dispatch(controller.RecordingActions.select(props.match.params.id)),
         saveAndBack: () => dispatch(controller.RecordingActions.save('list')),
+        saveAndCopy: () => dispatch(controller.RecordingActions.save('copy')),
         setProp: (prop, value) => dispatch(controller.RecordingActions.setProperty(prop, value)),
     }
 }

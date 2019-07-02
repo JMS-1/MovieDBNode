@@ -17,6 +17,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingLinksUiProp
     const route = state.recording
 
     return {
+        deleteLabel: state.mui.remove,
         description: emui.description,
         descriptionErrors: getErrors(route.validation, 'links.description', <any>undefined),
         errors: getErrors(route.validation, 'links', <IRecording>undefined),

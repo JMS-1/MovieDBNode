@@ -38,7 +38,7 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
         return (
             <div className='movie-db-language-details'>
                 <ConfirmDeleteLanguage />
-                <Button.Group>
+                <div>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
                     </Button>
@@ -48,7 +48,7 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
                     {this.props.showDelete && (
                         <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
                     )}
-                </Button.Group>
+                </div>
                 <Form error={hasError}>
                     <LanguageTextInput prop='name' required />
                 </Form>

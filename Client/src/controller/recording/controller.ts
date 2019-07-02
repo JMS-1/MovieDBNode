@@ -13,6 +13,7 @@ import { delayedDispatch, ServerApi } from '../../store'
 type TRecordingActions =
     | local.ICancelRecordingEdit
     | local.ICloseRecordingDelete
+    | local.ICopyRecording
     | local.ILoadRecordings
     | local.ILoadSchemas
     | local.IOpenRecordingDelete
@@ -46,6 +47,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return {
             [local.applicationActions.loadSchema]: this.loadSchema,
             [local.recordingActions.cancel]: this.cancelEdit,
+            [local.recordingActions.createCopy]: this.createCopy,
             [local.recordingActions.deleted]: this.deleteDone,
             [local.recordingActions.hideConfirm]: this.closeDelete,
             [local.recordingActions.query]: this.query,
@@ -278,6 +280,22 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return { ...state, edit: request.id }
     }
 
+    private createCopy(state: local.IRecordingState, request: local.ICopyRecording): local.IRecordingState {
+        delayedDispatch(routerActions.push(`${local.routes.recording}/NEW`))
+
+        const edit = state.workingCopy || (typeof state.edit !== 'string' && state.edit)
+
+        if (!edit) {
+            return state
+        }
+
+        return {
+            ...state,
+            selected: undefined,
+            workingCopy: <api.IRecordingInfo>{ ...edit, _id: '', name: `Kopie von ${edit.name || ''}` },
+        }
+    }
+
     protected getWorkingCopy(state: local.IRecordingState): api.IRecording {
         return typeof state.edit !== 'string' && state.edit
     }
@@ -300,6 +318,17 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         switch (state.afterSave) {
             case 'list':
                 delayedDispatch(routerActions.push(local.routes.recording))
+                break
+            case 'copy':
+                const { item } = response
+
+                state = {
+                    ...state,
+                    selected: undefined,
+                    workingCopy: <api.IRecordingInfo>{ ...item, _id: '', name: `Kopie von ${item.name || ''}` },
+                }
+
+                delayedDispatch(routerActions.push(`${local.routes.recording}/NEW`))
                 break
         }
 

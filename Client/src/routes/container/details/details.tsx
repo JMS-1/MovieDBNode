@@ -50,7 +50,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
         return (
             <div className='movie-db-container-details'>
                 <ConfirmDeleteContainer />
-                <Button.Group>
+                <div>
                     <Button onClick={this.props.cancel} disabled={!hasChanges}>
                         {this.props.cancelLabel}
                     </Button>
@@ -60,7 +60,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     {this.props.showDelete && (
                         <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
                     )}
-                </Button.Group>
+                </div>
                 <Form error={hasError}>
                     <Form.Field>
                         <label>{this.props.parentLabel}</label>

@@ -81,6 +81,10 @@ export class RecordingActions {
         return { type: local.recordingActions.resetFilter }
     }
 
+    static createCopy(): local.ICopyRecording {
+        return { type: local.recordingActions.createCopy }
+    }
+
     static confirmDelete(): local.IOpenRecordingDelete {
         return { type: local.recordingActions.showConfirm }
     }

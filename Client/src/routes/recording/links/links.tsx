@@ -8,6 +8,7 @@ import { ReportError } from '../../../components/message/messageRedux'
 export interface IRecordingLinksUiProps {}
 
 export interface IRecordingLinksProps {
+    deleteLabel: string
     description: string
     descriptionErrors: string[]
     errors: string[]
@@ -67,10 +68,11 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                 <label>
                     {this.props.label}
                     <Icon name={edit ? 'eye' : 'edit'} link onClick={this.toggleEdit} />
+                    {edit && <Icon name='add' link onClick={this.addLink} />}
                 </label>
                 {edit ? (
                     <>
-                        <Button.Group>
+                        <div>
                             {links.map((l, i) => (
                                 <EditButton
                                     description={l.description}
@@ -81,33 +83,31 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                                     selected={i === selected}
                                 />
                             ))}
-                        </Button.Group>
+                        </div>
                         <div className='link-edit'>
-                            <Form.Field error={hasNameError} required>
+                            <Form.Field required>
                                 <label>{this.props.name}</label>
                                 <Input input='text' onChange={this.setName} value={(link && link.name) || ''} />
-                                <ReportError errors={nameErrors} />
                             </Form.Field>
-                            <Form.Field error={hasUrlError} required>
+                            <Form.Field required>
                                 <label>{this.props.url}</label>
                                 <Input input='text' onChange={this.setUrl} value={(link && link.url) || ''} />
-                                <ReportError errors={urlErrors} />
                             </Form.Field>
-                            <Form.Field error={hasDescriptionError}>
+                            <Form.Field>
                                 <label>{this.props.description}</label>
                                 <TextArea onChange={this.setDescription} value={(link && link.description) || ''} />
-                                <ReportError errors={descriptionErrors} />
                             </Form.Field>
+                            <Button onClick={this.delLink}>{this.props.deleteLabel}</Button>
                         </div>
                     </>
                 ) : (
-                    <Button.Group>
+                    <div>
                         {links.map((l, i) => (
                             <Button as='a' key={i} title={l.description} href={l.url} target='_blank'>
                                 {l.name || <>&nbsp;</>}
                             </Button>
                         ))}
-                    </Button.Group>
+                    </div>
                 )}
                 <ReportError errors={errors} />
             </Form.Field>
@@ -126,6 +126,24 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
 
     private readonly setUrl = (ev: React.ChangeEvent<HTMLInputElement>): void =>
         this.setProp('url', ev.currentTarget.value)
+
+    private readonly addLink = (): void => {
+        const links = [...this.props.links, { name: '', url: '' }]
+
+        this.props.setLinks(links)
+
+        this.setState({ selected: links.length - 1 })
+    }
+
+    private readonly delLink = (): void => {
+        const links = [...this.props.links]
+
+        links.splice(this.state.selected, 1)
+
+        this.props.setLinks(links)
+
+        this.setState({ selected: 0 })
+    }
 
     private setProp<TProp extends keyof IRecordingLink>(prop: TProp, value: IRecordingLink[TProp]): void {
         const links = [...this.props.links]

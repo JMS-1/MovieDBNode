@@ -40,6 +40,7 @@ declare module 'movie-db-client' {
             readonly clear: string
             readonly confirmHtml: string
             readonly count: string
+            readonly createCopy: string
             readonly created: string
             readonly edit: IItemMui<api.IRecording>
             readonly editContainer: string
@@ -54,6 +55,7 @@ declare module 'movie-db-client' {
             readonly noId: string
             readonly noRent: string
             readonly saveAndBack: string
+            readonly saveAndCopy: string
             readonly yesRent: string
         }
         readonly remove: string

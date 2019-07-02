@@ -3,7 +3,7 @@ declare module 'movie-db-client' {
 
     import * as api from 'movie-db-api'
 
-    type TAfterRecordingSave = 'list'
+    type TAfterRecordingSave = 'list' | 'copy'
 
     interface IRecordingState extends IEditState<api.IRecordingInfo> {
         readonly afterSave: TAfterRecordingSave
@@ -27,6 +27,7 @@ declare module 'movie-db-client' {
 
     const enum recordingActions {
         cancel = 'movie-db.recordings.cancel-edit',
+        createCopy = 'movie-db.recordings.copy',
         deleted = 'movie-db.recordings.delete-done',
         hideConfirm = 'movie-db.recordings.close-delete',
         query = 'movie-db.recordings.query',
@@ -129,6 +130,10 @@ declare module 'movie-db-client' {
 
     interface IResetRecordingFilter extends Action {
         type: recordingActions.resetFilter
+    }
+
+    interface ICopyRecording extends Action {
+        type: recordingActions.createCopy
     }
 
     interface IStartRecordingEdit extends Action {
