@@ -6,3 +6,6 @@ node_modules
 
 Server/dist/**/*
 !Server/dist/**/index.html
+
+Server/src/**/*.js
+Server/src/**/*.js.map
