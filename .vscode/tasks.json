@@ -71,6 +71,13 @@
             "problemMatcher": [],
             "task": "build",
             "type": "gulp"
+        },
+        {
+            "group": "build",
+            "label": "deploy",
+            "problemMatcher": [],
+            "task": "deploy",
+            "type": "gulp"
         }
     ],
     "version": "2.0.0"

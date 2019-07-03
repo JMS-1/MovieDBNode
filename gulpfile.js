@@ -1,4 +1,5 @@
-﻿const gulp = require('gulp')
+﻿const del = require('del')
+const gulp = require('gulp')
 const map = require('gulp-sourcemaps')
 const path = require('path')
 const sass = require('gulp-sass')
@@ -31,8 +32,8 @@ function reportWatchError(err) {
             console.log(
                 `${message.substring(0, first)}(${err.line},${err.column}): error SASS: ${message.substring(
                     first + 1,
-                    second - first
-                )}`
+                    second - first,
+                )}`,
             )
         }
     }
@@ -48,7 +49,7 @@ gulp.task('build-sass', () =>
     gulp
         .src(path.join(__dirname, 'Client/src/index.scss'))
         .pipe(sass({ linefeed: 'crlf' }).on('error', reportWatchError))
-        .pipe(gulp.dest(path.join(__dirname, 'Server/dist')))
+        .pipe(gulp.dest(path.join(__dirname, 'Server/dist'))),
 )
 
 //
@@ -69,8 +70,23 @@ gulp.task('build-server', () =>
         .pipe(config())
         .on('error', ignoreErrorDuringWatch)
         .js.pipe(map.write('', { sourceRoot: build }))
-        .pipe(gulp.dest(build))
+        .pipe(gulp.dest(build)),
 )
 
 //
 gulp.task('build', ['build-client', 'build-server'])
+
+//
+gulp.task('deploy:clean', () => del.sync('deploy'))
+
+gulp.task('deploy:server', ['build', 'deploy:clean'], () =>
+    gulp.src('Server/src/**/*.js').pipe(gulp.dest('deploy/src')),
+)
+
+gulp.task('deploy:client', ['build', 'deploy:clean'], () =>
+    gulp.src(['Server/dist/**/*', '!Server/dist/**/*.map']).pipe(gulp.dest('deploy/dist')),
+)
+
+gulp.task('deploy:config', ['build', 'deploy:clean'], () => gulp.src('package.json').pipe(gulp.dest('deploy')))
+
+gulp.task('deploy', ['deploy:server', 'deploy:client', 'deploy:config'])
