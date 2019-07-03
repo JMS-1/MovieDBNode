@@ -15,7 +15,7 @@ class CContainerTextInput extends local.CTextInput<IContainer> {
         const value = edit && edit[props.prop]
 
         return {
-            errors: controller.getErrors(route.validation, props.prop, edit),
+            errors: controller.getErrors(route.validation, new RegExp(`^${props.prop}$`)),
             label: state.mui.container.edit[props.prop],
             value: typeof value === 'string' ? value : undefined,
         }
@@ -38,7 +38,7 @@ class CGenreTextInput extends local.CTextInput<IGenre> {
         const value = genre && genre[props.prop]
 
         return {
-            errors: controller.getErrors(route.validation, props.prop, genre),
+            errors: controller.getErrors(route.validation, new RegExp(`^${props.prop}$`)),
             label: state.mui.genre.edit[props.prop],
             value: typeof value === 'string' ? value : undefined,
         }
@@ -61,7 +61,7 @@ class CSeriesTextInput extends local.CTextInput<ISeries> {
         const value = series && series[props.prop]
 
         return {
-            errors: controller.getErrors(route.validation, props.prop, series),
+            errors: controller.getErrors(route.validation, new RegExp(`^${props.prop}$`)),
             label: state.mui.series.edit[props.prop],
             value: typeof value === 'string' ? value : undefined,
         }
@@ -84,7 +84,7 @@ class CLanguageTextInput extends local.CTextInput<ILanguage> {
         const value = language && language[props.prop]
 
         return {
-            errors: controller.getErrors(route.validation, props.prop, language),
+            errors: controller.getErrors(route.validation, new RegExp(`^${props.prop}$`)),
             label: state.mui.language.edit[props.prop],
             value: typeof value === 'string' ? value : undefined,
         }
@@ -107,7 +107,7 @@ class CRecordingTextInput extends local.CTextInput<IRecording> {
         const value = edit && edit[props.prop]
 
         return {
-            errors: controller.getErrors(route.validation, props.prop, edit),
+            errors: controller.getErrors(route.validation, new RegExp(`^${props.prop}$`)),
             label: state.mui.recording.edit[props.prop],
             value: typeof value === 'string' ? value : undefined,
         }

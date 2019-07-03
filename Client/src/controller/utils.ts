@@ -1,3 +1,4 @@
+import { IValidationError } from 'movie-db-api'
 import { ITreeItem, ITreeStructure } from 'movie-db-client'
 
 interface IItemInfo<TItem extends ITreeItem> {
@@ -67,4 +68,10 @@ export function createChildMap<TItem extends ITreeItem>(all: TItem[]): ITreeStru
     }
 
     return map
+}
+
+export function getErrors(errors: IValidationError[], expr: RegExp): string[] {
+    const list = errors && errors.filter(e => e.property.match(expr))
+
+    return list && list.length > 0 && list.map(e => `${e.message} (${e.constraint})`)
 }

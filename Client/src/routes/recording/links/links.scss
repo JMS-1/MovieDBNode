@@ -6,4 +6,8 @@
     > .link-edit {
         margin-left: 2em;
     }
+
+    &.link-errors > label {
+        color: var(--semantic-error-color) !important;
+    }
 }

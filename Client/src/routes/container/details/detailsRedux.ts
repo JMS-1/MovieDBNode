@@ -27,7 +27,7 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
         saveLabel: state.mui.save,
         showDelete: container && !!container._id,
         type: container ? container.type : undefined,
-        typeErrors: controller.getErrors(errors, 'type', container),
+        typeErrors: controller.getErrors(errors, /^type$/),
         typeLabel: emui.type,
         typeOptions: controller.getContainerTypeOptions(state),
     }

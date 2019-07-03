@@ -7,17 +7,17 @@ import { ReportError } from '../../../components/message/messageRedux'
 
 export interface IRecordingLinksUiProps {}
 
+export type lookupErrors = (index: number, prop: keyof IRecordingLink) => string[]
+
 export interface IRecordingLinksProps {
     deleteLabel: string
     description: string
-    descriptionErrors: string[]
     errors: string[]
+    getErrors: lookupErrors
     label: string
     links: IRecordingLink[]
     name: string
-    nameErrors: string[]
     url: string
-    urlErrors: string[]
 }
 
 export interface IRecordingLinksActions {
@@ -54,17 +54,19 @@ class EditButton extends React.PureComponent<IEditButtonProps> {
 export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, IRecordingLinksState> {
     render(): JSX.Element {
         const { edit, selected } = this.state
-        const { links, nameErrors, errors, descriptionErrors, urlErrors } = this.props
+        const { links, getErrors } = this.props
+
+        const nameErrors = getErrors(selected, 'name')
+        const hasNameError = nameErrors && nameErrors.length > 0
+        const urlErrors = getErrors(selected, 'url')
+        const hasUrlError = urlErrors && urlErrors.length > 0
+        const descriptionErrors = getErrors(selected, 'description')
+        const hasDescriptionError = descriptionErrors && descriptionErrors.length > 0
+
         const link = links[selected]
 
-        const hasNameError = nameErrors && nameErrors.length > 0
-        const hasUrlError = urlErrors && urlErrors.length > 0
-        const hasDescriptionError = descriptionErrors && descriptionErrors.length > 0
-        const hasLinkError = errors && errors.length > 0
-        const hasError = hasLinkError || hasNameError || hasUrlError || hasDescriptionError
-
         return (
-            <Form.Field className='movie-db-container-links' error={hasError}>
+            <Form.Field className={this.className}>
                 <label>
                     {this.props.label}
                     <Icon name={edit ? 'eye' : 'edit'} link onClick={this.toggleEdit} />
@@ -85,17 +87,20 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                             ))}
                         </div>
                         <div className='link-edit'>
-                            <Form.Field required>
+                            <Form.Field required error={hasNameError}>
                                 <label>{this.props.name}</label>
                                 <Input input='text' onChange={this.setName} value={(link && link.name) || ''} />
+                                <ReportError errors={nameErrors} />
                             </Form.Field>
-                            <Form.Field required>
+                            <Form.Field required error={hasUrlError}>
                                 <label>{this.props.url}</label>
                                 <Input input='text' onChange={this.setUrl} value={(link && link.url) || ''} />
+                                <ReportError errors={urlErrors} />
                             </Form.Field>
-                            <Form.Field>
+                            <Form.Field error={hasDescriptionError}>
                                 <label>{this.props.description}</label>
                                 <TextArea onChange={this.setDescription} value={(link && link.description) || ''} />
+                                <ReportError errors={descriptionErrors} />
                             </Form.Field>
                             <Button onClick={this.delLink}>{this.props.deleteLabel}</Button>
                         </div>
@@ -109,9 +114,20 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                         ))}
                     </div>
                 )}
-                <ReportError errors={errors} />
             </Form.Field>
         )
+    }
+
+    private get className(): string {
+        let className = 'movie-db-container-links'
+
+        const { errors } = this.props
+
+        if (errors && errors.length > 0) {
+            className += ' link-errors'
+        }
+
+        return className
     }
 
     private readonly toggleEdit = (): void => this.setState({ edit: !this.state.edit })
