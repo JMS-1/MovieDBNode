@@ -29,11 +29,10 @@ export class CTextInput<TItem> extends React.PureComponent<TTextInputProps<TItem
             <Form.Field
                 className='movie-db-input-text'
                 error={errors && errors.length > 0}
-                required={this.props.required}
-            >
+                required={this.props.required}>
                 <label>{this.props.label}</label>
                 {this.props.textarea ? (
-                    <TextArea onChange={this.setValue} value={this.props.value || ''} />
+                    <TextArea onChange={this.setValue} value={this.props.value || ''} rows={6} />
                 ) : (
                     <Input input='text' onChange={this.setValue} value={this.props.value || ''} />
                 )}

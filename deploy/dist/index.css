@@ -42,7 +42,8 @@ body {
   flex-direction: column;
   overflow: hidden; }
   .movie-db-root > .ui.menu {
-    flex-shrink: 0; }
+    flex-shrink: 0;
+    margin-bottom: 4px; }
   .movie-db-root > .content {
     flex-grow: 1;
     flex-basis: 0;
@@ -154,17 +155,24 @@ body {
       flex-grow: 1;
       flex-basis: 0; }
     .movie-db-recording-route > .filter > .search > .ui.button {
-      flex-shrink: 0; }
+      flex-shrink: 0;
+      margin-left: 0.5em; }
+  .movie-db-recording-route > .filter > .ui.dropdown {
+    margin-top: 0.5em; }
   .movie-db-recording-route > .pager,
   .movie-db-recording-route > .count,
   .movie-db-recording-route > .page-size {
     align-self: flex-start; }
+  .movie-db-recording-route > .count {
+    margin-bottom: 0; }
   .movie-db-recording-route > .pager {
     display: flex;
     flex-direction: row;
     align-items: center; }
     .movie-db-recording-route > .pager > .ui.menu {
       margin-bottom: 0; }
+    .movie-db-recording-route > .pager > .ui.pagination {
+      margin-left: 0.5em; }
   .movie-db-recording-route > .table {
     overflow: auto;
     margin-top: 0.5em; }

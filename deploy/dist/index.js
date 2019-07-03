@@ -583,7 +583,7 @@ class CTextInput extends React.PureComponent {
         const { errors } = this.props;
         return (React.createElement(semantic_ui_react_1.Form.Field, { className: 'movie-db-input-text', error: errors && errors.length > 0, required: this.props.required },
             React.createElement("label", null, this.props.label),
-            this.props.textarea ? (React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setValue, value: this.props.value || '' })) : (React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setValue, value: this.props.value || '' })),
+            this.props.textarea ? (React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setValue, value: this.props.value || '', rows: 6 })) : (React.createElement(semantic_ui_react_1.Input, { input: 'text', onChange: this.setValue, value: this.props.value || '' })),
             React.createElement(messageRedux_1.ReportError, { errors: errors })));
     }
 }
@@ -3394,7 +3394,7 @@ class CRecordingLinks extends React.PureComponent {
                         React.createElement(messageRedux_1.ReportError, { errors: urlErrors })),
                     React.createElement(semantic_ui_react_1.Form.Field, { error: hasDescriptionError },
                         React.createElement("label", null, this.props.description),
-                        React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setDescription, value: (link && link.description) || '' }),
+                        React.createElement(semantic_ui_react_1.TextArea, { onChange: this.setDescription, rows: 6, value: (link && link.description) || '' }),
                         React.createElement(messageRedux_1.ReportError, { errors: descriptionErrors })),
                     React.createElement(semantic_ui_react_1.Button, { onClick: this.delLink }, this.props.deleteLabel)))) : (React.createElement("div", null, links.map((l, i) => (React.createElement(semantic_ui_react_1.Button, { as: 'a', key: i, title: l.description, href: l.url, target: '_blank' }, l.name || React.createElement(React.Fragment, null, "\u00A0"))))))));
     }

@@ -7,18 +7,25 @@
     display: flex;
     flex-direction: column;
 
-    > .filter > .search {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+    > .filter {
+        > .search {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
 
-        > .movie-db-search {
-            flex-grow: 1;
-            flex-basis: 0;
+            > .movie-db-search {
+                flex-grow: 1;
+                flex-basis: 0;
+            }
+
+            > .ui.button {
+                flex-shrink: 0;
+                margin-left: 0.5em;
+            }
         }
 
-        > .ui.button {
-            flex-shrink: 0;
+        > .ui.dropdown {
+            margin-top: 0.5em;
         }
     }
 
@@ -28,6 +35,10 @@
         align-self: flex-start;
     }
 
+    > .count {
+        margin-bottom: 0;
+    }
+
     > .pager {
         display: flex;
         flex-direction: row;
@@ -35,6 +46,10 @@
 
         > .ui.menu {
             margin-bottom: 0;
+        }
+
+        > .ui.pagination {
+            margin-left: 0.5em;
         }
     }
 

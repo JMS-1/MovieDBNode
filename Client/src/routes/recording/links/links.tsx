@@ -99,7 +99,11 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                             </Form.Field>
                             <Form.Field error={hasDescriptionError}>
                                 <label>{this.props.description}</label>
-                                <TextArea onChange={this.setDescription} value={(link && link.description) || ''} />
+                                <TextArea
+                                    onChange={this.setDescription}
+                                    rows={6}
+                                    value={(link && link.description) || ''}
+                                />
                                 <ReportError errors={descriptionErrors} />
                             </Form.Field>
                             <Button onClick={this.delLink}>{this.props.deleteLabel}</Button>
