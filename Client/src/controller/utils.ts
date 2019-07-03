@@ -15,6 +15,14 @@ export function filterChildMap<TItem extends ITreeItem>(
     filter: string,
     lookup: IItemMap<TItem>,
 ): void {
+    // Wenn unser eigener Name passt, dann bleiben auch alle Kinder  drin.
+    const self = lookup[scope]
+    const name = self && self.raw.name && self.raw.name.toLocaleLowerCase()
+
+    if (name && name.indexOf(filter) >= 0) {
+        return
+    }
+
     // Das wird Bottom-Up gemacht
     const children = map[scope] || []
 
@@ -25,16 +33,8 @@ export function filterChildMap<TItem extends ITreeItem>(
     // Eventuell wurden Einträge entfernt.
     map[scope] = children.filter(c => map[c])
 
-    // Aber wir haben noch Kinder, dann ist nichts zu tun.
-    if (map[scope].length > 0) {
-        return
-    }
-
-    // Wenn auch unser Name nicht zum Filter passt verschwinden wird.
-    const self = lookup[scope]
-    const name = self && self.raw.name && self.raw.name.toLocaleLowerCase()
-
-    if (!name || name.indexOf(filter) < 0) {
+    // Wenn wir keine passenden Kinder haben müssen auch wir weg.
+    if (map[scope].length < 1) {
         delete map[scope]
     }
 }
@@ -52,11 +52,15 @@ export function sortChildMap<TItem extends ITreeItem>(map: ITreeStructure, looku
     return map
 }
 
-export function createChildMap<TItem extends ITreeItem>(all: TItem[]): ITreeStructure {
+export function createChildMap<TItem extends ITreeItem>(items: TItem[]): ITreeStructure {
     const map: ITreeStructure = {}
 
-    for (let series of all) {
-        const parentId = series.parentId || ''
+    for (let item of items) {
+        if (!map[item._id]) {
+            map[item._id] = []
+        }
+
+        const parentId = item.parentId || ''
 
         let parentInfo = map[parentId]
 
@@ -64,7 +68,7 @@ export function createChildMap<TItem extends ITreeItem>(all: TItem[]): ITreeStru
             map[parentId] = parentInfo = []
         }
 
-        parentInfo.push(series._id)
+        parentInfo.push(item._id)
     }
 
     return map

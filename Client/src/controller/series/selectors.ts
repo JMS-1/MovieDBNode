@@ -50,13 +50,13 @@ export const getSeriesMap = createSelector(
         }
 
         return map
-    }
+    },
 )
 
 export const getSeriesChildMap = createSelector(
     (state: IClientState) => state.series.all,
     getSeriesMap,
-    (all, lookup): ITreeStructure => sortChildMap(createChildMap(all), lookup)
+    (all, lookup): ITreeStructure => sortChildMap(createChildMap(all), lookup),
 )
 
 function buildOptions(
@@ -64,7 +64,7 @@ function buildOptions(
     list: DropdownItemProps[],
     tree: ITreeStructure,
     lookup: ISeriesMap,
-    exclude?: string
+    exclude?: string,
 ): DropdownItemProps[] {
     const children = (tree[scope] || []).map(id => id !== exclude && lookup[id]).filter(s => s)
 
@@ -82,7 +82,7 @@ function buildOptions(
 export const getSeriesOptions = createSelector(
     getSeriesChildMap,
     getSeriesMap,
-    (tree, map): DropdownItemProps[] => buildOptions('', [], tree, map)
+    (tree, map): DropdownItemProps[] => buildOptions('', [], tree, map),
 )
 
 export const getFilteredSeriesChildMap = createSelector(
@@ -97,19 +97,19 @@ export const getFilteredSeriesChildMap = createSelector(
         }
 
         return sortChildMap(map, lookup)
-    }
+    },
 )
 
 export const getSeriesEdit = createSelector(
     (state: IClientState) => state.series.workingCopy,
     (state: IClientState) => state.series.selected,
     getSeriesMap,
-    (edit, selected, map): ISeries => edit || (map[selected] && map[selected].raw)
+    (edit, selected, map): ISeries => edit || (map[selected] && map[selected].raw),
 )
 
 export const getSeriesOptionsNoEdit = createSelector(
     getSeriesChildMap,
     getSeriesMap,
     getSeriesEdit,
-    (tree, map, edit): DropdownItemProps[] => buildOptions('', [], tree, map, edit && edit._id)
+    (tree, map, edit): DropdownItemProps[] => buildOptions('', [], tree, map, edit && edit._id),
 )
