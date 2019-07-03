@@ -53,7 +53,7 @@
     "scripts": {
         "build-client": "node node_modules/webpack/bin/webpack.js --mode development",
         "debug-server": "node --inspect-brk=23902 Server/src/startup",
-        "start-deploy": "node src/startup",
+        "start": "node src/startup",
         "start-server": "node Server/src/startup",
         "watch-client": "node node_modules/webpack/bin/webpack.js --mode development --watch"
     },

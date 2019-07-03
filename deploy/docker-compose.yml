@@ -1,0 +1,19 @@
+version: '3.3'
+services:
+    movie-db:
+        environment:
+            - DATABASE=mongodb://localhost:27017/movie-db
+            - DEBUG=startup,api,database
+            - PORT=29099
+        image: movie-db
+        networks:
+            - iSxS
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.hostname==${THISHOST}
+networks:
+    iSxS:
+        external:
+            name: host

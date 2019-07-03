@@ -136,9 +136,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
         const errors = await super.findOneAndReplace(recording);
         if (!errors || errors.length < 1) {
             try {
-                await exports.recordingCollection.refreshFullNames({
-                    series: { $in: await this.refreshFullNames({ _id: recording._id }) },
-                });
+                await this.refreshFullNames({ _id: recording._id });
             }
             catch (error) {
                 utils_1.databaseError('failed to refresh recording full name: %s', utils_2.getError(error));

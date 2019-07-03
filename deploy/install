@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker stack rm movie-db && \
+git pull && \
+docker build . -t movie-db && \
+export THISHOST=`hostname` && \
+echo "wait 30 seconds for stack to shut down" && \
+sleep 30 && \
+docker stack deploy -c docker-compose.yml movie-db

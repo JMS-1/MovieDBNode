@@ -87,8 +87,8 @@ gulp.task('deploy:client', ['build', 'deploy:clean'], () =>
     gulp.src(['Server/dist/**/*', '!Server/dist/**/*.map']).pipe(gulp.dest('deploy/dist')),
 )
 
-gulp.task('deploy:config', ['build', 'deploy:clean'], () =>
-    gulp.src(['package.json', 'Dockerfile', 'yarn.lock']).pipe(gulp.dest('deploy')),
+gulp.task('deploy:config', ['deploy:clean'], () =>
+    gulp.src(['package.json', 'Dockerfile', 'yarn.lock', 'docker-compose.yml', 'install']).pipe(gulp.dest('deploy')),
 )
 
 gulp.task('deploy', ['deploy:server', 'deploy:client', 'deploy:config'])

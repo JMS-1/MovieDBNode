@@ -190,9 +190,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
 
         if (!errors || errors.length < 1) {
             try {
-                await recordingCollection.refreshFullNames({
-                    series: { $in: await this.refreshFullNames({ _id: recording._id }) },
-                })
+                await this.refreshFullNames({ _id: recording._id })
             } catch (error) {
                 databaseError('failed to refresh recording full name: %s', getError(error))
             }
