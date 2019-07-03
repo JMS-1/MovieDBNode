@@ -72,7 +72,7 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                     <Icon name={edit ? 'eye' : 'edit'} link onClick={this.toggleEdit} />
                     {edit && <Icon name='add' link onClick={this.addLink} />}
                 </label>
-                {edit ? (
+                {edit && link ? (
                     <>
                         <div>
                             {links.map((l, i) => (

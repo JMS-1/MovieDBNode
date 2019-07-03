@@ -107,8 +107,9 @@ declare module 'movie-db-api' {
     // Serie
 
     interface INewSeries {
-        name: string
         description?: string
+        fullName?: string
+        name: string
         parentId?: string
     }
 

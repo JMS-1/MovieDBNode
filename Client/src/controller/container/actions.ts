@@ -44,4 +44,8 @@ export class ContainerActions {
     static deleteDone(response: api.IDeleteContainerResponse): local.IContainerDeleted {
         return { id: response.id, errors: response.errors, type: local.containerActions.deleted }
     }
+
+    static loadRecordings(recordings: api.IRecording[]): local.ILoadContainerRecordings {
+        return { recordings, type: local.containerActions.loadRecordings }
+    }
 }

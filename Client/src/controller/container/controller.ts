@@ -12,6 +12,7 @@ type TContainerActions =
     | local.ICloseContainerDelete
     | local.IContainerDeleted
     | local.IContainerSaved
+    | local.ILoadContainerRecordings
     | local.ILoadContainers
     | local.ILoadSchemas
     | local.IOpenContainerDelete
@@ -33,6 +34,7 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
             [local.containerActions.filter]: this.setFilter,
             [local.containerActions.hideConfirm]: this.closeDelete,
             [local.containerActions.load]: this.load,
+            [local.containerActions.loadRecordings]: this.loadRecordings,
             [local.containerActions.save]: this.startSave,
             [local.containerActions.saveDone]: this.saveDone,
             [local.containerActions.select]: this.select,
@@ -53,6 +55,7 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
         return {
             ...super.getInitialState(),
             filter: '',
+            recordings: [],
         }
     }
 
@@ -94,6 +97,23 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
         }
 
         return state
+    }
+
+    private loadRecordings(
+        state: local.IContainerState,
+        response: local.ILoadContainerRecordings,
+    ): local.IContainerState {
+        return { ...state, recordings: response.recordings || [] }
+    }
+
+    protected select(state: local.IContainerState, request: local.ISelectContainer): local.IContainerState {
+        state = super.select(state, request)
+
+        if (state.selected) {
+            ServerApi.get(`recording/container/${state.selected}`, ContainerActions.loadRecordings)
+        }
+
+        return { ...state, recordings: [] }
     }
 })()
 

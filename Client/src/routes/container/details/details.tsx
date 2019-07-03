@@ -3,6 +3,8 @@ import { Button, Dropdown, DropdownItemProps, DropdownProps, Form } from 'semant
 
 import { containerType, IContainer } from 'movie-db-api'
 
+import { ContainerContent } from '../content/contentRedux'
+
 import { ConfirmDeleteContainer } from '../../../components/confirm/confirmRedux'
 import { ReportError } from '../../../components/message/messageRedux'
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
@@ -90,6 +92,7 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                     <ContainerTextInput prop='description' textarea />
                     <ContainerTextInput prop='parentLocation' />
                 </Form>
+                <ContainerContent />
             </div>
         )
     }

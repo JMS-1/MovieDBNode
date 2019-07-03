@@ -1,0 +1,21 @@
+.movie-db-container-content {
+    > tbody,
+    > thead {
+        > tr {
+            > td,
+            > th {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                &.position {
+                    text-align: center;
+
+                    > a {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}

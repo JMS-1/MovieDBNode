@@ -19,6 +19,13 @@ export const recordingApi = Router().use(
                 response,
             ),
         )
+        .get('/container/:id', (request, response, next) =>
+            processApiRequest(
+                async () => await recordingCollection.queryContainer(request.params.id),
+                request,
+                response,
+            ),
+        )
         .delete('/:id', (request, response) =>
             processApiRequest(
                 async () =>

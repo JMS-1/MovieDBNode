@@ -19,8 +19,10 @@ export function getInitialState(): IMuiState {
                 parentLocation: 'Position in der übergeordneten Ablage',
                 type: 'Art der Ablage',
             },
+            name: 'Aufzeichnung',
             noId: '(noch keine)',
             noParent: '(keine)',
+            position: 'Position',
             types: {
                 [containerType.Box]: {
                     icon: 'zip',
@@ -159,6 +161,7 @@ export function getInitialState(): IMuiState {
             edit: {
                 _id: 'Eindeutige Kennung',
                 description: 'Beschreibung',
+                fullName: 'Hierarchischer Name',
                 name: 'Name',
                 parentId: 'Übergeordnete Serie',
             },

@@ -200,6 +200,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
 
         return errors
     }
+
     async refreshFullNames(filter: FilterQuery<IDbRecording>): Promise<void> {
         const me = await this.getCollection()
 
@@ -226,5 +227,14 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         for (let recording of results) {
             await me.findOneAndUpdate({ _id: recording._id }, { $set: { fullName: recording.fullName } })
         }
+    }
+
+    async queryContainer(id: string): Promise<api.IRecording[]> {
+        const me = await this.getCollection()
+
+        return me
+            .find({ containerId: typeof id === 'string' && id }, { collation })
+            .sort({ fullName: 1 })
+            .toArray()
     }
 })()

@@ -20,7 +20,6 @@ declare module 'movie-db-client' {
 
     const enum Separators {
         Container = ' > ',
-        Series = ' > ',
     }
 
     type IActionHandlerMap<TActions extends Action, TState> = {

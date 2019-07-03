@@ -5,6 +5,7 @@ declare module 'movie-db-client' {
 
     interface IContainerState extends IEditState<api.IContainer> {
         readonly filter: string
+        readonly recordings: api.IRecording[]
     }
 
     const enum containerActions {
@@ -13,6 +14,7 @@ declare module 'movie-db-client' {
         filter = 'movie-db.containers.set-filter',
         hideConfirm = 'movie-db.containers.close-delete',
         load = 'movie-db.containers.load',
+        loadRecordings = 'movie-db.containers.load-recordings',
         save = 'movie-db.containers.save',
         saveDone = 'movie-db.containers.save-done',
         select = 'movie-db.containers.select',
@@ -60,5 +62,10 @@ declare module 'movie-db-client' {
 
     interface ICloseContainerDelete extends IGenericDeleteClose {
         type: containerActions.hideConfirm
+    }
+
+    interface ILoadContainerRecordings extends Action {
+        recordings: api.IRecording[]
+        type: containerActions.loadRecordings
     }
 }
