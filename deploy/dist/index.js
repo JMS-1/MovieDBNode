@@ -2361,6 +2361,13 @@ const controller = new (class extends controller_1.EditController {
         }
         return state;
     }
+    saveDone(state, request) {
+        state = super.saveDone(state, request);
+        if (!request.errors || request.errors.length < 1) {
+            store_1.ServerApi.get('series', actions_1.SeriesActions.load);
+        }
+        return state;
+    }
 })();
 exports.SeriesReducer = controller.reducer;
 

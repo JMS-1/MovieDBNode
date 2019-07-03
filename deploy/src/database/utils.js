@@ -12,12 +12,19 @@ function sleep(ms) {
 async function dbConnect() {
     for (;; await sleep(5000)) {
         if (!loader) {
-            loader = mongodb_1.MongoClient.connect(process.env.DATABASE, {
+            const options = {
                 autoReconnect: true,
                 promiseLibrary: Promise,
                 reconnectTries: Number.MAX_VALUE,
                 useNewUrlParser: true,
-            });
+            };
+            if (process.env.USER) {
+                options.auth = {
+                    user: process.env.USER,
+                    password: process.env.PASSWORD,
+                };
+            }
+            loader = mongodb_1.MongoClient.connect(process.env.DATABASE, options);
         }
         try {
             const client = await loader;

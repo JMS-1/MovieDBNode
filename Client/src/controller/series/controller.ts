@@ -94,6 +94,16 @@ const controller = new (class extends EditController<ILanguage, TSeriesActions, 
 
         return state
     }
+
+    protected saveDone(state: local.ISeriesState, request: local.ISeriesSaved): local.ISeriesState {
+        state = super.saveDone(state, request)
+
+        if (!request.errors || request.errors.length < 1) {
+            ServerApi.get('series', SeriesActions.load)
+        }
+
+        return state
+    }
 })()
 
 export const SeriesReducer = controller.reducer

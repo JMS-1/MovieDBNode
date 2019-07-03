@@ -1,5 +1,5 @@
 import * as debug from 'debug'
-import { Collection, Db, FilterQuery, MongoClient } from 'mongodb'
+import { Collection, Db, FilterQuery, MongoClient, MongoClientOptions } from 'mongodb'
 
 import { IValidatableSchema, IValidationError } from 'movie-db-api'
 
@@ -18,12 +18,21 @@ function sleep(ms: number): Promise<void> {
 export async function dbConnect(): Promise<Db> {
     for (; ; await sleep(5000)) {
         if (!loader) {
-            loader = MongoClient.connect(process.env.DATABASE, {
+            const options: MongoClientOptions = {
                 autoReconnect: true,
                 promiseLibrary: Promise,
                 reconnectTries: Number.MAX_VALUE,
                 useNewUrlParser: true,
-            })
+            }
+
+            if (process.env.USER) {
+                options.auth = {
+                    user: process.env.USER,
+                    password: process.env.PASSWORD,
+                }
+            }
+
+            loader = MongoClient.connect(process.env.DATABASE, options)
         }
 
         try {
