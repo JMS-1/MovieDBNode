@@ -152,10 +152,7 @@ declare module 'movie-db-api' {
 
     interface IRecording extends TItem<INewRecording> {
         created: string
-    }
-
-    interface IRecordingInfo extends IRecording {
-        fullName: string
+        fullName?: string
     }
 
     type TRecordingSort = 'fullName' | 'created'
@@ -180,7 +177,7 @@ declare module 'movie-db-api' {
         count: number
     }
 
-    interface IRecordingQueryResponse extends IApiQueryResponse<IRecordingInfo> {
+    interface IRecordingQueryResponse extends IApiQueryResponse<IRecording> {
         correlationId: string
         count: number
         genres: IQueryCountInfo[]

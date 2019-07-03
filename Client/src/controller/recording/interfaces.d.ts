@@ -5,7 +5,7 @@ declare module 'movie-db-client' {
 
     type TAfterRecordingSave = 'list' | 'copy'
 
-    interface IRecordingState extends IEditState<api.IRecordingInfo> {
+    interface IRecordingState extends IEditState<api.IRecording> {
         readonly afterSave: TAfterRecordingSave
         readonly correlationId: string
         readonly count: number

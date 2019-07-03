@@ -4,8 +4,10 @@ import { CollationDocument, Collection, FilterQuery } from 'mongodb'
 import * as api from 'movie-db-api'
 
 import { collectionName, IDbRecording, RecordingSchema } from './entities/recording'
-import { CollectionBase } from './utils'
+import { CollectionBase, databaseError } from './utils'
 import { validate } from './validation'
+
+import { getError } from '../utils'
 
 export * from './entities/recording'
 
@@ -19,7 +21,12 @@ interface IAggregateCount {
 interface IAggregationResult {
     count: IAggregateCount[]
     genres: api.IQueryCountInfo[]
-    view: api.IRecordingInfo[]
+    view: api.IRecording[]
+}
+
+interface IAggregateFullName {
+    _id: string
+    fullName: string
 }
 
 const escapeReg = /[.*+?^${}()|[\]\\]/g
@@ -96,64 +103,11 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             filter.rentTo = { $exists: req.rent }
         }
 
-        const query = [
-            { $match: filter },
-            {
-                $graphLookup: {
-                    as: 'hierarchy',
-                    connectFromField: 'parentId',
-                    connectToField: '_id',
-                    depthField: '_depth',
-                    from: 'series',
-                    startWith: '$series',
-                },
-            },
-            { $unwind: { path: '$hierarchy', preserveNullAndEmptyArrays: true } },
-            { $sort: { 'hierarchy._depth': 1 } },
-            {
-                $group: {
-                    _id: '$_id',
-                    created: { $first: '$created' },
-                    description: { $first: '$description' },
-                    genres: { $first: '$genres' },
-                    languages: { $first: '$languages' },
-                    links: { $first: '$links' },
-                    media: { $first: '$media' },
-                    name: { $first: '$name' },
-                    rentTo: { $first: '$rentTo' },
-                    series: { $first: '$series' },
-                    sortedHierarchy: { $push: '$hierarchy' },
-                },
-            },
-            {
-                $project: {
-                    _id: 1,
-                    created: 1,
-                    description: 1,
-                    fullName: {
-                        $reduce: {
-                            in: { $concat: ['$$this.name', ' > ', '$$value'] },
-                            initialValue: '$name',
-                            input: '$sortedHierarchy',
-                        },
-                    },
-                    genres: 1,
-                    languages: 1,
-                    links: 1,
-                    media: 1,
-                    name: 1,
-                    rentTo: 1,
-                    series: 1,
-                },
-            },
-        ]
-
         if (req.fullName) {
-            query.push({
-                $match: { fullName: { $regex: req.fullName.toString().replace(escapeReg, '\\$&'), $options: 'i' } },
-            })
+            filter.fullName = { $regex: req.fullName.toString().replace(escapeReg, '\\$&'), $options: 'i' }
         }
 
+        const query = [{ $match: filter }]
         const baseQuery = [...query]
 
         // Für die eigentliche Ergebnisermittlung sind aller Filter aktiv.
@@ -197,16 +151,6 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         }
     }
 
-    async findOneAndReplace(recording: IDbRecording): Promise<api.IValidationError[]> {
-        const existing = await this.findOne(recording._id)
-
-        if (existing) {
-            recording = { ...recording, created: existing.created }
-        }
-
-        return super.findOneAndReplace(recording)
-    }
-
     async inUse<TProp extends keyof IDbRecording>(property: TProp, id: string, scope: string): Promise<string> {
         const me = await this.getCollection()
         const count = await me.countDocuments({ [property]: typeof id === 'string' && id })
@@ -218,6 +162,69 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
                 return `${scope} wird noch für eine Aufzeichnung verwendet`
             default:
                 return `${scope} wird noch für ${count} Aufzeichnungen verwendet`
+        }
+    }
+
+    async insertOne(recording: IDbRecording): Promise<api.IValidationError[]> {
+        const errors = await super.insertOne(recording)
+
+        if (!errors || errors.length < 1) {
+            try {
+                await this.refreshFullNames({ _id: recording._id })
+            } catch (error) {
+                databaseError('failed to refresh recording full name: %s', getError(error))
+            }
+        }
+
+        return errors
+    }
+
+    async findOneAndReplace(recording: IDbRecording): Promise<api.IValidationError[]> {
+        const existing = await this.findOne(recording._id)
+
+        if (existing) {
+            recording = { ...recording, created: existing.created }
+        }
+
+        const errors = await super.findOneAndReplace(recording)
+
+        if (!errors || errors.length < 1) {
+            try {
+                await recordingCollection.refreshFullNames({
+                    series: { $in: await this.refreshFullNames({ _id: recording._id }) },
+                })
+            } catch (error) {
+                databaseError('failed to refresh recording full name: %s', getError(error))
+            }
+        }
+
+        return errors
+    }
+    async refreshFullNames(filter: FilterQuery<IDbRecording>): Promise<void> {
+        const me = await this.getCollection()
+
+        const query = [
+            { $match: filter },
+            { $lookup: { as: 'series', foreignField: '_id', from: 'series', localField: 'series' } },
+            { $project: { _id: 1, name: 1, series: { $ifNull: [{ $arrayElemAt: ['$series', 0] }, null] } } },
+            {
+                $project: {
+                    _id: 1,
+                    fullName: {
+                        $cond: {
+                            if: { $eq: ['$series', null] },
+                            then: '$name',
+                            else: { $concat: ['$series.fullName', ' > ', '$name'] },
+                        },
+                    },
+                },
+            },
+        ]
+
+        const results = await me.aggregate<IAggregateFullName>(query).toArray()
+
+        for (let recording of results) {
+            await me.findOneAndUpdate({ _id: recording._id }, { $set: { fullName: recording.fullName } })
         }
     }
 })()

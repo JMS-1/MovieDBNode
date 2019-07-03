@@ -104,6 +104,7 @@ export function getInitialState(): IMuiState {
                 containerType: 'Art der Ablage',
                 created: 'Erstellt',
                 description: 'Beschreibung',
+                fullName: 'Hierarchischer Name',
                 genres: 'Kategorien',
                 languages: 'Sprachen',
                 links: 'Verweise',

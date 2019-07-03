@@ -7,7 +7,7 @@ import { validate } from './validation'
 
 import { getError } from '../utils'
 
-const databaseError = debug('database')
+export const databaseError = debug('database')
 
 let loader: Promise<MongoClient>
 
@@ -69,11 +69,11 @@ export abstract class CollectionBase<TType extends { _id: string }> {
         return db.collection(this.name)
     }
 
-    async insertOne(container: TType): Promise<IValidationError[]> {
+    async insertOne(item: TType): Promise<IValidationError[]> {
         try {
             const me = await this.getCollection()
 
-            await me.insertOne(container)
+            await me.insertOne(item)
 
             return undefined
         } catch (error) {
@@ -85,9 +85,7 @@ export abstract class CollectionBase<TType extends { _id: string }> {
 
             try {
                 return (
-                    validate(container, this.schema) || [
-                        { constraint: 'database', message: getError(error), property: '*' },
-                    ]
+                    validate(item, this.schema) || [{ constraint: 'database', message: getError(error), property: '*' }]
                 )
             } catch (e) {
                 databaseError('error during insert validation: %s', getError(e))
@@ -97,10 +95,10 @@ export abstract class CollectionBase<TType extends { _id: string }> {
         }
     }
 
-    async findOneAndReplace(container: TType): Promise<IValidationError[]> {
+    async findOneAndReplace(item: TType): Promise<IValidationError[]> {
         try {
             const me = await this.getCollection()
-            const updated = await me.findOneAndReplace({ _id: container._id }, container)
+            const updated = await me.findOneAndReplace({ _id: item._id }, item)
 
             if (!updated) {
                 return [{ constraint: 'database', message: 'Nicht gefunden', property: '_id' }]
@@ -116,9 +114,7 @@ export abstract class CollectionBase<TType extends { _id: string }> {
 
             try {
                 return (
-                    validate(container, this.schema) || [
-                        { constraint: 'database', message: getError(error), property: '*' },
-                    ]
+                    validate(item, this.schema) || [{ constraint: 'database', message: getError(error), property: '*' }]
                 )
             } catch (e) {
                 databaseError('error during update validation: %s', getError(e))

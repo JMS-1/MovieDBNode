@@ -51,6 +51,9 @@ export const RecordingSchema: ISchema<IRecording> = {
             message: 'Beschreibung ist zu lang',
             type: 'string',
         },
+        fullName: {
+            type: 'string',
+        },
         genres: {
             items: {
                 message: 'Genre ist ungültig',

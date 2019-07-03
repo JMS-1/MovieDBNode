@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect'
 import { DropdownItemProps } from 'semantic-ui-react'
 
-import { IRecordingInfo, mediaType } from 'movie-db-api'
+import { IRecording, mediaType } from 'movie-db-api'
 import { IClientState } from 'movie-db-client'
 
 export interface IRecordingMap {
-    [id: string]: IRecordingInfo
+    [id: string]: IRecording
 }
 
 export const getRecordingMap = createSelector(

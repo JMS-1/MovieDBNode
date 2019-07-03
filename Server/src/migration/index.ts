@@ -180,4 +180,7 @@ export async function runMigration(): Promise<void> {
     for (let collection of Object.values(collections)) {
         await collection.migrate()
     }
+
+    await seriesCollection.refreshFullNames(null)
+    await recordingCollection.refreshFullNames({})
 }

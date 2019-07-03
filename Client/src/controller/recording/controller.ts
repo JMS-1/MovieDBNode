@@ -292,7 +292,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         return {
             ...state,
             selected: undefined,
-            workingCopy: <api.IRecordingInfo>{ ...edit, _id: '', name: `Kopie von ${edit.name || ''}` },
+            workingCopy: { ...edit, _id: '', name: `Kopie von ${edit.name || ''}` },
         }
     }
 
@@ -325,7 +325,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
                 state = {
                     ...state,
                     selected: undefined,
-                    workingCopy: <api.IRecordingInfo>{ ...item, _id: '', name: `Kopie von ${item.name || ''}` },
+                    workingCopy: { ...item, _id: '', name: `Kopie von ${item.name || ''}` },
                 }
 
                 delayedDispatch(routerActions.push(`${local.routes.recording}/NEW`))

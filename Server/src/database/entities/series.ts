@@ -4,9 +4,11 @@ import { ISchema, uniqueId } from './utils'
 
 export const collectionName = 'series'
 
-export interface IDbSeries extends ISeries {}
+export interface IDbSeries extends ISeries {
+    fullName?: string
+}
 
-export const SeriesSchema: ISchema<ISeries> = {
+export const SeriesSchema: ISchema<IDbSeries> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/series.json',
     additionalProperties: false,
@@ -19,6 +21,9 @@ export const SeriesSchema: ISchema<ISeries> = {
         description: {
             maxLength: 2000,
             message: 'Beschreibung ist zu lang',
+            type: 'string',
+        },
+        fullName: {
             type: 'string',
         },
         name: {
