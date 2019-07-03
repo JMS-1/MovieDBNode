@@ -18,10 +18,10 @@ async function dbConnect() {
                 reconnectTries: Number.MAX_VALUE,
                 useNewUrlParser: true,
             };
-            if (process.env.USER) {
+            if (process.env.DBUSER) {
                 options.auth = {
-                    user: process.env.USER,
-                    password: process.env.PASSWORD,
+                    user: process.env.DBUSER,
+                    password: process.env.DBPASSWORD,
                 };
             }
             loader = mongodb_1.MongoClient.connect(process.env.DATABASE, options);

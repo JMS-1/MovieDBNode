@@ -9,3 +9,5 @@ Server/dist/**/*
 
 Server/src/**/*.js
 Server/src/**/*.js.map
+
+deploy/install.custom

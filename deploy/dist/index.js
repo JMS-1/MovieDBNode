@@ -1133,14 +1133,23 @@ exports.getContainerTypeOptions = reselect_1.createSelector((state) => state.mui
         mui[c].title)),
     value: c,
 })));
-exports.getAllContainerOptions = reselect_1.createSelector(exports.getContainerMap, (state) => state.mui.container.types, (all, types) => Object.values(all)
-    .map(c => ({
-    key: c.raw._id,
-    icon: { name: (types[c.raw.type] && types[c.raw.type].icon) || 'help' },
-    text: c.name || c.raw._id,
-    value: c.raw._id,
-}))
-    .sort((l, r) => l.text.localeCompare(r.text)));
+function buildOptions(scope, list, tree, lookup, types, exclude) {
+    const children = (tree[scope] || []).map(id => id !== exclude && lookup[id]).filter(s => s);
+    for (let child of children) {
+        const container = child.raw;
+        list.push({
+            key: container._id,
+            icon: { name: (types[container.type] && types[container.type].icon) || 'help' },
+            text: child.name || container._id,
+            value: container._id,
+        });
+        buildOptions(container._id, list, tree, lookup, types, exclude);
+    }
+    return list;
+}
+exports.getContainerChildMap = reselect_1.createSelector((state) => state.container.all, exports.getContainerMap, (all, lookup) => utils_1.sortChildMap(utils_1.createChildMap(all), lookup));
+exports.getContainerOptions = reselect_1.createSelector(exports.getContainerChildMap, exports.getContainerMap, (state) => state.mui.container.types, (tree, map, types) => buildOptions('', [], tree, map, types));
+exports.getContainerOptionsNoEdit = reselect_1.createSelector(exports.getContainerChildMap, exports.getContainerMap, (state) => state.mui.container.types, exports.getContainerEdit, (tree, map, types, edit) => buildOptions('', [], tree, map, types, edit && edit._id));
 
 
 /***/ }),
@@ -2744,7 +2753,7 @@ function mapStateToProps(state, props) {
     return {
         cancelLabel: container && container._id ? state.mui.cancel : state.mui.reset,
         containerHint: mui.noParent,
-        containerOptions: controller.getAllContainerOptions(state),
+        containerOptions: controller.getContainerOptionsNoEdit(state),
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
@@ -3194,7 +3203,7 @@ function mapStateToProps(state, props) {
         container: edit && edit.containerId,
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
-        containerOptions: controller.getAllContainerOptions(state),
+        containerOptions: controller.getContainerOptions(state),
         copyLabel: mui.createCopy,
         deleteLabel: state.mui.remove,
         genreHint: mui.editGenres,

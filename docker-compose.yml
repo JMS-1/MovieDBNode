@@ -2,9 +2,11 @@ version: '3.3'
 services:
     movie-db:
         environment:
-            - DATABASE=mongodb://localhost:27017/movie-db
+            - DATABASE
+            - DBPASSWORD
+            - DBUSER
             - DEBUG=startup,api,database
-            - PORT=29099
+            - PORT
         image: movie-db
         networks:
             - iSxS
