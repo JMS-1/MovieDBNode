@@ -8,7 +8,7 @@ export interface IDbLink extends IRecordingLink {}
 
 export interface IDbRecording extends IRecording {}
 
-const LinkSubSchema: IObjectFieldSchema<IDbLink> = {
+const LinkSubSchema: IObjectFieldSchema<IRecordingLink> = {
     type: 'object',
     message: 'Verweis unvollständig',
     properties: {
@@ -33,7 +33,7 @@ const LinkSubSchema: IObjectFieldSchema<IDbLink> = {
     required: ['name', 'url'],
 }
 
-export const RecordingSchema: ISchema<IDbRecording> = {
+export const RecordingSchema: ISchema<IRecording> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/recording.json',
     additionalProperties: false,

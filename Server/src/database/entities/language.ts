@@ -6,7 +6,7 @@ export const collectionName = 'languages'
 
 export interface IDbLanguage extends ILanguage {}
 
-export const LanguageSchema: ISchema<IDbLanguage> = {
+export const LanguageSchema: ISchema<ILanguage> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/language.json',
     additionalProperties: false,

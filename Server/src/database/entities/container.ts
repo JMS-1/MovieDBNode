@@ -6,7 +6,7 @@ export const collectionName = 'containers'
 
 export interface IDbContainer extends IContainer {}
 
-export const ContainerSchema: ISchema<IDbContainer> = {
+export const ContainerSchema: ISchema<IContainer> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/container.json',
     additionalProperties: false,

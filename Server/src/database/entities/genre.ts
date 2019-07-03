@@ -6,7 +6,7 @@ export const collectionName = 'genres'
 
 export interface IDbGenre extends IGenre {}
 
-export const GenreSchema: ISchema<IDbGenre> = {
+export const GenreSchema: ISchema<IGenre> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/genre.json',
     additionalProperties: false,
