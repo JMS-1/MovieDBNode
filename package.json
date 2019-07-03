@@ -16,7 +16,7 @@
         "@types/node": "10.14.10",
         "@types/react-dom": "16.8.4",
         "@types/react-redux": "7.1.1",
-        "@types/react-router": "5.0.2",
+        "@types/react-router": "5.0.3",
         "@types/react-router-dom": "4.3.4",
         "@types/uuid": "3.4.5",
         "awesome-typescript-loader": "5.2.1",
@@ -53,6 +53,7 @@
     "scripts": {
         "build-client": "node node_modules/webpack/bin/webpack.js --mode development",
         "debug-server": "node --inspect-brk=23902 Server/src/startup",
+        "start-deploy": "node src/startup",
         "start-server": "node Server/src/startup",
         "watch-client": "node node_modules/webpack/bin/webpack.js --mode development --watch"
     },
