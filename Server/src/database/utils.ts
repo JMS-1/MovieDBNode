@@ -25,10 +25,10 @@ export async function dbConnect(): Promise<Db> {
                 useNewUrlParser: true,
             }
 
-            if (process.env.USER) {
+            if (process.env.DBUSER) {
                 options.auth = {
-                    user: process.env.USER,
-                    password: process.env.PASSWORD,
+                    user: process.env.DBUSER,
+                    password: process.env.DBPASSWORD,
                 }
             }
 

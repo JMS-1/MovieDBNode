@@ -3,7 +3,7 @@ import { createSelector } from 'reselect'
 import { DropdownItemProps, Icon } from 'semantic-ui-react'
 
 import { containerType, IContainer } from 'movie-db-api'
-import { IClientState, ITreeStructure, Separators } from 'movie-db-client'
+import { IClientState, IMuiState, ITreeStructure, Separators } from 'movie-db-client'
 
 import { createChildMap, filterChildMap, sortChildMap } from '../utils'
 
@@ -51,7 +51,7 @@ export const getContainerMap = createSelector(
         }
 
         return map
-    }
+    },
 )
 
 export const getFilteredContainerChildMap = createSelector(
@@ -66,14 +66,14 @@ export const getFilteredContainerChildMap = createSelector(
         }
 
         return sortChildMap(map, lookup)
-    }
+    },
 )
 
 export const getContainerEdit = createSelector(
     (state: IClientState) => state.container.workingCopy,
     (state: IClientState) => state.container.selected,
     getContainerMap,
-    (edit, selected, map): IContainer => edit || (map[selected] && map[selected].raw)
+    (edit, selected, map): IContainer => edit || (map[selected] && map[selected].raw),
 )
 
 const optionOrder: containerType[] = [
@@ -96,19 +96,52 @@ export const getContainerTypeOptions = createSelector(
                 </span>
             ),
             value: c,
-        }))
+        })),
 )
 
-export const getAllContainerOptions = createSelector(
+function buildOptions(
+    scope: string,
+    list: DropdownItemProps[],
+    tree: ITreeStructure,
+    lookup: IContainerMap,
+    types: IMuiState['container']['types'],
+    exclude?: string,
+): DropdownItemProps[] {
+    const children = (tree[scope] || []).map(id => id !== exclude && lookup[id]).filter(s => s)
+
+    for (let child of children) {
+        const container = child.raw
+
+        list.push({
+            key: container._id,
+            icon: { name: (types[container.type] && types[container.type].icon) || 'help' },
+            text: child.name || container._id,
+            value: container._id,
+        })
+
+        buildOptions(container._id, list, tree, lookup, types, exclude)
+    }
+
+    return list
+}
+
+export const getContainerChildMap = createSelector(
+    (state: IClientState) => state.container.all,
+    getContainerMap,
+    (all, lookup): ITreeStructure => sortChildMap(createChildMap(all), lookup),
+)
+
+export const getContainerOptions = createSelector(
+    getContainerChildMap,
     getContainerMap,
     (state: IClientState) => state.mui.container.types,
-    (all, types): DropdownItemProps[] =>
-        Object.values(all)
-            .map(c => ({
-                key: c.raw._id,
-                icon: { name: (types[c.raw.type] && types[c.raw.type].icon) || 'help' },
-                text: c.name || c.raw._id,
-                value: c.raw._id,
-            }))
-            .sort((l, r) => l.text.localeCompare(r.text))
+    (tree, map, types): DropdownItemProps[] => buildOptions('', [], tree, map, types),
+)
+
+export const getContainerOptionsNoEdit = createSelector(
+    getContainerChildMap,
+    getContainerMap,
+    (state: IClientState) => state.mui.container.types,
+    getContainerEdit,
+    (tree, map, types, edit): DropdownItemProps[] => buildOptions('', [], tree, map, types, edit && edit._id),
 )

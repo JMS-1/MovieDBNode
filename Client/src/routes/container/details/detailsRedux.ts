@@ -17,7 +17,7 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
     return {
         cancelLabel: container && container._id ? state.mui.cancel : state.mui.reset,
         containerHint: mui.noParent,
-        containerOptions: controller.getAllContainerOptions(state),
+        containerOptions: controller.getContainerOptionsNoEdit(state),
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,

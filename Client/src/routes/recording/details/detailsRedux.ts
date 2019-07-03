@@ -21,7 +21,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
         container: edit && edit.containerId,
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
-        containerOptions: controller.getAllContainerOptions(state),
+        containerOptions: controller.getContainerOptions(state),
         copyLabel: mui.createCopy,
         deleteLabel: state.mui.remove,
         genreHint: mui.editGenres,
