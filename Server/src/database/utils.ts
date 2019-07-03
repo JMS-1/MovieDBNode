@@ -53,6 +53,10 @@ export abstract class CollectionBase<TType extends { _id: string }> {
         this.migrationMap[item._id] = item
     }
 
+    initialize(collection: Collection<TType>): Promise<void> {
+        return Promise.resolve<void>(undefined)
+    }
+
     async migrate(): Promise<void> {
         for (let item of Object.values(this.migrationMap)) {
             await this.insertOne(item)

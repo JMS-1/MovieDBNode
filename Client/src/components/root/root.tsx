@@ -66,19 +66,19 @@ export class CRoot extends React.PureComponent<TRootProps> {
                     </Message>
                 </Dimmer>
                 <Menu borderless>
-                    <Menu.Item active={recording} as='a' href={recording ? undefined : `#${routes.recording}`}>
+                    <Menu.Item active={recording} as='a' href={`#${routes.recording}`}>
                         {this.props.recordingRoute}
                     </Menu.Item>
-                    <Menu.Item active={series} as='a' href={series ? undefined : `#${routes.series}`}>
+                    <Menu.Item active={series} as='a' href={`#${routes.series}`}>
                         {this.props.seriesRoute}
                     </Menu.Item>
-                    <Menu.Item active={container} as='a' href={container ? undefined : `#${routes.container}`}>
+                    <Menu.Item active={container} as='a' href={`#${routes.container}`}>
                         {this.props.containerRoute}
                     </Menu.Item>
-                    <Menu.Item active={language} as='a' href={language ? undefined : `#${routes.language}`}>
+                    <Menu.Item active={language} as='a' href={`#${routes.language}`}>
                         {this.props.languageRoute}
                     </Menu.Item>
-                    <Menu.Item active={genre} as='a' href={genre ? undefined : `#${routes.genre}`}>
+                    <Menu.Item active={genre} as='a' href={`#${routes.genre}`}>
                         {this.props.genreRoute}
                     </Menu.Item>
                     <Menu.Item active={create}>

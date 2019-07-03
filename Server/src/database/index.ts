@@ -18,12 +18,15 @@ export async function initializeDatabase(): Promise<void> {
 
     const db = await dbConnect()
 
-    for (let { schema, name } of collections) {
+    for (let { schema, name, initialize } of collections) {
         // Interne Prüfumgebung initialisieren.
         addSchema(schema)
 
         // Eventuell die Tabelle erstmalig anlegen.
-        await db.createCollection(name)
+        const collection = await db.createCollection(name)
+
+        // Initialisierung durchführen.
+        await initialize(collection)
 
         // Immer die Prüfregeln in der Datenbank auf den neuesten Stand bringen.
         await db.command({ collMod: name, validator: { $jsonSchema: convertToMongo(schema) } })

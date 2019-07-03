@@ -1,5 +1,5 @@
 import * as debug from 'debug'
-import { CollationDocument, FilterQuery } from 'mongodb'
+import { CollationDocument, Collection, FilterQuery } from 'mongodb'
 
 import * as api from 'movie-db-api'
 
@@ -31,6 +31,16 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
     readonly schema = RecordingSchema
 
     readonly mediaMigration: { [id: string]: string } = {}
+
+    async initialize(collection: Collection<IDbRecording>): Promise<void> {
+        await collection.createIndex({ containerId: 1 }, { name: 'recording_container' })
+        await collection.createIndex({ created: 1 }, { name: 'recording_date' })
+        await collection.createIndex({ genres: 1 }, { name: 'recording_genres' })
+        await collection.createIndex({ languages: 1 }, { name: 'recording_languages' })
+        await collection.createIndex({ name: 1 }, { name: 'recording_name' })
+        await collection.createIndex({ rentTo: 1 }, { name: 'recording_rent' })
+        await collection.createIndex({ series: 1 }, { name: 'recording_series' })
+    }
 
     fromSql(sql: any): void {
         const date = dateReg.exec(sql.Created)

@@ -1,3 +1,5 @@
+import { Collection } from 'mongodb'
+
 import { collectionName, IDbSeries, SeriesSchema } from './entities/series'
 import { recordingCollection } from './recording'
 import { CollectionBase } from './utils'
@@ -9,6 +11,11 @@ export const seriesCollection = new (class extends CollectionBase<IDbSeries> {
     readonly name = collectionName
 
     readonly schema = SeriesSchema
+
+    async initialize(collection: Collection<IDbSeries>): Promise<void> {
+        await collection.createIndex({ name: 1 }, { name: 'series_name' })
+        await collection.createIndex({ parentId: 1 }, { name: 'series_tree' })
+    }
 
     fromSql(sql: any): void {
         const series: IDbSeries = {
