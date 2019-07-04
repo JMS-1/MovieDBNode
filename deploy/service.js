@@ -5,6 +5,12 @@ const svc = new Service({
     name: 'Movie Datenbank',
     nodeOptions: [],
     script: 'src/startup.js',
+    env: [
+        {
+            name: 'DEBUG',
+            value: 'startup,api,database',
+        },
+    ],
 })
 
 svc.on('install', () => svc.start())
