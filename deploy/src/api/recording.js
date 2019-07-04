@@ -6,6 +6,7 @@ const utils_1 = require("./utils");
 const genre_1 = require("../database/genre");
 const language_1 = require("../database/language");
 const recording_1 = require("../database/recording");
+const utfBom = Buffer.from([0xef, 0xbb, 0xbf]);
 let csvData = '';
 function escape(str) {
     return `"${(str || '').replace(/"/g, '""')}"`;
@@ -15,6 +16,7 @@ exports.recordingApi = express_1.Router().use('/recording', express_1.Router()
     response.setHeader('Content-disposition', 'attachment; filename=export.csv');
     response.setHeader('Content-Type', 'text/csv; charset=utf-8');
     response.status(200);
+    response.write(utfBom);
     response.write(csvData, 'utf-8');
     response.end();
 })

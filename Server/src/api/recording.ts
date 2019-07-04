@@ -9,6 +9,8 @@ import { genreCollection } from '../database/genre'
 import { languageCollection } from '../database/language'
 import { recordingCollection, toEntity, toProtocol } from '../database/recording'
 
+const utfBom = Buffer.from([0xef, 0xbb, 0xbf])
+
 let csvData = ''
 
 function escape(str: string): string {
@@ -22,6 +24,7 @@ export const recordingApi = Router().use(
             response.setHeader('Content-disposition', 'attachment; filename=export.csv')
             response.setHeader('Content-Type', 'text/csv; charset=utf-8')
             response.status(200)
+            response.write(utfBom)
             response.write(csvData, 'utf-8')
             response.end()
         })
