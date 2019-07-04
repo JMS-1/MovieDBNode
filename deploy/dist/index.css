@@ -23,6 +23,10 @@ client-root {
       body > .ui.dimmer .ui.loader:after,
       client-root > .ui.dimmer .ui.loader:after {
         border-color: black lightgray lightgray; }
+  html .ui.form,
+  body .ui.form,
+  client-root .ui.form {
+    margin-top: 0.5em; }
 
 body {
   margin: 0; }
