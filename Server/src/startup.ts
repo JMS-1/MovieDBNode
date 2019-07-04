@@ -4,6 +4,7 @@ import * as express from 'express'
 import { join } from 'path'
 
 import { installApi } from './api'
+import { Config } from './config'
 import { initializeDatabase } from './database'
 import { getError } from './utils'
 
@@ -19,7 +20,7 @@ async function startup(): Promise<void> {
 
     installApi(app)
 
-    app.listen(process.env.PORT)
+    app.listen(Config.port)
 }
 
 function startupError(error: any): void {

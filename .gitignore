@@ -10,6 +10,8 @@ Server/dist/**/*
 Server/src/**/*.js
 Server/src/**/*.js.map
 
-deploy/install.custom
+Server/config.custom.json
+
+deploy/config.custom.json
 deploy/node_modules
 deploy/src/daemon

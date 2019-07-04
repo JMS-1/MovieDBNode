@@ -2,11 +2,7 @@ version: '3.3'
 services:
     movie-db:
         environment:
-            - DATABASE
-            - DBPASSWORD
-            - DBUSER
             - DEBUG=startup,api,database
-            - PORT
         image: movie-db
         networks:
             - iSxS

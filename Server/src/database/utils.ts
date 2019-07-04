@@ -5,6 +5,7 @@ import { IValidatableSchema, IValidationError } from 'movie-db-api'
 
 import { validate } from './validation'
 
+import { Config } from '../config'
 import { getError } from '../utils'
 
 export const databaseError = debug('database')
@@ -25,14 +26,14 @@ export async function dbConnect(): Promise<Db> {
                 useNewUrlParser: true,
             }
 
-            if (process.env.DBUSER) {
+            if (Config.user) {
                 options.auth = {
-                    user: process.env.DBUSER,
-                    password: process.env.DBPASSWORD,
+                    user: Config.user,
+                    password: Config.password,
                 }
             }
 
-            loader = MongoClient.connect(process.env.DATABASE, options)
+            loader = MongoClient.connect(Config.db, options)
         }
 
         try {

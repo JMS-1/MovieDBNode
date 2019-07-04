@@ -1,16 +1,6 @@
 #!/bin/bash
 
-CUSTOM=install.custom
-
-if [ -f "$CUSTOM" ]; then
-    source $CUSTOM
-fi
-
 export THISHOST=`hostname`
-export DATABASE=${DATABASE:=mongodb://localhost:27017/movie-db}
-export PORT=${PORT:=29099}
-export DBUSER=${DBUSER:=}
-export DBPASSWORD=${DBPASSWORD:=}
 
 docker stack rm movie-db
 

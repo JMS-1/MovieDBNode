@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const debug = require("debug");
 const mongodb_1 = require("mongodb");
 const validation_1 = require("./validation");
+const config_1 = require("../config");
 const utils_1 = require("../utils");
 exports.databaseError = debug('database');
 let loader;
@@ -18,13 +19,13 @@ async function dbConnect() {
                 reconnectTries: Number.MAX_VALUE,
                 useNewUrlParser: true,
             };
-            if (process.env.DBUSER) {
+            if (config_1.Config.user) {
                 options.auth = {
-                    user: process.env.DBUSER,
-                    password: process.env.DBPASSWORD,
+                    user: config_1.Config.user,
+                    password: config_1.Config.password,
                 };
             }
-            loader = mongodb_1.MongoClient.connect(process.env.DATABASE, options);
+            loader = mongodb_1.MongoClient.connect(config_1.Config.db, options);
         }
         try {
             const client = await loader;

@@ -5,6 +5,7 @@ const debug = require("debug");
 const express = require("express");
 const path_1 = require("path");
 const api_1 = require("./api");
+const config_1 = require("./config");
 const database_1 = require("./database");
 const utils_1 = require("./utils");
 async function startup() {
@@ -13,7 +14,7 @@ async function startup() {
     app.use(express.static(path_1.join(__dirname, '../dist')));
     app.use(body_parser_1.json());
     api_1.installApi(app);
-    app.listen(process.env.PORT);
+    app.listen(config_1.Config.port);
 }
 function startupError(error) {
     debug('startup')('%s', utils_1.getError(error));

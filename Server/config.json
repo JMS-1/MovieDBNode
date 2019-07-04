@@ -1,0 +1,6 @@
+{
+    "db": "mongodb://localhost:27017/movie-db",
+    "password": "",
+    "port": 29099,
+    "user": ""
+}
