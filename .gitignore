@@ -11,3 +11,4 @@ Server/src/**/*.js
 Server/src/**/*.js.map
 
 deploy/install.custom
+deploy/node_modules
