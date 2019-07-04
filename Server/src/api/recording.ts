@@ -20,9 +20,9 @@ export const recordingApi = Router().use(
     Router()
         .get('/export', (request, response, next) => {
             response.setHeader('Content-disposition', 'attachment; filename=export.csv')
-            response.setHeader('Content-Type', 'text/csv')
+            response.setHeader('Content-Type', 'text/csv; charset=utf-8')
             response.status(200)
-            response.write(csvData)
+            response.write(csvData, 'utf-8')
             response.end()
         })
         .get('/:id', (request, response, next) =>

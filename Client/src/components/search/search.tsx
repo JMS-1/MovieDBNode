@@ -26,9 +26,8 @@ export class CSearch extends React.PureComponent<TSearchProps> {
                 fluid={this.props.fluid}
                 icon
                 onChange={this.setFilter}
-                placeholder='[TBD]'
-                value={text}
-            >
+                placeholder={this.props.hint}
+                value={text}>
                 <input />
                 <Icon name={text ? 'close' : 'search'} link onClick={this.clearFilter} />
             </Input>

@@ -498,7 +498,7 @@ class CSearch extends React.PureComponent {
     }
     render() {
         const { text } = this.props;
-        return (React.createElement(semantic_ui_react_1.Input, { className: 'movie-db-search', fluid: this.props.fluid, icon: true, onChange: this.setFilter, placeholder: '[TBD]', value: text },
+        return (React.createElement(semantic_ui_react_1.Input, { className: 'movie-db-search', fluid: this.props.fluid, icon: true, onChange: this.setFilter, placeholder: this.props.hint, value: text },
             React.createElement("input", null),
             React.createElement(semantic_ui_react_1.Icon, { name: text ? 'close' : 'search', link: true, onClick: this.clearFilter })));
     }

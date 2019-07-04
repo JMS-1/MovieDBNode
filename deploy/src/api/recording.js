@@ -13,9 +13,9 @@ function escape(str) {
 exports.recordingApi = express_1.Router().use('/recording', express_1.Router()
     .get('/export', (request, response, next) => {
     response.setHeader('Content-disposition', 'attachment; filename=export.csv');
-    response.setHeader('Content-Type', 'text/csv');
+    response.setHeader('Content-Type', 'text/csv; charset=utf-8');
     response.status(200);
-    response.write(csvData);
+    response.write(csvData, 'utf-8');
     response.end();
 })
     .get('/:id', (request, response, next) => utils_1.processApiRequest(async () => recording_1.toProtocol(await recording_1.recordingCollection.findOne(request.params.id)), request, response))
