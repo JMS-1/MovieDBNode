@@ -119,6 +119,7 @@ export function getInitialState(): IMuiState {
             editLanguages: '(Sprachen zuordnen)',
             editSeries: '(Serie zuordnen)',
             editType: '(Ablageart auswählen)',
+            export: 'Exportieren',
             genres: 'Kategorien',
             languages: 'Sprachen',
             linkEdit: {

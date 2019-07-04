@@ -19,6 +19,7 @@ type TRecordingActions =
     | local.IOpenRecordingDelete
     | local.IQueryRecordings
     | local.IRecordingDeleted
+    | local.IRecordingExportDone
     | local.IRecordingSaved
     | local.IResetRecordingFilter
     | local.ISaveRecording
@@ -32,6 +33,7 @@ type TRecordingActions =
     | local.ISetRecordingSeriesFilter
     | local.ISetRecordingTextFilter
     | local.IStartRecordingEdit
+    | local.IStartRecordingExport
     | local.IToggleRecordingSort
 
 const controller = new (class extends EditController<api.IRecording, TRecordingActions, local.IRecordingState> {
@@ -46,9 +48,11 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
     protected getReducerMap(): local.IActionHandlerMap<TRecordingActions, local.IRecordingState> {
         return {
             [local.applicationActions.loadSchema]: this.loadSchema,
+            [local.recordingActions.beginExport]: this.startExport,
             [local.recordingActions.cancel]: this.cancelEdit,
             [local.recordingActions.createCopy]: this.createCopy,
             [local.recordingActions.deleted]: this.deleteDone,
+            [local.recordingActions.doneExport]: this.exportDone,
             [local.recordingActions.hideConfirm]: this.closeDelete,
             [local.recordingActions.query]: this.query,
             [local.recordingActions.queryDone]: this.load,
@@ -341,6 +345,31 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         if (request.confirm && state.selected) {
             ServerApi.delete(`recording/${state.selected}`, RecordingActions.deleteDone)
         }
+
+        return state
+    }
+
+    private startExport(state: local.IRecordingState, request: local.IStartRecordingExport): local.IRecordingState {
+        const req: api.IRecordingQueryRequest = {
+            correlationId: uuid(),
+            firstPage: 0,
+            fullName: state.search,
+            genres: state.genres,
+            language: state.language,
+            pageSize: Number.MAX_SAFE_INTEGER,
+            rent: state.rent,
+            series: state.series,
+            sort: 'fullName',
+            sortOrder: 'ascending',
+        }
+
+        ServerApi.post('recording/export/query', req, RecordingActions.exportDone)
+
+        return state
+    }
+
+    private exportDone(state: local.IRecordingState, request: local.IRecordingExportDone): local.IRecordingState {
+        window.open('api/recording/export', '_blank')
 
         return state
     }

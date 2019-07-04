@@ -1,17 +1,30 @@
 import { Router } from 'express'
 import { v4 as uuid } from 'uuid'
 
-import {
-    IApiDeleteResponse, INewRecording, IRecordingQueryRequest, IUpdateRecordingResponse,
-} from 'movie-db-api'
+import * as movieDbApi from 'movie-db-api'
 
 import { processApiRequest } from './utils'
 
+import { genreCollection } from '../database/genre'
+import { languageCollection } from '../database/language'
 import { recordingCollection, toEntity, toProtocol } from '../database/recording'
+
+let csvData = ''
+
+function escape(str: string): string {
+    return `"${(str || '').replace(/"/g, '""')}"`
+}
 
 export const recordingApi = Router().use(
     '/recording',
     Router()
+        .get('/export', (request, response, next) => {
+            response.setHeader('Content-disposition', 'attachment; filename=export.csv')
+            response.setHeader('Content-Type', 'text/csv')
+            response.status(200)
+            response.write(csvData)
+            response.end()
+        })
         .get('/:id', (request, response, next) =>
             processApiRequest(
                 async () => toProtocol(await recordingCollection.findOne(request.params.id)),
@@ -29,7 +42,7 @@ export const recordingApi = Router().use(
         .delete('/:id', (request, response) =>
             processApiRequest(
                 async () =>
-                    <IApiDeleteResponse>{
+                    <movieDbApi.IApiDeleteResponse>{
                         id: request.params.id,
                         errors: await recordingCollection.deleteOne(request.params.id),
                     },
@@ -39,20 +52,35 @@ export const recordingApi = Router().use(
         )
         .post('/search', (request, response, next) =>
             processApiRequest(
-                async (req: IRecordingQueryRequest) => await recordingCollection.query(req),
+                async (req: movieDbApi.IRecordingQueryRequest) => await recordingCollection.query(req),
                 request,
                 response,
             ),
         )
-        .put('/:id', (request, response, next) =>
+        .post('/export/query', (request, response, next) =>
             processApiRequest(
-                async (req: INewRecording) => {
-                    const recording = toEntity(req, request.params.id, undefined)
+                async (req: movieDbApi.IRecordingQueryRequest) => {
+                    const all = await recordingCollection.query(req)
 
-                    return <IUpdateRecordingResponse>{
-                        errors: await recordingCollection.findOneAndReplace(recording),
-                        item: toProtocol(recording),
+                    const languageMap: { [id: string]: string } = {}
+                    const languages = await languageCollection.find()
+                    languages.forEach(l => (languageMap[l._id] = l.name))
+
+                    const genreMap: { [id: string]: string } = {}
+                    const genres = await genreCollection.find()
+                    genres.forEach(g => (genreMap[g._id] = g.name))
+
+                    csvData = 'Name;Sprachen;Kategorien\r\n'
+
+                    for (let recording of all.list) {
+                        const name = escape(recording.fullName)
+                        const languages = escape((recording.languages || []).map(l => languageMap[l] || l).join('; '))
+                        const genres = escape((recording.genres || []).map(l => genreMap[l] || l).join('; '))
+
+                        csvData += `${name};${languages};${genres}\r\n`
                     }
+
+                    return {}
                 },
                 request,
                 response,
@@ -60,11 +88,25 @@ export const recordingApi = Router().use(
         )
         .post('/', (request, response, next) =>
             processApiRequest(
-                async (req: INewRecording) => {
+                async (req: movieDbApi.INewRecording) => {
                     const recording = toEntity(req, uuid(), new Date().toISOString())
 
-                    return <IUpdateRecordingResponse>{
+                    return <movieDbApi.IUpdateRecordingResponse>{
                         errors: await recordingCollection.insertOne(recording),
+                        item: toProtocol(recording),
+                    }
+                },
+                request,
+                response,
+            ),
+        )
+        .put('/:id', (request, response, next) =>
+            processApiRequest(
+                async (req: movieDbApi.INewRecording) => {
+                    const recording = toEntity(req, request.params.id, undefined)
+
+                    return <movieDbApi.IUpdateRecordingResponse>{
+                        errors: await recordingCollection.findOneAndReplace(recording),
                         item: toProtocol(recording),
                     }
                 },

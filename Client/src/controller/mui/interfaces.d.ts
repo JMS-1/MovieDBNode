@@ -50,6 +50,7 @@ declare module 'movie-db-client' {
             readonly editLanguages: string
             readonly editSeries: string
             readonly editType: string
+            readonly export: string
             readonly genres: string
             readonly languages: string
             readonly linkEdit: IItemMui<api.IRecordingLink>

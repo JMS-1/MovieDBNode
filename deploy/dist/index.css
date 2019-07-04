@@ -164,7 +164,13 @@ body {
   .movie-db-recording-route > .page-size {
     align-self: flex-start; }
   .movie-db-recording-route > .count {
-    margin-bottom: 0; }
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; }
+    .movie-db-recording-route > .count > .ui.segment {
+      margin-bottom: 0; }
   .movie-db-recording-route > .pager {
     display: flex;
     flex-direction: row;

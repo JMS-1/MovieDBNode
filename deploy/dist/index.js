@@ -1809,6 +1809,7 @@ function getInitialState() {
             editLanguages: '(Sprachen zuordnen)',
             editSeries: '(Serie zuordnen)',
             editType: '(Ablageart auswählen)',
+            export: 'Exportieren',
             genres: 'Kategorien',
             languages: 'Sprachen',
             linkEdit: {
@@ -1977,6 +1978,12 @@ class RecordingActions {
     static deleteDone(response) {
         return { id: response.id, errors: response.errors, type: "movie-db.recordings.delete-done" };
     }
+    static startExport() {
+        return { type: "movie-db.recordings.export-start" };
+    }
+    static exportDone() {
+        return { type: "movie-db.recordings.export-done" };
+    }
 }
 exports.RecordingActions = RecordingActions;
 
@@ -2009,9 +2016,11 @@ const controller = new (class extends controller_1.EditController {
     getReducerMap() {
         return {
             ["movie-db.application.load-schemas"]: this.loadSchema,
+            ["movie-db.recordings.export-start"]: this.startExport,
             ["movie-db.recordings.cancel-edit"]: this.cancelEdit,
             ["movie-db.recordings.copy"]: this.createCopy,
             ["movie-db.recordings.delete-done"]: this.deleteDone,
+            ["movie-db.recordings.export-done"]: this.exportDone,
             ["movie-db.recordings.close-delete"]: this.closeDelete,
             ["movie-db.recordings.query"]: this.query,
             ["movie-db.recordings.query-done"]: this.load,
@@ -2186,6 +2195,26 @@ const controller = new (class extends controller_1.EditController {
         if (request.confirm && state.selected) {
             store_1.ServerApi.delete(`recording/${state.selected}`, actions_1.RecordingActions.deleteDone);
         }
+        return state;
+    }
+    startExport(state, request) {
+        const req = {
+            correlationId: uuid_1.v4(),
+            firstPage: 0,
+            fullName: state.search,
+            genres: state.genres,
+            language: state.language,
+            pageSize: Number.MAX_SAFE_INTEGER,
+            rent: state.rent,
+            series: state.series,
+            sort: 'fullName',
+            sortOrder: 'ascending',
+        };
+        store_1.ServerApi.post('recording/export/query', req, actions_1.RecordingActions.exportDone);
+        return state;
+    }
+    exportDone(state, request) {
+        window.open('api/recording/export', '_blank');
         return state;
     }
 })();
@@ -3500,7 +3529,7 @@ exports.RecordingLinks = react_redux_1.connect(mapStateToProps, mapDispatchToPro
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-const semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+const ui = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const itemRedux_1 = __webpack_require__(/*! ./item/itemRedux */ "./Client/src/routes/recording/item/itemRedux.ts");
 const sizeRedux_1 = __webpack_require__(/*! ./size/sizeRedux */ "./Client/src/routes/recording/size/sizeRedux.ts");
 const searchRedux_1 = __webpack_require__(/*! ../../components/search/searchRedux */ "./Client/src/components/search/searchRedux.ts");
@@ -3521,27 +3550,29 @@ class CRecordingRoute extends React.PureComponent {
     }
     render() {
         return (React.createElement("div", { className: 'movie-db-recording-route' },
-            React.createElement(semanticUiReact.Segment, { className: 'count' }, this.props.count),
-            React.createElement(semanticUiReact.Segment, { className: 'filter' },
+            React.createElement("div", { className: 'count' },
+                React.createElement(ui.Segment, null, this.props.count),
+                React.createElement(ui.Button, { onClick: this.props.export }, this.props.exportLabel)),
+            React.createElement(ui.Segment, { className: 'filter' },
                 React.createElement("div", { className: 'search' },
                     React.createElement(searchRedux_1.RecordingSearch, { fluid: true }),
-                    React.createElement(semanticUiReact.Button, { onClick: this.props.clearFilter }, this.props.clear)),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setLanguage, options: this.props.languageOptions, placeholder: this.props.languageHint, search: true, selection: true, scrolling: true, value: this.props.language || '' }),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, search: true, selection: true, scrolling: true, value: this.props.genres }),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, placeholder: this.props.seriesHint, search: true, selection: true, scrolling: true, value: this.props.series[0] || '' }),
-                React.createElement(semanticUiReact.Dropdown, { clearable: true, fluid: true, onChange: this.setRentTo, options: this.props.rentOptions, placeholder: this.props.rentToHint, selection: true, scrolling: true, value: this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : '' })),
+                    React.createElement(ui.Button, { onClick: this.props.clearFilter }, this.props.clear)),
+                React.createElement(ui.Dropdown, { clearable: true, fluid: true, onChange: this.setLanguage, options: this.props.languageOptions, placeholder: this.props.languageHint, search: true, selection: true, scrolling: true, value: this.props.language || '' }),
+                React.createElement(ui.Dropdown, { clearable: true, fluid: true, multiple: true, onChange: this.setGenre, options: this.props.genreOptions, placeholder: this.props.genreHint, search: true, selection: true, scrolling: true, value: this.props.genres }),
+                React.createElement(ui.Dropdown, { clearable: true, fluid: true, onChange: this.setSeries, options: this.props.seriesOptions, placeholder: this.props.seriesHint, search: true, selection: true, scrolling: true, value: this.props.series[0] || '' }),
+                React.createElement(ui.Dropdown, { clearable: true, fluid: true, onChange: this.setRentTo, options: this.props.rentOptions, placeholder: this.props.rentToHint, selection: true, scrolling: true, value: this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : '' })),
             React.createElement("div", { className: 'pager' },
-                React.createElement(semanticUiReact.Menu, { className: 'page-size' }, pageSizes.map(p => (React.createElement(sizeRedux_1.PageSizeSelector, { key: p, size: p })))),
-                React.createElement(semanticUiReact.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })),
+                React.createElement(ui.Menu, { className: 'page-size' }, pageSizes.map(p => (React.createElement(sizeRedux_1.PageSizeSelector, { key: p, size: p })))),
+                React.createElement(ui.Pagination, { activePage: this.props.page, totalPages: this.props.lastPage, onPageChange: this.onPage })),
             React.createElement("div", { className: 'table' },
-                React.createElement(semanticUiReact.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },
-                    React.createElement(semanticUiReact.Table.Header, null,
-                        React.createElement(semanticUiReact.Table.Row, null,
-                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'name', onClick: this.sortName, sorted: this.props.nameSort }, this.props.nameHeader),
-                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'created', onClick: this.sortCreated, sorted: this.props.createdSort }, this.props.createdHeader),
-                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'languages' }, this.props.languageHeader),
-                            React.createElement(semanticUiReact.Table.HeaderCell, { className: 'genres' }, this.props.genreHeader))),
-                    React.createElement(semanticUiReact.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r }))))))));
+                React.createElement(ui.Table, { unstackable: true, celled: true, striped: true, sortable: true, compact: true, fixed: true, collapsing: true },
+                    React.createElement(ui.Table.Header, null,
+                        React.createElement(ui.Table.Row, null,
+                            React.createElement(ui.Table.HeaderCell, { className: 'name', onClick: this.sortName, sorted: this.props.nameSort }, this.props.nameHeader),
+                            React.createElement(ui.Table.HeaderCell, { className: 'created', onClick: this.sortCreated, sorted: this.props.createdSort }, this.props.createdHeader),
+                            React.createElement(ui.Table.HeaderCell, { className: 'languages' }, this.props.languageHeader),
+                            React.createElement(ui.Table.HeaderCell, { className: 'genres' }, this.props.genreHeader))),
+                    React.createElement(ui.Table.Body, null, this.props.list.map(r => (React.createElement(itemRedux_1.RecordingItem, { key: r, id: r }))))))));
     }
     componentWillMount() {
         this.props.query();
@@ -3573,6 +3604,7 @@ function mapStateToProps(state, props) {
         count: mui.count.replace(/\{count\}/g, `${route.count}`).replace(/\{total\}/g, `${route.total}`),
         createdHeader: mui.created,
         createdSort: route.sort === 'created' ? route.sortOrder : undefined,
+        exportLabel: mui.export,
         genreHeader: mui.genres,
         genreHint: state.mui.genre.noSelect,
         genreOptions: controller.getGenreOptions(state),
@@ -3599,6 +3631,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, props) {
     return {
         clearFilter: () => dispatch(controller.RecordingActions.resetFilter()),
+        export: () => dispatch(controller.RecordingActions.startExport()),
         query: () => dispatch(controller.RecordingActions.query()),
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),

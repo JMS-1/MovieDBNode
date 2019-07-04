@@ -96,4 +96,12 @@ export class RecordingActions {
     static deleteDone(response: api.IDeleteRecordingResponse): local.IRecordingDeleted {
         return { id: response.id, errors: response.errors, type: local.recordingActions.deleted }
     }
+
+    static startExport(): local.IStartRecordingExport {
+        return { type: local.recordingActions.beginExport }
+    }
+
+    static exportDone(): local.IRecordingExportDone {
+        return { type: local.recordingActions.doneExport }
+    }
 }

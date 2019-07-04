@@ -26,9 +26,11 @@ declare module 'movie-db-client' {
     }
 
     const enum recordingActions {
+        beginExport = 'movie-db.recordings.export-start',
         cancel = 'movie-db.recordings.cancel-edit',
         createCopy = 'movie-db.recordings.copy',
         deleted = 'movie-db.recordings.delete-done',
+        doneExport = 'movie-db.recordings.export-done',
         hideConfirm = 'movie-db.recordings.close-delete',
         query = 'movie-db.recordings.query',
         queryDone = 'movie-db.recordings.query-done',
@@ -147,5 +149,13 @@ declare module 'movie-db-client' {
 
     interface ICloseRecordingDelete extends IGenericDeleteClose {
         type: recordingActions.hideConfirm
+    }
+
+    interface IStartRecordingExport extends Action {
+        type: recordingActions.beginExport
+    }
+
+    interface IRecordingExportDone extends Action {
+        type: recordingActions.doneExport
     }
 }

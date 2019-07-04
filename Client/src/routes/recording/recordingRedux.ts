@@ -16,6 +16,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingRouteUiProp
         count: mui.count.replace(/\{count\}/g, `${route.count}`).replace(/\{total\}/g, `${route.total}`),
         createdHeader: mui.created,
         createdSort: route.sort === 'created' ? route.sortOrder : undefined,
+        exportLabel: mui.export,
         genreHeader: mui.genres,
         genreHint: state.mui.genre.noSelect,
         genreOptions: controller.getGenreOptions(state),
@@ -46,6 +47,7 @@ function mapDispatchToProps(
 ): local.IRecordingRouteActions {
     return {
         clearFilter: () => dispatch(controller.RecordingActions.resetFilter()),
+        export: () => dispatch(controller.RecordingActions.startExport()),
         query: () => dispatch(controller.RecordingActions.query()),
         setGenres: ids => dispatch(controller.RecordingActions.filterGenre(ids)),
         setLanguage: id => dispatch(controller.RecordingActions.filterLanguage(id)),
