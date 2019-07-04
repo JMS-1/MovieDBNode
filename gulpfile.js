@@ -95,8 +95,8 @@ gulp.task('deploy:config', ['deploy:clean'], () =>
             'Dockerfile',
             'install',
             'package.json',
+            'Server/service.cmd',
             'Server/service.js',
-            'Server/service',
             'yarn.lock',
         ])
         .pipe(gulp.dest('deploy')),

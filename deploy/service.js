@@ -4,7 +4,7 @@ const svc = new Service({
     description: 'Node.Js Variante der Movie Datenbank',
     name: 'Movie Datenbank',
     nodeOptions: [],
-    script: join('src/startup.js'),
+    script: 'src/startup.js',
 })
 
 svc.on('install', () => svc.start())
