@@ -79,6 +79,8 @@ async function selectTheme(theme, name) {
     })
 }
 
+// Dieser Work-Aorund funktioniert NUR für Tasks, die noch nicht ausgeführt wurden
+// und zudem keine Abhängigkeiten haben. Für uns passt das aber gut!
 function runSequence(...tasks) {
     return new Promise(async (success, failure) => {
         try {
