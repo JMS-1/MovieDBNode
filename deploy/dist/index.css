@@ -29,6 +29,7 @@ client-root {
     margin-top: 1em; }
 
 body {
+  display: none;
   margin: 0; }
 
 .movie-db-confirm-delete > .content > .actions {

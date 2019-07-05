@@ -8,12 +8,15 @@ declare module 'movie-db-client' {
         readonly errors: string[]
         readonly requests: number
         readonly schemas: ISchemaResponse
+        readonly theme: string
+        readonly themeId: string
     }
 
     const enum applicationActions {
         endReq = 'movie-db.application.end-request',
         loadSchema = 'movie-db.application.load-schemas',
         resetErrors = 'movie-db.application.clear-errors',
+        setTheme = 'movie-db.application.set-theme',
         startReq = 'movie-db.application.begin-request',
     }
 
@@ -33,5 +36,10 @@ declare module 'movie-db-client' {
 
     interface IClearWebRequestErrors extends Action {
         type: applicationActions.resetErrors
+    }
+
+    interface ISetTheme extends Action {
+        theme: string
+        type: applicationActions.setTheme
     }
 }

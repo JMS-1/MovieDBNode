@@ -17,4 +17,8 @@ export class ApplicationActions {
     static clearErrors(): local.IClearWebRequestErrors {
         return { type: local.applicationActions.resetErrors }
     }
+
+    static setTheme(theme: string): local.ISetTheme {
+        return { theme, type: local.applicationActions.setTheme }
+    }
 }

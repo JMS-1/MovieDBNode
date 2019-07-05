@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid'
+
 import * as local from 'movie-db-client'
 
 import { Controller } from '../controller'
@@ -13,6 +15,7 @@ type TApplicationActions =
     | local.ILoadSchemas
     | local.IRecordingDeleted
     | local.ISeriesDeleted
+    | local.ISetTheme
     | local.IStartWebRequest
 
 const controller = new (class extends Controller<TApplicationActions, local.IApplicationState> {
@@ -21,6 +24,7 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
             [local.applicationActions.endReq]: this.endWebRequest,
             [local.applicationActions.loadSchema]: this.loadSchemas,
             [local.applicationActions.resetErrors]: this.clearErrors,
+            [local.applicationActions.setTheme]: this.setTheme,
             [local.applicationActions.startReq]: this.beginWebRequest,
             [local.containerActions.deleted]: this.containerDeleted,
             [local.genreActions.deleted]: this.genreDeleted,
@@ -36,6 +40,8 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
             errors: [],
             requests: 0,
             schemas: undefined,
+            theme: undefined,
+            themeId: uuid(),
         }
     }
 
@@ -114,6 +120,25 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
 
     private seriesDeleted(state: local.IApplicationState, response: local.ISeriesDeleted): local.IApplicationState {
         return this.deleteDone(state, response)
+    }
+
+    private setTheme(state: local.IApplicationState, request: local.ISetTheme): local.IApplicationState {
+        if (state.theme === request.theme) {
+            return state
+        }
+
+        let link = <HTMLLinkElement>document.getElementById(state.themeId)
+
+        if (!link) {
+            link = document.querySelector('head').appendChild(document.createElement('link'))
+
+            link.id = state.themeId
+            link.rel = 'stylesheet'
+        }
+
+        link.href = `${request.theme}/semantic.min.css`
+
+        return { ...state, theme: request.theme }
     }
 })()
 

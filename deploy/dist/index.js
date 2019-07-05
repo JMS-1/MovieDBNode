@@ -385,8 +385,14 @@ const detailsRedux_1 = __webpack_require__(/*! ../../routes/recording/details/de
 const recordingRedux_1 = __webpack_require__(/*! ../../routes/recording/recordingRedux */ "./Client/src/routes/recording/recordingRedux.ts");
 const seriesRedux_1 = __webpack_require__(/*! ../../routes/series/seriesRedux */ "./Client/src/routes/series/seriesRedux.ts");
 class CRoot extends React.PureComponent {
+    constructor() {
+        super(...arguments);
+        this.defaultTheme = () => this.props.setTheme('default');
+        this.alternateTheme1 = () => this.props.setTheme('alternate.1');
+        this.alternateTheme2 = () => this.props.setTheme('alternate.2');
+    }
     render() {
-        const { errors, busy, path } = this.props;
+        const { errors, busy, path, theme } = this.props;
         const createContainer = path === `${"/container"}/NEW`;
         const createRecording = path === `${"/recording"}/NEW`;
         const createSeries = path === `${"/series"}/NEW`;
@@ -417,7 +423,13 @@ class CRoot extends React.PureComponent {
                             React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createSeries, as: 'a', href: `#${"/series"}/NEW` }, this.props.createSeries),
                             React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createContainer, as: 'a', href: `#${"/container"}/NEW` }, this.props.createContainer),
                             React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createLanguage, as: 'a', href: `#${"/language"}/NEW` }, this.props.createLanguage),
-                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createGenre, as: 'a', href: `#${"/genre"}/NEW` }, this.props.createGenre))))),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: createGenre, as: 'a', href: `#${"/genre"}/NEW` }, this.props.createGenre)))),
+                React.createElement(semantic_ui_react_1.Menu.Item, null,
+                    React.createElement(semantic_ui_react_1.Dropdown, { text: this.props.themeTitle },
+                        React.createElement(semantic_ui_react_1.Dropdown.Menu, null,
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: theme === 'default', onClick: this.defaultTheme }, this.props.defaultTheme),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: theme === 'alternate.1', onClick: this.alternateTheme1 }, this.props.alternateTheme1),
+                            React.createElement(semantic_ui_react_1.Dropdown.Item, { active: theme === 'alternate.2', onClick: this.alternateTheme2 }, this.props.alternateTheme2))))),
             React.createElement("div", { className: 'content' },
                 React.createElement(react_router_1.Route, { path: '/', exact: true, component: recordingRedux_1.RecordingRoute }),
                 React.createElement(react_router_1.Route, { path: `${"/container"}/:id?`, component: containerRedux_1.ContainerRoute }),
@@ -449,8 +461,10 @@ const controller_1 = __webpack_require__(/*! ../../controller */ "./Client/src/c
 function mapStateToProps(state, props) {
     const mui = state.mui.routes;
     const cmui = mui.create;
+    const tmui = state.mui.themes;
     const route = state.application;
     return {
+        alternateTheme1: tmui.theme1,
         busy: route.requests > 0,
         containerRoute: mui.container,
         createContainer: cmui.container,
@@ -459,18 +473,23 @@ function mapStateToProps(state, props) {
         createRecording: cmui.recording,
         createRoute: cmui.title,
         createSeries: cmui.series,
+        defaultTheme: tmui.default,
         errors: route.errors,
         genreRoute: mui.genre,
+        alternateTheme2: tmui.theme2,
         languageRoute: mui.language,
         path: state.router.location.pathname,
         recordingRoute: mui.recording,
         seriesRoute: mui.series,
+        theme: state.application.theme,
+        themeTitle: tmui.title,
         title: state.mui.webError,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
         clearErrors: () => dispatch(controller_1.ApplicationActions.clearErrors()),
+        setTheme: theme => dispatch(controller_1.ApplicationActions.setTheme(theme)),
     };
 }
 exports.Root = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CRoot);
@@ -797,6 +816,9 @@ class ApplicationActions {
     static clearErrors() {
         return { type: "movie-db.application.clear-errors" };
     }
+    static setTheme(theme) {
+        return { theme, type: "movie-db.application.set-theme" };
+    }
 }
 exports.ApplicationActions = ApplicationActions;
 
@@ -813,6 +835,7 @@ exports.ApplicationActions = ApplicationActions;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
 const controller_1 = __webpack_require__(/*! ../controller */ "./Client/src/controller/controller.ts");
 const validation_1 = __webpack_require__(/*! ../../validation */ "./Client/src/validation.ts");
 const controller = new (class extends controller_1.Controller {
@@ -821,6 +844,7 @@ const controller = new (class extends controller_1.Controller {
             ["movie-db.application.end-request"]: this.endWebRequest,
             ["movie-db.application.load-schemas"]: this.loadSchemas,
             ["movie-db.application.clear-errors"]: this.clearErrors,
+            ["movie-db.application.set-theme"]: this.setTheme,
             ["movie-db.application.begin-request"]: this.beginWebRequest,
             ["movie-db.containers.delete-done"]: this.containerDeleted,
             ["movie-db.genres.delete-done"]: this.genreDeleted,
@@ -835,6 +859,8 @@ const controller = new (class extends controller_1.Controller {
             errors: [],
             requests: 0,
             schemas: undefined,
+            theme: undefined,
+            themeId: uuid_1.v4(),
         };
     }
     loadSchemas(state, response) {
@@ -881,6 +907,19 @@ const controller = new (class extends controller_1.Controller {
     }
     seriesDeleted(state, response) {
         return this.deleteDone(state, response);
+    }
+    setTheme(state, request) {
+        if (state.theme === request.theme) {
+            return state;
+        }
+        let link = document.getElementById(state.themeId);
+        if (!link) {
+            link = document.querySelector('head').appendChild(document.createElement('link'));
+            link.id = state.themeId;
+            link.rel = 'stylesheet';
+        }
+        link.href = `${request.theme}/semantic.min.css`;
+        return Object.assign({}, state, { theme: request.theme });
     }
 })();
 exports.ApplicationReducer = controller.reducer;
@@ -1860,6 +1899,12 @@ function getInitialState() {
             noParent: '(keine)',
             noSelect: '(alle Serien)',
         },
+        themes: {
+            default: 'Standard',
+            theme1: 'Alternative 1',
+            theme2: 'Alternative 2',
+            title: 'Theme',
+        },
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
         yes: 'Ja',
@@ -2571,6 +2616,7 @@ const controller = __webpack_require__(/*! ./controller */ "./Client/src/control
 const genre_1 = __webpack_require__(/*! ./controller/genre */ "./Client/src/controller/genre/index.ts");
 const store_1 = __webpack_require__(/*! ./store */ "./Client/src/store.ts");
 const store = store_1.initializeStore();
+store.dispatch(controller.ApplicationActions.setTheme('default'));
 react_dom_1.render(React.createElement(react_redux_1.Provider, { store: store },
     React.createElement(connected_react_router_1.ConnectedRouter, { history: store_1.history },
         React.createElement(rootRedux_1.Root, null))), document.querySelector('client-root'));
@@ -70111,7 +70157,7 @@ var partitionHTMLProps = function partitionHTMLProps(props) {
 /*!*************************************************************!*\
   !*** ./node_modules/semantic-ui-react/dist/es/lib/index.js ***!
   \*************************************************************/
-/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph */
+/*! exports provided: AutoControlledComponent, getChildMapping, mergeChildMappings, childrenUtils, useKeyOnly, useKeyOrValueAndKey, useValueAndKey, useMultipleProp, useTextAlignProp, useVerticalAlignProp, useWidthProp, customPropTypes, eventStack, createShorthand, createShorthandFactory, createHTMLDivision, createHTMLIframe, createHTMLImage, createHTMLInput, createHTMLLabel, createHTMLParagraph, getUnhandledProps, getElementType, htmlInputAttrs, htmlInputEvents, htmlInputProps, htmlImageProps, partitionHTMLProps, isBrowser, doesNodeContainClick, leven, createPaginationItems, SUI, numberToWordMap, numberToWord, normalizeOffset, normalizeTransitionDuration, objectDiff, handleRef, isRefObject */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

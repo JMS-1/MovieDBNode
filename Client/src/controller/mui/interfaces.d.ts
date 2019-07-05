@@ -87,6 +87,12 @@ declare module 'movie-db-client' {
             readonly noParent: string
             readonly noSelect: string
         }
+        readonly themes: {
+            readonly default: string
+            readonly theme1: string
+            readonly theme2: string
+            readonly title: string
+        }
         readonly validationError: string
         readonly webError: string
         readonly yes: string

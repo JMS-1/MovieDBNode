@@ -14,6 +14,7 @@ import { SeriesRoute } from '../../routes/series/seriesRedux'
 export interface IRootUiProps {}
 
 export interface IRootProps {
+    alternateTheme1: string
     busy: boolean
     containerRoute: string
     createContainer: string
@@ -22,24 +23,29 @@ export interface IRootProps {
     createRecording: string
     createRoute: string
     createSeries: string
+    defaultTheme: string
     errors: string[]
     genreRoute: string
+    alternateTheme2: string
     languageRoute: string
     path: string
     recordingRoute: string
     seriesRoute: string
+    theme: string
+    themeTitle: string
     title: string
 }
 
 export interface IRootActions {
     clearErrors(): void
+    setTheme(theme: string): void
 }
 
 export type TRootProps = IRootProps & IRootUiProps & IRootActions
 
 export class CRoot extends React.PureComponent<TRootProps> {
     render(): JSX.Element {
-        const { errors, busy, path } = this.props
+        const { errors, busy, path, theme } = this.props
         const createContainer = path === `${routes.container}/NEW`
         const createRecording = path === `${routes.recording}/NEW`
         const createSeries = path === `${routes.series}/NEW`
@@ -102,6 +108,21 @@ export class CRoot extends React.PureComponent<TRootProps> {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Menu.Item>
+                    <Menu.Item>
+                        <Dropdown text={this.props.themeTitle}>
+                            <Dropdown.Menu>
+                                <Dropdown.Item active={theme === 'default'} onClick={this.defaultTheme}>
+                                    {this.props.defaultTheme}
+                                </Dropdown.Item>
+                                <Dropdown.Item active={theme === 'alternate.1'} onClick={this.alternateTheme1}>
+                                    {this.props.alternateTheme1}
+                                </Dropdown.Item>
+                                <Dropdown.Item active={theme === 'alternate.2'} onClick={this.alternateTheme2}>
+                                    {this.props.alternateTheme2}
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Menu.Item>
                 </Menu>
                 <div className='content'>
                     <Route path='/' exact component={RecordingRoute} />
@@ -115,4 +136,10 @@ export class CRoot extends React.PureComponent<TRootProps> {
             </div>
         )
     }
+
+    private readonly defaultTheme = (): void => this.props.setTheme('default')
+
+    private readonly alternateTheme1 = (): void => this.props.setTheme('alternate.1')
+
+    private readonly alternateTheme2 = (): void => this.props.setTheme('alternate.2')
 }

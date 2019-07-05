@@ -10,13 +10,15 @@ import { history, initializeStore, ServerApi } from './store'
 
 const store = initializeStore()
 
+store.dispatch(controller.ApplicationActions.setTheme('default'))
+
 render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <Root />
         </ConnectedRouter>
     </Provider>,
-    document.querySelector('client-root')
+    document.querySelector('client-root'),
 )
 
 ServerApi.get('container', controller.ContainerActions.load)

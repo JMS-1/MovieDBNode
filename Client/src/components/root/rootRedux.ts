@@ -10,9 +10,11 @@ import { ApplicationActions } from '../../controller'
 function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.IRootProps {
     const mui = state.mui.routes
     const cmui = mui.create
+    const tmui = state.mui.themes
     const route = state.application
 
     return {
+        alternateTheme1: tmui.theme1,
         busy: route.requests > 0,
         containerRoute: mui.container,
         createContainer: cmui.container,
@@ -21,12 +23,16 @@ function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.
         createRecording: cmui.recording,
         createRoute: cmui.title,
         createSeries: cmui.series,
+        defaultTheme: tmui.default,
         errors: route.errors,
         genreRoute: mui.genre,
+        alternateTheme2: tmui.theme2,
         languageRoute: mui.language,
         path: state.router.location.pathname,
         recordingRoute: mui.recording,
         seriesRoute: mui.series,
+        theme: state.application.theme,
+        themeTitle: tmui.title,
         title: state.mui.webError,
     }
 }
@@ -34,6 +40,7 @@ function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.
 function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.IRootUiProps): local.IRootActions {
     return {
         clearErrors: () => dispatch(ApplicationActions.clearErrors()),
+        setTheme: theme => dispatch(ApplicationActions.setTheme(theme)),
     }
 }
 

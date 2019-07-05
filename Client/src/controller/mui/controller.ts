@@ -170,6 +170,12 @@ export function getInitialState(): IMuiState {
             noParent: '(keine)',
             noSelect: '(alle Serien)',
         },
+        themes: {
+            default: 'Standard',
+            theme1: 'Alternative 1',
+            theme2: 'Alternative 2',
+            title: 'Theme',
+        },
         validationError: 'Bitte Eingaben kontrollieren',
         webError: 'Server-Zugriff fehlgeschlagen',
         yes: 'Ja',
