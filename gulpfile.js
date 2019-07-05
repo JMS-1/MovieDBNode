@@ -4,7 +4,6 @@ const gulp = require('gulp')
 const map = require('gulp-sourcemaps')
 const path = require('path')
 const sass = require('gulp-sass')
-const sequence = require('run-sequence')
 const shell = require('gulp-shell')
 const ts = require('gulp-typescript')
 const util = require('util')
@@ -73,7 +72,21 @@ async function selectTheme(theme, name) {
             }
 
             // Gewünschte Task ausführen.
-            tasks[name](success)
+            tasks[name](error => (error ? failure(error) : success()))
+        } catch (error) {
+            failure(error)
+        }
+    })
+}
+
+function runSequence(...tasks) {
+    return new Promise(async (success, failure) => {
+        try {
+            for (let task of tasks) {
+                await gulp.tasks[task].fn(error => (error ? failure(error) : success))
+            }
+
+            success()
         } catch (error) {
             failure(error)
         }
@@ -102,14 +115,17 @@ gulp.task('int-build-alternate-2-ui', () => selectTheme('alternate.2', 'build'))
 gulp.task('int-build-default-ui', () => selectTheme('default', 'build'))
 gulp.task('int-watch-default-ui', () => selectTheme('default', 'watch'))
 
-gulp.task('build-alternate-1-ui', shell.task('node node_modules/gulp/bin/gulp int-build-alternate-1-ui'))
-gulp.task('build-alternate-2-ui', shell.task('node node_modules/gulp/bin/gulp int-build-alternate-2-ui'))
-gulp.task('build-default-ui', shell.task('node node_modules/gulp/bin/gulp int-build-default-ui'))
-gulp.task('watch-default-ui', shell.task('node node_modules/gulp/bin/gulp int-watch-default-ui'))
+gulp.task('build-alternate-1-ui', shell.task('node node_modules/gulp/bin/gulp.js int-build-alternate-1-ui'))
+gulp.task('build-alternate-2-ui', shell.task('node node_modules/gulp/bin/gulp.js int-build-alternate-2-ui'))
+gulp.task('build-default-ui', shell.task('node node_modules/gulp/bin/gulp.js int-build-default-ui'))
+gulp.task('watch-default-ui', shell.task('node node_modules/gulp/bin/gulp.js int-watch-default-ui'))
 
 //
-gulp.task('build-client', ['build-sass', 'build-app', 'build-default-ui'])
-gulp.task('build-client-deploy', () => sequence('build-alternate-1-ui', 'build-alternate-2-ui', 'build-client'))
+gulp.task('build-client-core', ['build-sass', 'build-app'])
+gulp.task('build-client', ['build-client-core', 'build-default-ui'])
+gulp.task('build-client-deploy', ['build-client-core'], () =>
+    runSequence('build-alternate-1-ui', 'build-alternate-2-ui', 'build-default-ui'),
+)
 
 //
 gulp.task('build-server', () =>
