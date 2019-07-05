@@ -3,7 +3,12 @@
         "source.fixAll.tslint": true
     },
     "editor.formatOnSave": true,
+    "files.exclude": {
+        "Server/src/**/*.js": true,
+        "Server/src/**/*.js.map": true
+    },
     "grunt.autoDetect": "off",
+    "gulp.autoDetect": "on",
     "jake.autoDetect": "off",
     "scss.lint.duplicateProperties": "warning",
     "scss.lint.emptyRules": "error",
@@ -11,9 +16,5 @@
     "scss.lint.universalSelector": "warning",
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
     "tslint.suppressWhileTypeErrorsPresent": true,
-    "typescript.tsdk": "node_modules\\typescript\\lib",
-    "files.exclude": {
-        "Server/src/**/*.js": true,
-        "Server/src/**/*.js.map": true
-    }
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

@@ -10,6 +10,14 @@
         min-width: 10vw;
         overflow: auto;
         padding-right: 0.5em;
+
+        > .ui.list > .item {
+            color: var(--semantic-text-color);
+
+            &.active {
+                font-weight: bold;
+            }
+        }
     }
 
     > .movie-db-genre-details {

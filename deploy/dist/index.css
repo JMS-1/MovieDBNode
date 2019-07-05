@@ -26,7 +26,7 @@ client-root {
   html .ui.form,
   body .ui.form,
   client-root .ui.form {
-    margin-top: 0.5em; }
+    margin-top: 1em; }
 
 body {
   margin: 0; }
@@ -118,6 +118,10 @@ body {
     min-width: 10vw;
     overflow: auto;
     padding-right: 0.5em; }
+    .movie-db-genre-route > .movie-db-genre-list > .ui.list > .item {
+      color: var(--semantic-text-color); }
+      .movie-db-genre-route > .movie-db-genre-list > .ui.list > .item.active {
+        font-weight: bold; }
   .movie-db-genre-route > .movie-db-genre-details {
     flex-grow: 1;
     flex-basis: 0; }
@@ -137,6 +141,10 @@ body {
     min-width: 10vw;
     overflow: auto;
     padding-right: 0.5em; }
+    .movie-db-language-route > .movie-db-language-list > .ui.list > .item {
+      color: var(--semantic-text-color); }
+      .movie-db-language-route > .movie-db-language-list > .ui.list > .item.active {
+        font-weight: bold; }
   .movie-db-language-route > .movie-db-language-details {
     flex-grow: 1;
     flex-basis: 0; }
