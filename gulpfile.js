@@ -108,7 +108,7 @@ gulp.task('build-default-ui', shell.task('node node_modules/gulp/bin/gulp int-bu
 gulp.task('watch-default-ui', shell.task('node node_modules/gulp/bin/gulp int-watch-default-ui'))
 
 //
-gulp.task('build-client', ['build-sass', 'build-default-ui', 'build-app'])
+gulp.task('build-client', ['build-sass', 'build-app', 'build-default-ui'])
 gulp.task('build-client-deploy', () => sequence('build-alternate-1-ui', 'build-alternate-2-ui', 'build-client'))
 
 //
@@ -128,7 +128,7 @@ gulp.task('build', ['build-client', 'build-server'])
 //
 gulp.task('deploy:clean', () => del.sync('deploy'))
 
-gulp.task('deploy:server', ['build', 'deploy:clean'], () =>
+gulp.task('deploy:server', ['build-server', 'deploy:clean'], () =>
     gulp.src('Server/src/**/*.js').pipe(gulp.dest('deploy/src')),
 )
 
