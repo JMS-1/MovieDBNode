@@ -17,7 +17,7 @@ function mapStateToProps(state: IClientState, props: local.IRecordingUiProps): l
     const edit = controller.getRecordingEdit(state)
 
     return {
-        cancelLabel: edit && edit._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: edit && edit._id ? state.mui.reset : state.mui.cancel,
         container: edit && edit.containerId,
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,

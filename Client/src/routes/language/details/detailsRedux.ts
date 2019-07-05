@@ -13,7 +13,7 @@ function mapStateToProps(state: IClientState, props: local.ILanguageDetailsUiPro
     const errors = route.validation
 
     return {
-        cancelLabel: language && language._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: language && language._id ? state.mui.reset : state.mui.cancel,
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,

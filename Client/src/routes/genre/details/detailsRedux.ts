@@ -13,7 +13,7 @@ function mapStateToProps(state: IClientState, props: local.IGenreDetailsUiProps)
     const errors = route.validation
 
     return {
-        cancelLabel: genre && genre._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: genre && genre._id ? state.mui.reset : state.mui.cancel,
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,

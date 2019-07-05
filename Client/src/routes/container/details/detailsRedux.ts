@@ -15,7 +15,7 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
     const errors = route.validation
 
     return {
-        cancelLabel: container && container._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: container && container._id ? state.mui.reset : state.mui.cancel,
         containerHint: mui.noParent,
         containerOptions: controller.getContainerOptionsNoEdit(state),
         deleteLabel: state.mui.remove,

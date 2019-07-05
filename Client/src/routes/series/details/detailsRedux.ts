@@ -15,7 +15,7 @@ function mapStateToProps(state: IClientState, props: local.ISeriesDetailsUiProps
     const errors = route.validation
 
     return {
-        cancelLabel: series && series._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: series && series._id ? state.mui.reset : state.mui.cancel,
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,

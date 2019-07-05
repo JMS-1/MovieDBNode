@@ -134,7 +134,7 @@ export function getInitialState(): IMuiState {
             saveAndCopy: 'Speichern und neue Kopie',
             yesRent: 'verliehen',
         },
-        reset: 'Abbrechen',
+        reset: 'Verwerfen',
         remove: 'Löschen',
         routes: {
             container: 'Ablagen',
