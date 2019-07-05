@@ -9,7 +9,13 @@
         {
             "label": "build sematic",
             "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "task": "build-ui",
+            "task": "build-default-ui",
+            "type": "gulp"
+        },
+        {
+            "label": "build sematic (alternate)",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "task": "build-alternate-ui",
             "type": "gulp"
         },
         {
@@ -23,7 +29,7 @@
             "isBackground": true,
             "label": "watch semantic",
             "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "task": "watch-ui",
+            "task": "watch-default-ui",
             "type": "gulp"
         },
         {

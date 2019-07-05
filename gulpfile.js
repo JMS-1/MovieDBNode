@@ -1,7 +1,9 @@
 ﻿const del = require('del')
+const fs = require('fs')
 const gulp = require('gulp')
 const map = require('gulp-sourcemaps')
 const path = require('path')
+const util = require('util')
 const sass = require('gulp-sass')
 const shell = require('gulp-shell')
 const ts = require('gulp-typescript')
@@ -39,6 +41,30 @@ function reportWatchError(err) {
     }
 }
 
+async function selectTheme(theme, task) {
+    return new Promise(async (success, failure) => {
+        try {
+            const config = path.join(__dirname, 'semantic.json')
+
+            const readFile = util.promisify(fs.readFile)
+            const raw = (await readFile(config)).toString()
+            const json = raw.substring(raw.indexOf('{'))
+
+            const target = `/dist/${theme}/`
+            const themeJson = json.replace(/\/dist\/[^\/]+\//g, target)
+
+            if (themeJson !== json) {
+                const writeFile = util.promisify(fs.writeFile)
+                await writeFile(config, themeJson)
+            }
+
+            task(success)
+        } catch (error) {
+            failure(error)
+        }
+    })
+}
+
 gulp.on('task_stop', ({ task }) => (watchMode = watchMode || task.indexOf('watch') >= 0))
 
 //
@@ -56,11 +82,12 @@ gulp.task('build-sass', () =>
 gulp.task('watch-sass', () => gulp.watch(path.join(__dirname, 'Client/src/**/*.scss'), ['build-sass']))
 
 //
-gulp.task('build-ui', semanticBuild)
-gulp.task('watch-ui', semanticWatch)
+gulp.task('build-alternate-ui', () => selectTheme('alternate', semanticBuild))
+gulp.task('build-default-ui', () => selectTheme('default', semanticBuild))
+gulp.task('watch-default-ui', () => selectTheme('default', semanticWatch))
 
 //
-gulp.task('build-client', ['build-sass', 'build-ui', 'build-app'])
+gulp.task('build-client', ['build-sass', 'build-default-ui', 'build-app'])
 
 //
 gulp.task('build-server', () =>
