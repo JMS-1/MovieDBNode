@@ -3,13 +3,11 @@ const fs = require('fs')
 const gulp = require('gulp')
 const map = require('gulp-sourcemaps')
 const path = require('path')
-const util = require('util')
 const sass = require('gulp-sass')
+const sequence = require('run-sequence')
 const shell = require('gulp-shell')
 const ts = require('gulp-typescript')
-
-const semanticBuild = require('./Client/src/semantic/tasks/build')
-const semanticWatch = require('./Client/src/semantic/tasks/watch')
+const util = require('util')
 
 const config = ts.createProject(path.join(__dirname, 'Server/tsconfig.json'))
 const build = path.join(__dirname, 'Server/src')
@@ -41,9 +39,10 @@ function reportWatchError(err) {
     }
 }
 
-async function selectTheme(theme, task) {
+async function selectTheme(theme, name) {
     return new Promise(async (success, failure) => {
         try {
+            // Konfigurationsdatei an gewünschtes Theme anpassen.
             const config = path.join(__dirname, 'semantic.json')
 
             const readFile = util.promisify(fs.readFile)
@@ -58,7 +57,23 @@ async function selectTheme(theme, task) {
                 await writeFile(config, themeJson)
             }
 
-            task(success)
+            // Jetzt noch die Theme Konfiguration selbst - auch die ist hardcoded in LESS.
+            const themeConfig = JSON.parse(themeJson)
+            const themePath = path.join(__dirname, themeConfig.base, themeConfig.paths.source.config)
+            const parsed = path.parse(themePath)
+            const themeSource = path.join(parsed.dir, `${parsed.name}.${theme}${parsed.ext}`)
+
+            const copy = util.promisify(fs.copyFile)
+            await copy(themeSource, themePath)
+
+            // Immer alle Hilfstasks laden.
+            const tasks = {
+                build: require('./Client/src/semantic/tasks/build'),
+                watch: require('./Client/src/semantic/tasks/watch'),
+            }
+
+            // Gewünschte Task ausführen.
+            tasks[name](success)
         } catch (error) {
             failure(error)
         }
@@ -82,12 +97,19 @@ gulp.task('build-sass', () =>
 gulp.task('watch-sass', () => gulp.watch(path.join(__dirname, 'Client/src/**/*.scss'), ['build-sass']))
 
 //
-gulp.task('build-alternate-ui', () => selectTheme('alternate', semanticBuild))
-gulp.task('build-default-ui', () => selectTheme('default', semanticBuild))
-gulp.task('watch-default-ui', () => selectTheme('default', semanticWatch))
+gulp.task('int-build-alternate-1-ui', () => selectTheme('alternate.1', 'build'))
+gulp.task('int-build-alternate-2-ui', () => selectTheme('alternate.2', 'build'))
+gulp.task('int-build-default-ui', () => selectTheme('default', 'build'))
+gulp.task('int-watch-default-ui', () => selectTheme('default', 'watch'))
+
+gulp.task('build-alternate-1-ui', shell.task('node node_modules/gulp/bin/gulp int-build-alternate-1-ui'))
+gulp.task('build-alternate-2-ui', shell.task('node node_modules/gulp/bin/gulp int-build-alternate-2-ui'))
+gulp.task('build-default-ui', shell.task('node node_modules/gulp/bin/gulp int-build-default-ui'))
+gulp.task('watch-default-ui', shell.task('node node_modules/gulp/bin/gulp int-watch-default-ui'))
 
 //
 gulp.task('build-client', ['build-sass', 'build-default-ui', 'build-app'])
+gulp.task('build-client-deploy', () => sequence('build-alternate-1-ui', 'build-alternate-2-ui', 'build-client'))
 
 //
 gulp.task('build-server', () =>
@@ -110,7 +132,7 @@ gulp.task('deploy:server', ['build', 'deploy:clean'], () =>
     gulp.src('Server/src/**/*.js').pipe(gulp.dest('deploy/src')),
 )
 
-gulp.task('deploy:client', ['build', 'deploy:clean'], () =>
+gulp.task('deploy:client', ['build-client-deploy', 'deploy:clean'], () =>
     gulp.src(['Server/dist/**/*', '!Server/dist/**/*.map']).pipe(gulp.dest('deploy/dist')),
 )
 

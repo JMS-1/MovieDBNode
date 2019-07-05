@@ -13,9 +13,15 @@
             "type": "gulp"
         },
         {
-            "label": "build sematic (alternate)",
+            "label": "build sematic (alternate 1)",
             "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "task": "build-alternate-ui",
+            "task": "build-alternate-1-ui",
+            "type": "gulp"
+        },
+        {
+            "label": "build sematic (alternate 2)",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "task": "build-alternate-2-ui",
             "type": "gulp"
         },
         {
