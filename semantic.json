@@ -9,8 +9,8 @@
         },
         "output": {
             "packaged": "../../../Server/dist/",
-            "uncompressed": "../../../Server/dist/components/",
-            "compressed": "../../../Server/dist/components/",
+            "uncompressed": "../../../.scratch/components/",
+            "compressed": "../../../.scratch/components/",
             "themes": "../../../Server/dist/themes/"
         },
         "clean": "../../../Server/dist/"

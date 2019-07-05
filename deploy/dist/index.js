@@ -1824,7 +1824,7 @@ function getInitialState() {
             saveAndCopy: 'Speichern und neue Kopie',
             yesRent: 'verliehen',
         },
-        reset: 'Abbrechen',
+        reset: 'Verwerfen',
         remove: 'Löschen',
         routes: {
             container: 'Ablagen',
@@ -2780,7 +2780,7 @@ function mapStateToProps(state, props) {
     const container = controller.getContainerEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: container && container._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: container && container._id ? state.mui.reset : state.mui.cancel,
         containerHint: mui.noParent,
         containerOptions: controller.getContainerOptionsNoEdit(state),
         deleteLabel: state.mui.remove,
@@ -2920,7 +2920,7 @@ function mapStateToProps(state, props) {
     const genre = controller_1.getGenreEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: genre && genre._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: genre && genre._id ? state.mui.reset : state.mui.cancel,
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
@@ -3056,7 +3056,7 @@ function mapStateToProps(state, props) {
     const language = controller_1.getLanguageEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: language && language._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: language && language._id ? state.mui.reset : state.mui.cancel,
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
@@ -3228,7 +3228,7 @@ function mapStateToProps(state, props) {
     const route = state.recording;
     const edit = controller.getRecordingEdit(state);
     return {
-        cancelLabel: edit && edit._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: edit && edit._id ? state.mui.reset : state.mui.cancel,
         container: edit && edit.containerId,
         containerHint: mui.editContainer,
         containerLabel: emui.containerId,
@@ -3771,7 +3771,7 @@ function mapStateToProps(state, props) {
     const series = controller_1.getSeriesEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: series && series._id ? state.mui.cancel : state.mui.reset,
+        cancelLabel: series && series._id ? state.mui.reset : state.mui.cancel,
         deleteLabel: state.mui.remove,
         hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
