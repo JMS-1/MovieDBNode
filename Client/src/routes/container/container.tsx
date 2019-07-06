@@ -4,6 +4,8 @@ import { RouteComponentProps } from 'react-router'
 import { ContainerDetails } from './details/detailsRedux'
 import { ContainerTree } from './tree/treeRedux'
 
+import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
+
 export interface IContainerRouteParams {
     id?: string
 }
@@ -21,10 +23,10 @@ export class CContainerRoute extends React.PureComponent<TContainerRouteProps> {
         const { id } = this.props.match.params
 
         return (
-            <div className='movie-db-container-route movie-db-route'>
+            <MasterDetailRoute className='movie-db-container-route'>
                 <ContainerTree id={id} />
                 <ContainerDetails id={id} />
-            </div>
+            </MasterDetailRoute>
         )
     }
 }

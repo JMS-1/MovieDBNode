@@ -1,32 +1,14 @@
 .movie-db-genre-route {
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-    padding: 0 0.5em 0.5em 0.5em;
+    > .master > .ui.list > .item {
+        color: var(--semantic-text-color);
 
-    > .movie-db-genre-list {
-        background: white;
-        flex-shrink: 0;
-        min-width: 10vw;
-        overflow: auto;
-        padding-right: 0.5em;
-
-        > .ui.list > .item {
-            color: var(--semantic-text-color);
-
-            &.active {
-                font-weight: bold;
-            }
-
-            > .ui.label {
-                width: 100%;
-            }
+        &.active {
+            font-weight: bold;
         }
-    }
 
-    > .movie-db-genre-details {
-        flex-grow: 1;
-        flex-basis: 0;
+        > .ui.label {
+            width: 100%;
+        }
     }
 }
 

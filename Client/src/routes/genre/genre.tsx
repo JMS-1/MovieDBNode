@@ -6,6 +6,8 @@ import { routes } from 'movie-db-client'
 
 import { GenreDetails } from './details/detailsRedux'
 
+import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
+
 interface IGenreRouteParams {
     id?: string
 }
@@ -25,20 +27,18 @@ export class CGenreRoute extends React.PureComponent<TGenreRouteProps> {
         const { id } = this.props.match.params
 
         return (
-            <div className='movie-db-genre-route movie-db-route'>
-                <div className='movie-db-genre-list'>
-                    <List selection>
-                        {this.props.genreOptions.map(l => (
-                            <List.Item key={l.key}>
-                                <Label active={l.key === id} as='a' href={`#${routes.genre}/${l.key}`}>
-                                    {l.text}
-                                </Label>
-                            </List.Item>
-                        ))}
-                    </List>
-                </div>
+            <MasterDetailRoute className='movie-db-genre-route'>
+                <List selection>
+                    {this.props.genreOptions.map(l => (
+                        <List.Item key={l.key}>
+                            <Label active={l.key === id} as='a' href={`#${routes.genre}/${l.key}`}>
+                                {l.text}
+                            </Label>
+                        </List.Item>
+                    ))}
+                </List>
                 <GenreDetails id={id} />
-            </div>
+            </MasterDetailRoute>
         )
     }
 }

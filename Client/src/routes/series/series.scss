@@ -1,15 +1,5 @@
 .movie-db-series-route {
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-
-    > .movie-db-series-tree {
-        flex-shrink: 0;
-    }
-
-    > .movie-db-series-details {
-        flex-grow: 1;
-        flex-basis: 0;
+    > .master {
     }
 }
 

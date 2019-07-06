@@ -4,6 +4,8 @@ import { RouteComponentProps } from 'react-router'
 import { SeriesDetails } from './details/detailsRedux'
 import { SeriesTree } from './tree/treeRedux'
 
+import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
+
 export interface ISeriesRouteParams {
     id?: string
 }
@@ -21,10 +23,10 @@ export class CSeriesRoute extends React.PureComponent<TSeriesRouteProps> {
         const { id } = this.props.match.params
 
         return (
-            <div className='movie-db-series-route movie-db-route'>
+            <MasterDetailRoute className='movie-db-series-route'>
                 <SeriesTree id={id} />
                 <SeriesDetails id={id} />
-            </div>
+            </MasterDetailRoute>
         )
     }
 }
