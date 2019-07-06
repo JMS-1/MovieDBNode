@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { DropdownItemProps, List } from 'semantic-ui-react'
+import { DropdownItemProps, Label, List } from 'semantic-ui-react'
 
 import { routes } from 'movie-db-client'
 
@@ -29,8 +29,10 @@ export class CLanguageRoute extends React.PureComponent<TLanguageRouteProps> {
                 <div className='movie-db-language-list'>
                     <List selection>
                         {this.props.languageOptions.map(l => (
-                            <List.Item active={l.key === id} as='a' href={`#${routes.language}/${l.key}`} key={l.key}>
-                                {l.text}
+                            <List.Item key={l.key}>
+                                <Label active={l.key === id} as='a' href={`#${routes.language}/${l.key}`}>
+                                    {l.text}
+                                </Label>
                             </List.Item>
                         ))}
                     </List>

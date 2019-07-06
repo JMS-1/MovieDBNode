@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { DropdownItemProps, List } from 'semantic-ui-react'
+import { DropdownItemProps, Label, List } from 'semantic-ui-react'
 
 import { routes } from 'movie-db-client'
 
@@ -29,8 +29,10 @@ export class CGenreRoute extends React.PureComponent<TGenreRouteProps> {
                 <div className='movie-db-genre-list'>
                     <List selection>
                         {this.props.genreOptions.map(l => (
-                            <List.Item active={l.key === id} as='a' href={`#${routes.genre}/${l.key}`} key={l.key}>
-                                {l.text}
+                            <List.Item key={l.key}>
+                                <Label active={l.key === id} as='a' href={`#${routes.genre}/${l.key}`}>
+                                    {l.text}
+                                </Label>
                             </List.Item>
                         ))}
                     </List>

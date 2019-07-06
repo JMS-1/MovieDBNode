@@ -17,6 +17,10 @@
             &.active {
                 font-weight: bold;
             }
+
+            > .ui.label {
+                width: 100%;
+            }
         }
     }
 
