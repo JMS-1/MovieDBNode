@@ -13,13 +13,8 @@ function mapStateToProps(state: IClientState, props: local.ILanguageDetailsUiPro
     const errors = route.validation
 
     return {
-        cancelLabel: language && language._id ? state.mui.reset : state.mui.cancel,
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !language,
-        saveLabel: state.mui.save,
-        showDelete: language && !!language._id,
     }
 }
 
@@ -28,10 +23,7 @@ function mapDispatchToProps(
     props: local.ILanguageDetailsUiProps,
 ): local.ILanguageDetailsActions {
     return {
-        cancel: () => dispatch(LanguageActions.cancelEdit()),
-        confirmDelete: () => dispatch(LanguageActions.confirmDelete()),
         loadDetails: id => dispatch(LanguageActions.select(id)),
-        save: () => dispatch(LanguageActions.save()),
     }
 }
 

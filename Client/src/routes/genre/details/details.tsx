@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { Button, Form } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
 
 import { ConfirmDeleteGenre } from '../../../components/confirm/confirmRedux'
+import { GenreDetailActions } from '../../../components/detailActions/actionsRedux'
 import { GenreTextInput } from '../../../components/textInput/textInputRedux'
 
 export interface IGenreDetailsUiProps {
@@ -9,20 +10,12 @@ export interface IGenreDetailsUiProps {
 }
 
 export interface IGenreDetailsProps {
-    cancelLabel: string
-    deleteLabel: string
-    hasChanges: boolean
     hasError: boolean
     lost: boolean
-    saveLabel: string
-    showDelete: boolean
 }
 
 export interface IGenreDetailsActions {
-    cancel(): void
-    confirmDelete(): void
     loadDetails(id: string): void
-    save(): void
 }
 
 export type TGenreDetailsProps = IGenreDetailsProps & IGenreDetailsUiProps & IGenreDetailsActions
@@ -33,23 +26,11 @@ export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
             return null
         }
 
-        const { hasChanges, hasError } = this.props
-
         return (
             <div className='movie-db-genre-details'>
                 <ConfirmDeleteGenre />
-                <div>
-                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
-                        {this.props.cancelLabel}
-                    </Button>
-                    <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
-                        {this.props.saveLabel}
-                    </Button>
-                    {this.props.showDelete && (
-                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
-                    )}
-                </div>
-                <Form error={hasError}>
+                <GenreDetailActions />
+                <Form error={this.props.hasError}>
                     <GenreTextInput prop='name' required />
                 </Form>
             </div>

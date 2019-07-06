@@ -15,17 +15,12 @@ function mapStateToProps(state: IClientState, props: local.IContainerDetailsUiPr
     const errors = route.validation
 
     return {
-        cancelLabel: container && container._id ? state.mui.reset : state.mui.cancel,
         containerHint: mui.noParent,
         containerOptions: controller.getContainerOptionsNoEdit(state),
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !container,
         parent: container && container.parentId,
         parentLabel: emui.parentId,
-        saveLabel: state.mui.save,
-        showDelete: container && !!container._id,
         type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, /^type$/),
         typeLabel: emui.type,
@@ -38,10 +33,7 @@ function mapDispatchToProps(
     props: local.IContainerDetailsUiProps,
 ): local.IContainerDetailsActions {
     return {
-        cancel: () => dispatch(controller.ContainerActions.cancelEdit()),
-        confirmDelete: () => dispatch(controller.ContainerActions.confirmDelete()),
         loadDetails: id => dispatch(controller.ContainerActions.select(id)),
-        save: () => dispatch(controller.ContainerActions.save()),
         setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
     }
 }

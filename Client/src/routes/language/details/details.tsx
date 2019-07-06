@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { Button, Form } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
 
 import { ConfirmDeleteLanguage } from '../../../components/confirm/confirmRedux'
+import { LanguageDetailActions } from '../../../components/detailActions/actionsRedux'
 import { LanguageTextInput } from '../../../components/textInput/textInputRedux'
 
 export interface ILanguageDetailsUiProps {
@@ -9,20 +10,12 @@ export interface ILanguageDetailsUiProps {
 }
 
 export interface ILanguageDetailsProps {
-    cancelLabel: string
-    showDelete: boolean
-    deleteLabel: string
-    hasChanges: boolean
     hasError: boolean
     lost: boolean
-    saveLabel: string
 }
 
 export interface ILanguageDetailsActions {
-    cancel(): void
-    confirmDelete(): void
     loadDetails(id: string): void
-    save(): void
 }
 
 export type TLanguageDetailsProps = ILanguageDetailsProps & ILanguageDetailsUiProps & ILanguageDetailsActions
@@ -33,23 +26,11 @@ export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps>
             return null
         }
 
-        const { hasChanges, hasError } = this.props
-
         return (
             <div className='movie-db-language-details'>
                 <ConfirmDeleteLanguage />
-                <div>
-                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
-                        {this.props.cancelLabel}
-                    </Button>
-                    <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
-                        {this.props.saveLabel}
-                    </Button>
-                    {this.props.showDelete && (
-                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
-                    )}
-                </div>
-                <Form error={hasError}>
+                <LanguageDetailActions />
+                <Form error={this.props.hasError}>
                     <LanguageTextInput prop='name' required />
                 </Form>
             </div>

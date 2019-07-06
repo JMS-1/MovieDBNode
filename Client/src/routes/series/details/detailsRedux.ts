@@ -15,17 +15,12 @@ function mapStateToProps(state: IClientState, props: local.ISeriesDetailsUiProps
     const errors = route.validation
 
     return {
-        cancelLabel: series && series._id ? state.mui.reset : state.mui.cancel,
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !series,
         parent: series && series.parentId,
         parentHint: mui.noParent,
         parentLabel: emui.parentId,
         parentOptions: getSeriesOptionsNoEdit(state),
-        saveLabel: state.mui.save,
-        showDelete: series && !!series._id,
     }
 }
 
@@ -34,10 +29,7 @@ function mapDispatchToProps(
     props: local.ISeriesDetailsUiProps,
 ): local.ISeriesDetailsActions {
     return {
-        cancel: () => dispatch(SeriesActions.cancelEdit()),
-        confirmDelete: () => dispatch(SeriesActions.confirmDelete()),
         loadDetails: id => dispatch(SeriesActions.select(id)),
-        save: () => dispatch(SeriesActions.save()),
         setProp: (prop, value) => dispatch(SeriesActions.setProperty(prop, value)),
     }
 }

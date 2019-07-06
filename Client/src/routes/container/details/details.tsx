@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { Button, Dropdown, DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react'
+import { Dropdown, DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react'
 
 import { containerType, IContainer } from 'movie-db-api'
 
 import { ContainerContent } from '../content/contentRedux'
 
 import { ConfirmDeleteContainer } from '../../../components/confirm/confirmRedux'
+import { ContainerDetailActions } from '../../../components/detailActions/actionsRedux'
 import { ReportError } from '../../../components/message/messageRedux'
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
 
@@ -14,17 +15,12 @@ export interface IContainerDetailsUiProps {
 }
 
 export interface IContainerDetailsProps {
-    cancelLabel: string
     containerHint: string
     containerOptions: DropdownItemProps[]
-    deleteLabel: string
-    hasChanges: boolean
     hasError: boolean
     lost: boolean
     parent: string
     parentLabel: string
-    saveLabel: string
-    showDelete: boolean
     type: containerType
     typeErrors: string[]
     typeLabel: string
@@ -32,10 +28,7 @@ export interface IContainerDetailsProps {
 }
 
 export interface IContainerDetailsActions {
-    cancel(): void
-    confirmDelete(): void
     loadDetails(id: string): void
-    save(): void
     setProp<TProp extends keyof IContainer>(prop: TProp, value: IContainer[TProp]): void
 }
 
@@ -47,23 +40,11 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
             return null
         }
 
-        const { hasChanges, hasError } = this.props
-
         return (
             <div className='movie-db-container-details'>
                 <ConfirmDeleteContainer />
-                <div>
-                    <Button onClick={this.props.cancel} disabled={!hasChanges}>
-                        {this.props.cancelLabel}
-                    </Button>
-                    <Button onClick={this.props.save} disabled={hasError || !hasChanges}>
-                        {this.props.saveLabel}
-                    </Button>
-                    {this.props.showDelete && (
-                        <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>
-                    )}
-                </div>
-                <Form error={hasError}>
+                <ContainerDetailActions />
+                <Form error={this.props.hasError}>
                     <Form.Field>
                         <label>{this.props.parentLabel}</label>
                         <Dropdown
