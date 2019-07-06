@@ -29,6 +29,16 @@ ServerApi.get('series', controller.SeriesActions.load)
 
 // Kleine Hilfe zum Styling während der Entwicklung.
 
-const css: HTMLLinkElement = document.querySelector('head > link[rel="stylesheet"][href="index.css"]')
+document.addEventListener('keydown', (ev: KeyboardEvent) => {
+    if (!ev.ctrlKey || ev.key !== 'F12') {
+        return
+    }
 
-document.addEventListener('keydown', (ev: KeyboardEvent) => ev.ctrlKey && ev.key === 'F12' && (css.href = css.href))
+    const css = document.querySelectorAll('head > link[rel="stylesheet"]')
+
+    for (let i = 0; i < css.length; i++) {
+        const link = css[i] as HTMLLinkElement
+
+        link.href = link.href
+    }
+})
