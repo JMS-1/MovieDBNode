@@ -16,7 +16,7 @@ export type TContainerTreeProps = IContainerTreeProps & IContainerTreeUiProps & 
 export class CContainerTree extends React.PureComponent<TContainerTreeProps> {
     render(): JSX.Element {
         return (
-            <div className='movie-db-container-tree'>
+            <div className='movie-db-container-tree movie-db-tree'>
                 <ContainerSearch />
                 <ContainerNode scope='' detail={this.props.id} />
             </div>

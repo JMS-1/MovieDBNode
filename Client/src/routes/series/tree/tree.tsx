@@ -16,7 +16,7 @@ export type TSeriesTreeProps = ISeriesTreeProps & ISeriesTreeUiProps & ISeriesTr
 export class CSeriesTree extends React.PureComponent<TSeriesTreeProps> {
     render(): JSX.Element {
         return (
-            <div className='movie-db-series-tree'>
+            <div className='movie-db-series-tree movie-db-tree'>
                 <SeriesSearch />
                 <SeriesNode scope='' detail={this.props.id} />
             </div>
