@@ -23,10 +23,25 @@ client-root {
       body > .ui.dimmer .ui.loader:after,
       client-root > .ui.dimmer .ui.loader:after {
         border-color: black lightgray lightgray; }
-  html .ui.form,
-  body .ui.form,
-  client-root .ui.form {
-    margin-top: 1em; }
+  html .movie-db-tree,
+  body .movie-db-tree,
+  client-root .movie-db-tree {
+    display: flex;
+    flex-direction: column;
+    height: 100%; }
+    html .movie-db-tree > .movie-db-search,
+    body .movie-db-tree > .movie-db-search,
+    client-root .movie-db-tree > .movie-db-search {
+      flex-shrink: 0;
+      margin: 10px 0 0 6px;
+      width: calc(100% - 6px); }
+    html .movie-db-tree > .movie-db-tree-level.ui.list,
+    body .movie-db-tree > .movie-db-tree-level.ui.list,
+    client-root .movie-db-tree > .movie-db-tree-level.ui.list {
+      flex-basis: 0;
+      flex-grow: 1;
+      overflow: auto;
+      padding-right: 0.5em; }
 
 body {
   display: none;
@@ -40,6 +55,21 @@ body {
   margin-top: 1em; }
   .movie-db-confirm-delete > .content > .actions > .ui.button {
     margin: 0; }
+
+.movie-db-master-detail-route {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  padding: 0 0.5em 0.5em 0.5em; }
+  .movie-db-master-detail-route > .master {
+    background: white;
+    flex-shrink: 0;
+    min-width: 10vw;
+    overflow: auto;
+    padding-right: 0.5em; }
+  .movie-db-master-detail-route > .details {
+    flex-basis: 0;
+    flex-grow: 1; }
 
 .movie-db-root {
   height: 100%;
@@ -58,16 +88,6 @@ body {
 
 .movie-db-tree-level > .ui.label {
   width: 100%; }
-
-.movie-db-container-route {
-  display: flex;
-  flex-direction: row;
-  overflow: hidden; }
-  .movie-db-container-route > .movie-db-container-tree {
-    flex-shrink: 0; }
-  .movie-db-container-route > .movie-db-container-details {
-    flex-grow: 1;
-    flex-basis: 0; }
 
 .movie-db-container-content > tbody > tr > td,
 .movie-db-container-content > tbody > tr > th,
@@ -91,64 +111,23 @@ body {
   padding: 0 1em 1em 1em;
   overflow: auto; }
 
-.movie-db-container-tree {
-  background: white;
-  min-width: 10vw;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding-right: 0.5em; }
-  .movie-db-container-tree > .movie-db-search {
-    flex-shrink: 0;
-    margin: 10px 0 0 6px;
-    width: calc(100% - 6px); }
-  .movie-db-container-tree > .movie-db-tree-level {
-    flex-grow: 1;
-    flex-basis: 0;
-    overflow: auto;
-    padding-right: 0.5em; }
-
-.movie-db-genre-route {
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  padding: 0 0.5em 0.5em 0.5em; }
-  .movie-db-genre-route > .movie-db-genre-list {
-    background: white;
-    flex-shrink: 0;
-    min-width: 10vw;
-    overflow: auto;
-    padding-right: 0.5em; }
-    .movie-db-genre-route > .movie-db-genre-list > .ui.list > .item {
-      color: var(--semantic-text-color); }
-      .movie-db-genre-route > .movie-db-genre-list > .ui.list > .item.active {
-        font-weight: bold; }
-  .movie-db-genre-route > .movie-db-genre-details {
-    flex-grow: 1;
-    flex-basis: 0; }
+.movie-db-genre-route > .master > .ui.list > .item {
+  color: var(--semantic-text-color); }
+  .movie-db-genre-route > .master > .ui.list > .item.active {
+    font-weight: bold; }
+  .movie-db-genre-route > .master > .ui.list > .item > .ui.label {
+    width: 100%; }
 
 .movie-db-genre-details {
   padding: 0 1em 1em 1em;
   overflow: auto; }
 
-.movie-db-language-route {
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  padding: 0 0.5em 0.5em 0.5em; }
-  .movie-db-language-route > .movie-db-language-list {
-    background: white;
-    flex-shrink: 0;
-    min-width: 10vw;
-    overflow: auto;
-    padding-right: 0.5em; }
-    .movie-db-language-route > .movie-db-language-list > .ui.list > .item {
-      color: var(--semantic-text-color); }
-      .movie-db-language-route > .movie-db-language-list > .ui.list > .item.active {
-        font-weight: bold; }
-  .movie-db-language-route > .movie-db-language-details {
-    flex-grow: 1;
-    flex-basis: 0; }
+.movie-db-language-route > .master > .ui.list > .item {
+  color: var(--semantic-text-color); }
+  .movie-db-language-route > .master > .ui.list > .item.active {
+    font-weight: bold; }
+  .movie-db-language-route > .master > .ui.list > .item > .ui.label {
+    width: 100%; }
 
 .movie-db-language-details {
   padding: 0 1em 1em 1em;
@@ -254,33 +233,6 @@ body {
 .movie-db-container-links.link-errors > label {
   color: var(--semantic-error-color) !important; }
 
-.movie-db-series-route {
-  display: flex;
-  flex-direction: row;
-  overflow: hidden; }
-  .movie-db-series-route > .movie-db-series-tree {
-    flex-shrink: 0; }
-  .movie-db-series-route > .movie-db-series-details {
-    flex-grow: 1;
-    flex-basis: 0; }
-
 .movie-db-series-details {
   padding: 0 1em 1em 1em;
   overflow: auto; }
-
-.movie-db-series-tree {
-  background: white;
-  min-width: 10vw;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding-right: 0.5em; }
-  .movie-db-series-tree > .movie-db-search {
-    flex-shrink: 0;
-    margin: 10px 0 0 6px;
-    width: calc(100% - 6px); }
-  .movie-db-series-tree > .movie-db-tree-level {
-    flex-grow: 1;
-    flex-basis: 0;
-    overflow: auto;
-    padding-right: 0.5em; }

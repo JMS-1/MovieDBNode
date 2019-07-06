@@ -216,6 +216,133 @@ exports.ConfirmDeleteSeries = react_redux_1.connect(mapSeriesProps, mapSeriesAct
 
 /***/ }),
 
+/***/ "./Client/src/components/detailActions/actions.tsx":
+/*!*********************************************************!*\
+  !*** ./Client/src/components/detailActions/actions.tsx ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+class CDetailActions extends React.PureComponent {
+    render() {
+        const { hasChanges } = this.props;
+        return (React.createElement("div", { className: 'movie-db-detail-actions' },
+            React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
+            React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: this.props.hasError || !hasChanges }, this.props.saveLabel),
+            this.props.showDelete && React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel)));
+    }
+}
+exports.CDetailActions = CDetailActions;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/detailActions/actionsRedux.ts":
+/*!*************************************************************!*\
+  !*** ./Client/src/components/detailActions/actionsRedux.ts ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./actions */ "./Client/src/components/detailActions/actions.tsx");
+const controller = __webpack_require__(/*! ../../controller */ "./Client/src/controller/index.ts");
+function mapContainerProps(state, props) {
+    const route = state.container;
+    const container = controller.getContainerEdit(state);
+    const errors = route.validation;
+    return {
+        cancelLabel: container && container._id ? state.mui.reset : state.mui.cancel,
+        deleteLabel: state.mui.remove,
+        hasChanges: !!route.workingCopy,
+        hasError: errors && errors.length > 0,
+        saveLabel: state.mui.save,
+        showDelete: container && !!container._id,
+    };
+}
+function mapContainerActions(dispatch, props) {
+    return {
+        cancel: () => dispatch(controller.ContainerActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.ContainerActions.confirmDelete()),
+        save: () => dispatch(controller.ContainerActions.save()),
+    };
+}
+function mapLanguageProps(state, props) {
+    const route = state.language;
+    const language = controller.getLanguageEdit(state);
+    const errors = route.validation;
+    return {
+        cancelLabel: language && language._id ? state.mui.reset : state.mui.cancel,
+        deleteLabel: state.mui.remove,
+        hasChanges: !!route.workingCopy,
+        hasError: errors && errors.length > 0,
+        saveLabel: state.mui.save,
+        showDelete: language && !!language._id,
+    };
+}
+function mapLanguageActions(dispatch, props) {
+    return {
+        cancel: () => dispatch(controller.LanguageActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.LanguageActions.confirmDelete()),
+        save: () => dispatch(controller.LanguageActions.save()),
+    };
+}
+function mapGenreProps(state, props) {
+    const route = state.genre;
+    const genre = controller.getGenreEdit(state);
+    const errors = route.validation;
+    return {
+        cancelLabel: genre && genre._id ? state.mui.reset : state.mui.cancel,
+        deleteLabel: state.mui.remove,
+        hasChanges: !!route.workingCopy,
+        hasError: errors && errors.length > 0,
+        saveLabel: state.mui.save,
+        showDelete: genre && !!genre._id,
+    };
+}
+function mapGenreActions(dispatch, props) {
+    return {
+        cancel: () => dispatch(controller.GenreActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.GenreActions.confirmDelete()),
+        save: () => dispatch(controller.GenreActions.save()),
+    };
+}
+function mapSeriesProps(state, props) {
+    const route = state.series;
+    const series = controller.getSeriesEdit(state);
+    const errors = route.validation;
+    return {
+        cancelLabel: series && series._id ? state.mui.reset : state.mui.cancel,
+        deleteLabel: state.mui.remove,
+        hasChanges: !!route.workingCopy,
+        hasError: errors && errors.length > 0,
+        saveLabel: state.mui.save,
+        showDelete: series && !!series._id,
+    };
+}
+function mapSeriesActions(dispatch, props) {
+    return {
+        cancel: () => dispatch(controller.SeriesActions.cancelEdit()),
+        confirmDelete: () => dispatch(controller.SeriesActions.confirmDelete()),
+        save: () => dispatch(controller.SeriesActions.save()),
+    };
+}
+exports.ContainerDetailActions = react_redux_1.connect(mapContainerProps, mapContainerActions)(local.CDetailActions);
+exports.LanguageDetailActions = react_redux_1.connect(mapLanguageProps, mapLanguageActions)(local.CDetailActions);
+exports.GenreDetailActions = react_redux_1.connect(mapGenreProps, mapGenreActions)(local.CDetailActions);
+exports.SeriesDetailActions = react_redux_1.connect(mapSeriesProps, mapSeriesActions)(local.CDetailActions);
+
+
+/***/ }),
+
 /***/ "./Client/src/components/genre/genre.tsx":
 /*!***********************************************!*\
   !*** ./Client/src/components/genre/genre.tsx ***!
@@ -308,6 +435,60 @@ function mapDispatchToProps(dispatch, props) {
     return {};
 }
 exports.Language = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CLanguage);
+
+
+/***/ }),
+
+/***/ "./Client/src/components/masterDetailRoute/masterDetail.tsx":
+/*!******************************************************************!*\
+  !*** ./Client/src/components/masterDetailRoute/masterDetail.tsx ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+class CMasterDetailRoute extends React.PureComponent {
+    render() {
+        const children = React.Children.toArray(this.props.children);
+        return (React.createElement("div", { className: this.className },
+            React.createElement("div", { className: 'master' }, children[0]),
+            React.createElement("div", { className: 'details' }, children[1])));
+    }
+    get className() {
+        let className = 'movie-db-master-detail-route movie-db-route';
+        if (this.props.className) {
+            className += ` ${this.props.className}`;
+        }
+        return className;
+    }
+}
+exports.CMasterDetailRoute = CMasterDetailRoute;
+
+
+/***/ }),
+
+/***/ "./Client/src/components/masterDetailRoute/masterDetailRedux.ts":
+/*!**********************************************************************!*\
+  !*** ./Client/src/components/masterDetailRoute/masterDetailRedux.ts ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+const local = __webpack_require__(/*! ./masterDetail */ "./Client/src/components/masterDetailRoute/masterDetail.tsx");
+function mapStateToProps(state, props) {
+    return {};
+}
+function mapDispatchToProps(dispatch, props) {
+    return {};
+}
+exports.MasterDetailRoute = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CMasterDetailRoute);
 
 
 /***/ }),
@@ -2625,8 +2806,16 @@ store_1.ServerApi.get('genre', genre_1.GenreActions.load);
 store_1.ServerApi.get('language', controller.LanguageActions.load);
 store_1.ServerApi.get('schemas', controller.ApplicationActions.loadSchemas);
 store_1.ServerApi.get('series', controller.SeriesActions.load);
-const css = document.querySelector('head > link[rel="stylesheet"][href="index.css"]');
-document.addEventListener('keydown', (ev) => ev.ctrlKey && ev.key === 'F12' && (css.href = css.href));
+document.addEventListener('keydown', (ev) => {
+    if (!ev.ctrlKey || ev.key !== 'F12') {
+        return;
+    }
+    const css = document.querySelectorAll('head > link[rel="stylesheet"]');
+    for (let i = 0; i < css.length; i++) {
+        const link = css[i];
+        link.href = link.href;
+    }
+});
 
 
 /***/ }),
@@ -2644,10 +2833,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Client/src/routes/container/details/detailsRedux.ts");
 const treeRedux_1 = __webpack_require__(/*! ./tree/treeRedux */ "./Client/src/routes/container/tree/treeRedux.ts");
+const masterDetailRedux_1 = __webpack_require__(/*! ../../components/masterDetailRoute/masterDetailRedux */ "./Client/src/components/masterDetailRoute/masterDetailRedux.ts");
 class CContainerRoute extends React.PureComponent {
     render() {
         const { id } = this.props.match.params;
-        return (React.createElement("div", { className: 'movie-db-container-route movie-db-route' },
+        return (React.createElement(masterDetailRedux_1.MasterDetailRoute, { className: 'movie-db-container-route' },
             React.createElement(treeRedux_1.ContainerTree, { id: id }),
             React.createElement(detailsRedux_1.ContainerDetails, { id: id })));
     }
@@ -2756,6 +2946,7 @@ const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const contentRedux_1 = __webpack_require__(/*! ../content/contentRedux */ "./Client/src/routes/container/content/contentRedux.ts");
 const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
+const actionsRedux_1 = __webpack_require__(/*! ../../../components/detailActions/actionsRedux */ "./Client/src/components/detailActions/actionsRedux.ts");
 const messageRedux_1 = __webpack_require__(/*! ../../../components/message/messageRedux */ "./Client/src/components/message/messageRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CContainerDetails extends React.PureComponent {
@@ -2772,14 +2963,10 @@ class CContainerDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-container-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteContainer, null),
-            React.createElement("div", null,
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
-                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
-            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+            React.createElement(actionsRedux_1.ContainerDetailActions, null),
+            React.createElement(semantic_ui_react_1.Form, { error: this.props.hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.parentLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setContainer, options: this.props.containerOptions, placeholder: this.props.containerHint, search: true, selection: true, scrolling: true, value: this.props.parent || '' })),
@@ -2826,17 +3013,12 @@ function mapStateToProps(state, props) {
     const container = controller.getContainerEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: container && container._id ? state.mui.reset : state.mui.cancel,
         containerHint: mui.noParent,
         containerOptions: controller.getContainerOptionsNoEdit(state),
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !container,
         parent: container && container.parentId,
         parentLabel: emui.parentId,
-        saveLabel: state.mui.save,
-        showDelete: container && !!container._id,
         type: container ? container.type : undefined,
         typeErrors: controller.getErrors(errors, /^type$/),
         typeLabel: emui.type,
@@ -2845,10 +3027,7 @@ function mapStateToProps(state, props) {
 }
 function mapDispatchToProps(dispatch, props) {
     return {
-        cancel: () => dispatch(controller.ContainerActions.cancelEdit()),
-        confirmDelete: () => dispatch(controller.ContainerActions.confirmDelete()),
         loadDetails: id => dispatch(controller.ContainerActions.select(id)),
-        save: () => dispatch(controller.ContainerActions.save()),
         setProp: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
     };
 }
@@ -2872,7 +3051,7 @@ const searchRedux_1 = __webpack_require__(/*! ../../../components/search/searchR
 const levelRedux_1 = __webpack_require__(/*! ../../../components/tree/levelRedux */ "./Client/src/components/tree/levelRedux.tsx");
 class CContainerTree extends React.PureComponent {
     render() {
-        return (React.createElement("div", { className: 'movie-db-container-tree' },
+        return (React.createElement("div", { className: 'movie-db-container-tree movie-db-tree' },
             React.createElement(searchRedux_1.ContainerSearch, null),
             React.createElement(levelRedux_1.ContainerNode, { scope: '', detail: this.props.id })));
     }
@@ -2918,20 +3097,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
+const actionsRedux_1 = __webpack_require__(/*! ../../../components/detailActions/actionsRedux */ "./Client/src/components/detailActions/actionsRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CGenreDetails extends React.PureComponent {
     render() {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-genre-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteGenre, null),
-            React.createElement("div", null,
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
-                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
-            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+            React.createElement(actionsRedux_1.GenreDetailActions, null),
+            React.createElement(semantic_ui_react_1.Form, { error: this.props.hasError },
                 React.createElement(textInputRedux_1.GenreTextInput, { prop: 'name', required: true }))));
     }
     componentWillMount() {
@@ -2966,21 +3142,13 @@ function mapStateToProps(state, props) {
     const genre = controller_1.getGenreEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: genre && genre._id ? state.mui.reset : state.mui.cancel,
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !genre,
-        saveLabel: state.mui.save,
-        showDelete: genre && !!genre._id,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
-        cancel: () => dispatch(controller_1.GenreActions.cancelEdit()),
-        confirmDelete: () => dispatch(controller_1.GenreActions.confirmDelete()),
         loadDetails: id => dispatch(controller_1.GenreActions.select(id)),
-        save: () => dispatch(controller_1.GenreActions.save()),
     };
 }
 exports.GenreDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CGenreDetails);
@@ -3001,12 +3169,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Client/src/routes/genre/details/detailsRedux.ts");
+const masterDetailRedux_1 = __webpack_require__(/*! ../../components/masterDetailRoute/masterDetailRedux */ "./Client/src/components/masterDetailRoute/masterDetailRedux.ts");
 class CGenreRoute extends React.PureComponent {
     render() {
         const { id } = this.props.match.params;
-        return (React.createElement("div", { className: 'movie-db-genre-route movie-db-route' },
-            React.createElement("div", { className: 'movie-db-genre-list' },
-                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.genreOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === id, as: 'a', href: `#${"/genre"}/${l.key}`, key: l.key }, l.text))))),
+        return (React.createElement(masterDetailRedux_1.MasterDetailRoute, { className: 'movie-db-genre-route' },
+            React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.genreOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { key: l.key },
+                React.createElement(semantic_ui_react_1.Label, { active: l.key === id, as: 'a', href: `#${"/genre"}/${l.key}` }, l.text))))),
             React.createElement(detailsRedux_1.GenreDetails, { id: id })));
     }
 }
@@ -3054,20 +3223,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
+const actionsRedux_1 = __webpack_require__(/*! ../../../components/detailActions/actionsRedux */ "./Client/src/components/detailActions/actionsRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CLanguageDetails extends React.PureComponent {
     render() {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-language-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteLanguage, null),
-            React.createElement("div", null,
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
-                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
-            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+            React.createElement(actionsRedux_1.LanguageDetailActions, null),
+            React.createElement(semantic_ui_react_1.Form, { error: this.props.hasError },
                 React.createElement(textInputRedux_1.LanguageTextInput, { prop: 'name', required: true }))));
     }
     componentWillMount() {
@@ -3102,21 +3268,13 @@ function mapStateToProps(state, props) {
     const language = controller_1.getLanguageEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: language && language._id ? state.mui.reset : state.mui.cancel,
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !language,
-        saveLabel: state.mui.save,
-        showDelete: language && !!language._id,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
-        cancel: () => dispatch(controller_1.LanguageActions.cancelEdit()),
-        confirmDelete: () => dispatch(controller_1.LanguageActions.confirmDelete()),
         loadDetails: id => dispatch(controller_1.LanguageActions.select(id)),
-        save: () => dispatch(controller_1.LanguageActions.save()),
     };
 }
 exports.LanguageDetails = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(local.CLanguageDetails);
@@ -3137,12 +3295,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Client/src/routes/language/details/detailsRedux.ts");
+const masterDetailRedux_1 = __webpack_require__(/*! ../../components/masterDetailRoute/masterDetailRedux */ "./Client/src/components/masterDetailRoute/masterDetailRedux.ts");
 class CLanguageRoute extends React.PureComponent {
     render() {
         const { id } = this.props.match.params;
-        return (React.createElement("div", { className: 'movie-db-language-route movie-db-route' },
-            React.createElement("div", { className: 'movie-db-language-list' },
-                React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.languageOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { active: l.key === id, as: 'a', href: `#${"/language"}/${l.key}`, key: l.key }, l.text))))),
+        return (React.createElement(masterDetailRedux_1.MasterDetailRoute, { className: 'movie-db-language-route' },
+            React.createElement(semantic_ui_react_1.List, { selection: true }, this.props.languageOptions.map(l => (React.createElement(semantic_ui_react_1.List.Item, { key: l.key },
+                React.createElement(semantic_ui_react_1.Label, { active: l.key === id, as: 'a', href: `#${"/language"}/${l.key}` }, l.text))))),
             React.createElement(detailsRedux_1.LanguageDetails, { id: id })));
     }
 }
@@ -3757,6 +3916,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const semantic_ui_react_1 = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
 const confirmRedux_1 = __webpack_require__(/*! ../../../components/confirm/confirmRedux */ "./Client/src/components/confirm/confirmRedux.ts");
+const actionsRedux_1 = __webpack_require__(/*! ../../../components/detailActions/actionsRedux */ "./Client/src/components/detailActions/actionsRedux.ts");
 const textInputRedux_1 = __webpack_require__(/*! ../../../components/textInput/textInputRedux */ "./Client/src/components/textInput/textInputRedux.ts");
 class CSeriesDetails extends React.PureComponent {
     constructor() {
@@ -3769,14 +3929,10 @@ class CSeriesDetails extends React.PureComponent {
         if (this.props.lost) {
             return null;
         }
-        const { hasChanges, hasError } = this.props;
         return (React.createElement("div", { className: 'movie-db-series-details' },
             React.createElement(confirmRedux_1.ConfirmDeleteSeries, null),
-            React.createElement("div", null,
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.cancel, disabled: !hasChanges }, this.props.cancelLabel),
-                React.createElement(semantic_ui_react_1.Button, { onClick: this.props.save, disabled: hasError || !hasChanges }, this.props.saveLabel),
-                this.props.showDelete && (React.createElement(semantic_ui_react_1.Button, { onClick: this.props.confirmDelete }, this.props.deleteLabel))),
-            React.createElement(semantic_ui_react_1.Form, { error: hasError },
+            React.createElement(actionsRedux_1.SeriesDetailActions, null),
+            React.createElement(semantic_ui_react_1.Form, { error: this.props.hasError },
                 React.createElement(semantic_ui_react_1.Form.Field, null,
                     React.createElement("label", null, this.props.parentLabel),
                     React.createElement(semantic_ui_react_1.Dropdown, { clearable: true, fluid: true, onChange: this.setParent, options: this.props.parentOptions, placeholder: this.props.parentHint, search: true, selection: true, scrolling: true, value: this.props.parent || '' })),
@@ -3817,25 +3973,17 @@ function mapStateToProps(state, props) {
     const series = controller_1.getSeriesEdit(state);
     const errors = route.validation;
     return {
-        cancelLabel: series && series._id ? state.mui.reset : state.mui.cancel,
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
         hasError: errors && errors.length > 0,
         lost: !series,
         parent: series && series.parentId,
         parentHint: mui.noParent,
         parentLabel: emui.parentId,
         parentOptions: controller_1.getSeriesOptionsNoEdit(state),
-        saveLabel: state.mui.save,
-        showDelete: series && !!series._id,
     };
 }
 function mapDispatchToProps(dispatch, props) {
     return {
-        cancel: () => dispatch(controller_1.SeriesActions.cancelEdit()),
-        confirmDelete: () => dispatch(controller_1.SeriesActions.confirmDelete()),
         loadDetails: id => dispatch(controller_1.SeriesActions.select(id)),
-        save: () => dispatch(controller_1.SeriesActions.save()),
         setProp: (prop, value) => dispatch(controller_1.SeriesActions.setProperty(prop, value)),
     };
 }
@@ -3857,10 +4005,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 const detailsRedux_1 = __webpack_require__(/*! ./details/detailsRedux */ "./Client/src/routes/series/details/detailsRedux.ts");
 const treeRedux_1 = __webpack_require__(/*! ./tree/treeRedux */ "./Client/src/routes/series/tree/treeRedux.ts");
+const masterDetailRedux_1 = __webpack_require__(/*! ../../components/masterDetailRoute/masterDetailRedux */ "./Client/src/components/masterDetailRoute/masterDetailRedux.ts");
 class CSeriesRoute extends React.PureComponent {
     render() {
         const { id } = this.props.match.params;
-        return (React.createElement("div", { className: 'movie-db-series-route movie-db-route' },
+        return (React.createElement(masterDetailRedux_1.MasterDetailRoute, { className: 'movie-db-series-route' },
             React.createElement(treeRedux_1.SeriesTree, { id: id }),
             React.createElement(detailsRedux_1.SeriesDetails, { id: id })));
     }
@@ -3908,7 +4057,7 @@ const searchRedux_1 = __webpack_require__(/*! ../../../components/search/searchR
 const levelRedux_1 = __webpack_require__(/*! ../../../components/tree/levelRedux */ "./Client/src/components/tree/levelRedux.tsx");
 class CSeriesTree extends React.PureComponent {
     render() {
-        return (React.createElement("div", { className: 'movie-db-series-tree' },
+        return (React.createElement("div", { className: 'movie-db-series-tree movie-db-tree' },
             React.createElement(searchRedux_1.SeriesSearch, null),
             React.createElement(levelRedux_1.SeriesNode, { scope: '', detail: this.props.id })));
     }
