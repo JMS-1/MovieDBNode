@@ -111,23 +111,15 @@ body {
   padding: 0 1em 1em 1em;
   overflow: auto; }
 
-.movie-db-genre-route > .master > .ui.list > .item {
-  color: var(--semantic-text-color); }
-  .movie-db-genre-route > .master > .ui.list > .item.active {
-    font-weight: bold; }
-  .movie-db-genre-route > .master > .ui.list > .item > .ui.label {
-    width: 100%; }
+.movie-db-genre-route > .master > .ui.list > .item > .ui.label {
+  width: 100%; }
 
 .movie-db-genre-details {
   padding: 0 1em 1em 1em;
   overflow: auto; }
 
-.movie-db-language-route > .master > .ui.list > .item {
-  color: var(--semantic-text-color); }
-  .movie-db-language-route > .master > .ui.list > .item.active {
-    font-weight: bold; }
-  .movie-db-language-route > .master > .ui.list > .item > .ui.label {
-    width: 100%; }
+.movie-db-language-route > .master > .ui.list > .item > .ui.label {
+  width: 100%; }
 
 .movie-db-language-details {
   padding: 0 1em 1em 1em;

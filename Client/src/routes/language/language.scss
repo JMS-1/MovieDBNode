@@ -1,14 +1,6 @@
 .movie-db-language-route {
-    > .master > .ui.list > .item {
-        color: var(--semantic-text-color);
-
-        &.active {
-            font-weight: bold;
-        }
-
-        > .ui.label {
-            width: 100%;
-        }
+    > .master > .ui.list > .item > .ui.label {
+        width: 100%;
     }
 }
 
