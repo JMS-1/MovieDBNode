@@ -54126,17 +54126,17 @@ if (false) {} else {
 /*!****************************************!*\
   !*** ./node_modules/redux/es/redux.js ***!
   \****************************************/
-/*! exports provided: createStore, combineReducers, bindActionCreators, applyMiddleware, compose, __DO_NOT_USE__ActionTypes */
+/*! exports provided: __DO_NOT_USE__ActionTypes, applyMiddleware, bindActionCreators, combineReducers, compose, createStore */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return createStore; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return combineReducers; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return bindActionCreators; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return applyMiddleware; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return compose; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__DO_NOT_USE__ActionTypes", function() { return ActionTypes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return applyMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return bindActionCreators; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return combineReducers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return compose; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return createStore; });
 /* harmony import */ var symbol_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! symbol-observable */ "./node_modules/symbol-observable/es/index.js");
 
 
@@ -54203,7 +54203,7 @@ function createStore(reducer, preloadedState, enhancer) {
   var _ref2;
 
   if (typeof preloadedState === 'function' && typeof enhancer === 'function' || typeof enhancer === 'function' && typeof arguments[3] === 'function') {
-    throw new Error('It looks like you are passing several store enhancers to ' + 'createStore(). This is not supported. Instead, compose them ' + 'together to a single function');
+    throw new Error('It looks like you are passing several store enhancers to ' + 'createStore(). This is not supported. Instead, compose them ' + 'together to a single function.');
   }
 
   if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
@@ -54228,6 +54228,13 @@ function createStore(reducer, preloadedState, enhancer) {
   var currentListeners = [];
   var nextListeners = currentListeners;
   var isDispatching = false;
+  /**
+   * This makes a shallow copy of currentListeners so we can use
+   * nextListeners as a temporary list while dispatching.
+   *
+   * This prevents any bugs around consumers calling
+   * subscribe/unsubscribe in the middle of a dispatch.
+   */
 
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
@@ -54373,7 +54380,11 @@ function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Expected the nextReducer to be a function.');
     }
 
-    currentReducer = nextReducer;
+    currentReducer = nextReducer; // This action has a similiar effect to ActionTypes.INIT.
+    // Any reducers that existed in both the new and old rootReducer
+    // will receive the previous state. This effectively populates
+    // the new state tree with any relevant data from the old one.
+
     dispatch({
       type: ActionTypes.REPLACE
     });
@@ -54543,7 +54554,9 @@ function combineReducers(reducers) {
     }
   }
 
-  var finalReducerKeys = Object.keys(finalReducers);
+  var finalReducerKeys = Object.keys(finalReducers); // This is used to make sure we don't warn about the same
+  // keys multiple times.
+
   var unexpectedKeyCache;
 
   if (true) {
@@ -54608,8 +54621,8 @@ function bindActionCreator(actionCreator, dispatch) {
  * may be invoked directly. This is just a convenience method, as you can call
  * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
  *
- * For convenience, you can also pass a single function as the first argument,
- * and get a function in return.
+ * For convenience, you can also pass an action creator as the first argument,
+ * and get a dispatch wrapped function in return.
  *
  * @param {Function|Object} actionCreators An object whose values are action
  * creator functions. One handy way to obtain it is to use ES6 `import * as`
@@ -54634,11 +54647,9 @@ function bindActionCreators(actionCreators, dispatch) {
     throw new Error("bindActionCreators expected an object or a function, instead received " + (actionCreators === null ? 'null' : typeof actionCreators) + ". " + "Did you write \"import ActionCreators from\" instead of \"import * as ActionCreators from\"?");
   }
 
-  var keys = Object.keys(actionCreators);
   var boundActionCreators = {};
 
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
+  for (var key in actionCreators) {
     var actionCreator = actionCreators[key];
 
     if (typeof actionCreator === 'function') {
@@ -54664,20 +54675,33 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _objectSpread(target) {
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    keys.push.apply(keys, Object.getOwnPropertySymbols(object));
+  }
+
+  if (enumerableOnly) keys = keys.filter(function (sym) {
+    return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+  });
+  return keys;
+}
+
+function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
+    if (i % 2) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      ownKeys(source, true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(arguments[i]));
+    } else {
+      ownKeys(source).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(arguments[i], key));
+      });
     }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
   }
 
   return target;
@@ -54742,7 +54766,7 @@ function applyMiddleware() {
       var store = createStore.apply(void 0, arguments);
 
       var _dispatch = function dispatch() {
-        throw new Error("Dispatching while constructing your middleware is not allowed. " + "Other middleware would not be applied to this dispatch.");
+        throw new Error('Dispatching while constructing your middleware is not allowed. ' + 'Other middleware would not be applied to this dispatch.');
       };
 
       var middlewareAPI = {
@@ -54755,7 +54779,7 @@ function applyMiddleware() {
         return middleware(middlewareAPI);
       });
       _dispatch = compose.apply(void 0, chain)(store.dispatch);
-      return _objectSpread({}, store, {
+      return _objectSpread2({}, store, {
         dispatch: _dispatch
       });
     };
@@ -56545,12 +56569,12 @@ var NodeRegistry = function NodeRegistry() {
     var set = _this.nodes.get(nodeRef);
 
     if (set.size === 1) {
-      _this.nodes.delete(nodeRef);
+      _this.nodes["delete"](nodeRef);
 
       return;
     }
 
-    set.delete(component);
+    set["delete"](component);
   });
 
   _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "emit", function (nodeRef, callback) {
@@ -60157,10 +60181,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js");
 /* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/get */ "./node_modules/lodash/get.js");
-/* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_get__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash_isNil__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/isNil */ "./node_modules/lodash/isNil.js");
-/* harmony import */ var lodash_isNil__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_isNil__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash_isNil__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/isNil */ "./node_modules/lodash/isNil.js");
+/* harmony import */ var lodash_isNil__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_isNil__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/get */ "./node_modules/lodash/get.js");
+/* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_get__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
@@ -60168,8 +60192,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lib */ "./node_modules/semantic-ui-react/dist/es/lib/index.js");
-/* harmony import */ var _modules_Checkbox__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../modules/Checkbox */ "./node_modules/semantic-ui-react/dist/es/modules/Checkbox/index.js");
-/* harmony import */ var _addons_Radio__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../addons/Radio */ "./node_modules/semantic-ui-react/dist/es/addons/Radio/index.js");
+/* harmony import */ var _elements_Label__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../elements/Label */ "./node_modules/semantic-ui-react/dist/es/elements/Label/index.js");
+/* harmony import */ var _modules_Checkbox__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../modules/Checkbox */ "./node_modules/semantic-ui-react/dist/es/modules/Checkbox/index.js");
+/* harmony import */ var _addons_Radio__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../addons/Radio */ "./node_modules/semantic-ui-react/dist/es/addons/Radio/index.js");
+
 
 
 
@@ -60206,12 +60232,24 @@ function FormField(props) {
       width = props.width;
   var classes = classnames__WEBPACK_IMPORTED_MODULE_4___default()(Object(_lib__WEBPACK_IMPORTED_MODULE_7__["useKeyOnly"])(disabled, 'disabled'), Object(_lib__WEBPACK_IMPORTED_MODULE_7__["useKeyOnly"])(error, 'error'), Object(_lib__WEBPACK_IMPORTED_MODULE_7__["useKeyOnly"])(inline, 'inline'), Object(_lib__WEBPACK_IMPORTED_MODULE_7__["useKeyOnly"])(required, 'required'), Object(_lib__WEBPACK_IMPORTED_MODULE_7__["useWidthProp"])(width, 'wide'), 'field', className);
   var rest = Object(_lib__WEBPACK_IMPORTED_MODULE_7__["getUnhandledProps"])(FormField, props);
-  var ElementType = Object(_lib__WEBPACK_IMPORTED_MODULE_7__["getElementType"])(FormField, props); // ----------------------------------------
+  var ElementType = Object(_lib__WEBPACK_IMPORTED_MODULE_7__["getElementType"])(FormField, props);
+
+  var errorPointing = lodash_get__WEBPACK_IMPORTED_MODULE_3___default()(error, 'pointing', 'above');
+
+  var errorLabel = _elements_Label__WEBPACK_IMPORTED_MODULE_8__["default"].create(error, {
+    autoGenerateKey: false,
+    defaultProps: {
+      prompt: true,
+      pointing: errorPointing
+    }
+  });
+  var errorLabelBefore = (errorPointing === 'below' || errorPointing === 'right') && errorLabel;
+  var errorLabelAfter = (errorPointing === 'above' || errorPointing === 'left') && errorLabel; // ----------------------------------------
   // No Control
   // ----------------------------------------
 
-  if (lodash_isNil__WEBPACK_IMPORTED_MODULE_3___default()(control)) {
-    if (lodash_isNil__WEBPACK_IMPORTED_MODULE_3___default()(label)) {
+  if (lodash_isNil__WEBPACK_IMPORTED_MODULE_2___default()(control)) {
+    if (lodash_isNil__WEBPACK_IMPORTED_MODULE_2___default()(label)) {
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(ElementType, _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default()({}, rest, {
         className: classes
       }), _lib__WEBPACK_IMPORTED_MODULE_7__["childrenUtils"].isNil(children) ? content : children);
@@ -60219,9 +60257,9 @@ function FormField(props) {
 
     return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(ElementType, _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default()({}, rest, {
       className: classes
-    }), Object(_lib__WEBPACK_IMPORTED_MODULE_7__["createHTMLLabel"])(label, {
+    }), errorLabelBefore, Object(_lib__WEBPACK_IMPORTED_MODULE_7__["createHTMLLabel"])(label, {
       autoGenerateKey: false
-    }));
+    }), errorLabelAfter);
   } // ----------------------------------------
   // Checkbox/Radio Control
   // ----------------------------------------
@@ -60239,16 +60277,16 @@ function FormField(props) {
   if (control === 'input' && (type === 'checkbox' || type === 'radio')) {
     return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(ElementType, {
       className: classes
-    }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, Object(react__WEBPACK_IMPORTED_MODULE_6__["createElement"])(control, controlProps), " ", label));
+    }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, errorLabelBefore, Object(react__WEBPACK_IMPORTED_MODULE_6__["createElement"])(control, controlProps), " ", label, errorLabelAfter));
   } // pass label prop to controls that support it
 
 
-  if (control === _modules_Checkbox__WEBPACK_IMPORTED_MODULE_8__["default"] || control === _addons_Radio__WEBPACK_IMPORTED_MODULE_9__["default"]) {
+  if (control === _modules_Checkbox__WEBPACK_IMPORTED_MODULE_9__["default"] || control === _addons_Radio__WEBPACK_IMPORTED_MODULE_10__["default"]) {
     return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(ElementType, {
       className: classes
-    }, Object(react__WEBPACK_IMPORTED_MODULE_6__["createElement"])(control, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, controlProps, {
+    }, errorLabelBefore, Object(react__WEBPACK_IMPORTED_MODULE_6__["createElement"])(control, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_0___default()({}, controlProps, {
       label: label
-    })));
+    })), errorLabelAfter);
   } // ----------------------------------------
   // Other Control
   // ----------------------------------------
@@ -60258,10 +60296,10 @@ function FormField(props) {
     className: classes
   }, Object(_lib__WEBPACK_IMPORTED_MODULE_7__["createHTMLLabel"])(label, {
     defaultProps: {
-      htmlFor: lodash_get__WEBPACK_IMPORTED_MODULE_2___default()(controlProps, 'id')
+      htmlFor: lodash_get__WEBPACK_IMPORTED_MODULE_3___default()(controlProps, 'id')
     },
     autoGenerateKey: false
-  }), Object(react__WEBPACK_IMPORTED_MODULE_6__["createElement"])(control, controlProps));
+  }), errorLabelBefore, Object(react__WEBPACK_IMPORTED_MODULE_6__["createElement"])(control, controlProps), errorLabelAfter);
 }
 
 FormField.handledProps = ["as", "children", "className", "content", "control", "disabled", "error", "inline", "label", "required", "type", "width"];
@@ -60288,8 +60326,8 @@ FormField.propTypes =  true ? {
   /** Individual fields may be disabled. */
   disabled: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.bool,
 
-  /** Individual fields may display an error state. */
-  error: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.bool,
+  /** Individual fields may display an error state along with a message. */
+  error: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.bool, _lib__WEBPACK_IMPORTED_MODULE_7__["customPropTypes"].itemShorthand]),
 
   /** A field can have its label next to instead of above it. */
   inline: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.bool,
@@ -64959,12 +64997,13 @@ function (_Component) {
           image = _this$props.image,
           onRemove = _this$props.onRemove,
           pointing = _this$props.pointing,
+          prompt = _this$props.prompt,
           removeIcon = _this$props.removeIcon,
           ribbon = _this$props.ribbon,
           size = _this$props.size,
           tag = _this$props.tag;
       var pointingClass = pointing === true && 'pointing' || (pointing === 'left' || pointing === 'right') && "".concat(pointing, " pointing") || (pointing === 'above' || pointing === 'below') && "pointing ".concat(pointing);
-      var classes = classnames__WEBPACK_IMPORTED_MODULE_10___default()('ui', color, pointingClass, size, Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(active, 'active'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(basic, 'basic'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(circular, 'circular'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(empty, 'empty'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(floating, 'floating'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(horizontal, 'horizontal'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(image === true, 'image'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(tag, 'tag'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOrValueAndKey"])(corner, 'corner'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOrValueAndKey"])(ribbon, 'ribbon'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useValueAndKey"])(attached, 'attached'), 'label', className);
+      var classes = classnames__WEBPACK_IMPORTED_MODULE_10___default()('ui', color, pointingClass, size, Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(active, 'active'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(basic, 'basic'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(circular, 'circular'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(empty, 'empty'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(floating, 'floating'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(horizontal, 'horizontal'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(image === true, 'image'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(prompt, 'prompt'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOnly"])(tag, 'tag'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOrValueAndKey"])(corner, 'corner'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useKeyOrValueAndKey"])(ribbon, 'ribbon'), Object(_lib__WEBPACK_IMPORTED_MODULE_13__["useValueAndKey"])(attached, 'attached'), 'label', className);
       var rest = Object(_lib__WEBPACK_IMPORTED_MODULE_13__["getUnhandledProps"])(Label, this.props);
       var ElementType = Object(_lib__WEBPACK_IMPORTED_MODULE_13__["getElementType"])(Label, this.props);
 
@@ -64999,7 +65038,7 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Lab
 
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Label, "Group", _LabelGroup__WEBPACK_IMPORTED_MODULE_17__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Label, "handledProps", ["active", "as", "attached", "basic", "children", "circular", "className", "color", "content", "corner", "detail", "empty", "floating", "horizontal", "icon", "image", "onClick", "onRemove", "pointing", "removeIcon", "ribbon", "size", "tag"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Label, "handledProps", ["active", "as", "attached", "basic", "children", "circular", "className", "color", "content", "corner", "detail", "empty", "floating", "horizontal", "icon", "image", "onClick", "onRemove", "pointing", "prompt", "removeIcon", "ribbon", "size", "tag"]);
 
 
 Label.propTypes =  true ? {
@@ -65069,6 +65108,9 @@ Label.propTypes =  true ? {
 
   /** A label can point to content next to it. */
   pointing: prop_types__WEBPACK_IMPORTED_MODULE_11___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_11___default.a.bool, prop_types__WEBPACK_IMPORTED_MODULE_11___default.a.oneOf(['above', 'below', 'left', 'right'])]),
+
+  /** A label can prompt for an error in your forms. */
+  prompt: prop_types__WEBPACK_IMPORTED_MODULE_11___default.a.bool,
 
   /** Shorthand for Icon to appear as the last child and trigger onRemove. */
   removeIcon: _lib__WEBPACK_IMPORTED_MODULE_13__["customPropTypes"].itemShorthand,
@@ -71487,8 +71529,13 @@ function (_Component) {
       var _this$state = _this.state,
           checked = _this$state.checked,
           indeterminate = _this$state.indeterminate;
+
+      var isInputClick = lodash_invoke__WEBPACK_IMPORTED_MODULE_11___default()(_this.inputRef.current, 'contains', e.target);
+
+      var isLabelClick = lodash_invoke__WEBPACK_IMPORTED_MODULE_11___default()(_this.labelRef.current, 'contains', e.target);
+
+      var isRootClick = !isLabelClick && !isInputClick;
       var hasId = !lodash_isNil__WEBPACK_IMPORTED_MODULE_13___default()(id);
-      var isLabelClick = e.target === _this.labelRef.current;
       var isLabelClickAndForwardedToInput = isLabelClick && hasId; // https://github.com/Semantic-Org/Semantic-UI-React/pull/3351
 
       if (!isLabelClickAndForwardedToInput) {
@@ -71503,9 +71550,14 @@ function (_Component) {
 
         if (isLabelClick && !hasId) {
           _this.handleChange(e);
+        } // Changes should be triggered for the slider variation
+
+
+        if (isRootClick) {
+          _this.handleChange(e);
         }
 
-        if (hasId) {
+        if (isLabelClick && hasId) {
           // To prevent two clicks from being fired from the component we have to stop the propagation
           // from the "input" click: https://github.com/Semantic-Org/Semantic-UI-React/issues/3433
           e.stopPropagation();
@@ -73078,9 +73130,7 @@ function (_Component) {
       var classes = classnames__WEBPACK_IMPORTED_MODULE_36___default()(placeholder && !hasValue && 'default', 'text', search && searchQuery && 'filtered');
       var _text = placeholder;
 
-      if (searchQuery) {
-        _text = null;
-      } else if (text) {
+      if (text) {
         _text = text;
       } else if (open && !multiple) {
         _text = lodash_get__WEBPACK_IMPORTED_MODULE_28___default()(_this.getSelectedItem(), 'text');
@@ -74609,15 +74659,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_15__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../lib */ "./node_modules/semantic-ui-react/dist/es/lib/index.js");
-/* harmony import */ var _elements_Icon__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../elements/Icon */ "./node_modules/semantic-ui-react/dist/es/elements/Icon/index.js");
-/* harmony import */ var _addons_MountNode__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../../addons/MountNode */ "./node_modules/semantic-ui-react/dist/es/addons/MountNode/index.js");
-/* harmony import */ var _addons_Portal__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../../addons/Portal */ "./node_modules/semantic-ui-react/dist/es/addons/Portal/index.js");
-/* harmony import */ var _ModalHeader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./ModalHeader */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalHeader.js");
-/* harmony import */ var _ModalContent__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./ModalContent */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalContent.js");
-/* harmony import */ var _ModalActions__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./ModalActions */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalActions.js");
-/* harmony import */ var _ModalDescription__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./ModalDescription */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalDescription.js");
-/* harmony import */ var _addons_Ref__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../../addons/Ref */ "./node_modules/semantic-ui-react/dist/es/addons/Ref/index.js");
+/* harmony import */ var shallowequal__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! shallowequal */ "./node_modules/shallowequal/index.js");
+/* harmony import */ var shallowequal__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(shallowequal__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../lib */ "./node_modules/semantic-ui-react/dist/es/lib/index.js");
+/* harmony import */ var _elements_Icon__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../../elements/Icon */ "./node_modules/semantic-ui-react/dist/es/elements/Icon/index.js");
+/* harmony import */ var _addons_MountNode__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../../addons/MountNode */ "./node_modules/semantic-ui-react/dist/es/addons/MountNode/index.js");
+/* harmony import */ var _addons_Portal__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../../addons/Portal */ "./node_modules/semantic-ui-react/dist/es/addons/Portal/index.js");
+/* harmony import */ var _ModalHeader__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./ModalHeader */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalHeader.js");
+/* harmony import */ var _ModalContent__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./ModalContent */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalContent.js");
+/* harmony import */ var _ModalActions__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./ModalActions */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalActions.js");
+/* harmony import */ var _ModalDescription__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./ModalDescription */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/ModalDescription.js");
+/* harmony import */ var _addons_Ref__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../../addons/Ref */ "./node_modules/semantic-ui-react/dist/es/addons/Ref/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./utils */ "./node_modules/semantic-ui-react/dist/es/modules/Modal/utils/index.js");
+
+
 
 
 
@@ -74668,6 +74723,8 @@ function (_Component) {
 
     _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, (_getPrototypeOf2 = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Modal)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "legacy", Object(_lib__WEBPACK_IMPORTED_MODULE_18__["isBrowser"])() && Object(_utils__WEBPACK_IMPORTED_MODULE_27__["isLegacy"])());
+
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "ref", Object(react__WEBPACK_IMPORTED_MODULE_16__["createRef"])());
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "dimmerRef", Object(react__WEBPACK_IMPORTED_MODULE_16__["createRef"])());
@@ -74675,7 +74732,7 @@ function (_Component) {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "latestDocumentMouseDownEvent", null);
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "getMountNode", function () {
-      return Object(_lib__WEBPACK_IMPORTED_MODULE_17__["isBrowser"])() ? _this.props.mountNode || document.body : null;
+      return Object(_lib__WEBPACK_IMPORTED_MODULE_18__["isBrowser"])() ? _this.props.mountNode || document.body : null;
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "handleActionsOverrides", function (predefinedProps) {
@@ -74706,7 +74763,7 @@ function (_Component) {
       var closeOnDimmerClick = _this.props.closeOnDimmerClick;
       var currentDocumentMouseDownEvent = _this.latestDocumentMouseDownEvent;
       _this.latestDocumentMouseDownEvent = null;
-      if (!closeOnDimmerClick || Object(_lib__WEBPACK_IMPORTED_MODULE_17__["doesNodeContainClick"])(_this.ref.current, currentDocumentMouseDownEvent) || Object(_lib__WEBPACK_IMPORTED_MODULE_17__["doesNodeContainClick"])(_this.ref.current, e)) return;
+      if (!closeOnDimmerClick || Object(_lib__WEBPACK_IMPORTED_MODULE_18__["doesNodeContainClick"])(_this.ref.current, currentDocumentMouseDownEvent) || Object(_lib__WEBPACK_IMPORTED_MODULE_18__["doesNodeContainClick"])(_this.ref.current, e)) return;
 
       lodash_invoke__WEBPACK_IMPORTED_MODULE_13___default()(_this.props, 'onClose', e, _this.props);
 
@@ -74742,11 +74799,11 @@ function (_Component) {
 
       _this.setPositionAndClassNames();
 
-      _lib__WEBPACK_IMPORTED_MODULE_17__["eventStack"].sub('mousedown', _this.handleDocumentMouseDown, {
+      _lib__WEBPACK_IMPORTED_MODULE_18__["eventStack"].sub('mousedown', _this.handleDocumentMouseDown, {
         pool: eventPool,
         target: _this.dimmerRef.current
       });
-      _lib__WEBPACK_IMPORTED_MODULE_17__["eventStack"].sub('click', _this.handleDocumentClick, {
+      _lib__WEBPACK_IMPORTED_MODULE_18__["eventStack"].sub('click', _this.handleDocumentClick, {
         pool: eventPool,
         target: _this.dimmerRef.current
       });
@@ -74757,11 +74814,11 @@ function (_Component) {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "handlePortalUnmount", function (e) {
       var eventPool = _this.props.eventPool;
       cancelAnimationFrame(_this.animationRequestId);
-      _lib__WEBPACK_IMPORTED_MODULE_17__["eventStack"].unsub('mousedown', _this.handleDocumentMouseDown, {
+      _lib__WEBPACK_IMPORTED_MODULE_18__["eventStack"].unsub('mousedown', _this.handleDocumentMouseDown, {
         pool: eventPool,
         target: _this.dimmerRef.current
       });
-      _lib__WEBPACK_IMPORTED_MODULE_17__["eventStack"].unsub('click', _this.handleDocumentClick, {
+      _lib__WEBPACK_IMPORTED_MODULE_18__["eventStack"].unsub('click', _this.handleDocumentClick, {
         pool: eventPool,
         target: _this.dimmerRef.current
       });
@@ -74778,40 +74835,30 @@ function (_Component) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "setPositionAndClassNames", function () {
-      var dimmer = _this.props.dimmer;
-      var classes;
-
-      if (dimmer) {
-        classes = 'dimmable dimmed';
-
-        if (dimmer === 'blurring') {
-          classes += ' blurring';
-        }
-      }
-
+      var _this$props = _this.props,
+          centered = _this$props.centered,
+          dimmer = _this$props.dimmer;
+      var scrolling;
       var newState = {};
 
       if (_this.ref.current) {
-        var _this$ref$current$get = _this.ref.current.getBoundingClientRect(),
-            height = _this$ref$current$get.height; // Leaving the old calculation here since we may need it as an older browser fallback
-        // SEE: https://github.com/Semantic-Org/Semantic-UI/issues/6185#issuecomment-376725956
-        // const marginTop = -Math.round(height / 2)
+        var rect = _this.ref.current.getBoundingClientRect();
 
+        var isFitted = Object(_utils__WEBPACK_IMPORTED_MODULE_27__["canFit"])(rect);
+        scrolling = !isFitted; // Styles should be computed for IE11
 
-        var marginTop = null;
-        var scrolling = height > window.innerHeight;
+        var legacyStyles = _this.legacy ? Object(_utils__WEBPACK_IMPORTED_MODULE_27__["getLegacyStyles"])(isFitted, centered, rect) : {};
 
-        if (_this.state.marginTop !== marginTop) {
-          newState.marginTop = marginTop;
+        if (!shallowequal__WEBPACK_IMPORTED_MODULE_17___default()(_this.state.legacyStyles, legacyStyles)) {
+          newState.legacyStyles = legacyStyles;
         }
 
         if (_this.state.scrolling !== scrolling) {
           newState.scrolling = scrolling;
         }
-
-        if (scrolling) classes += ' scrolling';
       }
 
+      var classes = classnames__WEBPACK_IMPORTED_MODULE_14___default()(Object(_lib__WEBPACK_IMPORTED_MODULE_18__["useKeyOnly"])(dimmer, 'dimmable dimmed'), Object(_lib__WEBPACK_IMPORTED_MODULE_18__["useKeyOnly"])(dimmer === 'blurring', ' blurring'), Object(_lib__WEBPACK_IMPORTED_MODULE_18__["useKeyOnly"])(scrolling, ' scrolling'));
       if (_this.state.mountClasses !== classes) newState.mountClasses = classes;
       if (!lodash_isEmpty__WEBPACK_IMPORTED_MODULE_12___default()(newState)) _this.setState(newState);
       _this.animationRequestId = requestAnimationFrame(_this.setPositionAndClassNames);
@@ -74820,42 +74867,40 @@ function (_Component) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "renderContent", function (rest) {
-      var _this$props = _this.props,
-          actions = _this$props.actions,
-          basic = _this$props.basic,
-          children = _this$props.children,
-          className = _this$props.className,
-          closeIcon = _this$props.closeIcon,
-          content = _this$props.content,
-          header = _this$props.header,
-          mountNode = _this$props.mountNode,
-          size = _this$props.size,
-          style = _this$props.style;
+      var _this$props2 = _this.props,
+          actions = _this$props2.actions,
+          basic = _this$props2.basic,
+          children = _this$props2.children,
+          className = _this$props2.className,
+          closeIcon = _this$props2.closeIcon,
+          content = _this$props2.content,
+          header = _this$props2.header,
+          mountNode = _this$props2.mountNode,
+          size = _this$props2.size,
+          style = _this$props2.style;
       var _this$state = _this.state,
-          marginTop = _this$state.marginTop,
+          legacyStyles = _this$state.legacyStyles,
           mountClasses = _this$state.mountClasses,
           scrolling = _this$state.scrolling;
-      var classes = classnames__WEBPACK_IMPORTED_MODULE_14___default()('ui', size, Object(_lib__WEBPACK_IMPORTED_MODULE_17__["useKeyOnly"])(basic, 'basic'), Object(_lib__WEBPACK_IMPORTED_MODULE_17__["useKeyOnly"])(scrolling, 'scrolling'), 'modal transition visible active', className);
-      var ElementType = Object(_lib__WEBPACK_IMPORTED_MODULE_17__["getElementType"])(Modal, _this.props);
+      var classes = classnames__WEBPACK_IMPORTED_MODULE_14___default()('ui', size, Object(_lib__WEBPACK_IMPORTED_MODULE_18__["useKeyOnly"])(basic, 'basic'), Object(_lib__WEBPACK_IMPORTED_MODULE_18__["useKeyOnly"])(_this.legacy, 'legacy'), Object(_lib__WEBPACK_IMPORTED_MODULE_18__["useKeyOnly"])(scrolling, 'scrolling'), 'modal transition visible active', className);
+      var ElementType = Object(_lib__WEBPACK_IMPORTED_MODULE_18__["getElementType"])(Modal, _this.props);
       var closeIconName = closeIcon === true ? 'close' : closeIcon;
-      var closeIconJSX = _elements_Icon__WEBPACK_IMPORTED_MODULE_18__["default"].create(closeIconName, {
+      var closeIconJSX = _elements_Icon__WEBPACK_IMPORTED_MODULE_19__["default"].create(closeIconName, {
         overrideProps: _this.handleIconOverrides
       });
-      return react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(_addons_Ref__WEBPACK_IMPORTED_MODULE_25__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(_addons_Ref__WEBPACK_IMPORTED_MODULE_26__["default"], {
         innerRef: _this.ref
       }, react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(ElementType, _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({}, rest, {
         className: classes,
-        style: _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({
-          marginTop: marginTop
-        }, style)
-      }), react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(_addons_MountNode__WEBPACK_IMPORTED_MODULE_19__["default"], {
+        style: _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, legacyStyles, style)
+      }), react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(_addons_MountNode__WEBPACK_IMPORTED_MODULE_20__["default"], {
         className: mountClasses,
         node: mountNode
-      }), closeIconJSX, _lib__WEBPACK_IMPORTED_MODULE_17__["childrenUtils"].isNil(children) ? react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_16__["Fragment"], null, _ModalHeader__WEBPACK_IMPORTED_MODULE_21__["default"].create(header, {
+      }), closeIconJSX, _lib__WEBPACK_IMPORTED_MODULE_18__["childrenUtils"].isNil(children) ? react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_16__["Fragment"], null, _ModalHeader__WEBPACK_IMPORTED_MODULE_22__["default"].create(header, {
         autoGenerateKey: false
-      }), _ModalContent__WEBPACK_IMPORTED_MODULE_22__["default"].create(content, {
+      }), _ModalContent__WEBPACK_IMPORTED_MODULE_23__["default"].create(content, {
         autoGenerateKey: false
-      }), _ModalActions__WEBPACK_IMPORTED_MODULE_23__["default"].create(actions, {
+      }), _ModalActions__WEBPACK_IMPORTED_MODULE_24__["default"].create(actions, {
         overrideProps: _this.handleActionsOverrides
       })) : children));
     });
@@ -74873,20 +74918,20 @@ function (_Component) {
     key: "render",
     value: function render() {
       var open = this.state.open;
-      var _this$props2 = this.props,
-          centered = _this$props2.centered,
-          closeOnDocumentClick = _this$props2.closeOnDocumentClick,
-          dimmer = _this$props2.dimmer,
-          eventPool = _this$props2.eventPool,
-          trigger = _this$props2.trigger;
+      var _this$props3 = this.props,
+          centered = _this$props3.centered,
+          closeOnDocumentClick = _this$props3.closeOnDocumentClick,
+          dimmer = _this$props3.dimmer,
+          eventPool = _this$props3.eventPool,
+          trigger = _this$props3.trigger;
       var mountNode = this.getMountNode(); // Short circuit when server side rendering
 
-      if (!Object(_lib__WEBPACK_IMPORTED_MODULE_17__["isBrowser"])()) {
+      if (!Object(_lib__WEBPACK_IMPORTED_MODULE_18__["isBrowser"])()) {
         return Object(react__WEBPACK_IMPORTED_MODULE_16__["isValidElement"])(trigger) ? trigger : null;
       }
 
-      var unhandled = Object(_lib__WEBPACK_IMPORTED_MODULE_17__["getUnhandledProps"])(Modal, this.props);
-      var portalPropNames = _addons_Portal__WEBPACK_IMPORTED_MODULE_20__["default"].handledProps;
+      var unhandled = Object(_lib__WEBPACK_IMPORTED_MODULE_18__["getUnhandledProps"])(Modal, this.props);
+      var portalPropNames = _addons_Portal__WEBPACK_IMPORTED_MODULE_21__["default"].handledProps;
 
       var rest = lodash_reduce__WEBPACK_IMPORTED_MODULE_11___default()(unhandled, function (acc, val, key) {
         if (!lodash_includes__WEBPACK_IMPORTED_MODULE_10___default()(portalPropNames, key)) acc[key] = val;
@@ -74907,7 +74952,7 @@ function (_Component) {
       //
       // We cannot them wrap the modalJSX in an actual <Dimmer /> instead, we apply the dimmer classes to the <Portal />.
 
-      return react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(_addons_Portal__WEBPACK_IMPORTED_MODULE_20__["default"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
+      return react__WEBPACK_IMPORTED_MODULE_16___default.a.createElement(_addons_Portal__WEBPACK_IMPORTED_MODULE_21__["default"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
         closeOnDocumentClick: closeOnDocumentClick
       }, portalProps, {
         trigger: trigger,
@@ -74926,7 +74971,7 @@ function (_Component) {
   }]);
 
   return Modal;
-}(_lib__WEBPACK_IMPORTED_MODULE_17__["AutoControlledComponent"]);
+}(_lib__WEBPACK_IMPORTED_MODULE_18__["AutoControlledComponent"]);
 
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "defaultProps", {
   centered: true,
@@ -74938,22 +74983,22 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Mod
 
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "autoControlledProps", ['open']);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Header", _ModalHeader__WEBPACK_IMPORTED_MODULE_21__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Header", _ModalHeader__WEBPACK_IMPORTED_MODULE_22__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Content", _ModalContent__WEBPACK_IMPORTED_MODULE_22__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Content", _ModalContent__WEBPACK_IMPORTED_MODULE_23__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Description", _ModalDescription__WEBPACK_IMPORTED_MODULE_24__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Description", _ModalDescription__WEBPACK_IMPORTED_MODULE_25__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Actions", _ModalActions__WEBPACK_IMPORTED_MODULE_23__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "Actions", _ModalActions__WEBPACK_IMPORTED_MODULE_24__["default"]);
 
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Modal, "handledProps", ["actions", "as", "basic", "centered", "children", "className", "closeIcon", "closeOnDimmerClick", "closeOnDocumentClick", "content", "defaultOpen", "dimmer", "eventPool", "header", "mountNode", "onActionClick", "onClose", "onMount", "onOpen", "onUnmount", "open", "size", "style", "trigger"]);
 
 Modal.propTypes =  true ? {
   /** An element type to render as (string or function). */
-  as: _lib__WEBPACK_IMPORTED_MODULE_17__["customPropTypes"].as,
+  as: _lib__WEBPACK_IMPORTED_MODULE_18__["customPropTypes"].as,
 
   /** Shorthand for Modal.Actions. Typically an array of button shorthand. */
-  actions: _lib__WEBPACK_IMPORTED_MODULE_17__["customPropTypes"].itemShorthand,
+  actions: _lib__WEBPACK_IMPORTED_MODULE_18__["customPropTypes"].itemShorthand,
 
   /** A modal can reduce its complexity */
   basic: prop_types__WEBPACK_IMPORTED_MODULE_15___default.a.bool,
@@ -74977,7 +75022,7 @@ Modal.propTypes =  true ? {
   closeOnDocumentClick: prop_types__WEBPACK_IMPORTED_MODULE_15___default.a.bool,
 
   /** Simple text content for the Modal. */
-  content: _lib__WEBPACK_IMPORTED_MODULE_17__["customPropTypes"].itemShorthand,
+  content: _lib__WEBPACK_IMPORTED_MODULE_18__["customPropTypes"].itemShorthand,
 
   /** Initial value of open. */
   defaultOpen: prop_types__WEBPACK_IMPORTED_MODULE_15___default.a.bool,
@@ -74989,7 +75034,7 @@ Modal.propTypes =  true ? {
   eventPool: prop_types__WEBPACK_IMPORTED_MODULE_15___default.a.string,
 
   /** Modal displayed above the content in bold. */
-  header: _lib__WEBPACK_IMPORTED_MODULE_17__["customPropTypes"].itemShorthand,
+  header: _lib__WEBPACK_IMPORTED_MODULE_18__["customPropTypes"].itemShorthand,
 
   /** The node where the modal should mount. Defaults to document.body. */
   mountNode: prop_types__WEBPACK_IMPORTED_MODULE_15___default.a.any,
@@ -75420,6 +75465,77 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+/***/ }),
+
+/***/ "./node_modules/semantic-ui-react/dist/es/modules/Modal/utils/index.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/semantic-ui-react/dist/es/modules/Modal/utils/index.js ***!
+  \*****************************************************************************/
+/*! exports provided: canFit, getLegacyStyles, isLegacy */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canFit", function() { return canFit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLegacyStyles", function() { return getLegacyStyles; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLegacy", function() { return isLegacy; });
+// https://github.com/Semantic-Org/Semantic-UI/blob/2.4.1/src/definitions/modules/modal.js#L956
+var OFFSET = 0; // https://github.com/Semantic-Org/Semantic-UI/blob/2.4.1/src/definitions/modules/modal.js#L990
+
+var PADDING = 50;
+/**
+ * Ensures that modal can fit viewport without scroll.
+ *
+ * @param modalRect {DOMRect}
+ *
+ * @see https://github.com/Semantic-Org/Semantic-UI/blob/2.4.1/src/definitions/modules/modal.js#L608
+ */
+
+var canFit = function canFit(modalRect) {
+  // original: scrollHeight = $module.prop('scrollHeight'),
+  // is replaced by .height because scrollHeight provides integer which produces glitches
+  // https://github.com/Semantic-Org/Semantic-UI-React/issues/2221
+  var scrollHeight = modalRect.height + OFFSET; // $module.outerHeight() + settings.offset
+
+  var height = modalRect.height + OFFSET; // original: $(window).height()
+
+  var contextHeight = window.innerHeight;
+  var verticalCenter = contextHeight / 2;
+  var topOffset = -(height / 2); // padding with edge of page
+
+  var paddingHeight = PADDING;
+  var startPosition = verticalCenter + topOffset; // 0
+  // original: scrollHeight > height
+  //     ? startPosition + scrollHeight + paddingHeight < contextHeight
+  //     : height + paddingHeight * 2 < contextHeight
+
+  return startPosition + scrollHeight + paddingHeight < contextHeight;
+};
+/**
+ * Creates legacy styles for IE11.
+ *
+ * @param isFitted {Boolean}
+ * @param centered {Boolean}
+ * @param modalRect {DOMRect}
+ *
+ * @see https://github.com/Semantic-Org/Semantic-UI/blob/2.4.1/src/definitions/modules/modal.js#L718
+ */
+
+var getLegacyStyles = function getLegacyStyles(isFitted, centered, modalRect) {
+  var marginTop = centered && isFitted ? -(modalRect.height / 2) : 0;
+  var marginLeft = -(modalRect.width / 2);
+  return {
+    marginLeft: marginLeft,
+    marginTop: marginTop
+  };
+}; // https://github.com/Semantic-Org/Semantic-UI/blob/2.4.1/src/definitions/modules/modal.js#L631
+
+/* istanbul ignore next */
+
+var isLegacy = function isLegacy() {
+  return !window.ActiveXObject && 'ActiveXObject' in window;
+};
 
 /***/ }),
 
@@ -77948,40 +78064,27 @@ var Sidebar =
 function (_Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_7___default()(Sidebar, _Component);
 
-  function Sidebar() {
-    var _getPrototypeOf2;
-
+  function Sidebar(props) {
     var _this;
 
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, Sidebar);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, (_getPrototypeOf2 = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Sidebar)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "state", {});
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Sidebar).call(this, props));
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "ref", Object(react__WEBPACK_IMPORTED_MODULE_13__["createRef"])());
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "handleAnimationStart", function () {
       var visible = _this.props.visible;
       var callback = visible ? 'onVisible' : 'onHide';
+      clearTimeout(_this.animationTimer);
+      _this.animationTimer = setTimeout(_this.handleAnimationEnd, Sidebar.animationDuration);
 
-      _this.setState({
-        animating: true
-      }, function () {
-        clearTimeout(_this.animationTimer);
-        _this.animationTimer = setTimeout(_this.handleAnimationEnd, Sidebar.animationDuration);
+      if (_this.skipNextCallback) {
+        _this.skipNextCallback = false;
+        return;
+      }
 
-        if (_this.skipNextCallback) {
-          _this.skipNextCallback = false;
-          return;
-        }
-
-        lodash_invoke__WEBPACK_IMPORTED_MODULE_9___default()(_this.props, callback, null, _this.props);
-      });
+      lodash_invoke__WEBPACK_IMPORTED_MODULE_9___default()(_this.props, callback, null, _this.props);
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "handleAnimationEnd", function () {
@@ -77989,7 +78092,7 @@ function (_Component) {
       var callback = visible ? 'onShow' : 'onHidden';
 
       _this.setState({
-        animating: false
+        animationTick: 0
       });
 
       lodash_invoke__WEBPACK_IMPORTED_MODULE_9___default()(_this.props, callback, null, _this.props);
@@ -78005,15 +78108,19 @@ function (_Component) {
       }
     });
 
+    _this.state = {
+      animationTick: 0,
+      visible: props.visible
+    };
     return _this;
   }
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(Sidebar, [{
     key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      var prevVisible = prevProps.visible;
-      var currentVisible = this.props.visible;
-      if (prevVisible !== currentVisible) this.handleAnimationStart();
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (this.state.animationTick > prevState.animationTick) {
+        this.handleAnimationStart();
+      }
     }
   }, {
     key: "componentWillUnmount",
@@ -78032,8 +78139,8 @@ function (_Component) {
           target = _this$props.target,
           visible = _this$props.visible,
           width = _this$props.width;
-      var animating = this.state.animating;
-      var classes = classnames__WEBPACK_IMPORTED_MODULE_11___default()('ui', animation, direction, width, Object(_lib__WEBPACK_IMPORTED_MODULE_15__["useKeyOnly"])(animating, 'animating'), Object(_lib__WEBPACK_IMPORTED_MODULE_15__["useKeyOnly"])(visible, 'visible'), 'sidebar', className);
+      var animationTick = this.state.animationTick;
+      var classes = classnames__WEBPACK_IMPORTED_MODULE_11___default()('ui', animation, direction, width, Object(_lib__WEBPACK_IMPORTED_MODULE_15__["useKeyOnly"])(animationTick > 0, 'animating'), Object(_lib__WEBPACK_IMPORTED_MODULE_15__["useKeyOnly"])(visible, 'visible'), 'sidebar', className);
       var rest = Object(_lib__WEBPACK_IMPORTED_MODULE_15__["getUnhandledProps"])(Sidebar, this.props);
       var ElementType = Object(_lib__WEBPACK_IMPORTED_MODULE_15__["getElementType"])(Sidebar, this.props);
       return react__WEBPACK_IMPORTED_MODULE_13___default.a.createElement(_addons_Ref__WEBPACK_IMPORTED_MODULE_14__["default"], {
@@ -78046,13 +78153,24 @@ function (_Component) {
         target: target
       })));
     }
+  }], [{
+    key: "getDerivedStateFromProps",
+    value: function getDerivedStateFromProps(props, state) {
+      // We use `animationTick` to understand when an animation should be scheduled
+      var tickIncrement = !!props.visible === !!state.visible ? 0 : 1;
+      return {
+        animationTick: state.animationTick + tickIncrement,
+        visible: props.visible
+      };
+    }
   }]);
 
   return Sidebar;
 }(react__WEBPACK_IMPORTED_MODULE_13__["Component"]);
 
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Sidebar, "defaultProps", {
-  direction: 'left'
+  direction: 'left',
+  visible: false
 });
 
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Sidebar, "animationDuration", 500);
