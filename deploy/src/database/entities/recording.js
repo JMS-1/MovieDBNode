@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("./utils");
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 exports.collectionName = 'recordings';
 const LinkSubSchema = {
     type: 'object',
@@ -50,7 +50,7 @@ exports.RecordingSchema = {
         genres: {
             items: {
                 message: 'Genre ist ungültig',
-                pattern: utils_1.uniqueId,
+                pattern: isxs_validation_1.uniqueId,
                 type: 'string',
             },
             message: 'Genres sind ungültig',
@@ -60,7 +60,7 @@ exports.RecordingSchema = {
         languages: {
             items: {
                 message: 'Sprache ist ungültig',
-                pattern: utils_1.uniqueId,
+                pattern: isxs_validation_1.uniqueId,
                 type: 'string',
             },
             message: 'Sprachen sind ungültig',
@@ -85,12 +85,12 @@ exports.RecordingSchema = {
         },
         series: {
             message: 'Serie ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         containerId: {
             message: 'Ablage ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         containerPosition: {

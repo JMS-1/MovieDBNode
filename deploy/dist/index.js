@@ -4181,73 +4181,10 @@ exports.ServerApi = ServerApi;
 
 "use strict";
 
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ../../Server/src/database/validation */ "./Server/src/database/validation.ts"));
-
-
-/***/ }),
-
-/***/ "./Server/src/database/validation.ts":
-/*!*******************************************!*\
-  !*** ./Server/src/database/validation.ts ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const djv = __webpack_require__(/*! djv */ "./node_modules/djv/djv.js");
-const validation = new djv();
-function addSchema(schema) {
-    function errorHandler(errorType) {
-        let scope = schema;
-        const props = [];
-        for (let prop of this.data.slice(1)) {
-            const testProp = /^\[decodeURIComponent\(['"]([^'"]+)['"]\)\]$/.exec(prop);
-            const isProp = testProp && testProp[1];
-            if (isProp) {
-                props.push(`"${isProp}"`);
-                scope = (scope.properties || (scope.items && scope.items.properties) || {})[isProp] || {};
-            }
-            else {
-                const testIndex = /^\[(i\d+)\]$/.exec(prop);
-                if (testIndex && props.length > 0) {
-                    props[props.length - 1] += `+"["+${testIndex[1]}+"]"`;
-                }
-            }
-        }
-        const command = `{
-            errors.push({
-                constraint: "${errorType}",
-                property: ${props.join("+'.'+") || "'*'"},
-                message: "${scope.message || ''}"
-            }); }`;
-        return command;
-    }
-    validation.setErrorHandler(errorHandler);
-    validation.addSchema(schema.$id, schema);
-    validation.setErrorHandler(undefined);
-}
-exports.addSchema = addSchema;
-function validate(object, schema) {
-    try {
-        return validation.validate(schema.$id, object);
-    }
-    catch (error) {
-        return [
-            {
-                constraint: 'validator',
-                message: typeof error === 'string' ? error : error.message || 'failed',
-                property: '*',
-            },
-        ];
-    }
-}
-exports.validate = validate;
+var isxs_validation_1 = __webpack_require__(/*! @jms-1/isxs-validation */ "./node_modules/@jms-1/isxs-validation/lib/index.js");
+exports.validate = isxs_validation_1.validate;
+exports.addSchema = isxs_validation_1.addSchema;
 
 
 /***/ }),
@@ -4902,6 +4839,173 @@ function _typeof(obj) {
 }
 
 module.exports = _typeof;
+
+/***/ }),
+
+/***/ "./node_modules/@jms-1/isxs-validation/lib/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-validation/lib/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(/*! ./mongoDb */ "./node_modules/@jms-1/isxs-validation/lib/mongoDb.js"));
+__export(__webpack_require__(/*! ./validation */ "./node_modules/@jms-1/isxs-validation/lib/validation.js"));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@jms-1/isxs-validation/lib/mongoDb.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-validation/lib/mongoDb.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const dataPropsMapper = {
+    additionalProperties: copy,
+    enum: copy,
+    items: arrayElements,
+    maxLength: copy,
+    message: errorMessage,
+    minLength: copy,
+    pattern: copy,
+    properties: subObject,
+    required: copy,
+    type: dataType,
+    uniqueItems: copy,
+};
+const schemaPropsMapper = {
+    $id: discard,
+    $schema: discard,
+    additionalProperties: copy,
+    message: errorMessage,
+    properties: subObject,
+    required: copy,
+    type: dataType,
+};
+function discard(value, target, prop) { }
+function copy(value, target, prop) {
+    target[prop] = value;
+}
+function dataType(value, target, prop) {
+    switch (value) {
+        case 'array':
+        case 'object':
+        case 'string':
+            target.bsonType = value;
+            break;
+        case 'integer':
+            target.bsonType = 'int';
+            break;
+        default:
+            throw new Error(`unsupported data type '${value}'`);
+    }
+}
+function errorMessage(value, target, prop) {
+    target.description = value;
+}
+function subObject(value, target, prop) {
+    target.properties = {};
+    for (let prop in value) {
+        if (value.hasOwnProperty(prop)) {
+            target.properties[prop] = mapProperties(value[prop], dataPropsMapper);
+        }
+    }
+}
+function arrayElements(value, target, prop) {
+    target.items = mapProperties(value, dataPropsMapper);
+}
+function mapProperties(object, mappers) {
+    const mongo = {};
+    for (let prop in object) {
+        if (object.hasOwnProperty(prop)) {
+            const mapper = mappers[prop];
+            if (!mapper) {
+                throw new Error(`can not map property '${prop}' to $jsonSchema`);
+            }
+            mapper(object[prop], mongo, prop);
+        }
+    }
+    return mongo;
+}
+function convertToMongo(schema) {
+    return mapProperties(schema, schemaPropsMapper);
+}
+exports.convertToMongo = convertToMongo;
+//# sourceMappingURL=mongoDb.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@jms-1/isxs-validation/lib/validation.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-validation/lib/validation.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const djv = __webpack_require__(/*! djv */ "./node_modules/djv/djv.js");
+exports.uniqueId = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$';
+const validation = new djv();
+function addSchema(schema) {
+    function errorHandler(errorType) {
+        let scope = schema;
+        const props = [];
+        for (let prop of this.data.slice(1)) {
+            const testProp = /^\[decodeURIComponent\(['"]([^'"]+)['"]\)\]$/.exec(prop);
+            const isProp = testProp && testProp[1];
+            if (isProp) {
+                props.push(`"${isProp}"`);
+                scope = (scope.properties || (scope.items && scope.items.properties) || {})[isProp] || {};
+            }
+            else {
+                const testIndex = /^\[(i\d+)\]$/.exec(prop);
+                if (testIndex && props.length > 0) {
+                    props[props.length - 1] += `+"["+${testIndex[1]}+"]"`;
+                }
+            }
+        }
+        const command = `{
+            errors.push({
+                constraint: "${errorType}",
+                property: ${props.join("+'.'+") || "'*'"},
+                message: "${scope.message || ''}"
+            }); }`;
+        return command;
+    }
+    validation.setErrorHandler(errorHandler);
+    validation.addSchema(schema.$id, schema);
+    validation.setErrorHandler(undefined);
+}
+exports.addSchema = addSchema;
+function validate(object, schema) {
+    try {
+        return validation.validate(schema.$id, object);
+    }
+    catch (error) {
+        return [
+            {
+                constraint: 'validator',
+                message: typeof error === 'string' ? error : error.message || 'failed',
+                property: '*',
+            },
+        ];
+    }
+}
+exports.validate = validate;
+//# sourceMappingURL=validation.js.map
 
 /***/ }),
 
@@ -54690,16 +54794,17 @@ function ownKeys(object, enumerableOnly) {
 
 function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
     if (i % 2) {
-      var source = arguments[i] != null ? arguments[i] : {};
       ownKeys(source, true).forEach(function (key) {
         _defineProperty(target, key, source[key]);
       });
     } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(arguments[i]));
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
     } else {
       ownKeys(source).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(arguments[i], key));
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
       });
     }
   }

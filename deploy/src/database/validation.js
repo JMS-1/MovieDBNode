@@ -48,5 +48,4 @@ function validate(object, schema) {
     }
 }
 exports.validate = validate;
-
 //# sourceMappingURL=validation.js.map

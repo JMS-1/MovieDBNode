@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 const debug = require("debug");
 const mongodb_1 = require("mongodb");
-const validation_1 = require("./validation");
 const config_1 = require("../config");
 const utils_1 = require("../utils");
 exports.databaseError = debug('database');
@@ -72,7 +72,7 @@ class CollectionBase {
                 throw error;
             }
             try {
-                return (validation_1.validate(item, this.schema) || [{ constraint: 'database', message: utils_1.getError(error), property: '*' }]);
+                return (isxs_validation_1.validate(item, this.schema) || [{ constraint: 'database', message: utils_1.getError(error), property: '*' }]);
             }
             catch (e) {
                 exports.databaseError('error during insert validation: %s', utils_1.getError(e));
@@ -95,7 +95,7 @@ class CollectionBase {
                 throw error;
             }
             try {
-                return (validation_1.validate(item, this.schema) || [{ constraint: 'database', message: utils_1.getError(error), property: '*' }]);
+                return (isxs_validation_1.validate(item, this.schema) || [{ constraint: 'database', message: utils_1.getError(error), property: '*' }]);
             }
             catch (e) {
                 exports.databaseError('error during update validation: %s', utils_1.getError(e));

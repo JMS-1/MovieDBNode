@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../database/entities/utils");
-const utils_2 = require("../database/utils");
-const validation_1 = require("../database/validation");
+const isxs_validation_1 = require("@jms-1/isxs-validation");
+const utils_1 = require("../database/utils");
 const MigrateMediaSchema = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/migrate/media.json',
@@ -12,12 +11,12 @@ const MigrateMediaSchema = {
     properties: {
         _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         containerId: {
             message: 'Ablage ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         position: {
@@ -40,7 +39,7 @@ const MigrateMediaSchema = {
     },
     required: ['_id', 'type'],
 };
-exports.mediaCollection = new (class extends utils_2.CollectionBase {
+exports.mediaCollection = new (class extends utils_1.CollectionBase {
     constructor() {
         super(...arguments);
         this.name = 'n/a';
@@ -57,7 +56,7 @@ exports.mediaCollection = new (class extends utils_2.CollectionBase {
         if (sql.Position) {
             media.position = sql.Position;
         }
-        const errors = validation_1.validate(media, this.schema);
+        const errors = isxs_validation_1.validate(media, this.schema);
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }

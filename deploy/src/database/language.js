@@ -3,10 +3,10 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 const language_1 = require("./entities/language");
 const recording_1 = require("./recording");
 const utils_1 = require("./utils");
-const validation_1 = require("./validation");
 __export(require("./entities/language"));
 exports.languageCollection = new (class extends utils_1.CollectionBase {
     constructor() {
@@ -19,7 +19,7 @@ exports.languageCollection = new (class extends utils_1.CollectionBase {
             _id: sql.Id,
             name: sql.Long || '',
         };
-        const errors = validation_1.validate(language, this.schema);
+        const errors = isxs_validation_1.validate(language, this.schema);
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }

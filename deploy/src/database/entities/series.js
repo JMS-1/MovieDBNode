@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("./utils");
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 exports.collectionName = 'series';
 exports.SeriesSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -28,7 +28,7 @@ exports.SeriesSchema = {
         },
         parentId: {
             message: 'Übergeordnete Serie ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
     },

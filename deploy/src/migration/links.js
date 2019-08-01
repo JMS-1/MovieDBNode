@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 const uuid_1 = require("uuid");
-const utils_1 = require("../database/entities/utils");
-const utils_2 = require("../database/utils");
-const validation_1 = require("../database/validation");
+const utils_1 = require("../database/utils");
 const MigrateLinkSchema = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/migrate/link.json',
@@ -13,7 +12,7 @@ const MigrateLinkSchema = {
     properties: {
         _id: {
             message: 'Eindeutige Kennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         description: {
@@ -23,7 +22,7 @@ const MigrateLinkSchema = {
         },
         for: {
             message: 'Aufzeichnungskennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         name: {
@@ -45,7 +44,7 @@ const MigrateLinkSchema = {
     },
     required: ['_id', 'name', 'for', 'url', 'ordinal'],
 };
-exports.linkCollection = new (class extends utils_2.CollectionBase {
+exports.linkCollection = new (class extends utils_1.CollectionBase {
     constructor() {
         super(...arguments);
         this.name = 'n/a';
@@ -62,7 +61,7 @@ exports.linkCollection = new (class extends utils_2.CollectionBase {
         if (sql.Description) {
             link.description = sql.Description;
         }
-        const errors = validation_1.validate(link, this.schema);
+        const errors = isxs_validation_1.validate(link, this.schema);
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }

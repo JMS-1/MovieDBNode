@@ -3,10 +3,10 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 const series_1 = require("./entities/series");
 const recording_1 = require("./recording");
 const utils_1 = require("./utils");
-const validation_1 = require("./validation");
 const utils_2 = require("../utils");
 __export(require("./entities/series"));
 exports.seriesCollection = new (class extends utils_1.CollectionBase {
@@ -31,7 +31,7 @@ exports.seriesCollection = new (class extends utils_1.CollectionBase {
         if (sql.Parent) {
             series.parentId = sql.Parent;
         }
-        const errors = validation_1.validate(series, this.schema);
+        const errors = isxs_validation_1.validate(series, this.schema);
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }

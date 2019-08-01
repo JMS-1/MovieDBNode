@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../database/entities/utils");
-const validation_1 = require("../database/validation");
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 exports.RelationSchema = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/migrate/relation.json',
@@ -11,12 +10,12 @@ exports.RelationSchema = {
     properties: {
         from: {
             message: 'Quellkennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         to: {
             message: 'Zielkennung fehlt oder ist ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
     },
@@ -32,7 +31,7 @@ class RelationCollection {
             from: sql.Recording,
             to: sql[this._other],
         };
-        const errors = validation_1.validate(relation, exports.RelationSchema);
+        const errors = isxs_validation_1.validate(relation, exports.RelationSchema);
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }

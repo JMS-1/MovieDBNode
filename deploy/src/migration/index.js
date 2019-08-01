@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 const fs = require("fs");
 const path_1 = require("path");
 const util_1 = require("util");
@@ -11,16 +12,15 @@ const genre_1 = require("../database/genre");
 const language_1 = require("../database/language");
 const recording_1 = require("../database/recording");
 const series_1 = require("../database/series");
-const validation_1 = require("../database/validation");
 const readFile = util_1.promisify(fs.readFile);
 const genreLinks = new (class extends relation_1.RelationCollection {
 })('Genre');
 const languageLinks = new (class extends relation_1.RelationCollection {
 })('Language');
 async function runMigration() {
-    validation_1.addSchema(links_1.linkCollection.schema);
-    validation_1.addSchema(media_1.mediaCollection.schema);
-    validation_1.addSchema(relation_1.RelationSchema);
+    isxs_validation_1.addSchema(links_1.linkCollection.schema);
+    isxs_validation_1.addSchema(media_1.mediaCollection.schema);
+    isxs_validation_1.addSchema(relation_1.RelationSchema);
     const collections = {
         Containers: container_1.containerCollection,
         Genres: genre_1.genreCollection,
@@ -129,7 +129,7 @@ async function runMigration() {
         if (media.position) {
             recording.containerPosition = media.position;
         }
-        const test = validation_1.validate(recording, recording_1.recordingCollection.schema);
+        const test = isxs_validation_1.validate(recording, recording_1.recordingCollection.schema);
         if (test) {
             throw new Error(JSON.stringify(test));
         }

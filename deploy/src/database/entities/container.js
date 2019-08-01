@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("./utils");
+const isxs_validation_1 = require("@jms-1/isxs-validation");
 exports.collectionName = 'containers';
 exports.ContainerSchema = {
     $schema: 'http://json-schema.org/schema#',
@@ -25,7 +25,7 @@ exports.ContainerSchema = {
         },
         parentId: {
             message: 'Übergeordnete Ablage ungültig',
-            pattern: utils_1.uniqueId,
+            pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         parentLocation: {
