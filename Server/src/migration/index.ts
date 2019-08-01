@@ -1,3 +1,4 @@
+import { addSchema, validate } from '@jms-1/isxs-validation'
 import * as fs from 'fs'
 import { join } from 'path'
 import { promisify } from 'util'
@@ -11,7 +12,6 @@ import { genreCollection } from '../database/genre'
 import { languageCollection } from '../database/language'
 import { recordingCollection } from '../database/recording'
 import { seriesCollection } from '../database/series'
-import { addSchema, validate } from '../database/validation'
 
 const readFile = promisify(fs.readFile)
 

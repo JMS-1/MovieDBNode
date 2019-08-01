@@ -1,6 +1,6 @@
-import { containerType, IContainer, INewContainer } from 'movie-db-api'
+import { ISchema, uniqueId } from '@jms-1/isxs-validation'
 
-import { ISchema, uniqueId } from './utils'
+import { containerType, IContainer, INewContainer } from 'movie-db-api'
 
 export const collectionName = 'containers'
 

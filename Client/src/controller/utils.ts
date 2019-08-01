@@ -1,4 +1,5 @@
-import { IValidationError } from 'movie-db-api'
+import { IValidationError } from '@jms-1/isxs-validation'
+
 import { ITreeItem, ITreeStructure } from 'movie-db-client'
 
 interface IItemInfo<TItem extends ITreeItem> {

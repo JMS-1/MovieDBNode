@@ -1,5 +1,4 @@
-import { uniqueId } from '../database/entities/utils'
-import { validate } from '../database/validation'
+import { uniqueId, validate } from '@jms-1/isxs-validation'
 
 export interface IRelation {
     from: string

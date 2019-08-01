@@ -1,6 +1,6 @@
-import { INewRecording, IRecording, IRecordingLink, mediaType } from 'movie-db-api'
+import { IObjectFieldSchema, ISchema, uniqueId } from '@jms-1/isxs-validation'
 
-import { IObjectFieldSchema, ISchema, uniqueId } from './utils'
+import { INewRecording, IRecording, IRecordingLink, mediaType } from 'movie-db-api'
 
 export const collectionName = 'recordings'
 

@@ -1,4 +1,6 @@
 declare module 'movie-db-api' {
+    import { IValidationError, IValidatableSchema } from '@jms-1/isxs-validation'
+
     // Generische API
 
     type TItem<TNewItem> = TNewItem & { _id: string }
@@ -24,22 +26,6 @@ declare module 'movie-db-api' {
     }
 
     // Schema und Validierung
-
-    interface IValidationScope {
-        readonly items?: any
-        readonly message?: string
-        readonly properties?: any
-    }
-
-    interface IValidatableSchema extends IValidationScope {
-        readonly $id: string
-    }
-
-    interface IValidationError {
-        readonly constraint: string
-        readonly message: string
-        readonly property: string
-    }
 
     interface ISchemaResponse {
         container: IValidatableSchema

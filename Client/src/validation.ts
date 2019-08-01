@@ -1,1 +1,1 @@
-export * from '../../Server/src/database/validation'
+export { validate, addSchema } from '@jms-1/isxs-validation'

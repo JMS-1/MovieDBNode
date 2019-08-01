@@ -1,3 +1,4 @@
+import { IValidationError } from '@jms-1/isxs-validation'
 import { Request, Response, Router } from 'express'
 import { v4 as uuid } from 'uuid'
 
@@ -40,10 +41,10 @@ export function processApiRequest<TResponse, TRequest = {}>(
 }
 
 interface IApiCollection<TDbItem> {
-    deleteOne(id: string): Promise<movieDbApi.IValidationError[]>
+    deleteOne(id: string): Promise<IValidationError[]>
     find(): Promise<TDbItem[]>
-    findOneAndReplace(item: TDbItem): Promise<movieDbApi.IValidationError[]>
-    insertOne(item: TDbItem): Promise<movieDbApi.IValidationError[]>
+    findOneAndReplace(item: TDbItem): Promise<IValidationError[]>
+    insertOne(item: TDbItem): Promise<IValidationError[]>
 }
 
 class Api<TNewItem, TFullItem extends movieDbApi.TItem<TNewItem>, TDbItem> {

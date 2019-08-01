@@ -1,6 +1,6 @@
-import { ILanguage, INewLanguage } from 'movie-db-api'
+import { ISchema } from '@jms-1/isxs-validation'
 
-import { ISchema } from './utils'
+import { ILanguage, INewLanguage } from 'movie-db-api'
 
 export const collectionName = 'languages'
 

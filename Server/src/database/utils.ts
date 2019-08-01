@@ -1,9 +1,6 @@
+import { IValidatableSchema, IValidationError, validate } from '@jms-1/isxs-validation'
 import * as debug from 'debug'
 import { Collection, Db, FilterQuery, MongoClient, MongoClientOptions } from 'mongodb'
-
-import { IValidatableSchema, IValidationError } from 'movie-db-api'
-
-import { validate } from './validation'
 
 import { Config } from '../config'
 import { getError } from '../utils'

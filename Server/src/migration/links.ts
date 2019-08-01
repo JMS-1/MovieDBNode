@@ -1,9 +1,8 @@
+import { ISchema, uniqueId, validate } from '@jms-1/isxs-validation'
 import { v4 as uuid } from 'uuid'
 
-import { ISchema, uniqueId } from '../database/entities/utils'
 import { IDbLink } from '../database/recording'
 import { CollectionBase } from '../database/utils'
-import { validate } from '../database/validation'
 
 export interface IMigrateLink extends IDbLink {
     _id: string

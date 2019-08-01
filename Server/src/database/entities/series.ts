@@ -1,6 +1,6 @@
-import { INewSeries, ISeries } from 'movie-db-api'
+import { ISchema, uniqueId } from '@jms-1/isxs-validation'
 
-import { ISchema, uniqueId } from './utils'
+import { INewSeries, ISeries } from 'movie-db-api'
 
 export const collectionName = 'series'
 

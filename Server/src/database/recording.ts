@@ -1,3 +1,4 @@
+import { IValidationError, validate } from '@jms-1/isxs-validation'
 import * as debug from 'debug'
 import { CollationDocument, Collection, FilterQuery } from 'mongodb'
 
@@ -5,7 +6,6 @@ import * as api from 'movie-db-api'
 
 import { collectionName, IDbRecording, RecordingSchema } from './entities/recording'
 import { CollectionBase, databaseError } from './utils'
-import { validate } from './validation'
 
 import { getError } from '../utils'
 
@@ -165,7 +165,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         }
     }
 
-    async insertOne(recording: IDbRecording): Promise<api.IValidationError[]> {
+    async insertOne(recording: IDbRecording): Promise<IValidationError[]> {
         const errors = await super.insertOne(recording)
 
         if (!errors || errors.length < 1) {
@@ -179,7 +179,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         return errors
     }
 
-    async findOneAndReplace(recording: IDbRecording): Promise<api.IValidationError[]> {
+    async findOneAndReplace(recording: IDbRecording): Promise<IValidationError[]> {
         const existing = await this.findOne(recording._id)
 
         if (existing) {

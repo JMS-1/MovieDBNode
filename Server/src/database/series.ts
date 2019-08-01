@@ -1,11 +1,9 @@
+import { IValidationError, validate } from '@jms-1/isxs-validation'
 import { Collection } from 'mongodb'
-
-import { IValidationError } from 'movie-db-api'
 
 import { collectionName, IDbSeries, SeriesSchema } from './entities/series'
 import { recordingCollection } from './recording'
 import { CollectionBase, databaseError } from './utils'
-import { validate } from './validation'
 
 import { getError } from '../utils'
 

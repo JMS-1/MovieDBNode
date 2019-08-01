@@ -1,7 +1,8 @@
+import { validate } from '@jms-1/isxs-validation'
+
 import { collectionName, IDbLanguage, LanguageSchema } from './entities/language'
 import { recordingCollection } from './recording'
 import { CollectionBase } from './utils'
-import { validate } from './validation'
 
 export * from './entities/language'
 

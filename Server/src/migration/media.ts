@@ -1,8 +1,8 @@
+import { ISchema, uniqueId, validate } from '@jms-1/isxs-validation'
+
 import { mediaType } from 'movie-db-api'
 
-import { ISchema, uniqueId } from '../database/entities/utils'
 import { CollectionBase } from '../database/utils'
-import { validate } from '../database/validation'
 
 export interface IMigrateMedia {
     _id: string

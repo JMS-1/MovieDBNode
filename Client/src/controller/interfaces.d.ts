@@ -1,9 +1,8 @@
 declare module 'movie-db-client' {
     import { Action } from 'redux'
+    import { IValidationError, IValidatableSchema } from '@jms-1/isxs-validation'
     import { RouterState } from 'connected-react-router'
     import { SemanticICONS, DropdownItemProps } from 'semantic-ui-react'
-
-    import { IValidationError, IValidatableSchema } from 'movie-db-api'
 
     interface IClientState {
         readonly application: IApplicationState
