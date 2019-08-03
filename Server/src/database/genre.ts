@@ -1,12 +1,12 @@
-import { validate } from '@jms-1/isxs-validation'
+import { IMuiString, validate } from '@jms-1/isxs-validation'
 
 import { collectionName, GenreSchema, IDbGenre } from './entities/genre'
 import { recordingCollection } from './recording'
-import { CollectionBase } from './utils'
+import { MovieDbCollection } from './utils'
 
 export * from './entities/genre'
 
-export const genreCollection = new (class extends CollectionBase<IDbGenre> {
+export const genreCollection = new (class extends MovieDbCollection<IDbGenre> {
     readonly name = collectionName
 
     readonly schema = GenreSchema
@@ -26,7 +26,7 @@ export const genreCollection = new (class extends CollectionBase<IDbGenre> {
         this.cacheMigrated(genre)
     }
 
-    protected async canDelete(id: string): Promise<string> {
+    protected async canDelete(id: string): Promise<IMuiString> {
         return recordingCollection.inUse('genres', id, 'Kategorie')
     }
 })()

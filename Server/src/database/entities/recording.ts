@@ -10,22 +10,22 @@ export interface IDbRecording extends IRecording {}
 
 const LinkSubSchema: IObjectFieldSchema<IRecordingLink> = {
     type: 'object',
-    message: 'Verweis unvollständig',
+    message: { de: 'Verweis unvollständig' },
     properties: {
         description: {
             maxLength: 2000,
-            message: 'Beschreibung ist zu lang',
+            message: { de: 'Beschreibung ist zu lang' },
             type: 'string',
         },
         name: {
             maxLength: 100,
-            message: 'Name nicht angegeben oder zu lang',
+            message: { de: 'Name nicht angegeben oder zu lang' },
             minLength: 1,
             type: 'string',
         },
         url: {
             maxLength: 2000,
-            message: 'Verweis nicht angegeben oder zu lang',
+            message: { de: 'Verweis nicht angegeben oder zu lang' },
             minLength: 1,
             type: 'string',
         },
@@ -38,7 +38,7 @@ export const RecordingSchema: ISchema<IRecording> = {
     $id: 'http://psimarron.net/schemas/movie-db/recording.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Aufzeichnung unvollständig',
+    message: { de: 'Aufzeichnung unvollständig' },
     properties: {
         _id: {
             type: 'string',
@@ -48,7 +48,7 @@ export const RecordingSchema: ISchema<IRecording> = {
         },
         description: {
             maxLength: 2000,
-            message: 'Beschreibung ist zu lang',
+            message: { de: 'Beschreibung ist zu lang' },
             type: 'string',
         },
         fullName: {
@@ -56,57 +56,57 @@ export const RecordingSchema: ISchema<IRecording> = {
         },
         genres: {
             items: {
-                message: 'Genre ist ungültig',
+                message: { de: 'Genre ist ungültig' },
                 pattern: uniqueId,
                 type: 'string',
             },
-            message: 'Genres sind ungültig',
+            message: { de: 'Genres sind ungültig' },
             type: 'array',
             uniqueItems: true,
         },
         languages: {
             items: {
-                message: 'Sprache ist ungültig',
+                message: { de: 'Sprache ist ungültig' },
                 pattern: uniqueId,
                 type: 'string',
             },
-            message: 'Sprachen sind ungültig',
+            message: { de: 'Sprachen sind ungültig' },
             type: 'array',
             uniqueItems: true,
         },
         links: {
             items: LinkSubSchema,
-            message: 'Verweise sind ungültig',
+            message: { de: 'Verweise sind ungültig' },
             type: 'array',
         },
         name: {
             maxLength: 200,
-            message: 'Name nicht angegeben oder zu lang',
+            message: { de: 'Name nicht angegeben oder zu lang' },
             minLength: 1,
             type: 'string',
         },
         rentTo: {
             maxLength: 200,
-            message: 'Verleiher zu lang',
+            message: { de: 'Verleiher zu lang' },
             type: 'string',
         },
         series: {
-            message: 'Serie ist ungültig',
+            message: { de: 'Serie ist ungültig' },
             pattern: uniqueId,
             type: 'string',
         },
         containerId: {
-            message: 'Ablage ist ungültig',
+            message: { de: 'Ablage ist ungültig' },
             pattern: uniqueId,
             type: 'string',
         },
         containerPosition: {
             maxLength: 100,
-            message: 'Standort zu lang',
+            message: { de: 'Standort zu lang' },
             type: 'string',
         },
         containerType: {
-            message: 'Medienart fehlt oder ist unzulässig',
+            message: { de: 'Medienart fehlt oder ist unzulässig' },
             type: 'integer',
             enum: [
                 mediaType.BluRay,

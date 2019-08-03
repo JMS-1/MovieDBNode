@@ -2,7 +2,7 @@ import { ISchema, uniqueId, validate } from '@jms-1/isxs-validation'
 import { v4 as uuid } from 'uuid'
 
 import { IDbLink } from '../database/recording'
-import { CollectionBase } from '../database/utils'
+import { MovieDbCollection } from '../database/utils'
 
 export interface IMigrateLink extends IDbLink {
     _id: string
@@ -15,44 +15,44 @@ const MigrateLinkSchema: ISchema<IMigrateLink> = {
     $id: 'http://psimarron.net/schemas/movie-db/migrate/link.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Verweis unvollständig',
+    message: { de: 'Verweis unvollständig' },
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
+            message: { de: 'Eindeutige Kennung fehlt oder ist ungültig' },
             pattern: uniqueId,
             type: 'string',
         },
         description: {
             maxLength: 2000,
-            message: 'Beschreibung ist zu lang',
+            message: { de: 'Beschreibung ist zu lang' },
             type: 'string',
         },
         for: {
-            message: 'Aufzeichnungskennung fehlt oder ist ungültig',
+            message: { de: 'Aufzeichnungskennung fehlt oder ist ungültig' },
             pattern: uniqueId,
             type: 'string',
         },
         name: {
             maxLength: 100,
-            message: 'Name nicht angegeben oder zu lang',
+            message: { de: 'Name nicht angegeben oder zu lang' },
             minLength: 1,
             type: 'string',
         },
         ordinal: {
-            message: 'Anordnung fehlt oder ist ungültig',
+            message: { de: 'Anordnung fehlt oder ist ungültig' },
             minimum: 0,
             type: 'integer',
         },
         url: {
             maxLength: 2000,
-            message: 'Verweis ist zu lang',
+            message: { de: 'Verweis ist zu lang' },
             type: 'string',
         },
     },
     required: ['_id', 'name', 'for', 'url', 'ordinal'],
 }
 
-export const linkCollection = new (class extends CollectionBase<IMigrateLink> {
+export const linkCollection = new (class extends MovieDbCollection<IMigrateLink> {
     readonly name = 'n/a'
 
     readonly schema = MigrateLinkSchema

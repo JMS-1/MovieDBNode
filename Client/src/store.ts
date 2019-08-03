@@ -22,7 +22,7 @@ export function initializeStore(): Store<IClientState> {
             series: controller.SeriesReducer,
             recording: controller.RecordingReducer,
         }),
-        applyMiddleware(routerMiddleware(history))
+        applyMiddleware(routerMiddleware(history)),
     )
 
     return store
@@ -50,9 +50,9 @@ export class ServerApi {
                         store.dispatch(process(xhr.response))
                     } else {
                         store.dispatch(
-                            controller.ApplicationActions.endWebRequest(
-                                `${webMethod}: ${xhr.statusText || `HTTP ${xhr.status}`}`
-                            )
+                            controller.ApplicationActions.endWebRequest({
+                                en: `${webMethod}: ${xhr.statusText || `HTTP ${xhr.status}`}`,
+                            }),
                         )
                     }
                 }
@@ -67,7 +67,9 @@ export class ServerApi {
 
                 xhr.send(data && JSON.stringify(data))
             } catch (error) {
-                store.dispatch(controller.ApplicationActions.endWebRequest(`${webMethod}: ${getMessage(error)}`))
+                store.dispatch(
+                    controller.ApplicationActions.endWebRequest({ en: `${webMethod}: ${getMessage(error)}` }),
+                )
             }
         }, 0)
     }

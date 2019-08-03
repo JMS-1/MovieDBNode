@@ -11,14 +11,14 @@ export const GenreSchema: ISchema<IGenre> = {
     $id: 'http://psimarron.net/schemas/movie-db/genre.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Genre unvollständig',
+    message: { de: 'Genre unvollständig' },
     properties: {
         _id: {
             type: 'string',
         },
         name: {
             maxLength: 100,
-            message: 'Name nicht angegeben oder zu lang',
+            message: { de: 'Name nicht angegeben oder zu lang' },
             minLength: 1,
             type: 'string',
         },

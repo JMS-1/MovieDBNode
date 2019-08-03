@@ -1,15 +1,15 @@
-import { IValidationError, validate } from '@jms-1/isxs-validation'
+import { IMuiString, IValidationError, validate } from '@jms-1/isxs-validation'
 import { Collection } from 'mongodb'
 
 import { collectionName, IDbSeries, SeriesSchema } from './entities/series'
 import { recordingCollection } from './recording'
-import { CollectionBase, databaseError } from './utils'
+import { databaseError, MovieDbCollection } from './utils'
 
 import { getError } from '../utils'
 
 export * from './entities/series'
 
-export const seriesCollection = new (class extends CollectionBase<IDbSeries> {
+export const seriesCollection = new (class extends MovieDbCollection<IDbSeries> {
     readonly name = collectionName
 
     readonly schema = SeriesSchema
@@ -43,7 +43,7 @@ export const seriesCollection = new (class extends CollectionBase<IDbSeries> {
         this.cacheMigrated(series)
     }
 
-    protected async canDelete(id: string): Promise<string> {
+    protected async canDelete(id: string): Promise<IMuiString> {
         return recordingCollection.inUse('series', id, 'Serie')
     }
 

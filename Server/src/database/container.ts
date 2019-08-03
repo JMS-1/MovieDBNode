@@ -1,12 +1,12 @@
-import { validate } from '@jms-1/isxs-validation'
+import { IMuiString, validate } from '@jms-1/isxs-validation'
 
 import { collectionName, ContainerSchema, IDbContainer } from './entities/container'
 import { recordingCollection } from './recording'
-import { CollectionBase } from './utils'
+import { MovieDbCollection } from './utils'
 
 export * from './entities/container'
 
-export const containerCollection = new (class extends CollectionBase<IDbContainer> {
+export const containerCollection = new (class extends MovieDbCollection<IDbContainer> {
     readonly name = collectionName
 
     readonly schema = ContainerSchema
@@ -39,7 +39,7 @@ export const containerCollection = new (class extends CollectionBase<IDbContaine
         this.cacheMigrated(container)
     }
 
-    protected async canDelete(id: string): Promise<string> {
+    protected async canDelete(id: string): Promise<IMuiString> {
         return recordingCollection.inUse('containerId', id, 'Ablage')
     }
 

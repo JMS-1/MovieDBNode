@@ -1,5 +1,3 @@
-import { addSchema, convertToMongo } from '@jms-1/isxs-validation'
-
 import { containerCollection } from './container'
 import { genreCollection } from './genre'
 import { languageCollection } from './language'
@@ -18,17 +16,11 @@ export async function initializeDatabase(): Promise<void> {
 
     const db = await dbConnect()
 
-    for (let { schema, name, initialize } of collections) {
-        // Interne Prüfumgebung initialisieren.
-        addSchema(schema)
-
+    for (let { name, initialize } of collections) {
         // Eventuell die Tabelle erstmalig anlegen.
         const collection = await db.createCollection(name)
 
         // Initialisierung durchführen.
-        await initialize(collection)
-
-        // Immer die Prüfregeln in der Datenbank auf den neuesten Stand bringen.
-        await db.command({ collMod: name, validator: { $jsonSchema: convertToMongo(schema) } })
+        await initialize(collection, db)
     }
 }

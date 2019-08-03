@@ -1,3 +1,4 @@
+import { IMuiString } from '@jms-1/isxs-validation'
 import * as React from 'react'
 import { Route } from 'react-router'
 import { Dimmer, Dropdown, Header, Loader, Menu, Message } from 'semantic-ui-react'
@@ -24,7 +25,7 @@ export interface IRootProps {
     createRoute: string
     createSeries: string
     defaultTheme: string
-    errors: string[]
+    errors: IMuiString[]
     genreRoute: string
     alternateTheme2: string
     languageRoute: string
@@ -66,7 +67,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
                         <Header>{this.props.title}</Header>
                         <Message.List>
                             {errors.map((e, i) => (
-                                <Message.Item key={i}>{e}</Message.Item>
+                                <Message.Item key={i}>{e.de || e.en || 'failed'}</Message.Item>
                             ))}
                         </Message.List>
                     </Message>

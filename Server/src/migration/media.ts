@@ -2,7 +2,7 @@ import { ISchema, uniqueId, validate } from '@jms-1/isxs-validation'
 
 import { mediaType } from 'movie-db-api'
 
-import { CollectionBase } from '../database/utils'
+import { MovieDbCollection } from '../database/utils'
 
 export interface IMigrateMedia {
     _id: string
@@ -16,25 +16,25 @@ const MigrateMediaSchema: ISchema<IMigrateMedia> = {
     $id: 'http://psimarron.net/schemas/movie-db/migrate/media.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Medium unvollständig',
+    message: { de: 'Medium unvollständig' },
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
+            message: { de: 'Eindeutige Kennung fehlt oder ist ungültig' },
             pattern: uniqueId,
             type: 'string',
         },
         containerId: {
-            message: 'Ablage ist ungültig',
+            message: { de: 'Ablage ist ungültig' },
             pattern: uniqueId,
             type: 'string',
         },
         position: {
             maxLength: 100,
-            message: 'Standort zu lang',
+            message: { de: 'Standort zu lang' },
             type: 'string',
         },
         type: {
-            message: 'Medienart fehlt oder ist unzulässig',
+            message: { de: 'Medienart fehlt oder ist unzulässig' },
             type: 'integer',
             enum: [
                 mediaType.BluRay,
@@ -49,7 +49,7 @@ const MigrateMediaSchema: ISchema<IMigrateMedia> = {
     required: ['_id', 'type'],
 }
 
-export const mediaCollection = new (class extends CollectionBase<IMigrateMedia> {
+export const mediaCollection = new (class extends MovieDbCollection<IMigrateMedia> {
     readonly name = 'n/a'
 
     readonly schema = MigrateMediaSchema

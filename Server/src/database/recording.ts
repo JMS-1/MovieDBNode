@@ -1,11 +1,11 @@
-import { IValidationError, validate } from '@jms-1/isxs-validation'
+import { IMuiString, IValidationError, validate } from '@jms-1/isxs-validation'
 import * as debug from 'debug'
 import { CollationDocument, Collection, FilterQuery } from 'mongodb'
 
 import * as api from 'movie-db-api'
 
 import { collectionName, IDbRecording, RecordingSchema } from './entities/recording'
-import { CollectionBase, databaseError } from './utils'
+import { databaseError, MovieDbCollection } from './utils'
 
 import { getError } from '../utils'
 
@@ -32,7 +32,7 @@ interface IAggregateFullName {
 const escapeReg = /[.*+?^${}()|[\]\\]/g
 const collation: CollationDocument = { locale: 'en', strength: 2 }
 
-export const recordingCollection = new (class extends CollectionBase<IDbRecording> {
+export const recordingCollection = new (class extends MovieDbCollection<IDbRecording> {
     readonly name = collectionName
 
     readonly schema = RecordingSchema
@@ -151,7 +151,7 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
         }
     }
 
-    async inUse<TProp extends keyof IDbRecording>(property: TProp, id: string, scope: string): Promise<string> {
+    async inUse<TProp extends keyof IDbRecording>(property: TProp, id: string, scope: string): Promise<IMuiString> {
         const me = await this.getCollection()
         const count = await me.countDocuments({ [property]: typeof id === 'string' && id })
 
@@ -159,9 +159,9 @@ export const recordingCollection = new (class extends CollectionBase<IDbRecordin
             case 0:
                 return undefined
             case 1:
-                return `${scope} wird noch für eine Aufzeichnung verwendet`
+                return { de: `${scope} wird noch für eine Aufzeichnung verwendet` }
             default:
-                return `${scope} wird noch für ${count} Aufzeichnungen verwendet`
+                return { de: `${scope} wird noch für ${count} Aufzeichnungen verwendet` }
         }
     }
 
