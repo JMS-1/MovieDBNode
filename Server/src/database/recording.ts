@@ -1,3 +1,4 @@
+import { getMessage } from '@jms-1/isxs-tools'
 import { IMuiString, IValidationError, validate } from '@jms-1/isxs-validation'
 import * as debug from 'debug'
 import { CollationDocument, Collection, FilterQuery } from 'mongodb'
@@ -6,8 +7,6 @@ import * as api from 'movie-db-api'
 
 import { collectionName, IDbRecording, RecordingSchema } from './entities/recording'
 import { databaseError, MovieDbCollection } from './utils'
-
-import { getError } from '../utils'
 
 export * from './entities/recording'
 
@@ -172,7 +171,7 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
             try {
                 await this.refreshFullNames({ _id: recording._id })
             } catch (error) {
-                databaseError('failed to refresh recording full name: %s', getError(error))
+                databaseError('failed to refresh recording full name: %s', getMessage(error))
             }
         }
 
@@ -192,7 +191,7 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
             try {
                 await this.refreshFullNames({ _id: recording._id })
             } catch (error) {
-                databaseError('failed to refresh recording full name: %s', getError(error))
+                databaseError('failed to refresh recording full name: %s', getMessage(error))
             }
         }
 

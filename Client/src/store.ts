@@ -1,3 +1,4 @@
+import { getMessage } from '@jms-1/isxs-tools'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { createHashHistory } from 'history'
 import { Action, applyMiddleware, combineReducers, createStore, Store } from 'redux'
@@ -26,10 +27,6 @@ export function initializeStore(): Store<IClientState> {
     )
 
     return store
-}
-
-function getMessage(error: any): string {
-    return typeof error === 'string' ? error : error.message || 'failed'
 }
 
 export function delayedDispatch(action: Action): void {

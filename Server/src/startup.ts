@@ -1,3 +1,4 @@
+import { getMessage } from '@jms-1/isxs-tools'
 import { json } from 'body-parser'
 import * as debug from 'debug'
 import * as express from 'express'
@@ -6,7 +7,6 @@ import { join } from 'path'
 import { installApi } from './api'
 import { Config } from './config'
 import { initializeDatabase } from './database'
-import { getError } from './utils'
 
 async function startup(): Promise<void> {
     await initializeDatabase()
@@ -24,7 +24,7 @@ async function startup(): Promise<void> {
 }
 
 function startupError(error: any): void {
-    debug('startup')('%s', getError(error))
+    debug('startup')('%s', getMessage(error))
 }
 
 try {

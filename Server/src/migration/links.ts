@@ -2,7 +2,6 @@ import { ISchema, uniqueId, validate } from '@jms-1/isxs-validation'
 import { v4 as uuid } from 'uuid'
 
 import { IDbLink } from '../database/recording'
-import { MovieDbCollection } from '../database/utils'
 
 export interface IMigrateLink extends IDbLink {
     _id: string
@@ -10,7 +9,7 @@ export interface IMigrateLink extends IDbLink {
     ordinal: number
 }
 
-const MigrateLinkSchema: ISchema<IMigrateLink> = {
+export const MigrateLinkSchema: ISchema<IMigrateLink> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/migrate/link.json',
     additionalProperties: false,
@@ -52,10 +51,16 @@ const MigrateLinkSchema: ISchema<IMigrateLink> = {
     required: ['_id', 'name', 'for', 'url', 'ordinal'],
 }
 
-export const linkCollection = new (class extends MovieDbCollection<IMigrateLink> {
-    readonly name = 'n/a'
+export const linkCollection = new (class {
+    readonly migrationMap: { [id: string]: IMigrateLink }
 
-    readonly schema = MigrateLinkSchema
+    protected cacheMigrated(item: IMigrateLink): void {
+        if (this.migrationMap[item._id]) {
+            throw new Error(`duplicated identifier '${item._id}`)
+        }
+
+        this.migrationMap[item._id] = item
+    }
 
     fromSql(sql: any): void {
         const link: IMigrateLink = {
@@ -70,7 +75,7 @@ export const linkCollection = new (class extends MovieDbCollection<IMigrateLink>
             link.description = sql.Description
         }
 
-        const errors = validate(link, this.schema)
+        const errors = validate(link, MigrateLinkSchema)
 
         if (errors) {
             throw new Error(JSON.stringify(errors))

@@ -3,8 +3,8 @@ import * as fs from 'fs'
 import { join } from 'path'
 import { promisify } from 'util'
 
-import { linkCollection } from './links'
-import { mediaCollection } from './media'
+import { linkCollection, MigrateLinkSchema } from './links'
+import { mediaCollection, MigrateMediaSchema } from './media'
 import { RelationCollection, RelationSchema } from './relation'
 
 import { containerCollection } from '../database/container'
@@ -20,8 +20,8 @@ const genreLinks = new (class extends RelationCollection {})('Genre')
 const languageLinks = new (class extends RelationCollection {})('Language')
 
 export async function runMigration(): Promise<void> {
-    addSchema(linkCollection.schema)
-    addSchema(mediaCollection.schema)
+    addSchema(MigrateLinkSchema)
+    addSchema(MigrateMediaSchema)
     addSchema(RelationSchema)
 
     const collections = {

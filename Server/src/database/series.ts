@@ -1,11 +1,10 @@
+import { getMessage } from '@jms-1/isxs-tools'
 import { IMuiString, IValidationError, validate } from '@jms-1/isxs-validation'
 import { Collection } from 'mongodb'
 
 import { collectionName, IDbSeries, SeriesSchema } from './entities/series'
 import { recordingCollection } from './recording'
 import { databaseError, MovieDbCollection } from './utils'
-
-import { getError } from '../utils'
 
 export * from './entities/series'
 
@@ -98,7 +97,7 @@ export const seriesCollection = new (class extends MovieDbCollection<IDbSeries> 
             try {
                 await this.refreshFullNames(series)
             } catch (error) {
-                databaseError('failed to refresh series full name: %s', getError(error))
+                databaseError('failed to refresh series full name: %s', getMessage(error))
             }
         }
 
@@ -112,7 +111,7 @@ export const seriesCollection = new (class extends MovieDbCollection<IDbSeries> 
             try {
                 await recordingCollection.refreshFullNames({ series: { $in: await this.refreshFullNames(series) } })
             } catch (error) {
-                databaseError('failed to refresh series full name: %s', getError(error))
+                databaseError('failed to refresh series full name: %s', getMessage(error))
             }
         }
 

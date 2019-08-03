@@ -2,8 +2,6 @@ import { ISchema, uniqueId, validate } from '@jms-1/isxs-validation'
 
 import { mediaType } from 'movie-db-api'
 
-import { MovieDbCollection } from '../database/utils'
-
 export interface IMigrateMedia {
     _id: string
     containerId?: string
@@ -11,7 +9,7 @@ export interface IMigrateMedia {
     type: mediaType
 }
 
-const MigrateMediaSchema: ISchema<IMigrateMedia> = {
+export const MigrateMediaSchema: ISchema<IMigrateMedia> = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/migrate/media.json',
     additionalProperties: false,
@@ -49,10 +47,16 @@ const MigrateMediaSchema: ISchema<IMigrateMedia> = {
     required: ['_id', 'type'],
 }
 
-export const mediaCollection = new (class extends MovieDbCollection<IMigrateMedia> {
-    readonly name = 'n/a'
+export const mediaCollection = new (class {
+    readonly migrationMap: { [id: string]: IMigrateMedia }
 
-    readonly schema = MigrateMediaSchema
+    protected cacheMigrated(item: IMigrateMedia): void {
+        if (this.migrationMap[item._id]) {
+            throw new Error(`duplicated identifier '${item._id}`)
+        }
+
+        this.migrationMap[item._id] = item
+    }
 
     fromSql(sql: any): void {
         const media: IMigrateMedia = {
@@ -68,7 +72,7 @@ export const mediaCollection = new (class extends MovieDbCollection<IMigrateMedi
             media.position = sql.Position
         }
 
-        const errors = validate(media, this.schema)
+        const errors = validate(media, MigrateMediaSchema)
 
         if (errors) {
             throw new Error(JSON.stringify(errors))

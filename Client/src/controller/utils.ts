@@ -78,5 +78,9 @@ export function createChildMap<TItem extends ITreeItem>(items: TItem[]): ITreeSt
 export function getErrors(errors: IValidationError[], expr: RegExp): string[] {
     const list = errors && errors.filter(e => e.property.match(expr))
 
-    return list && list.length > 0 && list.map(e => `${e.message} (${e.constraint})`)
+    return (
+        list &&
+        list.length > 0 &&
+        list.map(e => `${(e.message && (e.message.de || e.message.en)) || 'Fehler'} (${e.constraint})`)
+    )
 }

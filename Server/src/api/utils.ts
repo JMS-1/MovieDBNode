@@ -1,10 +1,11 @@
+import { getMessage } from '@jms-1/isxs-tools'
 import { IValidationError } from '@jms-1/isxs-validation'
 import { Request, Response, Router } from 'express'
 import { v4 as uuid } from 'uuid'
 
 import * as movieDbApi from 'movie-db-api'
 
-import { apiError, getError } from '../utils'
+import { apiError } from '../utils'
 
 export function processApiRequest<TResponse, TRequest = {}>(
     processor: (body?: TRequest) => TResponse | Promise<TResponse>,
@@ -12,7 +13,7 @@ export function processApiRequest<TResponse, TRequest = {}>(
     response: Response,
 ): void {
     function onError(error: any): void {
-        const message = getError(error)
+        const message = getMessage(error)
 
         try {
             response.write(message)

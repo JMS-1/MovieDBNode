@@ -16,11 +16,11 @@ export async function initializeDatabase(): Promise<void> {
 
     const db = await dbConnect()
 
-    for (let { name, initialize } of collections) {
+    for (let collection of collections) {
         // Eventuell die Tabelle erstmalig anlegen.
-        const collection = await db.createCollection(name)
+        const dbCollection = await db.createCollection(collection.name)
 
         // Initialisierung durchführen.
-        await initialize(collection, db)
+        await collection.initialize(dbCollection, db)
     }
 }
