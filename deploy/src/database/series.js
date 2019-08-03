@@ -3,13 +3,13 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_tools_1 = require("@jms-1/isxs-tools");
 const isxs_validation_1 = require("@jms-1/isxs-validation");
 const series_1 = require("./entities/series");
 const recording_1 = require("./recording");
 const utils_1 = require("./utils");
-const utils_2 = require("../utils");
 __export(require("./entities/series"));
-exports.seriesCollection = new (class extends utils_1.CollectionBase {
+exports.seriesCollection = new (class extends utils_1.MovieDbCollection {
     constructor() {
         super(...arguments);
         this.name = series_1.collectionName;
@@ -75,7 +75,7 @@ exports.seriesCollection = new (class extends utils_1.CollectionBase {
                 await this.refreshFullNames(series);
             }
             catch (error) {
-                utils_1.databaseError('failed to refresh series full name: %s', utils_2.getError(error));
+                utils_1.databaseError('failed to refresh series full name: %s', isxs_tools_1.getMessage(error));
             }
         }
         return errors;
@@ -87,7 +87,7 @@ exports.seriesCollection = new (class extends utils_1.CollectionBase {
                 await recording_1.recordingCollection.refreshFullNames({ series: { $in: await this.refreshFullNames(series) } });
             }
             catch (error) {
-                utils_1.databaseError('failed to refresh series full name: %s', utils_2.getError(error));
+                utils_1.databaseError('failed to refresh series full name: %s', isxs_tools_1.getMessage(error));
             }
         }
         return errors;

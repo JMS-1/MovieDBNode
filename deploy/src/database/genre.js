@@ -8,7 +8,7 @@ const genre_1 = require("./entities/genre");
 const recording_1 = require("./recording");
 const utils_1 = require("./utils");
 __export(require("./entities/genre"));
-exports.genreCollection = new (class extends utils_1.CollectionBase {
+exports.genreCollection = new (class extends utils_1.MovieDbCollection {
     constructor() {
         super(...arguments);
         this.name = genre_1.collectionName;

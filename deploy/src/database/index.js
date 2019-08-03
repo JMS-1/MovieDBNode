@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const isxs_validation_1 = require("@jms-1/isxs-validation");
 const container_1 = require("./container");
 const genre_1 = require("./genre");
 const language_1 = require("./language");
@@ -16,11 +15,9 @@ async function initializeDatabase() {
         series_1.seriesCollection,
     ];
     const db = await utils_1.dbConnect();
-    for (let { schema, name, initialize } of collections) {
-        isxs_validation_1.addSchema(schema);
-        const collection = await db.createCollection(name);
-        await initialize(collection);
-        await db.command({ collMod: name, validator: { $jsonSchema: isxs_validation_1.convertToMongo(schema) } });
+    for (let collection of collections) {
+        const dbCollection = await db.createCollection(collection.name);
+        await collection.initialize(dbCollection, db);
     }
 }
 exports.initializeDatabase = initializeDatabase;

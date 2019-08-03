@@ -7,34 +7,34 @@ exports.ContainerSchema = {
     $id: 'http://psimarron.net/schemas/movie-db/container.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Ablage unvollständig',
+    message: { de: 'Ablage unvollständig' },
     properties: {
         _id: {
             type: 'string',
         },
         description: {
             maxLength: 2000,
-            message: 'Beschreibung ist zu lang',
+            message: { de: 'Beschreibung ist zu lang' },
             type: 'string',
         },
         name: {
             maxLength: 50,
-            message: 'Name nicht angegeben oder zu lang',
+            message: { de: 'Name nicht angegeben oder zu lang' },
             minLength: 1,
             type: 'string',
         },
         parentId: {
-            message: 'Übergeordnete Ablage ungültig',
+            message: { de: 'Übergeordnete Ablage ungültig' },
             pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         parentLocation: {
             maxLength: 100,
-            message: 'Ablagebezeichnung zu lang',
+            message: { de: 'Ablagebezeichnung zu lang' },
             type: 'string',
         },
         type: {
-            message: 'Ablageart fehlt oder ist unzulässig',
+            message: { de: 'Ablageart fehlt oder ist unzulässig' },
             type: 'integer',
             enum: [
                 2,

@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_tools_1 = require("@jms-1/isxs-tools");
 const express_1 = require("express");
 const uuid_1 = require("uuid");
 const utils_1 = require("../utils");
 function processApiRequest(processor, request, response) {
     function onError(error) {
-        const message = utils_1.getError(error);
+        const message = isxs_tools_1.getMessage(error);
         try {
             response.write(message);
             response.sendStatus(400);

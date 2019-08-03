@@ -8,7 +8,7 @@ const language_1 = require("./entities/language");
 const recording_1 = require("./recording");
 const utils_1 = require("./utils");
 __export(require("./entities/language"));
-exports.languageCollection = new (class extends utils_1.CollectionBase {
+exports.languageCollection = new (class extends utils_1.MovieDbCollection {
     constructor() {
         super(...arguments);
         this.name = language_1.collectionName;

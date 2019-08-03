@@ -6,15 +6,15 @@ exports.RelationSchema = {
     $id: 'http://psimarron.net/schemas/movie-db/migrate/relation.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Verweis unvollständig',
+    message: { de: 'Verweis unvollständig' },
     properties: {
         from: {
-            message: 'Quellkennung fehlt oder ist ungültig',
+            message: { de: 'Quellkennung fehlt oder ist ungültig' },
             pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         to: {
-            message: 'Zielkennung fehlt oder ist ungültig',
+            message: { de: 'Zielkennung fehlt oder ist ungültig' },
             pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },

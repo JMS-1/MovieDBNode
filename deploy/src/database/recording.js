@@ -3,17 +3,17 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+const isxs_tools_1 = require("@jms-1/isxs-tools");
 const isxs_validation_1 = require("@jms-1/isxs-validation");
 const debug = require("debug");
 const recording_1 = require("./entities/recording");
 const utils_1 = require("./utils");
-const utils_2 = require("../utils");
 __export(require("./entities/recording"));
 const databaseTrace = debug('database:trace');
 const dateReg = /^CAST\(N'([^\.]+)(\.\d+)?' AS DateTime\)$/;
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
 const collation = { locale: 'en', strength: 2 };
-exports.recordingCollection = new (class extends utils_1.CollectionBase {
+exports.recordingCollection = new (class extends utils_1.MovieDbCollection {
     constructor() {
         super(...arguments);
         this.name = recording_1.collectionName;
@@ -111,9 +111,9 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
             case 0:
                 return undefined;
             case 1:
-                return `${scope} wird noch für eine Aufzeichnung verwendet`;
+                return { de: `${scope} wird noch für eine Aufzeichnung verwendet` };
             default:
-                return `${scope} wird noch für ${count} Aufzeichnungen verwendet`;
+                return { de: `${scope} wird noch für ${count} Aufzeichnungen verwendet` };
         }
     }
     async insertOne(recording) {
@@ -123,7 +123,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
                 await this.refreshFullNames({ _id: recording._id });
             }
             catch (error) {
-                utils_1.databaseError('failed to refresh recording full name: %s', utils_2.getError(error));
+                utils_1.databaseError('failed to refresh recording full name: %s', isxs_tools_1.getMessage(error));
             }
         }
         return errors;
@@ -139,7 +139,7 @@ exports.recordingCollection = new (class extends utils_1.CollectionBase {
                 await this.refreshFullNames({ _id: recording._id });
             }
             catch (error) {
-                utils_1.databaseError('failed to refresh recording full name: %s', utils_2.getError(error));
+                utils_1.databaseError('failed to refresh recording full name: %s', isxs_tools_1.getMessage(error));
             }
         }
         return errors;

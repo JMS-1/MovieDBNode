@@ -6,14 +6,14 @@ exports.LanguageSchema = {
     $id: 'http://psimarron.net/schemas/movie-db/language.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Sprache unvollständig',
+    message: { de: 'Sprache unvollständig' },
     properties: {
         _id: {
             type: 'string',
         },
         name: {
             maxLength: 100,
-            message: 'Name nicht angegeben oder zu lang',
+            message: { de: 'Name nicht angegeben oder zu lang' },
             minLength: 1,
             type: 'string',
         },

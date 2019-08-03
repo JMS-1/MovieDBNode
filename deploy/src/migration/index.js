@@ -18,8 +18,8 @@ const genreLinks = new (class extends relation_1.RelationCollection {
 const languageLinks = new (class extends relation_1.RelationCollection {
 })('Language');
 async function runMigration() {
-    isxs_validation_1.addSchema(links_1.linkCollection.schema);
-    isxs_validation_1.addSchema(media_1.mediaCollection.schema);
+    isxs_validation_1.addSchema(links_1.MigrateLinkSchema);
+    isxs_validation_1.addSchema(media_1.MigrateMediaSchema);
     isxs_validation_1.addSchema(relation_1.RelationSchema);
     const collections = {
         Containers: container_1.containerCollection,

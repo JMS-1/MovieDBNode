@@ -8,7 +8,7 @@ const container_1 = require("./entities/container");
 const recording_1 = require("./recording");
 const utils_1 = require("./utils");
 __export(require("./entities/container"));
-exports.containerCollection = new (class extends utils_1.CollectionBase {
+exports.containerCollection = new (class extends utils_1.MovieDbCollection {
     constructor() {
         super(...arguments);
         this.name = container_1.collectionName;

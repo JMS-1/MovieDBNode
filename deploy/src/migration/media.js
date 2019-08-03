@@ -1,31 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const isxs_validation_1 = require("@jms-1/isxs-validation");
-const utils_1 = require("../database/utils");
-const MigrateMediaSchema = {
+exports.MigrateMediaSchema = {
     $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/migrate/media.json',
     additionalProperties: false,
     type: 'object',
-    message: 'Medium unvollständig',
+    message: { de: 'Medium unvollständig' },
     properties: {
         _id: {
-            message: 'Eindeutige Kennung fehlt oder ist ungültig',
+            message: { de: 'Eindeutige Kennung fehlt oder ist ungültig' },
             pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         containerId: {
-            message: 'Ablage ist ungültig',
+            message: { de: 'Ablage ist ungültig' },
             pattern: isxs_validation_1.uniqueId,
             type: 'string',
         },
         position: {
             maxLength: 100,
-            message: 'Standort zu lang',
+            message: { de: 'Standort zu lang' },
             type: 'string',
         },
         type: {
-            message: 'Medienart fehlt oder ist unzulässig',
+            message: { de: 'Medienart fehlt oder ist unzulässig' },
             type: 'integer',
             enum: [
                 5,
@@ -39,11 +38,12 @@ const MigrateMediaSchema = {
     },
     required: ['_id', 'type'],
 };
-exports.mediaCollection = new (class extends utils_1.CollectionBase {
-    constructor() {
-        super(...arguments);
-        this.name = 'n/a';
-        this.schema = MigrateMediaSchema;
+exports.mediaCollection = new (class {
+    cacheMigrated(item) {
+        if (this.migrationMap[item._id]) {
+            throw new Error(`duplicated identifier '${item._id}`);
+        }
+        this.migrationMap[item._id] = item;
     }
     fromSql(sql) {
         const media = {
@@ -56,7 +56,7 @@ exports.mediaCollection = new (class extends utils_1.CollectionBase {
         if (sql.Position) {
             media.position = sql.Position;
         }
-        const errors = isxs_validation_1.validate(media, this.schema);
+        const errors = isxs_validation_1.validate(media, exports.MigrateMediaSchema);
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }
