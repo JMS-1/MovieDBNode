@@ -49,10 +49,10 @@
   resolved "https://registry.yarnpkg.com/@jms-1/isxs-tools/-/isxs-tools-1.0.17.tgz#8fe6270bef5a1859a838aff2e87f8ac45a0a60db"
   integrity sha512-xTV1NqoxYbrNlgY7I/2IfE7w/8l3T0BRZI8tbWdpj+9cmltxy5vhcNyCusjQUGSeaPqbej3ezZiuVyOh2vIEYg==
 
-"@jms-1/isxs-validation@1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@jms-1/isxs-validation/-/isxs-validation-1.0.7.tgz#ea07c69fa51152786b8030f4fe926eb8c888ebfb"
-  integrity sha512-YG/fppbvsxx0zFn6vKoYz3ZOSWE07YWKA6lWei1fKFZV6tXVZXIG7+PjVK9W+E2j+Drdmx8CWBeUL0FgEtTDPw==
+"@jms-1/isxs-validation@1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@jms-1/isxs-validation/-/isxs-validation-1.0.8.tgz#16f0ae94daf4c1e0c8553d8ddd9106297be0edd5"
+  integrity sha512-fSSgQpU3/+6IirEbtqrWLsqJ0N5G3YuTrbQ1N5am50XWmmeefprcuv4bKYke8bRcERLV6sXiTxHJDheHVDto4g==
   dependencies:
     "@jms-1/isxs-tools" "^1.0.17"
     debug "4.1.1"
