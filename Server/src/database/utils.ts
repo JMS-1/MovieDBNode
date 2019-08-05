@@ -1,5 +1,6 @@
 import { getMessage } from '@jms-1/isxs-tools'
-import { CollectionBase, IValidatableSchema } from '@jms-1/isxs-validation'
+import { IValidatableSchema } from '@jms-1/isxs-validation'
+import { CollectionBase } from '@jms-1/isxs-validation/server'
 import * as debug from 'debug'
 import { Collection, Db, MongoClient, MongoClientOptions } from 'mongodb'
 

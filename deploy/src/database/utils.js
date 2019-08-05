@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const isxs_tools_1 = require("@jms-1/isxs-tools");
-const isxs_validation_1 = require("@jms-1/isxs-validation");
+const server_1 = require("@jms-1/isxs-validation/server");
 const debug = require("debug");
 const mongodb_1 = require("mongodb");
 const config_1 = require("../config");
@@ -38,7 +38,7 @@ async function dbConnect() {
     }
 }
 exports.dbConnect = dbConnect;
-class MigratableCollection extends isxs_validation_1.CollectionBase {
+class MigratableCollection extends server_1.CollectionBase {
     constructor() {
         super(...arguments);
         this.migrationMap = {};
