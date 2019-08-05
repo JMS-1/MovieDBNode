@@ -4102,7 +4102,7 @@ exports.SeriesTree = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const isxs_tools_1 = __webpack_require__(/*! @jms-1/isxs-tools */ "./node_modules/@jms-1/isxs-tools/lib/index.js");
+const isxs_tools_1 = __webpack_require__(/*! @jms-1/isxs-tools */ "./node_modules/@jms-1/isxs-tools/common/index.js");
 const connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
 const history_1 = __webpack_require__(/*! history */ "./node_modules/history/esm/history.js");
 const redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
@@ -4842,10 +4842,10 @@ module.exports = _typeof;
 
 /***/ }),
 
-/***/ "./node_modules/@jms-1/isxs-tools/lib/getMessage.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/@jms-1/isxs-tools/lib/getMessage.js ***!
-  \**********************************************************/
+/***/ "./node_modules/@jms-1/isxs-tools/common/getMessage.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-tools/common/getMessage.js ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4860,17 +4860,17 @@ exports.getMessage = getMessage;
 
 /***/ }),
 
-/***/ "./node_modules/@jms-1/isxs-tools/lib/index.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/@jms-1/isxs-tools/lib/index.js ***!
-  \*****************************************************/
+/***/ "./node_modules/@jms-1/isxs-tools/common/index.js":
+/*!********************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-tools/common/index.js ***!
+  \********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var getMessage_1 = __webpack_require__(/*! ./getMessage */ "./node_modules/@jms-1/isxs-tools/lib/getMessage.js");
+var getMessage_1 = __webpack_require__(/*! ./getMessage */ "./node_modules/@jms-1/isxs-tools/common/getMessage.js");
 exports.getMessage = getMessage_1.getMessage;
 //# sourceMappingURL=index.js.map
 
