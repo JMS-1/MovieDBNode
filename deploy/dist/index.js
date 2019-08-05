@@ -4447,8 +4447,6 @@ module.exports = _extends;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getPrototypeOf = __webpack_require__(/*! ./getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
-
 var superPropBase = __webpack_require__(/*! ./superPropBase */ "./node_modules/@babel/runtime/helpers/superPropBase.js");
 
 function _get(target, property, receiver) {
@@ -4878,10 +4876,29 @@ exports.getMessage = getMessage_1.getMessage;
 
 /***/ }),
 
-/***/ "./node_modules/@jms-1/isxs-validation/lib/collection.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/@jms-1/isxs-validation/lib/collection.js ***!
-  \***************************************************************/
+/***/ "./node_modules/@jms-1/isxs-validation/lib/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-validation/lib/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(/*! ./server */ "./node_modules/@jms-1/isxs-validation/lib/server/index.js"));
+__export(__webpack_require__(/*! ./validation */ "./node_modules/@jms-1/isxs-validation/lib/validation.js"));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@jms-1/isxs-validation/lib/server/collection.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-validation/lib/server/collection.js ***!
+  \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4890,8 +4907,8 @@ exports.getMessage = getMessage_1.getMessage;
 Object.defineProperty(exports, "__esModule", { value: true });
 const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js");
 const isxs_tools_1 = __webpack_require__(/*! @jms-1/isxs-tools */ "./node_modules/@jms-1/isxs-tools/lib/index.js");
-const mongoDb_1 = __webpack_require__(/*! ./mongoDb */ "./node_modules/@jms-1/isxs-validation/lib/mongoDb.js");
-const validation_1 = __webpack_require__(/*! ./validation */ "./node_modules/@jms-1/isxs-validation/lib/validation.js");
+const validation_1 = __webpack_require__(/*! ../validation */ "./node_modules/@jms-1/isxs-validation/lib/validation.js");
+const mongoDb_1 = __webpack_require__(/*! ./mongoDb */ "./node_modules/@jms-1/isxs-validation/lib/server/mongoDb.js");
 const databaseError = debug('database');
 class CollectionBase {
     onInitialize(collection) {
@@ -4985,10 +5002,10 @@ exports.CollectionBase = CollectionBase;
 
 /***/ }),
 
-/***/ "./node_modules/@jms-1/isxs-validation/lib/index.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/@jms-1/isxs-validation/lib/index.js ***!
-  \**********************************************************/
+/***/ "./node_modules/@jms-1/isxs-validation/lib/server/index.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-validation/lib/server/index.js ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4998,17 +5015,16 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./collection */ "./node_modules/@jms-1/isxs-validation/lib/collection.js"));
-__export(__webpack_require__(/*! ./mongoDb */ "./node_modules/@jms-1/isxs-validation/lib/mongoDb.js"));
-__export(__webpack_require__(/*! ./validation */ "./node_modules/@jms-1/isxs-validation/lib/validation.js"));
+__export(__webpack_require__(/*! ./collection */ "./node_modules/@jms-1/isxs-validation/lib/server/collection.js"));
+__export(__webpack_require__(/*! ./mongoDb */ "./node_modules/@jms-1/isxs-validation/lib/server/mongoDb.js"));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ "./node_modules/@jms-1/isxs-validation/lib/mongoDb.js":
-/*!************************************************************!*\
-  !*** ./node_modules/@jms-1/isxs-validation/lib/mongoDb.js ***!
-  \************************************************************/
+/***/ "./node_modules/@jms-1/isxs-validation/lib/server/mongoDb.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@jms-1/isxs-validation/lib/server/mongoDb.js ***!
+  \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10243,16 +10259,10 @@ function baseClone(value, bitmask, customizer, key, object, stack) {
     value.forEach(function(subValue) {
       result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
     });
-
-    return result;
-  }
-
-  if (isMap(value)) {
+  } else if (isMap(value)) {
     value.forEach(function(subValue, key) {
       result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
     });
-
-    return result;
   }
 
   var keysFunc = isFull
@@ -11824,8 +11834,8 @@ function baseMerge(object, source, srcIndex, customizer, stack) {
     return;
   }
   baseFor(source, function(srcValue, key) {
+    stack || (stack = new Stack);
     if (isObject(srcValue)) {
-      stack || (stack = new Stack);
       baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
     }
     else {
@@ -14307,12 +14317,14 @@ module.exports = createRecurry;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__(/*! ./toInteger */ "./node_modules/lodash/toInteger.js"),
+var root = __webpack_require__(/*! ./_root */ "./node_modules/lodash/_root.js"),
+    toInteger = __webpack_require__(/*! ./toInteger */ "./node_modules/lodash/toInteger.js"),
     toNumber = __webpack_require__(/*! ./toNumber */ "./node_modules/lodash/toNumber.js"),
     toString = __webpack_require__(/*! ./toString */ "./node_modules/lodash/toString.js");
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeMin = Math.min;
+var nativeIsFinite = root.isFinite,
+    nativeMin = Math.min;
 
 /**
  * Creates a function like `_.round`.
@@ -14326,7 +14338,7 @@ function createRound(methodName) {
   return function(number, precision) {
     number = toNumber(number);
     precision = precision == null ? 0 : nativeMin(toInteger(precision), 292);
-    if (precision) {
+    if (precision && nativeIsFinite(number)) {
       // Shift with exponential notation to avoid floating-point issues.
       // See [MDN](https://mdn.io/round#Examples) for more details.
       var pair = (toString(number) + 'e').split('e'),
@@ -17148,7 +17160,7 @@ module.exports = root;
 /***/ (function(module, exports) {
 
 /**
- * Gets the value at `key`, unless `key` is "__proto__".
+ * Gets the value at `key`, unless `key` is "__proto__" or "constructor".
  *
  * @private
  * @param {Object} object The object to query.
@@ -17156,6 +17168,10 @@ module.exports = root;
  * @returns {*} Returns the property value.
  */
 function safeGet(object, key) {
+  if (key === 'constructor' && typeof object[key] === 'function') {
+    return;
+  }
+
   if (key == '__proto__') {
     return;
   }

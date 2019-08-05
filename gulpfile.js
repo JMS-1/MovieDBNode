@@ -165,7 +165,6 @@ gulp.task('deploy:config', ['deploy:clean'], () =>
             'Server/config.json',
             'Server/service.cmd',
             'Server/service.js',
-            'yarn.lock',
         ])
         .pipe(gulp.dest('deploy')),
 )
