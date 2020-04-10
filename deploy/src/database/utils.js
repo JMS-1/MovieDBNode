@@ -14,10 +14,9 @@ async function dbConnect() {
     for (;; await sleep(5000)) {
         if (!loader) {
             const options = {
-                autoReconnect: true,
                 promiseLibrary: Promise,
-                reconnectTries: Number.MAX_VALUE,
                 useNewUrlParser: true,
+                useUnifiedTopology: true,
             };
             if (config_1.Config.user) {
                 options.auth = {
