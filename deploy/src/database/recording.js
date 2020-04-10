@@ -131,7 +131,7 @@ exports.recordingCollection = new (class extends utils_1.MovieDbCollection {
     async findOneAndReplace(recording) {
         const existing = await this.findOne(recording._id);
         if (existing) {
-            recording = Object.assign({}, recording, { created: existing.created });
+            recording = Object.assign(Object.assign({}, recording), { created: existing.created });
         }
         const errors = await super.findOneAndReplace(recording);
         if (!errors || errors.length < 1) {

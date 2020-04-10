@@ -127,7 +127,7 @@ function linkToEntity(link) {
     return dbLink;
 }
 function toProtocol(recording) {
-    return Object.assign({}, recording, { links: (recording.links || []).map(linkToProtocol) });
+    return Object.assign(Object.assign({}, recording), { links: (recording.links || []).map(linkToProtocol) });
 }
 exports.toProtocol = toProtocol;
 function toEntity(recording, id, created) {

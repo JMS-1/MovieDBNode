@@ -11,33 +11,6 @@ const util = require('util')
 const config = ts.createProject(path.join(__dirname, 'Server/tsconfig.json'))
 const build = path.join(__dirname, 'Server/src')
 
-let watchMode = false
-
-function ignoreErrorDuringWatch(err) {
-    if (!watchMode) {
-        throw err instanceof Error ? err : new Error(`${err}`)
-    }
-}
-
-function reportWatchError(err) {
-    if (!watchMode) {
-        throw new Error(err.message)
-    } else {
-        const message = err.message
-        const first = message.indexOf('\n')
-        const second = message.indexOf('\n', first + 1)
-
-        if (first >= 0 && second >= 0) {
-            console.log(
-                `${message.substring(0, first)}(${err.line},${err.column}): error SASS: ${message.substring(
-                    first + 1,
-                    second - first,
-                )}`,
-            )
-        }
-    }
-}
-
 async function selectTheme(theme, name) {
     return new Promise(async (success, failure) => {
         try {
@@ -65,28 +38,8 @@ async function selectTheme(theme, name) {
             const copy = util.promisify(fs.copyFile)
             await copy(themeSource, themePath)
 
-            // Immer alle Hilfstasks laden.
-            const tasks = {
-                build: require('./Client/src/semantic/tasks/build'),
-                watch: require('./Client/src/semantic/tasks/watch'),
-            }
-
             // Gewünschte Task ausführen.
-            tasks[name](error => (error ? failure(error) : success()))
-        } catch (error) {
-            failure(error)
-        }
-    })
-}
-
-// Dieser Work-Aorund funktioniert NUR für Tasks, die noch nicht ausgeführt wurden
-// und zudem keine Abhängigkeiten haben. Für uns passt das aber gut!
-function runSequence(...tasks) {
-    return new Promise(async (success, failure) => {
-        try {
-            for (let task of tasks) {
-                await gulp.tasks[task].fn(error => (error ? failure(error) : success))
-            }
+            await shell.task(`cd Client/src/semantic && gulp ${name}`)()
 
             success()
         } catch (error) {
@@ -95,8 +48,6 @@ function runSequence(...tasks) {
     })
 }
 
-gulp.on('task_stop', ({ task }) => (watchMode = watchMode || task.indexOf('watch') >= 0))
-
 //
 gulp.task('build-app', shell.task('yarn build-client'))
 
@@ -104,12 +55,12 @@ gulp.task('build-app', shell.task('yarn build-client'))
 gulp.task('build-sass', () =>
     gulp
         .src(path.join(__dirname, 'Client/src/index.scss'))
-        .pipe(sass({ linefeed: 'crlf' }).on('error', reportWatchError))
+        .pipe(sass({ linefeed: 'crlf' }))
         .pipe(gulp.dest(path.join(__dirname, 'Server/dist'))),
 )
 
 //
-gulp.task('watch-sass', () => gulp.watch(path.join(__dirname, 'Client/src/**/*.scss'), ['build-sass']))
+gulp.task('watch-sass', () => gulp.watch(path.join(__dirname, 'Client/src/**/*.scss'), gulp.series('build-sass')))
 
 //
 gulp.task('int-build-alternate-1-ui', () => selectTheme('alternate.1', 'build'))
@@ -123,11 +74,9 @@ gulp.task('build-default-ui', shell.task('node node_modules/gulp/bin/gulp.js int
 gulp.task('watch-default-ui', shell.task('node node_modules/gulp/bin/gulp.js int-watch-default-ui'))
 
 //
-gulp.task('build-client-core', ['build-sass', 'build-app'])
-gulp.task('build-client', ['build-client-core', 'build-default-ui'])
-gulp.task('build-client-deploy', ['build-client-core'], () =>
-    runSequence('build-alternate-1-ui', 'build-alternate-2-ui', 'build-default-ui'),
-)
+gulp.task('build-client-core', gulp.series('build-sass', 'build-app'))
+gulp.task('build-client', gulp.series('build-client-core', 'build-default-ui'))
+gulp.task('build-client-deploy', gulp.series('build-client-core', 'build-alternate-1-ui', 'build-alternate-2-ui', 'build-default-ui'))
 
 //
 gulp.task('build-server', () =>
@@ -135,26 +84,25 @@ gulp.task('build-server', () =>
         .src()
         .pipe(map.init())
         .pipe(config())
-        .on('error', ignoreErrorDuringWatch)
         .js.pipe(map.write('', { sourceRoot: build }))
         .pipe(gulp.dest(build)),
 )
 
 //
-gulp.task('build', ['build-client', 'build-server'])
+gulp.task('build', gulp.series('build-client', 'build-server'))
 
 //
-gulp.task('deploy:clean', () => del.sync('deploy'))
+gulp.task('deploy:clean', () => del('deploy'))
 
-gulp.task('deploy:server', ['build-server', 'deploy:clean'], () =>
-    gulp.src('Server/src/**/*.js').pipe(gulp.dest('deploy/src')),
+gulp.task('deploy:server', gulp.series('build-server', () =>
+    gulp.src('Server/src/**/*.js').pipe(gulp.dest('deploy/src')))
 )
 
-gulp.task('deploy:client', ['build-client-deploy', 'deploy:clean'], () =>
-    gulp.src(['Server/dist/**/*', '!Server/dist/**/*.map']).pipe(gulp.dest('deploy/dist')),
+gulp.task('deploy:client', gulp.series('build-client-deploy', () =>
+    gulp.src(['Server/dist/**/*', '!Server/dist/**/*.map']).pipe(gulp.dest('deploy/dist')))
 )
 
-gulp.task('deploy:config', ['deploy:clean'], () =>
+gulp.task('deploy:config', () =>
     gulp
         .src([
             '.dockerignore',
@@ -169,4 +117,4 @@ gulp.task('deploy:config', ['deploy:clean'], () =>
         .pipe(gulp.dest('deploy')),
 )
 
-gulp.task('deploy', ['deploy:server', 'deploy:client', 'deploy:config'])
+gulp.task('deploy', gulp.series('deploy:clean', 'deploy:config', 'deploy:server', 'deploy:client'))

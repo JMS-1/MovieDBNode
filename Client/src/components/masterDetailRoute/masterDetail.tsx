@@ -1,12 +1,13 @@
 import * as React from 'react'
 
 export interface IMasterDetailRouteUiProps {
+    children?: React.ReactNode
     className?: string
 }
 
-export interface IMasterDetailRouteProps {}
+export interface IMasterDetailRouteProps { }
 
-export interface IMasterDetailRouteActions {}
+export interface IMasterDetailRouteActions { }
 
 export type TMasterDetailRouteProps = IMasterDetailRouteProps & IMasterDetailRouteUiProps & IMasterDetailRouteActions
 

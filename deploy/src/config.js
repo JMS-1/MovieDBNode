@@ -10,6 +10,6 @@ function loadConfig(name) {
     const raw = fs_1.readFileSync(defPath).toString();
     return JSON.parse(raw.substr(raw.indexOf('{')));
 }
-exports.Config = Object.assign({}, loadConfig(''), loadConfig('.custom'));
+exports.Config = Object.assign(Object.assign({}, loadConfig('')), loadConfig('.custom'));
 
 //# sourceMappingURL=config.js.map
