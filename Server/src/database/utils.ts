@@ -18,10 +18,9 @@ export async function dbConnect(): Promise<Db> {
     for (; ; await sleep(5000)) {
         if (!loader) {
             const options: MongoClientOptions = {
-                autoReconnect: true,
                 promiseLibrary: Promise,
-                reconnectTries: Number.MAX_VALUE,
                 useNewUrlParser: true,
+                useUnifiedTopology: true,
             }
 
             if (Config.user) {
