@@ -24,7 +24,6 @@ export const Container = GqlObject(
         name: GqlString({
             description: 'Der Anzeigetext für die Ablage.', sortable: true, validation: {
                 maxLength: 50,
-                message: { de: 'Name nicht angegeben oder zu lang' },
                 minLength: 1,
                 type: 'string',
             },
@@ -32,13 +31,11 @@ export const Container = GqlObject(
         description: GqlNullable(GqlString({
             description: 'Eine Beschreibung für die Ablage.', validation: {
                 maxLength: 2000,
-                message: { de: 'Beschreibung zu lang' },
                 type: 'string',
             },
         })),
         parentId: GqlNullable(GqlString({
             description: 'Optional die eindeutige Kennung der übergeordneten Ablage.', validation: {
-                message: { de: 'Eindeutige Kennung erwartet' },
                 pattern: uniqueIdPattern,
                 type: 'string',
             },
@@ -46,7 +43,6 @@ export const Container = GqlObject(
         parentLocation: GqlNullable(GqlString({
             description: 'Die Position der Ablage in der übergeordneten Ablage.', validation: {
                 maxLength: 100,
-                message: { de: 'Ablagebezeichnung zu lang' },
                 type: 'string',
             },
         })),

@@ -11,6 +11,7 @@ import { installApi } from './api'
 import { ContainerCollection } from './collections/container'
 import { GenreCollection } from './collections/genre'
 import { LanguageCollection } from './collections/language'
+import { RecordingCollection } from './collections/recording'
 import { SeriesCollection } from './collections/series'
 import { Config } from './config'
 import { initializeDatabase } from './database'
@@ -33,6 +34,7 @@ async function startup(): Promise<void> {
                 container: ContainerCollection,
                 genres: GenreCollection,
                 languages: LanguageCollection,
+                recordings: RecordingCollection,
                 series: SeriesCollection,
             }),
         ),

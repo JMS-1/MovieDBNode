@@ -5,9 +5,11 @@ import * as entities from './entities'
 import { ContainerCollection } from '../collections/container'
 import { GenreCollection } from '../collections/genre'
 import { LanguageCollection } from '../collections/language'
+import { RecordingCollection } from '../collections/recording'
 import { SeriesCollection } from '../collections/series'
 
 export { TContainerType } from './container'
+export { TRecordingContainerType } from './recording'
 
 export type ILanguage = TGqlType<typeof entities.Language>
 
@@ -76,3 +78,21 @@ export type ISeriesUpdateResult = TGetMethodResult<typeof SeriesCollection, 'upd
 
 export type ISeriesRemoveArgs = TGetMethodArgs<typeof SeriesCollection, 'remove'>
 export type ISeriesRemoveResult = TGetMethodResult<typeof SeriesCollection, 'remove'>
+
+export type ILink = TGqlType<typeof entities.Link>
+export type IRecording = TGqlType<typeof entities.Recording>
+
+export type IRecordingFindArgs = TGetFilterArgs<typeof RecordingCollection, 'find'>
+export type IRecordingFindResult = TGetMethodResult<typeof RecordingCollection, 'find'>
+
+export type IRecordingFindOneArgs = TGetMethodArgs<typeof RecordingCollection, 'findOne'>
+export type IRecordingFindOneResult = TGetMethodResult<typeof RecordingCollection, 'findOne'>
+
+export type IRecordingAddArgs = TGetMethodArgs<typeof RecordingCollection, 'add'>
+export type IRecordingAddResult = TGetMethodResult<typeof RecordingCollection, 'add'>
+
+export type IRecordingUpdateArgs = TGetMethodArgs<typeof RecordingCollection, 'update'>
+export type IRecordingUpdateResult = TGetMethodResult<typeof RecordingCollection, 'update'>
+
+export type IRecordingRemoveArgs = TGetMethodArgs<typeof RecordingCollection, 'remove'>
+export type IRecordingRemoveResult = TGetMethodResult<typeof RecordingCollection, 'remove'>

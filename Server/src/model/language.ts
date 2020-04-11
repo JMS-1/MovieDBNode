@@ -7,7 +7,6 @@ export const Language = GqlObject(
         name: GqlString({
             description: 'Der Anzeigetext für die Sprache.', sortable: true, validation: {
                 maxLength: 100,
-                message: { de: 'Name nicht angegeben oder zu lang' },
                 minLength: 1,
                 type: 'string',
             },

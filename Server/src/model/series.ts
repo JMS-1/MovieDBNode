@@ -17,21 +17,18 @@ export const Series = GqlObject(
         name: GqlString({
             description: 'Der Anzeigetext für die Serie.', sortable: true, validation: {
                 maxLength: 50,
-                message: { de: 'Name nicht angegeben oder zu lang' },
                 minLength: 1,
                 type: 'string',
             },
         }),
         description: GqlNullable(GqlString({
-            description: 'Optional eine Beschreibung für die Serie.', sortable: true, validation: {
+            description: 'Optional eine Beschreibung für die Serie.', validation: {
                 maxLength: 2000,
-                message: { de: 'Beschreibung ist zu lang' },
                 type: 'string',
             },
         })),
         parentId: GqlNullable(GqlString({
             description: 'Optional die eindeutige Kennung der übergeordneten Serie.', validation: {
-                message: { de: 'Eindeutige Kennung erwartet' },
                 pattern: uniqueIdPattern,
                 type: 'string',
             },
