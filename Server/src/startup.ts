@@ -1,10 +1,14 @@
 import { getMessage } from '@jms-1/isxs-tools'
+import { createSchemaConfiguration } from '@jms-1/mongodb-graphql/lib/schema'
+import { ApolloServer } from 'apollo-server'
 import { json } from 'body-parser'
-import * as debug from 'debug'
-import * as express from 'express'
+import debug from 'debug'
+import express from 'express'
+import { GraphQLSchema } from 'graphql'
 import { join } from 'path'
 
 import { installApi } from './api'
+import { LanguageCollection } from './collections/language'
 import { Config } from './config'
 import { initializeDatabase } from './database'
 
@@ -21,6 +25,19 @@ async function startup(): Promise<void> {
     installApi(app)
 
     app.listen(Config.port)
+
+    const server = new ApolloServer({
+        schema: new GraphQLSchema(
+            createSchemaConfiguration({
+                languages: LanguageCollection,
+            }),
+        ),
+    })
+
+    server.listen().then(({ url }) => {
+        // tslint:disable-next-line: no-console
+        console.log(`Playground on ${url}`)
+    })
 }
 
 function startupError(error: any): void {

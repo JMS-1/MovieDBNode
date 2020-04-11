@@ -1,6 +1,6 @@
 import { getMessage } from '@jms-1/isxs-tools'
 import { IMuiString, IValidationError, validate } from '@jms-1/isxs-validation'
-import * as debug from 'debug'
+import debug from 'debug'
 import { CollationDocument, Collection, FilterQuery } from 'mongodb'
 
 import * as api from 'movie-db-api'

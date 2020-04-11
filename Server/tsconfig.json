@@ -1,6 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
+        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "inlineSources": true,
         "module": "commonjs",
@@ -13,6 +14,11 @@
         "strictPropertyInitialization": false,
         "target": "es2017"
     },
-    "exclude": ["node_modules"],
-    "include": ["src/**/*.ts", "../common/**/*.d.ts"]
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "src/**/*.ts",
+        "../common/**/*.d.ts"
+    ]
 }

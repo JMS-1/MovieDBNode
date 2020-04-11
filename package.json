@@ -3,6 +3,7 @@
         "@jms-1/isxs-tools": "^1.0.18",
         "@jms-1/isxs-validation": "^1.1.6",
         "@jms-1/mongodb-graphql": "^0.1.17",
+        "apollo-server": "^2.12.0",
         "body-parser": "^1.19.0",
         "debug": "^4.1.1",
         "djv": "^2.1.3-alpha.0",
