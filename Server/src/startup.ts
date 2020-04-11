@@ -8,8 +8,10 @@ import { GraphQLSchema } from 'graphql'
 import { join } from 'path'
 
 import { installApi } from './api'
+import { ContainerCollection } from './collections/container'
 import { GenreCollection } from './collections/genre'
 import { LanguageCollection } from './collections/language'
+import { SeriesCollection } from './collections/series'
 import { Config } from './config'
 import { initializeDatabase } from './database'
 
@@ -28,8 +30,10 @@ async function startup(): Promise<void> {
     const server = new ApolloServer({
         schema: new GraphQLSchema(
             createSchemaConfiguration({
-                languages: LanguageCollection,
+                container: ContainerCollection,
                 genres: GenreCollection,
+                languages: LanguageCollection,
+                series: SeriesCollection,
             }),
         ),
     })
