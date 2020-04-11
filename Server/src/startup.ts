@@ -8,6 +8,7 @@ import { GraphQLSchema } from 'graphql'
 import { join } from 'path'
 
 import { installApi } from './api'
+import { GenreCollection } from './collections/genre'
 import { LanguageCollection } from './collections/language'
 import { Config } from './config'
 import { initializeDatabase } from './database'
@@ -28,6 +29,7 @@ async function startup(): Promise<void> {
         schema: new GraphQLSchema(
             createSchemaConfiguration({
                 languages: LanguageCollection,
+                genres: GenreCollection,
             }),
         ),
     })
