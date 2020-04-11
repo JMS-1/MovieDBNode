@@ -1,6 +1,6 @@
 import { getMessage } from '@jms-1/isxs-tools'
 import { createSchemaConfiguration } from '@jms-1/mongodb-graphql/lib/schema'
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer } from 'apollo-server-express'
 import { json } from 'body-parser'
 import debug from 'debug'
 import express from 'express'
@@ -24,8 +24,6 @@ async function startup(): Promise<void> {
 
     installApi(app)
 
-    app.listen(Config.port)
-
     const server = new ApolloServer({
         schema: new GraphQLSchema(
             createSchemaConfiguration({
@@ -34,10 +32,9 @@ async function startup(): Promise<void> {
         ),
     })
 
-    server.listen().then(({ url }) => {
-        // tslint:disable-next-line: no-console
-        console.log(`Playground on ${url}`)
-    })
+    server.applyMiddleware({ app })
+
+    app.listen(Config.port)
 }
 
 function startupError(error: any): void {
