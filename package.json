@@ -2,7 +2,7 @@
     "dependencies": {
         "@jms-1/isxs-tools": "^1.0.18",
         "@jms-1/isxs-validation": "^1.1.6",
-        "@jms-1/mongodb-graphql": "^0.1.17",
+        "@jms-1/mongodb-graphql": "^0.1.18",
         "apollo-server-express": "^2.12.0",
         "body-parser": "^1.19.0",
         "debug": "^4.1.1",
