@@ -70,7 +70,7 @@ export const Recording = types.GqlObject(
             },
         })),
         genres: types.GqlArray(types.GqlString({
-            description: 'Alle Genres der Aufzeichnung.', validation: {
+            description: 'Alle Kategorien der Aufzeichnung.', validation: {
                 type: 'string',
                 pattern: uniqueIdPattern,
             },
