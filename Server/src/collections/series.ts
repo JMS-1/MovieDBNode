@@ -15,6 +15,14 @@ export const SeriesCollection = MongoConnection.createCollection(
 
         readonly entityName = 'Serie'
 
+        protected async afterInsert(series: ISeries): Promise<void> {
+            await this.refreshFullNames(series)
+        }
+
+        protected async afterUpdate(series: ISeries): Promise<void> {
+            await this.refreshFullNames(series)
+        }
+
         protected async afterRemove(series: ISeries): Promise<void> {
             const self = await this.collection
             const children = await self.find({ parentId: series._id }).toArray()
@@ -39,6 +47,8 @@ export const SeriesCollection = MongoConnection.createCollection(
             const fullName = parent ? `${parent} > ${series.name}` : series.name
 
             await self.findOneAndUpdate({ _id: series._id }, { $set: { fullName } })
+
+            series.fullName = fullName
 
             return this.updateFullNameByParent(series._id, fullName, self, updated)
         }
