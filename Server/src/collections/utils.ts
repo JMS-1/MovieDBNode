@@ -10,7 +10,7 @@ interface IAggregateFullName {
 export async function refreshRecordingNames(
     filter: FilterQuery<IRecording>,
     recordings: Collection<IRecording>
-): Promise<void> {
+): Promise<IAggregateFullName[]> {
     const query = [
         { $match: filter },
         { $lookup: { as: 'series', foreignField: '_id', from: 'series', localField: 'series' } },
@@ -29,9 +29,11 @@ export async function refreshRecordingNames(
         },
     ]
 
-    const results = await recordings.aggregate<IAggregateFullName>(query).toArray()
+    const results = (await recordings.aggregate<IAggregateFullName>(query).toArray()) || []
 
     for (const recording of results) {
         await recordings.findOneAndUpdate({ _id: recording._id }, { $set: { fullName: recording.fullName } })
     }
+
+    return results
 }
