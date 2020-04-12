@@ -2,14 +2,17 @@
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const isxs_tools_1 = require("@jms-1/isxs-tools");
 const isxs_validation_1 = require("@jms-1/isxs-validation");
-const debug = require("debug");
+const debug_1 = __importDefault(require("debug"));
 const recording_1 = require("./entities/recording");
 const utils_1 = require("./utils");
 __export(require("./entities/recording"));
-const databaseTrace = debug('database:trace');
+const databaseTrace = debug_1.default('database:trace');
 const dateReg = /^CAST\(N'([^\.]+)(\.\d+)?' AS DateTime\)$/;
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
 const collation = { locale: 'en', strength: 2 };

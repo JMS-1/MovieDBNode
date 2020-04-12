@@ -1,11 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const isxs_tools_1 = require("@jms-1/isxs-tools");
 const server_1 = require("@jms-1/isxs-validation/server");
-const debug = require("debug");
+const debug_1 = __importDefault(require("debug"));
 const mongodb_1 = require("mongodb");
 const config_1 = require("../config");
-exports.databaseError = debug('database');
+exports.databaseError = debug_1.default('database');
 let loader;
 function sleep(ms) {
     return new Promise(success => setTimeout(success, ms));

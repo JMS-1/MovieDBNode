@@ -1,7 +1,14 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const isxs_validation_1 = require("@jms-1/isxs-validation");
-const fs = require("fs");
+const fs = __importStar(require("fs"));
 const path_1 = require("path");
 const util_1 = require("util");
 const links_1 = require("./links");
