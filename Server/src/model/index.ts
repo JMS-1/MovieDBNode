@@ -1,4 +1,4 @@
-import { TGetFilterArgs, TGetMethodArgs, TGetMethodResult, TGqlType } from '@jms-1/mongodb-graphql'
+import { TGetFilterArgs, TGetMethodArgs, TGetMethodResult, TGqlType, TCollection } from '@jms-1/mongodb-graphql'
 
 import * as entities from './entities'
 
@@ -13,86 +13,96 @@ export { TRecordingContainerType } from './recording'
 
 export type ILanguage = TGqlType<typeof entities.Language>
 
-export type ILanguageFindArgs = TGetFilterArgs<typeof LanguageCollection, 'find'>
-export type ILanguageFindResult = TGetMethodResult<typeof LanguageCollection, 'find'>
+type TLanguageCollection = TCollection<typeof LanguageCollection>
 
-export type ILanguageFindOneArgs = TGetMethodArgs<typeof LanguageCollection, 'findOne'>
-export type ILanguageFindOneResult = TGetMethodResult<typeof LanguageCollection, 'findOne'>
+export type ILanguageFindArgs = TGetFilterArgs<TLanguageCollection, 'find'>
+export type ILanguageFindResult = TGetMethodResult<TLanguageCollection, 'find'>
 
-export type ILanguageAddArgs = TGetMethodArgs<typeof LanguageCollection, 'add'>
-export type ILanguageAddResult = TGetMethodResult<typeof LanguageCollection, 'add'>
+export type ILanguageFindOneArgs = TGetMethodArgs<TLanguageCollection, 'findOne'>
+export type ILanguageFindOneResult = TGetMethodResult<TLanguageCollection, 'findOne'>
 
-export type ILanguageUpdateArgs = TGetMethodArgs<typeof LanguageCollection, 'update'>
-export type ILanguageUpdateResult = TGetMethodResult<typeof LanguageCollection, 'update'>
+export type ILanguageAddArgs = TGetMethodArgs<TLanguageCollection, 'add'>
+export type ILanguageAddResult = TGetMethodResult<TLanguageCollection, 'add'>
 
-export type ILanguageRemoveArgs = TGetMethodArgs<typeof LanguageCollection, 'remove'>
-export type ILanguageRemoveResult = TGetMethodResult<typeof LanguageCollection, 'remove'>
+export type ILanguageUpdateArgs = TGetMethodArgs<TLanguageCollection, 'update'>
+export type ILanguageUpdateResult = TGetMethodResult<TLanguageCollection, 'update'>
+
+export type ILanguageRemoveArgs = TGetMethodArgs<TLanguageCollection, 'remove'>
+export type ILanguageRemoveResult = TGetMethodResult<TLanguageCollection, 'remove'>
 
 export type IGenre = TGqlType<typeof entities.Genre>
 
-export type IGenreFindArgs = TGetFilterArgs<typeof GenreCollection, 'find'>
-export type IGenreFindResult = TGetMethodResult<typeof GenreCollection, 'find'>
+type TGenreCollection = TCollection<typeof GenreCollection>
 
-export type IGenreFindOneArgs = TGetMethodArgs<typeof GenreCollection, 'findOne'>
-export type IGenreFindOneResult = TGetMethodResult<typeof GenreCollection, 'findOne'>
+export type IGenreFindArgs = TGetFilterArgs<TGenreCollection, 'find'>
+export type IGenreFindResult = TGetMethodResult<TGenreCollection, 'find'>
 
-export type IGenreAddArgs = TGetMethodArgs<typeof GenreCollection, 'add'>
-export type IGenreAddResult = TGetMethodResult<typeof GenreCollection, 'add'>
+export type IGenreFindOneArgs = TGetMethodArgs<TGenreCollection, 'findOne'>
+export type IGenreFindOneResult = TGetMethodResult<TGenreCollection, 'findOne'>
 
-export type IGenreUpdateArgs = TGetMethodArgs<typeof GenreCollection, 'update'>
-export type IGenreUpdateResult = TGetMethodResult<typeof GenreCollection, 'update'>
+export type IGenreAddArgs = TGetMethodArgs<TGenreCollection, 'add'>
+export type IGenreAddResult = TGetMethodResult<TGenreCollection, 'add'>
 
-export type IGenreRemoveArgs = TGetMethodArgs<typeof GenreCollection, 'remove'>
-export type IGenreRemoveResult = TGetMethodResult<typeof GenreCollection, 'remove'>
+export type IGenreUpdateArgs = TGetMethodArgs<TGenreCollection, 'update'>
+export type IGenreUpdateResult = TGetMethodResult<TGenreCollection, 'update'>
+
+export type IGenreRemoveArgs = TGetMethodArgs<TGenreCollection, 'remove'>
+export type IGenreRemoveResult = TGetMethodResult<TGenreCollection, 'remove'>
 
 export type IContainer = TGqlType<typeof entities.Container>
 
-export type IContainerFindArgs = TGetFilterArgs<typeof ContainerCollection, 'find'>
-export type IContainerFindResult = TGetMethodResult<typeof ContainerCollection, 'find'>
+type TContainerCollection = TCollection<typeof ContainerCollection>
 
-export type IContainerFindOneArgs = TGetMethodArgs<typeof ContainerCollection, 'findOne'>
-export type IContainerFindOneResult = TGetMethodResult<typeof ContainerCollection, 'findOne'>
+export type IContainerFindArgs = TGetFilterArgs<TContainerCollection, 'find'>
+export type IContainerFindResult = TGetMethodResult<TContainerCollection, 'find'>
 
-export type IContainerAddArgs = TGetMethodArgs<typeof ContainerCollection, 'add'>
-export type IContainerAddResult = TGetMethodResult<typeof ContainerCollection, 'add'>
+export type IContainerFindOneArgs = TGetMethodArgs<TContainerCollection, 'findOne'>
+export type IContainerFindOneResult = TGetMethodResult<TContainerCollection, 'findOne'>
 
-export type IContainerUpdateArgs = TGetMethodArgs<typeof ContainerCollection, 'update'>
-export type IContainerUpdateResult = TGetMethodResult<typeof ContainerCollection, 'update'>
+export type IContainerAddArgs = TGetMethodArgs<TContainerCollection, 'add'>
+export type IContainerAddResult = TGetMethodResult<TContainerCollection, 'add'>
 
-export type IContainerRemoveArgs = TGetMethodArgs<typeof ContainerCollection, 'remove'>
-export type IContainerRemoveResult = TGetMethodResult<typeof ContainerCollection, 'remove'>
+export type IContainerUpdateArgs = TGetMethodArgs<TContainerCollection, 'update'>
+export type IContainerUpdateResult = TGetMethodResult<TContainerCollection, 'update'>
+
+export type IContainerRemoveArgs = TGetMethodArgs<TContainerCollection, 'remove'>
+export type IContainerRemoveResult = TGetMethodResult<TContainerCollection, 'remove'>
 
 export type ISeries = TGqlType<typeof entities.Series>
 
-export type ISeriesFindArgs = TGetFilterArgs<typeof SeriesCollection, 'find'>
-export type ISeriesFindResult = TGetMethodResult<typeof SeriesCollection, 'find'>
+type TSeriesCollection = TCollection<typeof SeriesCollection>
 
-export type ISeriesFindOneArgs = TGetMethodArgs<typeof SeriesCollection, 'findOne'>
-export type ISeriesFindOneResult = TGetMethodResult<typeof SeriesCollection, 'findOne'>
+export type ISeriesFindArgs = TGetFilterArgs<TSeriesCollection, 'find'>
+export type ISeriesFindResult = TGetMethodResult<TSeriesCollection, 'find'>
 
-export type ISeriesAddArgs = TGetMethodArgs<typeof SeriesCollection, 'add'>
-export type ISeriesAddResult = TGetMethodResult<typeof SeriesCollection, 'add'>
+export type ISeriesFindOneArgs = TGetMethodArgs<TSeriesCollection, 'findOne'>
+export type ISeriesFindOneResult = TGetMethodResult<TSeriesCollection, 'findOne'>
 
-export type ISeriesUpdateArgs = TGetMethodArgs<typeof SeriesCollection, 'update'>
-export type ISeriesUpdateResult = TGetMethodResult<typeof SeriesCollection, 'update'>
+export type ISeriesAddArgs = TGetMethodArgs<TSeriesCollection, 'add'>
+export type ISeriesAddResult = TGetMethodResult<TSeriesCollection, 'add'>
 
-export type ISeriesRemoveArgs = TGetMethodArgs<typeof SeriesCollection, 'remove'>
-export type ISeriesRemoveResult = TGetMethodResult<typeof SeriesCollection, 'remove'>
+export type ISeriesUpdateArgs = TGetMethodArgs<TSeriesCollection, 'update'>
+export type ISeriesUpdateResult = TGetMethodResult<TSeriesCollection, 'update'>
+
+export type ISeriesRemoveArgs = TGetMethodArgs<TSeriesCollection, 'remove'>
+export type ISeriesRemoveResult = TGetMethodResult<TSeriesCollection, 'remove'>
 
 export type ILink = TGqlType<typeof entities.Link>
 export type IRecording = TGqlType<typeof entities.Recording>
 
-export type IRecordingFindArgs = TGetFilterArgs<typeof RecordingCollection, 'find'>
-export type IRecordingFindResult = TGetMethodResult<typeof RecordingCollection, 'find'>
+type TRecordingCollection = TCollection<typeof RecordingCollection>
 
-export type IRecordingFindOneArgs = TGetMethodArgs<typeof RecordingCollection, 'findOne'>
-export type IRecordingFindOneResult = TGetMethodResult<typeof RecordingCollection, 'findOne'>
+export type IRecordingFindArgs = TGetFilterArgs<TRecordingCollection, 'find'>
+export type IRecordingFindResult = TGetMethodResult<TRecordingCollection, 'find'>
 
-export type IRecordingAddArgs = TGetMethodArgs<typeof RecordingCollection, 'add'>
-export type IRecordingAddResult = TGetMethodResult<typeof RecordingCollection, 'add'>
+export type IRecordingFindOneArgs = TGetMethodArgs<TRecordingCollection, 'findOne'>
+export type IRecordingFindOneResult = TGetMethodResult<TRecordingCollection, 'findOne'>
 
-export type IRecordingUpdateArgs = TGetMethodArgs<typeof RecordingCollection, 'update'>
-export type IRecordingUpdateResult = TGetMethodResult<typeof RecordingCollection, 'update'>
+export type IRecordingAddArgs = TGetMethodArgs<TRecordingCollection, 'add'>
+export type IRecordingAddResult = TGetMethodResult<TRecordingCollection, 'add'>
 
-export type IRecordingRemoveArgs = TGetMethodArgs<typeof RecordingCollection, 'remove'>
-export type IRecordingRemoveResult = TGetMethodResult<typeof RecordingCollection, 'remove'>
+export type IRecordingUpdateArgs = TGetMethodArgs<TRecordingCollection, 'update'>
+export type IRecordingUpdateResult = TGetMethodResult<TRecordingCollection, 'update'>
+
+export type IRecordingRemoveArgs = TGetMethodArgs<TRecordingCollection, 'remove'>
+export type IRecordingRemoveResult = TGetMethodResult<TRecordingCollection, 'remove'>

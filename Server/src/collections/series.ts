@@ -15,6 +15,14 @@ export const SeriesCollection = MongoConnection.createCollection(
 
         readonly entityName = 'Serie'
 
+        async initialize(): Promise<void> {
+            const self = await this.collection
+
+            await self.createIndex({ fullName: 1 }, { name: 'series_full' })
+            await self.createIndex({ name: 1 }, { name: 'series_name' })
+            await self.createIndex({ parentId: 1 }, { name: 'series_tree' })
+        }
+
         protected async afterInsert(series: ISeries): Promise<void> {
             await this.refreshFullNames(series)
         }

@@ -11,7 +11,7 @@ import { databaseError, MovieDbCollection } from './utils'
 export * from './entities/recording'
 
 const databaseTrace = debug('database:trace')
-const dateReg = /^CAST\(N'([^\.]+)(\.\d+)?' AS DateTime\)$/
+const dateReg = /^CAST\(N'([^.]+)(\.\d+)?' AS DateTime\)$/
 
 interface IAggregateCount {
     total: number
@@ -91,11 +91,11 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
         }
 
         if (req.genres && req.genres.length > 0) {
-            filter.genres = { $all: req.genres.map(s => s.toString()) }
+            filter.genres = { $all: req.genres.map((s) => s.toString()) }
         }
 
         if (req.series && req.series.length > 0) {
-            filter.series = { $in: req.series.map(s => s.toString()) }
+            filter.series = { $in: req.series.map((s) => s.toString()) }
         }
 
         if (typeof req.rent === 'boolean') {
@@ -103,14 +103,14 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
         }
 
         if (req.fullName) {
-            filter.fullName = { $regex: req.fullName.toString().replace(escapeReg, '\\$&'), $options: 'i' }
+            filter.fullName = { $options: 'i', $regex: req.fullName.toString().replace(escapeReg, '\\$&') }
         }
 
         const query = [{ $match: filter }]
         const baseQuery = [...query]
 
         // Für die eigentliche Ergebnisermittlung sind aller Filter aktiv.
-        query.push(<any>{
+        query.push({
             $facet: {
                 count: [{ $count: 'total' }],
                 genres: [{ $unwind: '$genres' }, { $group: { _id: '$genres', count: { $sum: 1 } } }],
@@ -120,12 +120,14 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
                     { $limit: 1 * req.pageSize },
                 ],
             },
-        })
+        } as any)
 
         databaseTrace('query recordings: %j', query)
 
         const me = await this.getCollection()
-        const result = await me.aggregate<IAggregationResult>(query, { collation }).toArray()
+        const result = await me
+            .aggregate<IAggregationResult>(query, { collation })
+            .toArray()
 
         const firstRes = result && result[0]
         const countRes = firstRes && firstRes.count && firstRes.count[0]
@@ -136,7 +138,7 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
         const languageInfo = await me
             .aggregate<api.IQueryCountInfo>(
                 [...baseQuery, { $unwind: '$languages' }, { $group: { _id: '$languages', count: { $sum: 1 } } }],
-                { collation },
+                { collation }
             )
             .toArray()
 
@@ -145,8 +147,8 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
             count: (countRes && countRes.total) || 0,
             genres: (firstRes && firstRes.genres) || [],
             languages: languageInfo || [],
-            total: await me.countDocuments(),
             list: (firstRes && firstRes.view) || [],
+            total: await me.countDocuments(),
         }
     }
 
@@ -210,9 +212,9 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
                     _id: 1,
                     fullName: {
                         $cond: {
+                            else: { $concat: ['$series.fullName', ' > ', '$name'] },
                             if: { $eq: ['$series', null] },
                             then: '$name',
-                            else: { $concat: ['$series.fullName', ' > ', '$name'] },
                         },
                     },
                 },
@@ -221,7 +223,7 @@ export const recordingCollection = new (class extends MovieDbCollection<IDbRecor
 
         const results = await me.aggregate<IAggregateFullName>(query).toArray()
 
-        for (let recording of results) {
+        for (const recording of results) {
             await me.findOneAndUpdate({ _id: recording._id }, { $set: { fullName: recording.fullName } })
         }
     }
