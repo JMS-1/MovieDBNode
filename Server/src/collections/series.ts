@@ -1,80 +1,25 @@
-import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
 import { Collection as MongoCollection } from 'mongodb'
 
 import { ISeries } from 'movie-db-api'
 
 import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
+import { HierarchicalCollection } from './hierarchical'
 
 import { Series } from '../model/entities'
 
 export const SeriesCollection = MongoConnection.createCollection(
     Series,
-    class extends Collection<typeof Series> {
+    class extends HierarchicalCollection<typeof Series> {
         readonly collectionName = collectionNames.series
 
-        private async demandParent(parentId: string): Promise<boolean> {
-            if (!parentId) {
-                return false
-            }
-
-            const self = await this.collection
-            const parent = await self.findOne({ _id: parentId })
-
-            if (!parent) {
-                throw new Error('Übergeordnete Serie unbekannt.')
-            }
-
-            return true
-        }
-
-        protected async beforeInsert(container: ISeries): Promise<void> {
-            await this.demandParent(container.parentId)
-        }
-
-        protected async beforeUpdate(container: ISeries, id: string): Promise<void> {
-            if (!(await this.demandParent(container.parentId))) {
-                return
-            }
-
-            const self = await this.collection
-            const all = await self.find({}, { projection: { _id: 1, parentId: 1 } }).toArray()
-
-            const parentMap: Record<string, string> = {}
-
-            all.forEach((c) => (parentMap[c._id] = c.parentId))
-
-            parentMap[id] = container.parentId
-
-            const cycleTest = new Set<string>()
-
-            for (; id; id = parentMap[id]) {
-                if (cycleTest.has(id)) {
-                    throw new Error('Zyklische Definition von Serien nicht zulässig')
-                }
-
-                cycleTest.add(id)
-            }
-        }
-        protected async beforeRemove(_id: string): Promise<void> {
-            const recordings = await this._connection.getCollection(collectionNames.recordings)
-            const count = await recordings.countDocuments({ series: _id })
-
-            switch (count) {
-                case 0:
-                    return
-                case 1:
-                    throw new Error('Serie wird noch für eine Aufzeichnung verwendet')
-                default:
-                    throw new Error(`Serie wird noch für ${count} Aufzeichnungen verwendet`)
-            }
-        }
+        readonly entityName = 'Serie'
 
         protected async afterRemove(series: ISeries): Promise<void> {
             const self = await this.collection
             const children = await self.find({ parentId: series._id }).toArray()
 
-            await self.updateMany({ parentId: series._id }, { $unset: { parentId: null } })
+            await super.afterRemove(series)
 
             await this.updateFullNameByChildren(children, '', self, new Set<string>())
         }
