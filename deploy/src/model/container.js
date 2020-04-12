@@ -17,32 +17,37 @@ exports.ContainerType = types_1.GqlEnum('ContainerType', TContainerType, {
 });
 exports.Container = types_1.GqlObject('Container', {
     _id: types_1.GqlId({ computed: true, description: 'Automatisch vergebene eindeutige Kennung des Ablage.' }),
-    type: exports.ContainerType,
+    description: types_1.GqlNullable(types_1.GqlString({
+        description: 'Eine Beschreibung für die Ablage.',
+        validation: {
+            maxLength: 2000,
+            type: 'string',
+        },
+    })),
     name: types_1.GqlString({
-        description: 'Der Anzeigetext für die Ablage.', sortable: true, validation: {
+        description: 'Der Anzeigetext für die Ablage.',
+        sortable: true,
+        validation: {
             maxLength: 50,
             minLength: 1,
             type: 'string',
         },
     }),
-    description: types_1.GqlNullable(types_1.GqlString({
-        description: 'Eine Beschreibung für die Ablage.', validation: {
-            maxLength: 2000,
-            type: 'string',
-        },
-    })),
     parentId: types_1.GqlNullable(types_1.GqlString({
-        description: 'Optional die eindeutige Kennung der übergeordneten Ablage.', validation: {
+        description: 'Optional die eindeutige Kennung der übergeordneten Ablage.',
+        validation: {
             pattern: utils_1.uniqueIdPattern,
             type: 'string',
         },
     })),
     parentLocation: types_1.GqlNullable(types_1.GqlString({
-        description: 'Die Position der Ablage in der übergeordneten Ablage.', validation: {
+        description: 'Die Position der Ablage in der übergeordneten Ablage.',
+        validation: {
             maxLength: 100,
             type: 'string',
         },
     })),
+    type: exports.ContainerType,
 }, { description: 'Beschreibt eine Ablage.' });
 
 //# sourceMappingURL=container.js.map

@@ -1,19 +1,18 @@
-
 import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
 
+import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
-import { RecordingCollection } from './recording'
 
 import { Genre } from '../model/entities'
 
 export const GenreCollection = MongoConnection.createCollection(
     Genre,
     class extends Collection<typeof Genre> {
-        readonly collectionName = 'genres'
+        readonly collectionName = collectionNames.genres
 
         protected async beforeRemove(_id: string): Promise<void> {
-            const self = await RecordingCollection.collection
-            const count = await self.countDocuments({ genres: _id })
+            const recordings = await this._connection.getCollection(collectionNames.recordings)
+            const count = await recordings.countDocuments({ genres: _id })
 
             switch (count) {
                 case 0:
@@ -24,5 +23,5 @@ export const GenreCollection = MongoConnection.createCollection(
                     throw new Error(`Kategorie wird noch für ${count} Aufzeichnungen verwendet`)
             }
         }
-    },
+    }
 )

@@ -1,20 +1,26 @@
 {
+    "[typescript]": {
+        "editor.formatOnSave": false
+    },
+    "[typescriptreact]": {
+        "editor.formatOnSave": false
+    },
+    "css.validate": false,
     "editor.codeActionsOnSave": {
-        "source.fixAll.tslint": true
+        "source.fixAll.eslint": true
     },
     "editor.formatOnSave": true,
-    "files.exclude": {
-        "Server/src/**/*.js": true,
-        "Server/src/**/*.js.map": true
+    "eslint.enable": true,
+    "eslint.validate": [
+        "typescript",
+        "typescriptreact"
+    ],
+    "files.associations": {
+        "*.{overrides,variables}": "less"
     },
-    "grunt.autoDetect": "off",
-    "gulp.autoDetect": "on",
-    "jake.autoDetect": "off",
-    "scss.lint.duplicateProperties": "warning",
-    "scss.lint.emptyRules": "error",
-    "scss.lint.idSelector": "warning",
-    "scss.lint.universalSelector": "warning",
-    "tslint.alwaysShowRuleFailuresAsWarnings": true,
-    "tslint.suppressWhileTypeErrorsPresent": true,
+    "less.validate": false,
+    "scss.validate": false,
+    "stylelint.autoFixOnSave": true,
+    "stylelint.enable": true,
     "typescript.tsdk": "node_modules/typescript/lib"
 }

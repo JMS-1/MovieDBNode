@@ -41,9 +41,7 @@ function startupError(error) {
     debug_1.default('startup')('%s', isxs_tools_1.getMessage(error));
 }
 try {
-    startup()
-        .then(undefined, startupError)
-        .catch(startupError);
+    startup().then(undefined, startupError).catch(startupError);
 }
 catch (error) {
     startupError(error);

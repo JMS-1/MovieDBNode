@@ -36,7 +36,7 @@ async function startup(): Promise<void> {
                 languages: LanguageCollection,
                 recordings: RecordingCollection,
                 series: SeriesCollection,
-            }),
+            })
         ),
     })
 
@@ -45,14 +45,12 @@ async function startup(): Promise<void> {
     app.listen(Config.port)
 }
 
-function startupError(error: any): void {
+function startupError(error: unknown): void {
     debug('startup')('%s', getMessage(error))
 }
 
 try {
-    startup()
-        .then(undefined, startupError)
-        .catch(startupError)
+    startup().then(undefined, startupError).catch(startupError)
 } catch (error) {
     startupError(error)
 }

@@ -20,32 +20,43 @@ export const Container = GqlObject(
     'Container',
     {
         _id: GqlId({ computed: true, description: 'Automatisch vergebene eindeutige Kennung des Ablage.' }),
-        type: ContainerType,
+        description: GqlNullable(
+            GqlString({
+                description: 'Eine Beschreibung für die Ablage.',
+                validation: {
+                    maxLength: 2000,
+                    type: 'string',
+                },
+            })
+        ),
         name: GqlString({
-            description: 'Der Anzeigetext für die Ablage.', sortable: true, validation: {
+            description: 'Der Anzeigetext für die Ablage.',
+            sortable: true,
+            validation: {
                 maxLength: 50,
                 minLength: 1,
                 type: 'string',
             },
         }),
-        description: GqlNullable(GqlString({
-            description: 'Eine Beschreibung für die Ablage.', validation: {
-                maxLength: 2000,
-                type: 'string',
-            },
-        })),
-        parentId: GqlNullable(GqlString({
-            description: 'Optional die eindeutige Kennung der übergeordneten Ablage.', validation: {
-                pattern: uniqueIdPattern,
-                type: 'string',
-            },
-        })),
-        parentLocation: GqlNullable(GqlString({
-            description: 'Die Position der Ablage in der übergeordneten Ablage.', validation: {
-                maxLength: 100,
-                type: 'string',
-            },
-        })),
+        parentId: GqlNullable(
+            GqlString({
+                description: 'Optional die eindeutige Kennung der übergeordneten Ablage.',
+                validation: {
+                    pattern: uniqueIdPattern,
+                    type: 'string',
+                },
+            })
+        ),
+        parentLocation: GqlNullable(
+            GqlString({
+                description: 'Die Position der Ablage in der übergeordneten Ablage.',
+                validation: {
+                    maxLength: 100,
+                    type: 'string',
+                },
+            })
+        ),
+        type: ContainerType,
     },
-    { description: 'Beschreibt eine Ablage.' },
+    { description: 'Beschreibt eine Ablage.' }
 )

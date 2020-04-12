@@ -1,19 +1,18 @@
-
 import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
 
+import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
-import { RecordingCollection } from './recording'
 
 import { Language } from '../model/entities'
 
 export const LanguageCollection = MongoConnection.createCollection(
     Language,
     class extends Collection<typeof Language> {
-        readonly collectionName = 'languages'
+        readonly collectionName = collectionNames.languages
 
         protected async beforeRemove(_id: string): Promise<void> {
-            const self = await RecordingCollection.collection
-            const count = await self.countDocuments({ languages: _id })
+            const recordings = await this._connection.getCollection(collectionNames.recordings)
+            const count = await recordings.countDocuments({ languages: _id })
 
             switch (count) {
                 case 0:
@@ -24,5 +23,5 @@ export const LanguageCollection = MongoConnection.createCollection(
                     throw new Error(`Sprache wird noch für ${count} Aufzeichnungen verwendet`)
             }
         }
-    },
+    }
 )

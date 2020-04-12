@@ -2,7 +2,7 @@
     "dependencies": {
         "@jms-1/isxs-tools": "^1.0.18",
         "@jms-1/isxs-validation": "^1.1.6",
-        "@jms-1/mongodb-graphql": "^0.2.1",
+        "@jms-1/mongodb-graphql": "^0.2.2",
         "apollo-server-express": "^2.12.0",
         "body-parser": "^1.19.0",
         "debug": "^4.1.1",
@@ -12,6 +12,9 @@
         "uuid": "^7.0.3"
     },
     "devDependencies": {
+        "@insynergie/eslint-config": "^1.3.1",
+        "@insynergie/prettier-config": "^1.2.0",
+        "@insynergie/stylelint-config": "^1.1.1",
         "@types/body-parser": "^1.19.0",
         "@types/debug": "^4.1.5",
         "@types/djv": "^2.1.0",
@@ -26,6 +29,7 @@
         "awesome-typescript-loader": "^5.2.1",
         "connected-react-router": "^6.8.0",
         "css-loader": "^3.5.2",
+        "eslint": "^6.8.0",
         "extract-loader": "^5.0.1",
         "file-loader": "^6.0.0",
         "filter-webpack-output": "^1.2.0",
@@ -38,7 +42,7 @@
         "gulp-sourcemaps": "^2.6.5",
         "gulp-typescript": "^6.0.0-alpha.1",
         "history": "^4.10.1",
-        "node-sass": "^4.13.1",
+        "prettier": "^2.0.4",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.0",
@@ -46,12 +50,16 @@
         "react-router-dom": "^5.1.2",
         "redux": "^4.0.5",
         "reselect": "^4.0.0",
+        "sass": "^1.26.3",
         "sass-loader": "^8.0.2",
         "semantic-ui-react": "^0.88.2",
-        "tslint": "^6.1.1",
+        "stylelint": "^13.3.2",
         "typescript": "^3.8.3",
         "webpack": "^4.42.1",
         "webpack-cli": "^3.3.11"
+    },
+    "eslintConfig": {
+        "extends": "@insynergie"
     },
     "license": "MIT",
     "main": "Server/build/startup.ts",
@@ -59,12 +67,19 @@
     "optionalDependencies": {
         "node-windows": "^1.0.0-beta.1"
     },
+    "prettier": "@insynergie/prettier-config",
     "scripts": {
         "build-client": "node node_modules/webpack/bin/webpack.js --mode development",
         "debug-server": "node --inspect-brk=23902 Server/src/startup",
         "start": "node src/startup",
         "start-server": "node Server/src/startup",
         "watch-client": "node node_modules/webpack/bin/webpack.js --mode development --watch"
+    },
+    "stylelint": {
+        "extends": "@insynergie/stylelint-config",
+        "ignoreFiles": [
+            "**/*.min.css"
+        ]
     },
     "version": "2.0.0"
 }
