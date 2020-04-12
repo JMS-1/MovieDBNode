@@ -18,6 +18,10 @@
     "files.associations": {
         "*.{overrides,variables}": "less"
     },
+    "files.exclude": {
+        "Server/src/**/*.js": true,
+        "Server/src/**/*.js.map": true
+    },
     "less.validate": false,
     "scss.validate": false,
     "stylelint.autoFixOnSave": true,
