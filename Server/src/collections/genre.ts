@@ -12,8 +12,8 @@ export const GenreCollection = MongoConnection.createCollection(
         readonly collectionName = 'genres'
 
         protected async beforeRemove(_id: string): Promise<void> {
-            const me = await RecordingCollection.collection
-            const count = await me.countDocuments({ genres: _id })
+            const self = await RecordingCollection.collection
+            const count = await self.countDocuments({ genres: _id })
 
             switch (count) {
                 case 0:
