@@ -5,6 +5,7 @@ import { ISeries } from 'movie-db-api'
 import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
 import { HierarchicalCollection } from './hierarchical'
+import { refreshRecordingNames } from './utils'
 
 import { Series } from '../model/entities'
 
@@ -28,7 +29,12 @@ export const SeriesCollection = MongoConnection.createCollection(
         }
 
         protected async afterUpdate(series: ISeries): Promise<void> {
-            await this.refreshFullNames(series)
+            const seriesIds = await this.refreshFullNames(series)
+
+            await refreshRecordingNames(
+                { series: { $in: Array.from(seriesIds) } },
+                await this._connection.getCollection(collectionNames.recordings)
+            )
         }
 
         protected async afterRemove(series: ISeries): Promise<void> {

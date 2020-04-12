@@ -13,7 +13,7 @@ const recording_1 = require("./entities/recording");
 const utils_1 = require("./utils");
 __export(require("./entities/recording"));
 const databaseTrace = debug_1.default('database:trace');
-const dateReg = /^CAST\(N'([^\.]+)(\.\d+)?' AS DateTime\)$/;
+const dateReg = /^CAST\(N'([^.]+)(\.\d+)?' AS DateTime\)$/;
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
 const collation = { locale: 'en', strength: 2 };
 exports.recordingCollection = new (class extends utils_1.MovieDbCollection {
@@ -65,16 +65,16 @@ exports.recordingCollection = new (class extends utils_1.MovieDbCollection {
             filter.languages = req.language.toString();
         }
         if (req.genres && req.genres.length > 0) {
-            filter.genres = { $all: req.genres.map(s => s.toString()) };
+            filter.genres = { $all: req.genres.map((s) => s.toString()) };
         }
         if (req.series && req.series.length > 0) {
-            filter.series = { $in: req.series.map(s => s.toString()) };
+            filter.series = { $in: req.series.map((s) => s.toString()) };
         }
         if (typeof req.rent === 'boolean') {
             filter.rentTo = { $exists: req.rent };
         }
         if (req.fullName) {
-            filter.fullName = { $regex: req.fullName.toString().replace(escapeReg, '\\$&'), $options: 'i' };
+            filter.fullName = { $options: 'i', $regex: req.fullName.toString().replace(escapeReg, '\\$&') };
         }
         const query = [{ $match: filter }];
         const baseQuery = [...query];
@@ -91,7 +91,9 @@ exports.recordingCollection = new (class extends utils_1.MovieDbCollection {
         });
         databaseTrace('query recordings: %j', query);
         const me = await this.getCollection();
-        const result = await me.aggregate(query, { collation }).toArray();
+        const result = await me
+            .aggregate(query, { collation })
+            .toArray();
         const firstRes = result && result[0];
         const countRes = firstRes && firstRes.count && firstRes.count[0];
         delete filter.languages;
@@ -103,8 +105,8 @@ exports.recordingCollection = new (class extends utils_1.MovieDbCollection {
             count: (countRes && countRes.total) || 0,
             genres: (firstRes && firstRes.genres) || [],
             languages: languageInfo || [],
-            total: await me.countDocuments(),
             list: (firstRes && firstRes.view) || [],
+            total: await me.countDocuments(),
         };
     }
     async inUse(property, id, scope) {
@@ -158,16 +160,16 @@ exports.recordingCollection = new (class extends utils_1.MovieDbCollection {
                     _id: 1,
                     fullName: {
                         $cond: {
+                            else: { $concat: ['$series.fullName', ' > ', '$name'] },
                             if: { $eq: ['$series', null] },
                             then: '$name',
-                            else: { $concat: ['$series.fullName', ' > ', '$name'] },
                         },
                     },
                 },
             },
         ];
         const results = await me.aggregate(query).toArray();
-        for (let recording of results) {
+        for (const recording of results) {
             await me.findOneAndUpdate({ _id: recording._id }, { $set: { fullName: recording.fullName } });
         }
     }

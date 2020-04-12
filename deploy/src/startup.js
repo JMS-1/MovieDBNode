@@ -26,7 +26,7 @@ async function startup() {
     app.use(body_parser_1.json());
     api_1.installApi(app);
     const server = new apollo_server_express_1.ApolloServer({
-        schema: new graphql_1.GraphQLSchema(schema_1.createSchemaConfiguration({
+        schema: new graphql_1.GraphQLSchema(await schema_1.createSchemaConfiguration({
             container: container_1.ContainerCollection,
             genres: genre_1.GenreCollection,
             languages: language_1.LanguageCollection,
