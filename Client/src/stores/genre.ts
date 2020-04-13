@@ -8,4 +8,16 @@ export class GenreStore extends ItemStore<IGenre> {
     protected readonly itemScope = 'genres'
 
     protected readonly validationName = 'Genre'
+
+    getName(genre: IGenre): string {
+        return genre?.name || genre?._id
+    }
+
+    protected createNew(): IGenre {
+        return { _id: undefined, name: '' }
+    }
+
+    protected toProtocol(genre: IGenre): Partial<IGenre> {
+        return { name: genre.name }
+    }
 }

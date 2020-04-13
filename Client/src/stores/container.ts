@@ -8,4 +8,29 @@ export class ContainerStore extends ItemStore<IContainer> {
     protected readonly itemScope = 'containers'
 
     protected readonly validationName = 'Container'
+
+    getName(container: IContainer): string {
+        return container?.name || container?._id
+    }
+
+    protected createNew(): IContainer {
+        return {
+            _id: undefined,
+            description: undefined,
+            name: '',
+            parentId: undefined,
+            parentLocation: undefined,
+            type: undefined,
+        }
+    }
+
+    protected toProtocol(container: IContainer): Partial<IContainer> {
+        return {
+            description: container.description,
+            name: container.name,
+            parentId: container.parentId || null,
+            parentLocation: container.parentLocation,
+            type: container.type,
+        }
+    }
 }
