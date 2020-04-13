@@ -1,11 +1,11 @@
 ﻿const del = require('del')
 const fs = require('fs')
 const gulp = require('gulp')
-const map = require('gulp-sourcemaps')
-const path = require('path')
 const sass = require('gulp-sass')
 const shell = require('gulp-shell')
+const map = require('gulp-sourcemaps')
 const ts = require('gulp-typescript')
+const path = require('path')
 const util = require('util')
 
 const config = ts.createProject(path.join(__dirname, 'Server/tsconfig.json'))
@@ -56,7 +56,7 @@ gulp.task('build-sass', () =>
     gulp
         .src(path.join(__dirname, 'Client/src/index.scss'))
         .pipe(sass({ linefeed: 'crlf' }))
-        .pipe(gulp.dest(path.join(__dirname, 'Server/dist'))),
+        .pipe(gulp.dest(path.join(__dirname, 'Server/dist')))
 )
 
 //
@@ -76,7 +76,10 @@ gulp.task('watch-default-ui', shell.task('node node_modules/gulp/bin/gulp.js int
 //
 gulp.task('build-client-core', gulp.series('build-sass', 'build-app'))
 gulp.task('build-client', gulp.series('build-client-core', 'build-default-ui'))
-gulp.task('build-client-deploy', gulp.series('build-client-core', 'build-alternate-1-ui', 'build-alternate-2-ui', 'build-default-ui'))
+gulp.task(
+    'build-client-deploy',
+    gulp.series('build-client-core', 'build-alternate-1-ui', 'build-alternate-2-ui', 'build-default-ui')
+)
 
 //
 gulp.task('build-server', () =>
@@ -85,7 +88,7 @@ gulp.task('build-server', () =>
         .pipe(map.init())
         .pipe(config())
         .js.pipe(map.write('', { sourceRoot: build }))
-        .pipe(gulp.dest(build)),
+        .pipe(gulp.dest(build))
 )
 
 //
@@ -94,12 +97,16 @@ gulp.task('build', gulp.series('build-client', 'build-server'))
 //
 gulp.task('deploy:clean', () => del('deploy'))
 
-gulp.task('deploy:server', gulp.series('build-server', () =>
-    gulp.src('Server/src/**/*.js').pipe(gulp.dest('deploy/src')))
+gulp.task(
+    'deploy:server',
+    gulp.series('build-server', () => gulp.src('Server/src/**/*.js').pipe(gulp.dest('deploy/src')))
 )
 
-gulp.task('deploy:client', gulp.series('build-client-deploy', () =>
-    gulp.src(['Server/dist/**/*', '!Server/dist/**/*.map']).pipe(gulp.dest('deploy/dist')))
+gulp.task(
+    'deploy:client',
+    gulp.series('build-client-deploy', () =>
+        gulp.src(['Server/dist/**/*', '!Server/dist/**/*.map']).pipe(gulp.dest('deploy/dist'))
+    )
 )
 
 gulp.task('deploy:config', () =>
@@ -114,7 +121,7 @@ gulp.task('deploy:config', () =>
             'Server/service.cmd',
             'Server/service.js',
         ])
-        .pipe(gulp.dest('deploy')),
+        .pipe(gulp.dest('deploy'))
 )
 
 gulp.task('deploy', gulp.series('deploy:clean', 'deploy:config', 'deploy:server', 'deploy:client'))

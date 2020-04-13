@@ -1,6 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
+        "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "inlineSources": true,
         "jsx": "react",
@@ -14,5 +15,10 @@
         "strictPropertyInitialization": false,
         "target": "es2017"
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx", "../common/**/*.d.ts"]
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "../common/**/*.d.ts",
+        "../Server/src/model/**/*.ts"
+    ]
 }

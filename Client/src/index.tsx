@@ -7,10 +7,13 @@ import { Root } from './components/root/rootRedux'
 import * as controller from './controller'
 import { GenreActions } from './controller/genre'
 import { history, initializeStore, ServerApi } from './store'
+import { rootStore } from './stores'
 
 const store = initializeStore()
 
 store.dispatch(controller.ApplicationActions.setTheme('default'))
+
+rootStore.startup()
 
 render(
     <Provider store={store}>
@@ -18,7 +21,7 @@ render(
             <Root />
         </ConnectedRouter>
     </Provider>,
-    document.querySelector('client-root'),
+    document.querySelector('client-root')
 )
 
 ServerApi.get('container', controller.ContainerActions.load)
@@ -39,6 +42,7 @@ document.addEventListener('keydown', (ev: KeyboardEvent) => {
     for (let i = 0; i < css.length; i++) {
         const link = css[i] as HTMLLinkElement
 
+        // eslint-disable-next-line no-self-assign
         link.href = link.href
     }
 })

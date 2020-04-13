@@ -27,7 +27,7 @@ async function startup() {
     api_1.installApi(app);
     const server = new apollo_server_express_1.ApolloServer({
         schema: new graphql_1.GraphQLSchema(await schema_1.createSchemaConfiguration({
-            container: container_1.ContainerCollection,
+            containers: container_1.ContainerCollection,
             genres: genre_1.GenreCollection,
             languages: language_1.LanguageCollection,
             recordings: recording_1.RecordingCollection,

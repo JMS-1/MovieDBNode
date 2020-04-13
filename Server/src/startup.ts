@@ -31,7 +31,7 @@ async function startup(): Promise<void> {
     const server = new ApolloServer({
         schema: new GraphQLSchema(
             await createSchemaConfiguration({
-                container: ContainerCollection,
+                containers: ContainerCollection,
                 genres: GenreCollection,
                 languages: LanguageCollection,
                 recordings: RecordingCollection,
