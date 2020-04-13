@@ -124,5 +124,31 @@ exports.Recording = types.GqlObject('Recording', {
         },
     })),
 }, { description: 'Beschreibt eine Aufzeichnung.' });
+var TRecordingSort;
+(function (TRecordingSort) {
+    TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
+    TRecordingSort[TRecordingSort["created"] = 1] = "created";
+})(TRecordingSort = exports.TRecordingSort || (exports.TRecordingSort = {}));
+exports.RecordingSort = types.GqlEnum('RecordingSort', TRecordingSort, {
+    description: 'Eigenschaften, nach denen die Aufzeichnungen sortiert werden können.',
+});
+exports.QueryCountInfo = types.GqlObject('QueryCountInfo', {
+    _id: types.GqlId({ description: 'Die eindeutige Kennung des Kriteriums.' }),
+    count: types.GqlInt({ description: 'Die Anzahl der Aufzeichnungen für das Kriterium.' }),
+}, { description: 'Beschreibt die Anzahl von Aufzeichnungen für ein bestimmtes Kriterium.' });
+exports.RecordingQueryResponse = types.GqlObject('RecordingQueryResponse', {
+    correlationId: types.GqlNullable(types.GqlId({ description: 'Eindeutige Kennung des zugehörigen Aufrufs.' })),
+    count: types.GqlInt({
+        description: 'Die Anzahl der Aufzeichnungen bezüglich der vorgegebenen Einschränkungen.',
+    }),
+    genres: types.GqlArray(exports.QueryCountInfo, {
+        description: 'Statistik über die Anzahl der Aufzeichnungen pro Kategorie.',
+    }),
+    languages: types.GqlArray(exports.QueryCountInfo, {
+        description: 'Statistik über die Anzahl der Aufzeichnungen pro Sprache.',
+    }),
+    total: types.GqlInt({ description: 'Die gesamte Anzahl an Aufzeichnungen.' }),
+    view: types.GqlArray(exports.Recording, { description: 'Das zu den Ergebnissen passende Fenster von Aufzeichnungen.' }),
+}, { description: 'Ergebnis einer freien Suche nach Aufzeichnungen.' });
 
 //# sourceMappingURL=recording.js.map

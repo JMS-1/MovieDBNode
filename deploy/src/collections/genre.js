@@ -10,7 +10,7 @@ exports.GenreCollection = connection_1.MongoConnection.createCollection(entities
         this.collectionName = collections_1.collectionNames.genres;
     }
     async beforeRemove(_id) {
-        const recordings = await this._connection.getCollection(collections_1.collectionNames.recordings);
+        const recordings = await this.connection.getCollection(collections_1.collectionNames.recordings);
         const count = await recordings.countDocuments({ genres: _id });
         switch (count) {
             case 0:

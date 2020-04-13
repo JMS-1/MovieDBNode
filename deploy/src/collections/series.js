@@ -22,7 +22,7 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
     }
     async afterUpdate(series) {
         const seriesIds = await this.refreshFullNames(series);
-        await utils_1.refreshRecordingNames({ series: { $in: Array.from(seriesIds) } }, await this._connection.getCollection(collections_1.collectionNames.recordings));
+        await utils_1.refreshRecordingNames({ series: { $in: Array.from(seriesIds) } }, await this.connection.getCollection(collections_1.collectionNames.recordings));
     }
     async afterRemove(series) {
         const self = await this.collection;

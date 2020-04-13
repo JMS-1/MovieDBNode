@@ -2,7 +2,7 @@
     "dependencies": {
         "@jms-1/isxs-tools": "^1.0.18",
         "@jms-1/isxs-validation": "^1.1.6",
-        "@jms-1/mongodb-graphql": "^0.2.3",
+        "@jms-1/mongodb-graphql": "^0.2.5",
         "apollo-server-express": "^2.12.0",
         "body-parser": "^1.19.0",
         "debug": "^4.1.1",
@@ -71,6 +71,7 @@
     "scripts": {
         "build-client": "node node_modules/webpack/bin/webpack.js --mode development",
         "debug-server": "node --inspect-brk=23902 Server/src/startup",
+        "make": "gulp",
         "start": "node src/startup",
         "start-server": "node Server/src/startup",
         "watch-client": "node node_modules/webpack/bin/webpack.js --mode development --watch"

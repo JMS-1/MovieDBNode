@@ -18,10 +18,11 @@ async function refreshRecordingNames(filter, recordings) {
             },
         },
     ];
-    const results = await recordings.aggregate(query).toArray();
+    const results = (await recordings.aggregate(query).toArray()) || [];
     for (const recording of results) {
         await recordings.findOneAndUpdate({ _id: recording._id }, { $set: { fullName: recording.fullName } });
     }
+    return results;
 }
 exports.refreshRecordingNames = refreshRecordingNames;
 

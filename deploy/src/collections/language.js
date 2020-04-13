@@ -10,7 +10,7 @@ exports.LanguageCollection = connection_1.MongoConnection.createCollection(entit
         this.collectionName = collections_1.collectionNames.languages;
     }
     async beforeRemove(_id) {
-        const recordings = await this._connection.getCollection(collections_1.collectionNames.recordings);
+        const recordings = await this.connection.getCollection(collections_1.collectionNames.recordings);
         const count = await recordings.countDocuments({ languages: _id });
         switch (count) {
             case 0:
