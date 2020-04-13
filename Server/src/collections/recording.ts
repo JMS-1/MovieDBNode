@@ -1,4 +1,5 @@
 import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
+import { GqlId, GqlArray } from '@jms-1/mongodb-graphql/lib/types'
 
 import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
@@ -78,5 +79,18 @@ export const RecordingCollection = MongoConnection.createCollection(
         protected afterUpdate(item: IRecording): Promise<void> {
             return this.setFullName(item)
         }
+
+        readonly findByContainer = this.queries.register(
+            'findByContainer',
+            { containerId: GqlId({ description: 'Die eindeutige Kennung der Ablage.' }) },
+            GqlArray(this.model),
+            'Alle Aufzeichnungen in einer Ablage ermitteln.',
+            async (args) => {
+                const self = await this.collection
+                const recordings = await self.find({ containerId: args.containerId }).sort({ fullName: 1 }).toArray()
+
+                return Promise.all(recordings.map(async (r) => await this.toGraphQL(r)))
+            }
+        )
     }
 )
