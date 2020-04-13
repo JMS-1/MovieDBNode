@@ -106,3 +106,11 @@ export type IRecordingUpdateResult = TGetMethodResult<TRecordingCollection, 'upd
 
 export type IRecordingRemoveArgs = TGetMethodArgs<TRecordingCollection, 'remove'>
 export type IRecordingRemoveResult = TGetMethodResult<TRecordingCollection, 'remove'>
+
+export type IRecordingFindByContainerArgs = TGetFilterArgs<TRecordingCollection, 'findByContainer'>
+export type IRecordingFindByContainerResult = TGetMethodResult<TRecordingCollection, 'findByContainer'>
+
+export type IQueryCountInfo = TGqlType<typeof entities.QueryCountInfo>
+
+export type IRecordingQueryArgs = TGetFilterArgs<TRecordingCollection, 'query'>
+export type IRecordingQueryResult = TGetMethodResult<TRecordingCollection, 'query'>

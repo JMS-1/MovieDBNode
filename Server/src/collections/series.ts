@@ -24,20 +24,20 @@ export const SeriesCollection = MongoConnection.createCollection(
             await self.createIndex({ parentId: 1 }, { name: 'series_tree' })
         }
 
-        protected async afterInsert(series: ISeries): Promise<void> {
+        async afterInsert(series: ISeries): Promise<void> {
             await this.refreshFullNames(series)
         }
 
-        protected async afterUpdate(series: ISeries): Promise<void> {
+        async afterUpdate(series: ISeries): Promise<void> {
             const seriesIds = await this.refreshFullNames(series)
 
             await refreshRecordingNames(
                 { series: { $in: Array.from(seriesIds) } },
-                await this._connection.getCollection(collectionNames.recordings)
+                await this.connection.getCollection(collectionNames.recordings)
             )
         }
 
-        protected async afterRemove(series: ISeries): Promise<void> {
+        async afterRemove(series: ISeries): Promise<void> {
             const self = await this.collection
             const children = await self.find({ parentId: series._id }).toArray()
 

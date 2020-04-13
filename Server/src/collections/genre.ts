@@ -10,8 +10,8 @@ export const GenreCollection = MongoConnection.createCollection(
     class extends Collection<typeof Genre> {
         readonly collectionName = collectionNames.genres
 
-        protected async beforeRemove(_id: string): Promise<void> {
-            const recordings = await this._connection.getCollection(collectionNames.recordings)
+        async beforeRemove(_id: string): Promise<void> {
+            const recordings = await this.connection.getCollection(collectionNames.recordings)
             const count = await recordings.countDocuments({ genres: _id })
 
             switch (count) {

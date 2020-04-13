@@ -10,8 +10,8 @@ export const LanguageCollection = MongoConnection.createCollection(
     class extends Collection<typeof Language> {
         readonly collectionName = collectionNames.languages
 
-        protected async beforeRemove(_id: string): Promise<void> {
-            const recordings = await this._connection.getCollection(collectionNames.recordings)
+        async beforeRemove(_id: string): Promise<void> {
+            const recordings = await this.connection.getCollection(collectionNames.recordings)
             const count = await recordings.countDocuments({ languages: _id })
 
             switch (count) {

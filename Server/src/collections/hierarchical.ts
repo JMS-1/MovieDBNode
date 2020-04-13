@@ -13,7 +13,7 @@ export abstract class HierarchicalCollection<
     TItem = TGqlType<TModel>,
     TLayout = TGqlLayoutType<TModel>
 > extends CollectionBase<TItem extends IHierarchicalItem ? TItem : never, TLayout> {
-    protected abstract entityName: string
+    abstract readonly entityName: string
 
     private async demandParent(parentId?: string): Promise<boolean> {
         if (!parentId) {
@@ -31,11 +31,11 @@ export abstract class HierarchicalCollection<
         return true
     }
 
-    protected async beforeInsert(item: TItem & IHierarchicalItem): Promise<void> {
+    async beforeInsert(item: TItem & IHierarchicalItem): Promise<void> {
         await this.demandParent(item.parentId)
     }
 
-    protected async beforeUpdate(item: TItem & IHierarchicalItem, id: string): Promise<void> {
+    async beforeUpdate(item: TItem & IHierarchicalItem, id: string): Promise<void> {
         if (!(await this.demandParent(item.parentId))) {
             return
         }
@@ -60,8 +60,8 @@ export abstract class HierarchicalCollection<
         }
     }
 
-    protected async beforeRemove(_id: string): Promise<void> {
-        const recordings = await this._connection.getCollection(collectionNames.recordings)
+    async beforeRemove(_id: string): Promise<void> {
+        const recordings = await this.connection.getCollection(collectionNames.recordings)
         const count = await recordings.countDocuments({ containerId: _id })
 
         switch (count) {
@@ -74,7 +74,7 @@ export abstract class HierarchicalCollection<
         }
     }
 
-    protected async afterRemove(item: TItem & IHierarchicalItem): Promise<void> {
+    async afterRemove(item: TItem & IHierarchicalItem): Promise<void> {
         const self = await this.collection
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
