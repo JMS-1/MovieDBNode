@@ -8,6 +8,7 @@ import { refreshRecordingNames } from './utils'
 
 import { IRecording, IQueryCountInfo } from '../model'
 import { Recording, RecordingQueryResponse, RecordingSort, TRecordingSort } from '../model/entities'
+import { uniqueIdPattern } from '../model/utils'
 
 const escapeReg = /[.*+?^${}()|[\]\\]/g
 
@@ -97,7 +98,15 @@ export const RecordingCollection = MongoConnection.createCollection(
 
         readonly findByContainer = this.queries.register(
             'findByContainer',
-            { containerId: types.GqlId({ description: 'Die eindeutige Kennung der Ablage.' }) },
+            {
+                containerId: types.GqlString({
+                    description: 'Die eindeutige Kennung der Ablage.',
+                    validation: {
+                        pattern: uniqueIdPattern,
+                        type: 'string',
+                    },
+                }),
+            },
             types.GqlArray(this.model),
             'Alle Aufzeichnungen in einer Ablage ermitteln.',
             async (args) => {
@@ -122,9 +131,15 @@ export const RecordingCollection = MongoConnection.createCollection(
                     })
                 ),
                 genres: types.GqlNullable(
-                    types.GqlArray(types.GqlId(), {
-                        description: 'Optional eine Liste von Kategorien, die Aufzeichnungen alle haben müssen.',
-                    })
+                    types.GqlArray(
+                        types.GqlString({
+                            validation: {
+                                pattern: uniqueIdPattern,
+                                type: 'string',
+                            },
+                        }),
+                        { description: 'Optional eine Liste von Kategorien, die Aufzeichnungen alle haben müssen.' }
+                    )
                 ),
                 language: types.GqlNullable(
                     types.GqlString({ description: 'Optional die Sprache die eine Aufzeichnung haben muss.' })
@@ -137,9 +152,15 @@ export const RecordingCollection = MongoConnection.createCollection(
                     types.GqlBoolean({ description: 'Optional gesetzt um nur verliehene Aufzeichnungen zu erhalten.' })
                 ),
                 series: types.GqlNullable(
-                    types.GqlArray(types.GqlId(), {
-                        description: 'Optional eine Liste von Serien, von denen eine Aufzeichnung eine haben muss.',
-                    })
+                    types.GqlArray(
+                        types.GqlString({
+                            validation: {
+                                pattern: uniqueIdPattern,
+                                type: 'string',
+                            },
+                        }),
+                        { description: 'Optional eine Liste von Serien, von denen eine Aufzeichnung eine haben muss.' }
+                    )
                 ),
                 sort: RecordingSort,
                 sortOrder: types.SortDirection,
