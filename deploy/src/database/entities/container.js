@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const isxs_validation_1 = require("@jms-1/isxs-validation");
 exports.collectionName = 'containers';
 exports.ContainerSchema = {
-    $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/container.json',
+    $schema: 'http://json-schema.org/schema#',
     additionalProperties: false,
-    type: 'object',
     message: { de: 'Ablage unvollständig' },
     properties: {
         _id: {
@@ -34,8 +33,6 @@ exports.ContainerSchema = {
             type: 'string',
         },
         type: {
-            message: { de: 'Ablageart fehlt oder ist unzulässig' },
-            type: 'integer',
             enum: [
                 2,
                 4,
@@ -44,9 +41,12 @@ exports.ContainerSchema = {
                 3,
                 0,
             ],
+            message: { de: 'Ablageart fehlt oder ist unzulässig' },
+            type: 'integer',
         },
     },
     required: ['name', 'type'],
+    type: 'object',
 };
 function toProtocol(container) {
     return container;

@@ -24,7 +24,7 @@ export const Container = GqlObject(
             GqlString({
                 description: 'Eine Beschreibung für die Ablage.',
                 validation: {
-                    maxLength: 2000,
+                    max: 2000,
                     type: 'string',
                 },
             })
@@ -33,8 +33,8 @@ export const Container = GqlObject(
             description: 'Der Anzeigetext für die Ablage.',
             sortable: true,
             validation: {
-                maxLength: 50,
-                minLength: 1,
+                max: 50,
+                min: 1,
                 type: 'string',
             },
         }),
@@ -51,7 +51,7 @@ export const Container = GqlObject(
             GqlString({
                 description: 'Die Position der Ablage in der übergeordneten Ablage.',
                 validation: {
-                    maxLength: 100,
+                    max: 100,
                     type: 'string',
                 },
             })

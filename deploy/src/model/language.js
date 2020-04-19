@@ -7,8 +7,8 @@ exports.Language = types_1.GqlObject('Language', {
         description: 'Der Anzeigetext für die Sprache.',
         sortable: true,
         validation: {
-            maxLength: 100,
-            minLength: 1,
+            max: 100,
+            min: 1,
             type: 'string',
         },
     }),

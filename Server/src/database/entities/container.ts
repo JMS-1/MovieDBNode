@@ -7,10 +7,9 @@ export const collectionName = 'containers'
 export interface IDbContainer extends IContainer {}
 
 export const ContainerSchema: ISchema<IContainer> = {
-    $schema: 'http://json-schema.org/schema#',
     $id: 'http://psimarron.net/schemas/movie-db/container.json',
+    $schema: 'http://json-schema.org/schema#',
     additionalProperties: false,
-    type: 'object',
     message: { de: 'Ablage unvollständig' },
     properties: {
         _id: {
@@ -38,8 +37,6 @@ export const ContainerSchema: ISchema<IContainer> = {
             type: 'string',
         },
         type: {
-            message: { de: 'Ablageart fehlt oder ist unzulässig' },
-            type: 'integer',
             enum: [
                 containerType.Box,
                 containerType.Disk,
@@ -48,9 +45,12 @@ export const ContainerSchema: ISchema<IContainer> = {
                 containerType.Shelf,
                 containerType.Undefined,
             ],
+            message: { de: 'Ablageart fehlt oder ist unzulässig' },
+            type: 'integer',
         },
     },
     required: ['name', 'type'],
+    type: 'object',
 }
 
 export function toProtocol(container: IDbContainer): IContainer {

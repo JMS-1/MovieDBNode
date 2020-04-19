@@ -10,7 +10,7 @@ export const Series = GqlObject(
             GqlString({
                 description: 'Optional eine Beschreibung für die Serie.',
                 validation: {
-                    maxLength: 2000,
+                    max: 2000,
                     type: 'string',
                 },
             })
@@ -29,8 +29,8 @@ export const Series = GqlObject(
             description: 'Der Anzeigetext für die Serie.',
             sortable: true,
             validation: {
-                maxLength: 50,
-                minLength: 1,
+                max: 50,
+                min: 1,
                 type: 'string',
             },
         }),

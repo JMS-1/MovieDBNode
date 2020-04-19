@@ -1,12 +1,12 @@
+import { routes } from 'movie-db-client'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
-import { DropdownItemProps, Label, List } from 'semantic-ui-react'
+import { Label, List } from 'semantic-ui-react'
 
-import { routes } from 'movie-db-client'
-
-import { LanguageDetails } from './details/detailsRedux'
+import { LanguageDetails } from './details/details'
 
 import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
+import { languages } from '../../stores'
 
 interface ILanguageRouteParams {
     id?: string
@@ -14,22 +14,14 @@ interface ILanguageRouteParams {
 
 export interface ILanguageRouteUiProps extends RouteComponentProps<ILanguageRouteParams> {}
 
-export interface ILanguageRouteProps {
-    languageOptions: DropdownItemProps[]
-}
-
-export interface ILanguageRouteActions {}
-
-export type TLanguageRouteProps = ILanguageRouteProps & ILanguageRouteUiProps & ILanguageRouteActions
-
-export class CLanguageRoute extends React.PureComponent<TLanguageRouteProps> {
+export class LanguageRoute extends React.PureComponent<ILanguageRouteUiProps> {
     render(): JSX.Element {
         const { id } = this.props.match.params
 
         return (
             <MasterDetailRoute className='movie-db-language-route'>
                 <List selection>
-                    {this.props.languageOptions.map(l => (
+                    {languages.asOptions.map((l) => (
                         <List.Item key={l.key}>
                             <Label active={l.key === id} as='a' href={`#${routes.language}/${l.key}`}>
                                 {l.text}

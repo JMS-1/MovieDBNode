@@ -20,7 +20,7 @@ exports.Container = types_1.GqlObject('Container', {
     description: types_1.GqlNullable(types_1.GqlString({
         description: 'Eine Beschreibung für die Ablage.',
         validation: {
-            maxLength: 2000,
+            max: 2000,
             type: 'string',
         },
     })),
@@ -28,8 +28,8 @@ exports.Container = types_1.GqlObject('Container', {
         description: 'Der Anzeigetext für die Ablage.',
         sortable: true,
         validation: {
-            maxLength: 50,
-            minLength: 1,
+            max: 50,
+            min: 1,
             type: 'string',
         },
     }),
@@ -43,7 +43,7 @@ exports.Container = types_1.GqlObject('Container', {
     parentLocation: types_1.GqlNullable(types_1.GqlString({
         description: 'Die Position der Ablage in der übergeordneten Ablage.',
         validation: {
-            maxLength: 100,
+            max: 100,
             type: 'string',
         },
     })),

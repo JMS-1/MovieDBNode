@@ -23,7 +23,7 @@ export const Link = types.GqlObject(
             types.GqlString({
                 description: 'Optional eine Beschreibung des Verweises.',
                 validation: {
-                    maxLength: 2000,
+                    max: 2000,
                     type: 'string',
                 },
             })
@@ -31,16 +31,16 @@ export const Link = types.GqlObject(
         name: types.GqlString({
             description: 'Der Anzeigetext für den Verweise.',
             validation: {
-                maxLength: 100,
-                minLength: 1,
+                max: 100,
+                min: 1,
                 type: 'string',
             },
         }),
         url: types.GqlString({
             description: 'Der eigentliche Verweis.',
             validation: {
-                maxLength: 2000,
-                minLength: 1,
+                max: 2000,
+                min: 1,
                 type: 'string',
             },
         }),
@@ -65,7 +65,7 @@ export const Recording = types.GqlObject(
             types.GqlString({
                 description: 'Optional der Standort der Aufzeichnung innerhalb der Ablage.',
                 validation: {
-                    maxLength: 100,
+                    max: 100,
                     type: 'string',
                 },
             })
@@ -83,7 +83,7 @@ export const Recording = types.GqlObject(
             types.GqlString({
                 description: 'Optional eine Beschreibung für die Aufzeichnung.',
                 validation: {
-                    maxLength: 2000,
+                    max: 2000,
                     type: 'string',
                 },
             })
@@ -116,8 +116,8 @@ export const Recording = types.GqlObject(
             description: 'Der Anzeigetext für die Aufzeichnung.',
             sortable: true,
             validation: {
-                maxLength: 100,
-                minLength: 1,
+                max: 100,
+                min: 1,
                 type: 'string',
             },
         }),
@@ -126,7 +126,7 @@ export const Recording = types.GqlObject(
                 description: 'Optional an wen die Aufzeichnung verliehen ist.',
                 sortable: true,
                 validation: {
-                    maxLength: 200,
+                    max: 200,
                     type: 'string',
                 },
             })

@@ -1,12 +1,13 @@
 import { getMessage } from '@jms-1/isxs-tools'
-import * as Validator from 'fastest-validator'
+import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
 import { observable, action, computed } from 'mobx'
 import { createViewModel, IViewModel } from 'mobx-utils'
+import { DropdownItemProps } from 'semantic-ui-react'
 
 import { RootStore } from './root'
 
-const noSchema: Validator.ValidationSchema = { $$strict: true }
+const noSchema: ValidationSchema = { $$strict: true }
 
 export abstract class BasicItemStore<TItem extends { _id: string }> {
     protected abstract readonly itemProps: string
@@ -27,7 +28,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     @action
     select(id: string): void {
-        this._selected = id
+        this._selected = id || ''
     }
 
     private getErrors(
@@ -35,7 +36,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         field: string,
         index?: number,
         subField?: string
-    ): Validator.ValidationError[] | null {
+    ): ValidationError[] | null {
         const errors = this[type]
 
         if (errors === true) {
@@ -55,11 +56,11 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         return forField.length < 1 ? null : forField
     }
 
-    getInputErrors(field: string, index?: number, subField?: string): Validator.ValidationError[] | null {
+    getInputErrors(field: string, index?: number, subField?: string): ValidationError[] | null {
         return this.getErrors('inputErrors', field, index, subField)
     }
 
-    getUpdateErrors(field: string, index?: number, subField?: string): Validator.ValidationError[] | null {
+    getUpdateErrors(field: string, index?: number, subField?: string): ValidationError[] | null {
         return this.getErrors('updateErrors', field, index, subField)
     }
 
@@ -73,30 +74,30 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         return createViewModel(this.selected || observable(this.createNew()))
     }
 
-    private validate(schema: 'inputValidation' | 'updateValidation'): Validator.ValidationError[] | true {
+    private validate(schema: 'inputValidation' | 'updateValidation'): ValidationError[] | true {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const validator: Validator.default = new (Validator as any)()
+        const validator = new Validator()
 
         return validator.validate(this.toProtocol(this.workingCopy), this[schema])
     }
 
     @computed({ keepAlive: true })
-    get inputErrors(): Validator.ValidationError[] | true {
+    get inputErrors(): ValidationError[] | true {
         return this.validate('inputValidation')
     }
 
     @computed({ keepAlive: true })
-    get updateErrors(): Validator.ValidationError[] | true {
+    get updateErrors(): ValidationError[] | true {
         return this.validate('updateValidation')
     }
 
     @computed({ keepAlive: true })
-    get inputValidation(): Validator.ValidationSchema {
+    get inputValidation(): ValidationSchema {
         return this.root.inputValidations[this.validationName] || noSchema
     }
 
     @computed({ keepAlive: true })
-    get updateValidation(): Validator.ValidationSchema {
+    get updateValidation(): ValidationSchema {
         return this.root.updateValidations[this.validationName] || noSchema
     }
 }
@@ -141,5 +142,15 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
         return Object.keys(this._items).sort((l, r) =>
             (this.getName(this._items[l]) || l).localeCompare(this.getName(this._items[r]) || r)
         )
+    }
+
+    @computed({ keepAlive: true })
+    get asOptions(): DropdownItemProps[] {
+        const items = this._items
+
+        return this.ordered
+            .map((id) => items[id])
+            .filter((i) => i)
+            .map((l) => ({ key: l._id, text: this.getName(l), value: l._id }))
     }
 }

@@ -1,49 +1,45 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Form } from 'semantic-ui-react'
 
 import { ConfirmDeleteLanguage } from '../../../components/confirm/confirmRedux'
 import { LanguageDetailActions } from '../../../components/detailActions/actionsRedux'
 import { LanguageTextInput } from '../../../components/textInput/textInputRedux'
+import { languages } from '../../../stores'
 
 export interface ILanguageDetailsUiProps {
     id: string
 }
 
-export interface ILanguageDetailsProps {
-    hasError: boolean
-    lost: boolean
-}
+@observer
+export class LanguageDetails extends React.PureComponent<ILanguageDetailsUiProps> {
+    render(): JSX.Element | null {
+        const language = languages.selected
 
-export interface ILanguageDetailsActions {
-    loadDetails(id: string): void
-}
-
-export type TLanguageDetailsProps = ILanguageDetailsProps & ILanguageDetailsUiProps & ILanguageDetailsActions
-
-export class CLanguageDetails extends React.PureComponent<TLanguageDetailsProps> {
-    render(): JSX.Element {
-        if (this.props.lost) {
+        if (!language) {
             return null
         }
 
         return (
             <div className='movie-db-language-details'>
-                <ConfirmDeleteLanguage />
-                <LanguageDetailActions />
-                <Form error={this.props.hasError}>
-                    <LanguageTextInput prop='name' required />
-                </Form>
+                <>
+                    {!language && <ConfirmDeleteLanguage />}
+                    {!language && <LanguageDetailActions />}
+                    <Form error={languages.updateErrors !== true}>
+                        <LanguageTextInput required prop='name' />
+                    </Form>
+                </>
             </div>
         )
     }
 
-    componentWillMount(): void {
-        this.props.loadDetails(this.props.id)
+    UNSAFE_componentWillMount(): void {
+        languages.select(this.props.id)
     }
 
-    componentWillReceiveProps(props: Readonly<TLanguageDetailsProps>, context: any): void {
+    UNSAFE_componentWillReceiveProps(props: Readonly<ILanguageDetailsUiProps>): void {
         if (props.id !== this.props.id) {
-            this.props.loadDetails(props.id)
+            languages.select(props.id)
         }
     }
 }

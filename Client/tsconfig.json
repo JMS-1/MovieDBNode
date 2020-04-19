@@ -1,6 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
+        "esModuleInterop": true,
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "inlineSources": true,

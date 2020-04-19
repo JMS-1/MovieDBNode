@@ -12,6 +12,7 @@ import { GenreStore } from './genre'
 import { LanguageStore } from './language'
 import { RecordingStore } from './recording'
 import { SeriesStore } from './series'
+import { TranslationStore } from './translations'
 
 export class RootStore {
     readonly containers: ContainerStore
@@ -20,6 +21,7 @@ export class RootStore {
     readonly languages: LanguageStore
     readonly recordings: RecordingStore
     readonly series: SeriesStore
+    readonly translations: TranslationStore
 
     @observable outstandingRequests = 0
 
@@ -43,6 +45,7 @@ export class RootStore {
         this.languages = new LanguageStore(this)
         this.recordings = new RecordingStore(this)
         this.series = new SeriesStore(this)
+        this.translations = new TranslationStore(this)
     }
 
     startup(): void {
