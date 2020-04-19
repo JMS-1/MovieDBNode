@@ -1,11 +1,15 @@
+import { routerActions } from 'connected-react-router'
 import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
 import { observable, action, computed } from 'mobx'
 import { createViewModel, IViewModel } from 'mobx-utils'
+import { routes } from 'movie-db-client'
 import { DropdownItemProps } from 'semantic-ui-react'
 
 import { RootStore } from './root'
 import { getGraphQlError } from './utils'
+
+import { delayedDispatch } from '../store'
 
 const noSchema: ValidationSchema = { $$strict: true }
 
@@ -13,6 +17,8 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
     protected abstract readonly itemProps: string
 
     protected abstract readonly itemScope: string
+
+    protected abstract readonly itemRoute: routes
 
     protected abstract readonly validationName: string
 
@@ -30,7 +36,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     @action
     select(id: string): void {
-        this._selected = id || ''
+        this._selected = id === 'NEW' ? '' : id || ''
     }
 
     @action
@@ -48,7 +54,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
             this.deleteConfirm = false
 
-            this.select('')
+            delayedDispatch(routerActions.replace(this.itemRoute))
         } catch (error) {
             alert(getGraphQlError(error))
         } finally {
@@ -77,7 +83,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
             this._items[changed._id] = changed
 
             if (!item._id) {
-                this.select(changed._id)
+                delayedDispatch(routerActions.replace(`${this.itemRoute}/${changed._id}`))
             }
         } catch (error) {
             alert(getGraphQlError(error))

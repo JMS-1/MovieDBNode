@@ -15,9 +15,7 @@ export interface ILanguageDetailsUiProps {
 @observer
 export class LanguageDetails extends React.PureComponent<ILanguageDetailsUiProps> {
     render(): JSX.Element | null {
-        const language = languages.selected
-
-        if (!language) {
+        if (!languages.selected && this.props.id !== 'NEW') {
             return null
         }
 
