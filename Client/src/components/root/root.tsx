@@ -5,7 +5,7 @@ import { Route } from 'react-router'
 import { Dimmer, Dropdown, Header, Loader, Menu, Message } from 'semantic-ui-react'
 
 // import { ContainerRoute } from '../../routes/container/containerRedux'
-// import { GenreRoute } from '../../routes/genre/genreRedux'
+import { GenreRoute } from '../../routes/genre/genre'
 import { LanguageRoute } from '../../routes/language/language'
 // import { Recording } from '../../routes/recording/details/detailsRedux'
 // import { RecordingRoute } from '../../routes/recording/recordingRedux'
@@ -127,7 +127,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
                 <div className='content'>
                     {/* <Route exact component={RecordingRoute} path='/' /> */}
                     {/* <Route component={ContainerRoute} path={`${routes.container}/:id?`} /> */}
-                    {/* <Route component={GenreRoute} path={`${routes.genre}/:id?`} /> */}
+                    <Route component={GenreRoute} path={`${routes.genre}/:id?`} />
                     <Route component={LanguageRoute} path={`${routes.language}/:id?`} />
                     {/* <Route component={Recording} path={`${routes.recording}/:id`} /> */}
                     {/* <Route component={SeriesRoute} path={`${routes.series}/:id?`} /> */}

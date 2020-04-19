@@ -35,32 +35,6 @@ function mapContainerActions(
     }
 }
 
-function mapGenreProps(state: IClientState, props: local.IDetailActionsLegacyUiProps): local.IDetailActionsLegacyProps {
-    const route = state.genre
-    const genre = controller.getGenreEdit(state)
-    const errors = route.validation
-
-    return {
-        cancelLabel: genre && genre._id ? state.mui.reset : state.mui.cancel,
-        deleteLabel: state.mui.remove,
-        hasChanges: !!route.workingCopy,
-        hasError: errors && errors.length > 0,
-        saveLabel: state.mui.save,
-        showDelete: genre && !!genre._id,
-    }
-}
-
-function mapGenreActions(
-    dispatch: Dispatch<Action>,
-    props: local.IDetailActionsLegacyUiProps
-): local.IDetailActionsLegacyActions {
-    return {
-        cancel: () => dispatch(controller.GenreActions.cancelEdit()),
-        confirmDelete: () => dispatch(controller.GenreActions.confirmDelete()),
-        save: () => dispatch(controller.GenreActions.save()),
-    }
-}
-
 function mapSeriesProps(
     state: IClientState,
     props: local.IDetailActionsLegacyUiProps
@@ -91,7 +65,5 @@ function mapSeriesActions(
 }
 
 export const ContainerDetailActions = connect(mapContainerProps, mapContainerActions)(local.CDetailActionsLegacy)
-
-export const GenreDetailActions = connect(mapGenreProps, mapGenreActions)(local.CDetailActionsLegacy)
 
 export const SeriesDetailActions = connect(mapSeriesProps, mapSeriesActions)(local.CDetailActionsLegacy)

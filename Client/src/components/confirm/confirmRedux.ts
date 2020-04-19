@@ -31,28 +31,6 @@ function mapContainerActions(
     }
 }
 
-function mapGenreProps(state: IClientState, props: local.IDeleteConfirmLegacyUiProps): local.IDeleteConfirmLegacyProps {
-    const mui = state.mui
-
-    return {
-        html: mui.genre.confirmHtml,
-        no: mui.no,
-        open: state.genre.deleteOpen,
-        title: mui.confirm,
-        yes: mui.yes,
-    }
-}
-
-function mapGenreActions(
-    dispatch: Dispatch<Action>,
-    props: local.IDeleteConfirmLegacyUiProps
-): local.IDeleteConfirmLegacyActions {
-    return {
-        confirm: () => dispatch(controller.GenreActions.confirmDeleteDone(true)),
-        reject: () => dispatch(controller.GenreActions.confirmDeleteDone(false)),
-    }
-}
-
 function mapRecordingProps(
     state: IClientState,
     props: local.IDeleteConfirmLegacyUiProps
@@ -104,8 +82,6 @@ function mapSeriesActions(
 }
 
 export const ConfirmDeleteContainer = connect(mapContainerProps, mapContainerActions)(local.CDeleteConfirmLegacy)
-
-export const ConfirmDeleteGenre = connect(mapGenreProps, mapGenreActions)(local.CDeleteConfirmLegacy)
 
 export const ConfirmDeleteRecording = connect(mapRecordingProps, mapRecordingActions)(local.CDeleteConfirmLegacy)
 

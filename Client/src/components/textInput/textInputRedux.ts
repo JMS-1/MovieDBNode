@@ -2,7 +2,7 @@ import { IClientState } from 'movie-db-client'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
 
-import { IContainer, IGenre, IRecording, ISeries } from 'movie-db-api'
+import { IContainer, IRecording, ISeries } from 'movie-db-api'
 
 import * as local from './textInput'
 
@@ -30,29 +30,6 @@ class CContainerTextInput extends local.CTextInputLegacy<IContainer> {
     ): local.ITextInputLegacyActions<IContainer> {
         return {
             setValue: (prop, value) => dispatch(controller.ContainerActions.setProperty(prop, value)),
-        }
-    }
-}
-
-class CGenreTextInput extends local.CTextInputLegacy<IGenre> {
-    static mapProps(state: IClientState, props: local.ITextInputLegacyUiProps<IGenre>): local.ITextInputLegacyProps {
-        const route = state.genre
-        const genre = controller.getGenreEdit(state)
-        const value = genre && genre[props.prop]
-
-        return {
-            errors: controller.getErrors(route.validation, new RegExp(`^${props.prop}$`)),
-            label: state.mui.genre.edit[props.prop],
-            value: typeof value === 'string' ? value : undefined,
-        }
-    }
-
-    static mapActions(
-        dispatch: Dispatch<Action>,
-        props: local.ITextInputLegacyUiProps<IGenre>
-    ): local.ITextInputLegacyActions<IGenre> {
-        return {
-            setValue: (prop, value) => dispatch(controller.GenreActions.setProperty(prop, value)),
         }
     }
 }
@@ -110,8 +87,6 @@ export const ContainerTextInput = connect(
     CContainerTextInput.mapProps,
     CContainerTextInput.mapActions
 )(CContainerTextInput)
-
-export const GenreTextInput = connect(CGenreTextInput.mapProps, CGenreTextInput.mapActions)(CGenreTextInput)
 
 export const SeriesTextInput = connect(CSeriesTextInput.mapProps, CSeriesTextInput.mapActions)(CSeriesTextInput)
 

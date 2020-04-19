@@ -1,49 +1,42 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Form } from 'semantic-ui-react'
 
-import { ConfirmDeleteGenre } from '../../../components/confirm/confirmRedux'
-import { GenreDetailActions } from '../../../components/detailActions/actionsRedux'
-import { GenreTextInput } from '../../../components/textInput/textInputRedux'
+import { IGenre } from '../../../../../Server/src/model'
+import { DeleteConfirm } from '../../../components/confirm/confirm'
+import { DetailActions } from '../../../components/detailActions/actions'
+import { TextInput } from '../../../components/textInput/textInput'
+import { genres } from '../../../stores'
 
 export interface IGenreDetailsUiProps {
     id: string
 }
 
-export interface IGenreDetailsProps {
-    hasError: boolean
-    lost: boolean
-}
-
-export interface IGenreDetailsActions {
-    loadDetails(id: string): void
-}
-
-export type TGenreDetailsProps = IGenreDetailsProps & IGenreDetailsUiProps & IGenreDetailsActions
-
-export class CGenreDetails extends React.PureComponent<TGenreDetailsProps> {
+@observer
+export class GenreDetails extends React.PureComponent<IGenreDetailsUiProps> {
     render(): JSX.Element {
-        if (this.props.lost) {
+        if (!genres.selected && this.props.id !== 'NEW') {
             return null
         }
 
         return (
             <div className='movie-db-genre-details'>
-                <ConfirmDeleteGenre />
-                <GenreDetailActions />
-                <Form error={this.props.hasError}>
-                    <GenreTextInput prop='name' required />
+                <DeleteConfirm scope='genre' store={genres} />
+                <DetailActions<IGenre> store={genres} />
+                <Form error={genres.errors !== true}>
+                    <TextInput<IGenre> required prop='name' scope='genre' store={genres} />
                 </Form>
             </div>
         )
     }
 
-    componentWillMount(): void {
-        this.props.loadDetails(this.props.id)
+    UNSAFE_componentWillMount(): void {
+        genres.select(this.props.id)
     }
 
-    componentWillReceiveProps(props: Readonly<TGenreDetailsProps>, context: any): void {
+    UNSAFE_componentWillReceiveProps(props: Readonly<IGenreDetailsUiProps>): void {
         if (props.id !== this.props.id) {
-            this.props.loadDetails(props.id)
+            genres.select(props.id)
         }
     }
 }

@@ -62,7 +62,7 @@ interface ITextInputStore<TItem> {
 interface ITextInputProps<TItem> {
     prop: keyof TItem
     required?: boolean
-    scope: 'language'
+    scope: 'language' | 'genre'
     store: ITextInputStore<TItem>
     textarea?: boolean
 }
