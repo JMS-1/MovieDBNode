@@ -1,11 +1,12 @@
-import * as api from 'movie-db-api'
 import * as local from 'movie-db-client'
+
+import * as api from 'movie-db-api'
 
 import { ContainerActions } from './actions'
 
-import { EditController } from '../controller'
-
 import { ServerApi } from '../../store'
+import { routes } from '../../stores/routes'
+import { EditController } from '../controller'
 
 type TContainerActions =
     | local.ICancelContainerEdit
@@ -24,7 +25,7 @@ type TContainerActions =
 const controller = new (class extends EditController<api.IContainer, TContainerActions, local.IContainerState> {
     protected readonly schema = 'container'
 
-    protected readonly listRoute = local.routes.container
+    protected readonly listRoute = routes.container
 
     protected getReducerMap(): local.IActionHandlerMap<TContainerActions, local.IContainerState> {
         return {
@@ -101,7 +102,7 @@ const controller = new (class extends EditController<api.IContainer, TContainerA
 
     private loadRecordings(
         state: local.IContainerState,
-        response: local.ILoadContainerRecordings,
+        response: local.ILoadContainerRecordings
     ): local.IContainerState {
         return { ...state, recordings: response.recordings || [] }
     }

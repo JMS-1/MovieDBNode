@@ -1,7 +1,6 @@
+import { IClientState } from 'movie-db-client'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
-
-import { IClientState } from 'movie-db-client'
 
 import * as local from './search'
 
@@ -16,7 +15,7 @@ function mapContainerProps(state: IClientState, props: local.ISearchUiProps): lo
 
 function mapContainerActions(dispatch: Dispatch<Action>, props: local.ISearchUiProps): local.ISearchActions {
     return {
-        setText: text => dispatch(ContainerActions.setFilter(text)),
+        setText: (text) => dispatch(ContainerActions.setFilter(text)),
     }
 }
 
@@ -29,7 +28,7 @@ function mapSeriesProps(state: IClientState, props: local.ISearchUiProps): local
 
 function mapSeriesActions(dispatch: Dispatch<Action>, props: local.ISearchUiProps): local.ISearchActions {
     return {
-        setText: text => dispatch(SeriesActions.setFilter(text)),
+        setText: (text) => dispatch(SeriesActions.setFilter(text)),
     }
 }
 
@@ -42,21 +41,12 @@ function mapRecordingProps(state: IClientState, props: local.ISearchUiProps): lo
 
 function mapRecordingActions(dispatch: Dispatch<Action>, props: local.ISearchUiProps): local.ISearchActions {
     return {
-        setText: text => dispatch(RecordingActions.filterText(text)),
+        setText: (text) => dispatch(RecordingActions.filterText(text)),
     }
 }
 
-export const ContainerSearch = connect(
-    mapContainerProps,
-    mapContainerActions,
-)(local.CSearch)
+export const ContainerSearch = connect(mapContainerProps, mapContainerActions)(local.CSearch)
 
-export const SeriesSearch = connect(
-    mapSeriesProps,
-    mapSeriesActions,
-)(local.CSearch)
+export const SeriesSearch = connect(mapSeriesProps, mapSeriesActions)(local.CSearch)
 
-export const RecordingSearch = connect(
-    mapRecordingProps,
-    mapRecordingActions,
-)(local.CSearch)
+export const RecordingSearch = connect(mapRecordingProps, mapRecordingActions)(local.CSearch)

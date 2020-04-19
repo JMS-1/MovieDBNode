@@ -1,6 +1,5 @@
-import { routes } from 'movie-db-client'
-
 import { ItemStore } from './item'
+import { routes } from './routes'
 
 import { ISeries } from '../../../Server/src/model'
 
@@ -9,7 +8,7 @@ export class SeriesStore extends ItemStore<ISeries> {
 
     protected readonly itemScope = 'series'
 
-    protected readonly itemRoute = routes.series
+    readonly itemRoute = routes.series
 
     protected readonly validationName = 'Series'
 

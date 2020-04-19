@@ -12,6 +12,7 @@ const types = __importStar(require("@jms-1/mongodb-graphql/lib/types"));
 const collections_1 = require("./collections");
 const connection_1 = require("./connection");
 const utils_1 = require("./utils");
+const model_1 = require("../model");
 const entities_1 = require("../model/entities");
 const utils_2 = require("../model/utils");
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
@@ -88,7 +89,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                     view: [
                         {
                             $sort: {
-                                [args.sort === entities_1.TRecordingSort.created ? 'created' : 'fullName']: args.sortOrder === types.TSortDirection.Ascending ? +1 : -1,
+                                [args.sort === model_1.TRecordingSort.created ? 'created' : 'fullName']: args.sortOrder === types.TSortDirection.Ascending ? +1 : -1,
                             },
                         },
                         { $skip: args.firstPage * args.pageSize },

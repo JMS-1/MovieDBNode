@@ -1,8 +1,9 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
-import { ContainerDetails } from './details/detailsRedux'
-import { ContainerTree } from './tree/treeRedux'
+// import { ContainerDetails } from './details/detailsRedux'
+import { ContainerTree } from './tree/tree'
 
 import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
 
@@ -12,20 +13,15 @@ export interface IContainerRouteParams {
 
 export interface IContainerRouteUiProps extends RouteComponentProps<IContainerRouteParams> {}
 
-export interface IContainerRouteProps {}
-
-export interface IContainerRouteActions {}
-
-export type TContainerRouteProps = IContainerRouteProps & IContainerRouteUiProps & IContainerRouteActions
-
-export class CContainerRoute extends React.PureComponent<TContainerRouteProps> {
+@observer
+export class ContainerRoute extends React.PureComponent<IContainerRouteUiProps> {
     render(): JSX.Element {
         const { id } = this.props.match.params
 
         return (
             <MasterDetailRoute className='movie-db-container-route'>
                 <ContainerTree id={id} />
-                <ContainerDetails id={id} />
+                {/* <ContainerDetails id={id} /> '*/}
             </MasterDetailRoute>
         )
     }

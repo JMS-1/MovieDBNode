@@ -1,6 +1,5 @@
-import { routes } from 'movie-db-client'
-
 import { ItemStore } from './item'
+import { routes } from './routes'
 
 import { IGenre } from '../../../Server/src/model'
 
@@ -9,7 +8,7 @@ export class GenreStore extends ItemStore<IGenre> {
 
     protected readonly itemScope = 'genres'
 
-    protected readonly itemRoute = routes.genre
+    readonly itemRoute = routes.genre
 
     protected readonly validationName = 'Genre'
 

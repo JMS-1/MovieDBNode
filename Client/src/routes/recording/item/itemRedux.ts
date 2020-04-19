@@ -1,12 +1,12 @@
 import { routerActions } from 'connected-react-router'
+import { IClientState } from 'movie-db-client'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
-
-import { IClientState, routes } from 'movie-db-client'
 
 import * as local from './item'
 
 import { getGenreMap, getLanguageMap, getRecordingMap } from '../../../controller'
+import { routes } from '../../../stores/routes'
 
 function makeNumber(n: number): string {
     return n < 10 ? `0${n}` : `${n}`
@@ -14,7 +14,7 @@ function makeNumber(n: number): string {
 
 function makeTime(date: Date): string {
     return `${makeNumber(date.getDate())}.${makeNumber(1 + date.getMonth())}.${date.getFullYear()} ${makeNumber(
-        date.getHours(),
+        date.getHours()
     )}:${makeNumber(date.getMinutes())}:${makeNumber(date.getSeconds())}`
 }
 
@@ -36,14 +36,11 @@ function mapStateToProps(state: IClientState, props: local.IRecordingItemUiProps
 
 function mapDispatchToProps(
     dispatch: Dispatch<Action>,
-    props: local.IRecordingItemUiProps,
+    props: local.IRecordingItemUiProps
 ): local.IRecordingItemActions {
     return {
         select: () => dispatch(routerActions.push(`${routes.recording}/${props.id}`)),
     }
 }
 
-export const RecordingItem = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(local.CRecordingItem)
+export const RecordingItem = connect(mapStateToProps, mapDispatchToProps)(local.CRecordingItem)

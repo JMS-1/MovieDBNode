@@ -14,11 +14,12 @@ declare module 'movie-db-client' {
         readonly container: {
             readonly confirmHtml: string
             readonly edit: IItemMui<api.IContainer>
+            readonly legacyTypes: { readonly [type in api.containerType]: IContainerTypeMui }
             readonly name: string
             readonly noId: string
             readonly noParent: string
             readonly position: string
-            readonly types: { readonly [type in api.containerType]: IContainerTypeMui }
+            readonly types: { readonly [type: string]: IContainerTypeMui }
         }
         readonly create: string
         readonly language: {

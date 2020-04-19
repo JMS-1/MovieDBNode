@@ -3,10 +3,10 @@ import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
 import { observable, action, computed } from 'mobx'
 import { createViewModel, IViewModel } from 'mobx-utils'
-import { routes } from 'movie-db-client'
 import { DropdownItemProps } from 'semantic-ui-react'
 
 import { RootStore } from './root'
+import { routes } from './routes'
 import { getGraphQlError } from './utils'
 
 import { delayedDispatch } from '../store'
@@ -18,7 +18,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     protected abstract readonly itemScope: string
 
-    protected abstract readonly itemRoute: routes
+    abstract readonly itemRoute: routes
 
     protected abstract readonly validationName: string
 
@@ -112,6 +112,10 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         return forField.length < 1 ? null : forField
     }
 
+    getItem(id: string): TItem | undefined {
+        return this._items[id]
+    }
+
     @computed({ keepAlive: true })
     get selected(): TItem {
         return this._items[this._selected]
@@ -155,7 +159,7 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
         this.root.outstandingRequests += 1
 
         try {
-            const query = gql`{ ${this.itemScope} { find { items { ${this.itemProps} } } } }`
+            const query = gql`{ ${this.itemScope} { find(page: 1, pageSize: 1000) { items { ${this.itemProps} } } } }`
 
             const res = await this.root.gql.query({ query })
             const all: TItem[] = res.data[this.itemScope].find.items || []

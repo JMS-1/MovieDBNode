@@ -1,7 +1,7 @@
 declare module 'movie-db-client' {
-    import { Action } from 'redux'
     import { IValidationError, IValidatableSchema } from '@jms-1/isxs-validation'
     import { RouterState } from 'connected-react-router'
+    import { Action } from 'redux'
     import { SemanticICONS, DropdownItemProps } from 'semantic-ui-react'
 
     interface IClientState {
@@ -63,14 +63,6 @@ declare module 'movie-db-client' {
 
     interface IGenericDeleteClose extends Action {
         confirm: boolean
-    }
-
-    const enum routes {
-        container = '/container',
-        genre = '/genre',
-        language = '/language',
-        recording = '/recording',
-        series = '/series',
     }
 
     interface ITreeItem {

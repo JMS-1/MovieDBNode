@@ -2,7 +2,8 @@ import * as React from 'react'
 import { Table } from 'semantic-ui-react'
 
 import { IRecording } from 'movie-db-api'
-import { routes } from 'movie-db-client'
+
+import { routes } from '../../../stores/routes'
 
 export interface IContainerContentUiProps {}
 
@@ -25,7 +26,7 @@ export class CContainerContent extends React.PureComponent<TContainerContentProp
         }
 
         return (
-            <Table className='movie-db-container-content' unstackable celled striped compact fixed collapsing>
+            <Table celled collapsing compact fixed striped unstackable className='movie-db-container-content'>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>{this.props.name}</Table.HeaderCell>
@@ -33,7 +34,7 @@ export class CContainerContent extends React.PureComponent<TContainerContentProp
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {list.map(r => (
+                    {list.map((r) => (
                         <Table.Row key={r._id}>
                             <Table.Cell selectable>
                                 <a href={`#${routes.recording}/${r._id}`}>{r.fullName}</a>

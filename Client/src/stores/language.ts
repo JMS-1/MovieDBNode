@@ -1,6 +1,5 @@
-import { routes } from 'movie-db-client'
-
 import { ItemStore } from './item'
+import { routes } from './routes'
 
 import { ILanguage } from '../../../Server/src/model'
 
@@ -9,7 +8,7 @@ export class LanguageStore extends ItemStore<ILanguage> {
 
     protected readonly itemScope = 'languages'
 
-    protected readonly itemRoute = routes.language
+    readonly itemRoute = routes.language
 
     protected readonly validationName = 'Language'
 

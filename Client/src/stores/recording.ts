@@ -1,6 +1,5 @@
-import { routes } from 'movie-db-client'
-
 import { BasicItemStore } from './item'
+import { routes } from './routes'
 
 import { IRecording } from '../../../Server/src/model'
 
@@ -10,7 +9,7 @@ export class RecordingStore extends BasicItemStore<IRecording> {
 
     protected readonly itemScope = 'recordings'
 
-    protected readonly itemRoute = routes.recording
+    readonly itemRoute = routes.recording
 
     protected readonly validationName = 'Recording'
 

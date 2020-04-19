@@ -1,15 +1,7 @@
 import * as types from '@jms-1/mongodb-graphql/lib/types'
 
+import { TRecordingContainerType, TRecordingSort } from './enum'
 import { uniqueIdPattern } from './utils'
-
-export enum TRecordingContainerType {
-    BluRay = 5,
-    DVD = 4,
-    RecordedDVD = 3,
-    SuperVideoCD = 2,
-    Undefined = 0,
-    VideoCD = 1,
-}
 
 export const RecordingContainerType = types.GqlEnum('RecordingContainerType', TRecordingContainerType, {
     description: 'Ablageart einer Aufzeichnung.',
@@ -143,11 +135,6 @@ export const Recording = types.GqlObject(
     },
     { description: 'Beschreibt eine Aufzeichnung.' }
 )
-
-export enum TRecordingSort {
-    fullName = 0,
-    created = 1,
-}
 
 export const RecordingSort = types.GqlEnum('RecordingSort', TRecordingSort, {
     description: 'Eigenschaften, nach denen die Aufzeichnungen sortiert werden können.',

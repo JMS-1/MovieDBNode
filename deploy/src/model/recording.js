@@ -8,17 +8,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const types = __importStar(require("@jms-1/mongodb-graphql/lib/types"));
+const enum_1 = require("./enum");
 const utils_1 = require("./utils");
-var TRecordingContainerType;
-(function (TRecordingContainerType) {
-    TRecordingContainerType[TRecordingContainerType["BluRay"] = 5] = "BluRay";
-    TRecordingContainerType[TRecordingContainerType["DVD"] = 4] = "DVD";
-    TRecordingContainerType[TRecordingContainerType["RecordedDVD"] = 3] = "RecordedDVD";
-    TRecordingContainerType[TRecordingContainerType["SuperVideoCD"] = 2] = "SuperVideoCD";
-    TRecordingContainerType[TRecordingContainerType["Undefined"] = 0] = "Undefined";
-    TRecordingContainerType[TRecordingContainerType["VideoCD"] = 1] = "VideoCD";
-})(TRecordingContainerType = exports.TRecordingContainerType || (exports.TRecordingContainerType = {}));
-exports.RecordingContainerType = types.GqlEnum('RecordingContainerType', TRecordingContainerType, {
+exports.RecordingContainerType = types.GqlEnum('RecordingContainerType', enum_1.TRecordingContainerType, {
     description: 'Ablageart einer Aufzeichnung.',
     sortable: true,
 });
@@ -124,12 +116,7 @@ exports.Recording = types.GqlObject('Recording', {
         },
     })),
 }, { description: 'Beschreibt eine Aufzeichnung.' });
-var TRecordingSort;
-(function (TRecordingSort) {
-    TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
-    TRecordingSort[TRecordingSort["created"] = 1] = "created";
-})(TRecordingSort = exports.TRecordingSort || (exports.TRecordingSort = {}));
-exports.RecordingSort = types.GqlEnum('RecordingSort', TRecordingSort, {
+exports.RecordingSort = types.GqlEnum('RecordingSort', enum_1.TRecordingSort, {
     description: 'Eigenschaften, nach denen die Aufzeichnungen sortiert werden können.',
 });
 exports.QueryCountInfo = types.GqlObject('QueryCountInfo', {

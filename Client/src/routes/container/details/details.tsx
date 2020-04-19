@@ -3,12 +3,11 @@ import { Dropdown, DropdownItemProps, DropdownProps, Form } from 'semantic-ui-re
 
 import { containerType, IContainer } from 'movie-db-api'
 
-import { ContainerContent } from '../content/contentRedux'
-
 import { ConfirmDeleteContainer } from '../../../components/confirm/confirmRedux'
 import { ContainerDetailActions } from '../../../components/detailActions/actionsRedux'
 import { ReportError } from '../../../components/message/messageRedux'
 import { ContainerTextInput } from '../../../components/textInput/textInputRedux'
+import { ContainerContent } from '../content/contentRedux'
 
 export interface IContainerDetailsUiProps {
     id: string
@@ -50,27 +49,27 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
                         <Dropdown
                             clearable
                             fluid
-                            onChange={this.setContainer}
-                            options={this.props.containerOptions}
-                            placeholder={this.props.containerHint}
+                            scrolling
                             search
                             selection
-                            scrolling
+                            options={this.props.containerOptions}
+                            placeholder={this.props.containerHint}
                             value={this.props.parent || ''}
+                            onChange={this.setContainer}
                         />
                     </Form.Field>
-                    <ContainerTextInput prop='name' required />
+                    <ContainerTextInput required prop='name' />
                     <Form.Field required>
                         <label>{this.props.typeLabel}</label>
                         <Dropdown
-                            onChange={this.setType}
-                            options={this.props.typeOptions}
                             selection
+                            options={this.props.typeOptions}
                             value={this.props.type}
+                            onChange={this.setType}
                         />
                         <ReportError errors={this.props.typeErrors} />
                     </Form.Field>
-                    <ContainerTextInput prop='description' textarea />
+                    <ContainerTextInput textarea prop='description' />
                     <ContainerTextInput prop='parentLocation' />
                 </Form>
                 <ContainerContent />
@@ -86,11 +85,11 @@ export class CContainerDetails extends React.PureComponent<TContainerDetailsProp
         this.props.setProp('parentId', (typeof data.value === 'string' ? data.value : '') || undefined)
     }
 
-    componentWillMount(): void {
+    UNSAFE_componentWillMount(): void {
         this.props.loadDetails(this.props.id)
     }
 
-    componentWillReceiveProps(props: Readonly<TContainerDetailsProps>, context: any): void {
+    UNSAFE_componentWillReceiveProps(props: Readonly<TContainerDetailsProps>): void {
         if (props.id !== this.props.id) {
             this.props.loadDetails(props.id)
         }

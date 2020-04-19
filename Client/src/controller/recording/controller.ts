@@ -1,14 +1,14 @@
 import { routerActions } from 'connected-react-router'
+import * as local from 'movie-db-client'
 import { v4 as uuid } from 'uuid'
 
 import * as api from 'movie-db-api'
-import * as local from 'movie-db-client'
 
 import { RecordingActions } from './actions'
 
-import { EditController } from '../controller'
-
 import { delayedDispatch, ServerApi } from '../../store'
+import { routes } from '../../stores/routes'
+import { EditController } from '../controller'
 
 type TRecordingActions =
     | local.ICancelRecordingEdit
@@ -41,7 +41,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     protected readonly updateAllAfterSave = false
 
-    protected readonly listRoute = local.routes.recording
+    protected readonly listRoute = routes.recording
 
     protected readonly customSave = true
 
@@ -138,11 +138,11 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
                 sort: 'fullName',
                 sortOrder: 'ascending',
             },
-            true,
+            true
         )
     }
 
-    private sendQuery(state: local.IRecordingState, reset: boolean = false): local.IRecordingState {
+    private sendQuery(state: local.IRecordingState, reset = false): local.IRecordingState {
         const req: api.IRecordingQueryRequest = {
             correlationId: uuid(),
             firstPage: reset ? 0 : state.page - 1,
@@ -188,13 +188,13 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
         if (request.sort === state.sort) {
             return this.sendQuery(
                 { ...state, sortOrder: state.sortOrder === 'ascending' ? 'descending' : 'ascending' },
-                true,
+                true
             )
         }
 
         return this.sendQuery(
             { ...state, sort: request.sort, sortOrder: request.sort === 'created' ? 'descending' : 'ascending' },
-            true,
+            true
         )
     }
 
@@ -208,7 +208,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     private setLanguageFilter(
         state: local.IRecordingState,
-        request: local.ISetRecordingLanguageFilter,
+        request: local.ISetRecordingLanguageFilter
     ): local.IRecordingState {
         if (request.id === state.language) {
             return state
@@ -219,7 +219,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     private setRentFilter(
         state: local.IRecordingState,
-        request: local.ISetRecordingRentToFilter,
+        request: local.ISetRecordingRentToFilter
     ): local.IRecordingState {
         if (request.rent === state.rent) {
             return state
@@ -230,14 +230,14 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
     private setGenreFilter(
         state: local.IRecordingState,
-        request: local.ISetRecordingGenreFilter,
+        request: local.ISetRecordingGenreFilter
     ): local.IRecordingState {
         return this.sendQuery({ ...state, genres: request.ids || [] }, true)
     }
 
     private setSeriesFilter(
         state: local.IRecordingState,
-        request: local.ISetRecordingSeriesFilter,
+        request: local.ISetRecordingSeriesFilter
     ): local.IRecordingState {
         return this.sendQuery({ ...state, series: request.ids || [] }, true)
     }
@@ -285,7 +285,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
     }
 
     private createCopy(state: local.IRecordingState, request: local.ICopyRecording): local.IRecordingState {
-        delayedDispatch(routerActions.push(`${local.routes.recording}/NEW`))
+        delayedDispatch(routerActions.push(`${routes.recording}/NEW`))
 
         const edit = state.workingCopy || (typeof state.edit !== 'string' && state.edit)
 
@@ -321,9 +321,9 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
         switch (state.afterSave) {
             case 'list':
-                delayedDispatch(routerActions.push(local.routes.recording))
+                delayedDispatch(routerActions.push(routes.recording))
                 break
-            case 'copy':
+            case 'copy': {
                 const { item } = response
 
                 state = {
@@ -332,8 +332,9 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
                     workingCopy: { ...item, _id: '', name: `Kopie von ${item.name || ''}` },
                 }
 
-                delayedDispatch(routerActions.push(`${local.routes.recording}/NEW`))
+                delayedDispatch(routerActions.push(`${routes.recording}/NEW`))
                 break
+            }
         }
 
         return state

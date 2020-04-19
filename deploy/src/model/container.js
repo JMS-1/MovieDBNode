@@ -1,17 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("@jms-1/mongodb-graphql/lib/types");
+const enum_1 = require("./enum");
 const utils_1 = require("./utils");
-var TContainerType;
-(function (TContainerType) {
-    TContainerType[TContainerType["Box"] = 2] = "Box";
-    TContainerType[TContainerType["Disk"] = 4] = "Disk";
-    TContainerType[TContainerType["FeatureSet"] = 1] = "FeatureSet";
-    TContainerType[TContainerType["Folder"] = 5] = "Folder";
-    TContainerType[TContainerType["Shelf"] = 3] = "Shelf";
-    TContainerType[TContainerType["Undefined"] = 0] = "Undefined";
-})(TContainerType = exports.TContainerType || (exports.TContainerType = {}));
-exports.ContainerType = types_1.GqlEnum('ContainerType', TContainerType, {
+exports.ContainerType = types_1.GqlEnum('ContainerType', enum_1.TContainerType, {
     description: 'Die möglichen Arten von Ablagen.',
     sortable: true,
 });

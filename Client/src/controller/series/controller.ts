@@ -1,11 +1,12 @@
-import { ILanguage, ISeries } from 'movie-db-api'
 import * as local from 'movie-db-client'
+
+import { ILanguage, ISeries } from 'movie-db-api'
 
 import { SeriesActions } from './actions'
 
-import { EditController } from '../controller'
-
 import { ServerApi } from '../../store'
+import { routes } from '../../stores/routes'
+import { EditController } from '../controller'
 
 type TSeriesActions =
     | local.ICancelSeriesEdit
@@ -23,7 +24,7 @@ type TSeriesActions =
 const controller = new (class extends EditController<ILanguage, TSeriesActions, local.ISeriesState> {
     protected readonly schema = 'series'
 
-    protected readonly listRoute = local.routes.series
+    protected readonly listRoute = routes.series
 
     protected getReducerMap(): local.IActionHandlerMap<TSeriesActions, local.ISeriesState> {
         return {

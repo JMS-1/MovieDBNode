@@ -1,11 +1,12 @@
-import { ILanguage } from 'movie-db-api'
 import * as local from 'movie-db-client'
+
+import { ILanguage } from 'movie-db-api'
 
 import { LanguageActions } from './actions'
 
-import { EditController } from '../controller'
-
 import { ServerApi } from '../../store'
+import { routes } from '../../stores/routes'
+import { EditController } from '../controller'
 
 type TLanguageActions =
     | local.ICancelLanguageEdit
@@ -22,7 +23,7 @@ type TLanguageActions =
 const controller = new (class extends EditController<ILanguage, TLanguageActions, local.ILanguageState> {
     protected readonly schema = 'language'
 
-    protected readonly listRoute = local.routes.language
+    protected readonly listRoute = routes.language
 
     protected getReducerMap(): local.IActionHandlerMap<TLanguageActions, local.ILanguageState> {
         return {

@@ -25,11 +25,7 @@ export class TranslationStore {
                 parentLocation: 'Position in der übergeordneten Ablage',
                 type: 'Art der Ablage',
             },
-            name: 'Aufzeichnung',
-            noId: '(noch keine)',
-            noParent: '(keine)',
-            position: 'Position',
-            types: {
+            legacyTypes: {
                 [containerType.Box]: {
                     icon: 'zip' as SemanticICONS,
                     title: 'Große DVD Box',
@@ -51,6 +47,36 @@ export class TranslationStore {
                     title: 'Regal(fach)',
                 },
                 [containerType.Undefined]: {
+                    icon: 'help' as SemanticICONS,
+                    title: '(unbekannt)',
+                },
+            },
+            name: 'Aufzeichnung',
+            noId: '(noch keine)',
+            noParent: '(keine)',
+            position: 'Position',
+            types: {
+                Box: {
+                    icon: 'zip' as SemanticICONS,
+                    title: 'Große DVD Box',
+                },
+                Disk: {
+                    icon: 'hdd' as SemanticICONS,
+                    title: '(Externe) Festplatte',
+                },
+                FeatureSet: {
+                    icon: 'briefcase' as SemanticICONS,
+                    title: 'Kleine DVD Box',
+                },
+                Folder: {
+                    icon: 'folder' as SemanticICONS,
+                    title: 'Dateiverzeichnis',
+                },
+                Shelf: {
+                    icon: 'building' as SemanticICONS,
+                    title: 'Regal(fach)',
+                },
+                Undefined: {
                     icon: 'help' as SemanticICONS,
                     title: '(unbekannt)',
                 },

@@ -6,8 +6,8 @@ import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
 import { refreshRecordingNames } from './utils'
 
-import { IRecording, IQueryCountInfo } from '../model'
-import { Recording, RecordingQueryResponse, RecordingSort, TRecordingSort } from '../model/entities'
+import { IRecording, IQueryCountInfo, TRecordingSort } from '../model'
+import { Recording, RecordingQueryResponse, RecordingSort } from '../model/entities'
 import { uniqueIdPattern } from '../model/utils'
 
 const escapeReg = /[.*+?^${}()|[\]\\]/g

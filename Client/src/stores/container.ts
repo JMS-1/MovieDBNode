@@ -1,6 +1,7 @@
-import { routes } from 'movie-db-client'
+import { SemanticICONS } from 'semantic-ui-react'
 
 import { ItemStore } from './item'
+import { routes } from './routes'
 
 import { IContainer } from '../../../Server/src/model'
 
@@ -9,12 +10,24 @@ export class ContainerStore extends ItemStore<IContainer> {
 
     protected readonly itemScope = 'containers'
 
-    protected readonly itemRoute = routes.container
+    readonly itemRoute = routes.container
 
     protected readonly validationName = 'Container'
 
     getName(container: IContainer): string {
         return container?.name || container?._id
+    }
+
+    getIcon(container: IContainer): SemanticICONS {
+        const type = container?.type
+
+        if (type === undefined) {
+            return 'help'
+        }
+
+        const { types } = this.root.translations.strings.container
+
+        return types[type as keyof typeof types]?.icon || 'help'
     }
 
     protected createNew(): IContainer {

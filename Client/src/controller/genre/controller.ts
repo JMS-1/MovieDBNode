@@ -1,11 +1,12 @@
-import { IGenre } from 'movie-db-api'
 import * as local from 'movie-db-client'
+
+import { IGenre } from 'movie-db-api'
 
 import { GenreActions } from './actions'
 
-import { EditController } from '../controller'
-
 import { ServerApi } from '../../store'
+import { routes } from '../../stores/routes'
+import { EditController } from '../controller'
 
 type TGenreActions =
     | local.ICancelGenreEdit
@@ -22,7 +23,7 @@ type TGenreActions =
 const controller = new (class extends EditController<IGenre, TGenreActions, local.IGenreState> {
     protected readonly schema = 'genre'
 
-    protected readonly listRoute = local.routes.genre
+    protected readonly listRoute = routes.genre
 
     protected getReducerMap(): local.IActionHandlerMap<TGenreActions, local.IGenreState> {
         return {

@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react'
-import { routes } from 'movie-db-client'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 import { Label, List } from 'semantic-ui-react'
@@ -8,6 +7,7 @@ import { GenreDetails } from './details/details'
 
 import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
 import { genres } from '../../stores'
+import { routes } from '../../stores/routes'
 
 interface IGenreRouteParams {
     id?: string

@@ -1,7 +1,6 @@
+import { IClientState } from 'movie-db-client'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
-
-import { IClientState } from 'movie-db-client'
 
 import * as local from './content'
 
@@ -17,12 +16,9 @@ function mapStateToProps(state: IClientState, props: local.IContainerContentUiPr
 
 function mapDispatchToProps(
     dispatch: Dispatch<Action>,
-    props: local.IContainerContentUiProps,
+    props: local.IContainerContentUiProps
 ): local.IContainerContentActions {
     return {}
 }
 
-export const ContainerContent = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(local.CContainerContent)
+export const ContainerContent = connect(mapStateToProps, mapDispatchToProps)(local.CContainerContent)
