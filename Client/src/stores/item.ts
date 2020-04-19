@@ -1,4 +1,3 @@
-import { getMessage } from '@jms-1/isxs-tools'
 import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
 import { observable, action, computed } from 'mobx'
@@ -6,6 +5,7 @@ import { createViewModel, IViewModel } from 'mobx-utils'
 import { DropdownItemProps } from 'semantic-ui-react'
 
 import { RootStore } from './root'
+import { getGraphQlError } from './utils'
 
 const noSchema: ValidationSchema = { $$strict: true }
 
@@ -24,6 +24,8 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     @observable private _selected?: string = undefined
 
+    @observable deleteConfirm = false
+
     constructor(public readonly root: RootStore) {}
 
     @action
@@ -31,13 +33,61 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         this._selected = id || ''
     }
 
-    private getErrors(
-        type: 'inputErrors' | 'updateErrors',
-        field: string,
-        index?: number,
-        subField?: string
-    ): ValidationError[] | null {
-        const errors = this[type]
+    @action
+    async remove(item?: TItem): Promise<void> {
+        this.root.outstandingRequests += 1
+
+        const id = (item || this.workingCopy)._id
+
+        try {
+            const mutation = gql`mutation ($id: ID!){ ${this.itemScope} { delete(_id: $id) { _id } } }`
+
+            await this.root.gql.mutate({ mutation, variables: { id } })
+
+            delete this._items[id]
+
+            this.deleteConfirm = false
+
+            this.select('')
+        } catch (error) {
+            alert(getGraphQlError(error))
+        } finally {
+            this.root.outstandingRequests -= 1
+        }
+    }
+
+    @action
+    async addOrUpdate(item?: TItem): Promise<void> {
+        if (!item) {
+            item = this.workingCopy
+        }
+
+        this.root.outstandingRequests += 1
+
+        try {
+            const res = await this.root.gql.mutate({
+                mutation: item._id
+                    ? gql`mutation ($id: ID!, $data: ${this.validationName}Update!){ ${this.itemScope} { update(_id: $id, data: $data) { ${this.itemProps} } } }`
+                    : gql`mutation ($data: ${this.validationName}Input!){ ${this.itemScope} { add(data: $data) { ${this.itemProps} } } }`,
+                variables: { data: this.toProtocol(item), id: item._id },
+            })
+
+            const changed: TItem = res.data[this.itemScope][item._id ? 'update' : 'add']
+
+            this._items[changed._id] = changed
+
+            if (!item._id) {
+                this.select(changed._id)
+            }
+        } catch (error) {
+            alert(getGraphQlError(error))
+        } finally {
+            this.root.outstandingRequests -= 1
+        }
+    }
+
+    getErrors(field: string, index?: number, subField?: string): ValidationError[] | null {
+        const errors = this.errors
 
         if (errors === true) {
             return null
@@ -56,14 +106,6 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         return forField.length < 1 ? null : forField
     }
 
-    getInputErrors(field: string, index?: number, subField?: string): ValidationError[] | null {
-        return this.getErrors('inputErrors', field, index, subField)
-    }
-
-    getUpdateErrors(field: string, index?: number, subField?: string): ValidationError[] | null {
-        return this.getErrors('updateErrors', field, index, subField)
-    }
-
     @computed({ keepAlive: true })
     get selected(): TItem {
         return this._items[this._selected]
@@ -74,21 +116,14 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         return createViewModel(this.selected || observable(this.createNew()))
     }
 
-    private validate(schema: 'inputValidation' | 'updateValidation'): ValidationError[] | true {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    @computed({ keepAlive: true })
+    get errors(): ValidationError[] | true {
         const validator = new Validator()
 
-        return validator.validate(this.toProtocol(this.workingCopy), this[schema])
-    }
-
-    @computed({ keepAlive: true })
-    get inputErrors(): ValidationError[] | true {
-        return this.validate('inputValidation')
-    }
-
-    @computed({ keepAlive: true })
-    get updateErrors(): ValidationError[] | true {
-        return this.validate('updateValidation')
+        return validator.validate(
+            this.toProtocol(this.workingCopy),
+            this.workingCopy._id ? this.updateValidation : this.inputValidation
+        )
     }
 
     @computed({ keepAlive: true })
@@ -131,7 +166,7 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
                 this.select(this.ordered[0] || '')
             }
         } catch (error) {
-            alert(getMessage(error))
+            alert(getGraphQlError(error))
         } finally {
             this.root.outstandingRequests -= 1
         }

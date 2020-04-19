@@ -1,8 +1,11 @@
 import { ValidationError } from 'fastest-validator'
 import { computed } from 'mobx'
+import { observer } from 'mobx-react'
+import { IViewModel } from 'mobx-utils'
 import * as React from 'react'
 import { Form, Input, TextArea, InputOnChangeData, TextAreaProps } from 'semantic-ui-react'
 
+import { translations } from '../../stores'
 import { ReportError } from '../message/messageRedux'
 
 export interface ITextInputLegacyUiProps<TItem> {
@@ -51,19 +54,31 @@ export class CTextInputLegacy<TItem> extends React.PureComponent<TTextInputLegac
     ): void => this.props.setValue(this.props.prop, ev.currentTarget.value)
 }
 
-export interface ITextInputProps<TItem> {
+interface ITextInputStore<TItem> {
+    readonly errors: true | ValidationError[]
+    readonly workingCopy: TItem & IViewModel<TItem>
+}
+
+interface ITextInputProps<TItem> {
     prop: keyof TItem
     required?: boolean
+    scope: 'language'
+    store: ITextInputStore<TItem>
     textarea?: boolean
 }
 
-export abstract class TextInput<TItem> extends React.PureComponent<ITextInputProps<TItem>> {
+@observer
+export class TextInput<TItem> extends React.PureComponent<ITextInputProps<TItem>> {
     render(): JSX.Element {
+        const { prop, scope } = this.props
+
         const errors = this.errors
+
+        const emui = translations.strings[scope].edit
 
         return (
             <Form.Field className='movie-db-input-text' error={errors.length > 0} required={this.props.required}>
-                <label>{this.getLabel(this.props.prop)}</label>
+                <label>{emui[prop as keyof typeof emui]}</label>
                 {this.props.textarea ? (
                     <TextArea rows={6} value={this.value} onChange={this.onChange} />
                 ) : (
@@ -76,29 +91,24 @@ export abstract class TextInput<TItem> extends React.PureComponent<ITextInputPro
 
     @computed
     private get errors(): string[] {
-        const { prop } = this.props
+        const { prop, store } = this.props
 
-        const errors = this.getErrors()
+        const errors = store.errors
 
         return errors === true ? [] : errors.filter((e) => e.field === prop).map((e) => e.message)
     }
 
     private get value(): string {
-        const value = this.getValue(this.props.prop)
+        const value = this.props.store.workingCopy[this.props.prop]
 
         return typeof value === 'string' ? value : ''
     }
 
-    protected abstract getErrors(): ValidationError[] | true
-
-    protected abstract getValue(prop: keyof TItem): string
-
-    protected abstract setValue(prop: keyof TItem, value: string): void
-
-    protected abstract getLabel(prop: keyof TItem): string
-
     private readonly onChange = (
         _ev: React.ChangeEvent | React.FormEvent,
         data: InputOnChangeData | TextAreaProps
-    ): void => this.setValue(this.props.prop, data.value as string)
+    ): void => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.props.store.workingCopy[this.props.prop] = data.value as any
+    }
 }

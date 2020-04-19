@@ -1,9 +1,12 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Button, Header, Modal } from 'semantic-ui-react'
 
-export interface IDeleteConfirmUiProps {}
+import { translations } from '../../stores'
 
-export interface IDeleteConfirmProps {
+export interface IDeleteConfirmLegacyUiProps {}
+
+export interface IDeleteConfirmLegacyProps {
     html: string
     no: string
     open: boolean
@@ -11,14 +14,16 @@ export interface IDeleteConfirmProps {
     yes: string
 }
 
-export interface IDeleteConfirmActions {
+export interface IDeleteConfirmLegacyActions {
     confirm(): void
     reject(): void
 }
 
-export type TDeleteConfirmProps = IDeleteConfirmProps & IDeleteConfirmUiProps & IDeleteConfirmActions
+export type TDeleteConfirmLegacyProps = IDeleteConfirmLegacyProps &
+    IDeleteConfirmLegacyUiProps &
+    IDeleteConfirmLegacyActions
 
-export class CDeleteConfirm extends React.PureComponent<TDeleteConfirmProps> {
+export class CDeleteConfirmLegacy extends React.PureComponent<TDeleteConfirmLegacyProps> {
     render(): JSX.Element {
         return (
             <Modal className='movie-db-confirm-delete' open={this.props.open} onClose={this.props.reject}>
@@ -33,4 +38,40 @@ export class CDeleteConfirm extends React.PureComponent<TDeleteConfirmProps> {
             </Modal>
         )
     }
+}
+
+interface IDeleteConfirmStore {
+    deleteConfirm: boolean
+    remove(): Promise<void>
+}
+
+interface IDeleteConfirmProps {
+    scope: 'language'
+    store: IDeleteConfirmStore
+}
+
+@observer
+export class DeleteConfirm extends React.PureComponent<IDeleteConfirmProps> {
+    render(): JSX.Element {
+        const mui = translations.strings
+
+        return (
+            <Modal className='movie-db-confirm-delete' open={this.props.store.deleteConfirm} onClose={this.onReject}>
+                <Header>{mui.confirm}</Header>
+                <Modal.Content>
+                    <div dangerouslySetInnerHTML={{ __html: translations.strings[this.props.scope].confirmHtml }} />
+                    <div className='actions'>
+                        <Button onClick={this.onReject}>{mui.no}</Button>
+                        <Button onClick={this.onConfirm}>{mui.yes}</Button>
+                    </div>
+                </Modal.Content>
+            </Modal>
+        )
+    }
+
+    private readonly onReject = (): void => {
+        this.props.store.deleteConfirm = false
+    }
+
+    private readonly onConfirm = (): Promise<void> => this.props.store.remove()
 }

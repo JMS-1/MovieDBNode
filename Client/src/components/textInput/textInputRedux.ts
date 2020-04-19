@@ -1,5 +1,3 @@
-import { ValidationError } from 'fastest-validator'
-import { observer } from 'mobx-react'
 import { IClientState } from 'movie-db-client'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
@@ -8,9 +6,7 @@ import { IContainer, IGenre, IRecording, ISeries } from 'movie-db-api'
 
 import * as local from './textInput'
 
-import { ILanguage } from '../../../../Server/src/model'
 import * as controller from '../../controller'
-import { languages, translations } from '../../stores'
 
 class CContainerTextInput extends local.CTextInputLegacy<IContainer> {
     static mapProps(
@@ -81,25 +77,6 @@ class CSeriesTextInput extends local.CTextInputLegacy<ISeries> {
         return {
             setValue: (prop, value) => dispatch(controller.SeriesActions.setProperty(prop, value)),
         }
-    }
-}
-
-@observer
-export class LanguageTextInput extends local.TextInput<ILanguage> {
-    protected getErrors(): ValidationError[] | true {
-        return languages.updateErrors
-    }
-
-    protected getValue(prop: keyof ILanguage): string {
-        return languages.workingCopy[prop]
-    }
-
-    protected setValue(prop: keyof ILanguage, value: string): void {
-        languages.workingCopy[prop] = value
-    }
-
-    protected getLabel(prop: keyof ILanguage): string {
-        return translations.strings.language.edit[prop]
     }
 }
 

@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react'
 import { routes } from 'movie-db-client'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
@@ -14,6 +15,7 @@ interface ILanguageRouteParams {
 
 export interface ILanguageRouteUiProps extends RouteComponentProps<ILanguageRouteParams> {}
 
+@observer
 export class LanguageRoute extends React.PureComponent<ILanguageRouteUiProps> {
     render(): JSX.Element {
         const { id } = this.props.match.params

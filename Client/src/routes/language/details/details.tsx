@@ -2,9 +2,10 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Form } from 'semantic-ui-react'
 
-import { ConfirmDeleteLanguage } from '../../../components/confirm/confirmRedux'
-import { LanguageDetailActions } from '../../../components/detailActions/actionsRedux'
-import { LanguageTextInput } from '../../../components/textInput/textInputRedux'
+import { ILanguage } from '../../../../../Server/src/model'
+import { DeleteConfirm } from '../../../components/confirm/confirm'
+import { DetailActions } from '../../../components/detailActions/actions'
+import { TextInput } from '../../../components/textInput/textInput'
 import { languages } from '../../../stores'
 
 export interface ILanguageDetailsUiProps {
@@ -23,10 +24,10 @@ export class LanguageDetails extends React.PureComponent<ILanguageDetailsUiProps
         return (
             <div className='movie-db-language-details'>
                 <>
-                    {!language && <ConfirmDeleteLanguage />}
-                    {!language && <LanguageDetailActions />}
-                    <Form error={languages.updateErrors !== true}>
-                        <LanguageTextInput required prop='name' />
+                    <DeleteConfirm scope='language' store={languages} />
+                    <DetailActions<ILanguage> store={languages} />
+                    <Form error={languages.errors !== true}>
+                        <TextInput<ILanguage> required prop='name' scope='language' store={languages} />
                     </Form>
                 </>
             </div>
