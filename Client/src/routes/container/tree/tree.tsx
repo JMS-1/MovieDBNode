@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-// import { ContainerSearch } from '../../../components/search/searchRedux'
 import { IContainer } from '../../../../../Server/src/model'
+import { Search } from '../../../components/search/search'
 import { Node } from '../../../components/tree/level'
 import { containers } from '../../../stores'
 
@@ -21,7 +21,7 @@ export class ContainerTree extends React.PureComponent<TContainerTreeProps> {
     render(): JSX.Element {
         return (
             <div className='movie-db-container-tree movie-db-tree'>
-                {/* <ContainerSearch /> */}
+                <Search store={containers} />
                 <Node<IContainer> id='' scope={this.props.id} store={containers} />
             </div>
         )

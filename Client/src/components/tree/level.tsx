@@ -40,16 +40,17 @@ export class CLegacyNode extends React.PureComponent<TLegacyNodeProps> {
 }
 
 interface INodeItem {
-    _id: string
-    parentId?: string
+    readonly _id: string
+    readonly parentId?: string
 }
 
 interface INodeStore<TItem extends INodeItem> {
     getIcon?(item: TItem): SemanticICONS
     getItem(id: string): TItem | undefined
     getName(item: TItem): string
+    readonly filter: string
     readonly itemRoute: routes
-    readonly ordered: string[]
+    readonly orderedAndFiltered: string[]
 }
 
 interface INodeProps<TItem extends INodeItem> {
@@ -85,7 +86,7 @@ export class Node<TItem extends INodeItem> extends React.PureComponent<INodeProp
 
         const parentId = this.props.id || ''
 
-        return store.ordered
+        return store.orderedAndFiltered
             .map((id) => store.getItem(id))
             .filter((i) => i && (i.parentId || '') === parentId)
             .map((i) => <Node<TItem> key={i._id} id={i._id} scope={scope} store={store} />)

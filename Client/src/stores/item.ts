@@ -32,6 +32,8 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     @observable deleteConfirm = false
 
+    @observable filter = ''
+
     constructor(public readonly root: RootStore) {}
 
     @action

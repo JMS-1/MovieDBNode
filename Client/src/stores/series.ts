@@ -1,5 +1,8 @@
+import { computed } from 'mobx'
+
 import { ItemStore } from './item'
 import { routes } from './routes'
+import { createFiltered } from './utils'
 
 import { ISeries } from '../../../Server/src/model'
 
@@ -32,5 +35,10 @@ export class SeriesStore extends ItemStore<ISeries> {
             name: series.name,
             parentId: series.parentId || null,
         }
+    }
+
+    @computed({ keepAlive: true })
+    get orderedAndFiltered(): string[] {
+        return createFiltered(this._items, this.filter, this.getName.bind(this))
     }
 }

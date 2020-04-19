@@ -1,7 +1,9 @@
+import { computed } from 'mobx'
 import { SemanticICONS } from 'semantic-ui-react'
 
 import { ItemStore } from './item'
 import { routes } from './routes'
+import { createFiltered } from './utils'
 
 import { IContainer } from '../../../Server/src/model'
 
@@ -49,5 +51,10 @@ export class ContainerStore extends ItemStore<IContainer> {
             parentLocation: container.parentLocation,
             type: container.type,
         }
+    }
+
+    @computed({ keepAlive: true })
+    get orderedAndFiltered(): string[] {
+        return createFiltered(this._items, this.filter, this.getName.bind(this))
     }
 }
