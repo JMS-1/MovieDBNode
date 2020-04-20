@@ -46,7 +46,7 @@ interface IDeleteConfirmStore {
 }
 
 interface IDeleteConfirmProps {
-    scope: 'language' | 'genre'
+    scope: 'language' | 'genre' | 'container'
     store: IDeleteConfirmStore
 }
 

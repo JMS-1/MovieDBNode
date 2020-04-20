@@ -55,6 +55,7 @@ export class CTextInputLegacy<TItem> extends React.PureComponent<TTextInputLegac
 }
 
 interface ITextInputStore<TItem> {
+    getErrors(field: string): string[] | null
     readonly errors: true | ValidationError[]
     readonly workingCopy: TItem & IViewModel<TItem>
 }
@@ -62,7 +63,7 @@ interface ITextInputStore<TItem> {
 interface ITextInputProps<TItem> {
     prop: keyof TItem
     required?: boolean
-    scope: 'language' | 'genre'
+    scope: 'language' | 'genre' | 'container' | 'series'
     store: ITextInputStore<TItem>
     textarea?: boolean
 }
@@ -77,7 +78,11 @@ export class TextInput<TItem> extends React.PureComponent<ITextInputProps<TItem>
         const emui = translations.strings[scope].edit
 
         return (
-            <Form.Field className='movie-db-input-text' error={errors.length > 0} required={this.props.required}>
+            <Form.Field
+                className='movie-db-input-text'
+                error={errors && errors.length > 0}
+                required={this.props.required}
+            >
                 <label>{emui[prop as keyof typeof emui]}</label>
                 {this.props.textarea ? (
                     <TextArea rows={6} value={this.value} onChange={this.onChange} />
@@ -91,11 +96,7 @@ export class TextInput<TItem> extends React.PureComponent<ITextInputProps<TItem>
 
     @computed
     private get errors(): string[] {
-        const { prop, store } = this.props
-
-        const errors = store.errors
-
-        return errors === true ? [] : errors.filter((e) => e.field === prop).map((e) => e.message)
+        return this.props.store.getErrors(this.props.prop as string)
     }
 
     private get value(): string {

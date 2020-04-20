@@ -1,13 +1,15 @@
 import { computed } from 'mobx'
-import { SemanticICONS } from 'semantic-ui-react'
+import * as React from 'react'
+import { SemanticICONS, DropdownItemProps, Icon } from 'semantic-ui-react'
 
-import { ItemStore } from './item'
+import { HierarchyStore } from './item'
 import { routes } from './routes'
-import { createFiltered } from './utils'
 
-import { IContainer } from '../../../Server/src/model'
+import { IContainer, TContainerType } from '../../../Server/src/model'
 
-export class ContainerStore extends ItemStore<IContainer> {
+const optionOrder = ['Undefined', 'FeatureSet', 'Box', 'Shelf', 'Folder', 'Disk']
+
+export class ContainerStore extends HierarchyStore<IContainer> {
     protected readonly itemProps = '_id name description parentId parentLocation type'
 
     protected readonly itemScope = 'containers'
@@ -39,22 +41,32 @@ export class ContainerStore extends ItemStore<IContainer> {
             name: '',
             parentId: undefined,
             parentLocation: undefined,
-            type: undefined,
+            type: 'Undefined',
         }
     }
 
-    protected toProtocol(container: IContainer): Partial<IContainer> {
+    protected toProtocol(container: IContainer, toSend = false): Partial<IContainer> {
         return {
             description: container.description,
             name: container.name,
             parentId: container.parentId || null,
             parentLocation: container.parentLocation,
-            type: container.type,
+            type: toSend ? container.type : (TContainerType[container.type] as TContainerType),
         }
     }
 
     @computed({ keepAlive: true })
-    get orderedAndFiltered(): string[] {
-        return createFiltered(this._items, this.filter, this.getName.bind(this))
+    get typesAsOptions(): DropdownItemProps[] {
+        const mui = this.root.translations.strings.container.types
+
+        return optionOrder.map((c: keyof typeof mui) => ({
+            key: c,
+            text: (
+                <span>
+                    <Icon name={mui[c].icon} /> {mui[c].title}
+                </span>
+            ),
+            value: c,
+        }))
     }
 }

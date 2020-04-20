@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
-// import { ContainerDetails } from './details/detailsRedux'
+import { ContainerDetails } from './details/details'
 import { ContainerTree } from './tree/tree'
 
 import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
@@ -21,7 +21,7 @@ export class ContainerRoute extends React.PureComponent<IContainerRouteUiProps> 
         return (
             <MasterDetailRoute className='movie-db-container-route'>
                 <ContainerTree id={id} />
-                {/* <ContainerDetails id={id} /> '*/}
+                <ContainerDetails id={id} />
             </MasterDetailRoute>
         )
     }

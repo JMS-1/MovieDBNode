@@ -7,7 +7,7 @@ import { DropdownItemProps } from 'semantic-ui-react'
 
 import { RootStore } from './root'
 import { routes } from './routes'
-import { getGraphQlError } from './utils'
+import { getGraphQlError, createFiltered } from './utils'
 
 import { delayedDispatch } from '../store'
 
@@ -22,10 +22,6 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     protected abstract readonly validationName: string
 
-    protected abstract createNew(): TItem
-
-    protected abstract toProtocol(item: TItem): Partial<TItem>
-
     @observable protected _items: Record<string, TItem> = {}
 
     @observable private _selected?: string = undefined
@@ -35,6 +31,10 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
     @observable filter = ''
 
     constructor(public readonly root: RootStore) {}
+
+    protected abstract createNew(): TItem
+
+    protected abstract toProtocol(item: TItem, toSend?: boolean): Partial<TItem>
 
     @action
     select(id: string): void {
@@ -77,7 +77,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
                 mutation: item._id
                     ? gql`mutation ($id: ID!, $data: ${this.validationName}Update!){ ${this.itemScope} { update(_id: $id, data: $data) { ${this.itemProps} } } }`
                     : gql`mutation ($data: ${this.validationName}Input!){ ${this.itemScope} { add(data: $data) { ${this.itemProps} } } }`,
-                variables: { data: this.toProtocol(item), id: item._id },
+                variables: { data: this.toProtocol(item, true), id: item._id },
             })
 
             const changed: TItem = res.data[this.itemScope][item._id ? 'update' : 'add']
@@ -94,7 +94,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         }
     }
 
-    getErrors(field: string, index?: number, subField?: string): ValidationError[] | null {
+    getErrors(field: string, index?: number, subField?: string): string[] | null {
         const errors = this.errors
 
         if (errors === true) {
@@ -111,7 +111,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
         const forField = errors.filter((e) => e.field === field)
 
-        return forField.length < 1 ? null : forField
+        return forField.length > 0 ? forField.map((e) => e.message) : null
     }
 
     getItem(id: string): TItem | undefined {
@@ -152,6 +152,10 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 export abstract class ItemStore<TItem extends { _id: string }> extends BasicItemStore<TItem> {
     abstract getName(item: TItem): string
 
+    getFullName(item: TItem): string {
+        return this.getName(item)
+    }
+
     startup(): void {
         this.load()
     }
@@ -187,7 +191,7 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
     @computed({ keepAlive: true })
     get ordered(): string[] {
         return Object.keys(this._items).sort((l, r) =>
-            (this.getName(this._items[l]) || l).localeCompare(this.getName(this._items[r]) || r)
+            (this.getFullName(this._items[l]) || l).localeCompare(this.getFullName(this._items[r]) || r)
         )
     }
 
@@ -198,6 +202,43 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
         return this.ordered
             .map((id) => items[id])
             .filter((i) => i)
-            .map((l) => ({ key: l._id, text: this.getName(l), value: l._id }))
+            .map((l) => ({ key: l._id, text: this.getFullName(l), value: l._id }))
+    }
+}
+
+export abstract class HierarchyStore<TItem extends { _id: string; parentId?: string; name: string }> extends ItemStore<
+    TItem
+> {
+    getFullName(item: TItem): string {
+        const parentName = item?.parentId && this.getFullName(this._items[item.parentId])
+        const myName = item?.name || item?._id
+
+        return parentName ? `${parentName} > ${myName}` : myName
+    }
+
+    @computed({ keepAlive: true })
+    get orderedAndFiltered(): string[] {
+        return createFiltered(this._items, this.filter, this.getName.bind(this))
+    }
+
+    @computed
+    get possibleParents(): DropdownItemProps[] {
+        const forbidden = new Set<string>()
+
+        if (this.workingCopy._id) {
+            forbidden.add(this.workingCopy._id)
+        }
+
+        for (let check = new Set(forbidden); check.size > 0; ) {
+            const children = new Set<string>(
+                Object.keys(this._items).filter((id) => !forbidden.has(id) && forbidden.has(this._items[id].parentId))
+            )
+
+            check = children
+
+            check.forEach((id) => forbidden.add(id))
+        }
+
+        return this.asOptions.filter((i) => !forbidden.has(i.value as string))
     }
 }
