@@ -93,5 +93,4 @@ exports.seriesCollection = new (class extends utils_1.MovieDbCollection {
         return errors;
     }
 })();
-
 //# sourceMappingURL=series.js.map

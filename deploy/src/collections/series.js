@@ -10,6 +10,7 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
         super(...arguments);
         this.collectionName = collections_1.collectionNames.series;
         this.entityName = 'Serie';
+        this.parentProp = 'series';
     }
     async initialize() {
         const self = await this.collection;

@@ -9,6 +9,7 @@ exports.ContainerCollection = connection_1.MongoConnection.createCollection(enti
         super(...arguments);
         this.collectionName = collections_1.collectionNames.containers;
         this.entityName = 'Ablage';
+        this.parentProp = 'containerId';
     }
 });
 

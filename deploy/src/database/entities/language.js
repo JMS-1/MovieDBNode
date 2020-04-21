@@ -32,5 +32,4 @@ function toEntity(language, id) {
     return dbLanguage;
 }
 exports.toEntity = toEntity;
-
 //# sourceMappingURL=language.js.map

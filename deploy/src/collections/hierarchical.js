@@ -36,7 +36,7 @@ class HierarchicalCollection extends collection_1.CollectionBase {
     }
     async beforeRemove(_id) {
         const recordings = await this.connection.getCollection(collections_1.collectionNames.recordings);
-        const count = await recordings.countDocuments({ containerId: _id });
+        const count = await recordings.countDocuments({ [this.parentProp]: _id });
         switch (count) {
             case 0:
                 return;

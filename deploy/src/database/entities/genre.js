@@ -32,5 +32,4 @@ function toEntity(container, id) {
     return dbGenre;
 }
 exports.toEntity = toEntity;
-
 //# sourceMappingURL=genre.js.map

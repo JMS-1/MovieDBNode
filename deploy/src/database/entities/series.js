@@ -52,5 +52,4 @@ function toEntity(series, id) {
     return dbSeries;
 }
 exports.toEntity = toEntity;
-
 //# sourceMappingURL=series.js.map

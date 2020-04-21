@@ -29,5 +29,4 @@ exports.genreCollection = new (class extends utils_1.MovieDbCollection {
         return recording_1.recordingCollection.inUse('genres', id, 'Kategorie');
     }
 })();
-
 //# sourceMappingURL=genre.js.map

@@ -29,5 +29,4 @@ exports.languageCollection = new (class extends utils_1.MovieDbCollection {
         return recording_1.recordingCollection.inUse('languages', id, 'Sprache');
     }
 })();
-
 //# sourceMappingURL=language.js.map

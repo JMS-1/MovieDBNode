@@ -43,5 +43,4 @@ exports.containerCollection = new (class extends utils_1.MovieDbCollection {
         await me.updateMany({ parentId: typeof id === 'string' && id }, { $unset: { parentId: null } });
     }
 })();
-
 //# sourceMappingURL=container.js.map
