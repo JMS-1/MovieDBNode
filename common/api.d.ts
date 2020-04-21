@@ -28,11 +28,7 @@ declare module 'movie-db-api' {
     // Schema und Validierung
 
     interface ISchemaResponse {
-        container: IValidatableSchema
-        genre: IValidatableSchema
-        language: IValidatableSchema
         recording: IValidatableSchema
-        series: IValidatableSchema
     }
 
     // Ablage

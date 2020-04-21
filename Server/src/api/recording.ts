@@ -5,15 +5,13 @@ import * as movieDbApi from 'movie-db-api'
 
 import { processApiRequest } from './utils'
 
-import { genreCollection } from '../database/genre'
-import { languageCollection } from '../database/language'
 import { recordingCollection, toEntity, toProtocol } from '../database/recording'
 
 const utfBom = Buffer.from([0xef, 0xbb, 0xbf])
 
-let csvData = ''
+const csvData = ''
 
-function escape(str: string): string {
+export function escape(str: string): string {
     return `"${(str || '').replace(/"/g, '""')}"`
 }
 
@@ -32,62 +30,64 @@ export const recordingApi = Router().use(
             processApiRequest(
                 async () => toProtocol(await recordingCollection.findOne(request.params.id)),
                 request,
-                response,
-            ),
+                response
+            )
         )
         .get('/container/:id', (request, response, next) =>
             processApiRequest(
                 async () => await recordingCollection.queryContainer(request.params.id),
                 request,
-                response,
-            ),
+                response
+            )
         )
         .delete('/:id', (request, response) =>
             processApiRequest(
                 async () =>
                     <movieDbApi.IApiDeleteResponse>{
-                        id: request.params.id,
                         errors: await recordingCollection.deleteOne(request.params.id),
+                        id: request.params.id,
                     },
                 request,
-                response,
-            ),
+                response
+            )
         )
         .post('/search', (request, response, next) =>
             processApiRequest(
                 async (req: movieDbApi.IRecordingQueryRequest) => await recordingCollection.query(req),
                 request,
-                response,
-            ),
+                response
+            )
         )
         .post('/export/query', (request, response, next) =>
             processApiRequest(
                 async (req: movieDbApi.IRecordingQueryRequest) => {
+                    /*
                     const all = await recordingCollection.query(req)
 
                     const languageMap: { [id: string]: string } = {}
                     const languages = await languageCollection.find()
-                    languages.forEach(l => (languageMap[l._id] = l.name))
+                    languages.forEach((l) => (languageMap[l._id] = l.name))
 
                     const genreMap: { [id: string]: string } = {}
                     const genres = await genreCollection.find()
-                    genres.forEach(g => (genreMap[g._id] = g.name))
+                    genres.forEach((g) => (genreMap[g._id] = g.name))
 
                     csvData = 'Name;Sprachen;Kategorien\r\n'
 
-                    for (let recording of all.list) {
+                    for (const recording of all.list) {
                         const name = escape(recording.fullName)
-                        const languages = escape((recording.languages || []).map(l => languageMap[l] || l).join('; '))
-                        const genres = escape((recording.genres || []).map(l => genreMap[l] || l).join('; '))
+                        const languages = escape((recording.languages || []).map((l) => languageMap[l] || l).join('; '))
+                        const genres = escape((recording.genres || []).map((l) => genreMap[l] || l).join('; '))
 
                         csvData += `${name};${languages};${genres}\r\n`
                     }
+                    */
 
                     return {}
                 },
                 request,
-                response,
-            ),
+                response
+            )
         )
         .post('/', (request, response, next) =>
             processApiRequest(
@@ -100,8 +100,8 @@ export const recordingApi = Router().use(
                     }
                 },
                 request,
-                response,
-            ),
+                response
+            )
         )
         .put('/:id', (request, response, next) =>
             processApiRequest(
@@ -114,7 +114,7 @@ export const recordingApi = Router().use(
                     }
                 },
                 request,
-                response,
-            ),
-        ),
+                response
+            )
+        )
 )
