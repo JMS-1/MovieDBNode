@@ -13,6 +13,8 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
         this.parentProp = 'series';
     }
     async initialize() {
+        const db = await this.connection.database;
+        await db.command({ collMod: this.collectionName, validator: {} });
         const self = await this.collection;
         await self.createIndex({ fullName: 1 }, { name: 'series_full' });
         await self.createIndex({ name: 1 }, { name: 'series_name' });

@@ -122,6 +122,8 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
         });
     }
     async initialize() {
+        const db = await this.connection.database;
+        await db.command({ collMod: this.collectionName, validator: {} });
         const self = await this.collection;
         await self.createIndex({ containerId: 1 }, { name: 'recording_container' });
         await self.createIndex({ created: 1 }, { name: 'recording_date' });
