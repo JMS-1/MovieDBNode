@@ -5,13 +5,7 @@ export interface IMasterDetailRouteUiProps {
     className?: string
 }
 
-export interface IMasterDetailRouteProps { }
-
-export interface IMasterDetailRouteActions { }
-
-export type TMasterDetailRouteProps = IMasterDetailRouteProps & IMasterDetailRouteUiProps & IMasterDetailRouteActions
-
-export class CMasterDetailRoute extends React.PureComponent<TMasterDetailRouteProps> {
+export class MasterDetailRoute extends React.PureComponent<IMasterDetailRouteUiProps> {
     render(): JSX.Element {
         const children = React.Children.toArray(this.props.children)
 

@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router'
 import { ContainerDetails } from './details/details'
 import { ContainerTree } from './tree/tree'
 
-import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
+import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetail'
 
 export interface IContainerRouteParams {
     id?: string

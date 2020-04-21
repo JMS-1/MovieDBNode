@@ -1,10 +1,11 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
 
-import { SeriesDetails } from './details/detailsRedux'
-import { SeriesTree } from './tree/treeRedux'
+import { SeriesDetails } from './details/details'
+import { SeriesTree } from './tree/tree'
 
-import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
+import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetail'
 
 export interface ISeriesRouteParams {
     id?: string
@@ -12,13 +13,8 @@ export interface ISeriesRouteParams {
 
 export interface ISeriesRouteUiProps extends RouteComponentProps<ISeriesRouteParams> {}
 
-export interface ISeriesRouteProps {}
-
-export interface ISeriesRouteActions {}
-
-export type TSeriesRouteProps = ISeriesRouteProps & ISeriesRouteUiProps & ISeriesRouteActions
-
-export class CSeriesRoute extends React.PureComponent<TSeriesRouteProps> {
+@observer
+export class SeriesRoute extends React.PureComponent<ISeriesRouteUiProps> {
     render(): JSX.Element {
         const { id } = this.props.match.params
 

@@ -5,7 +5,7 @@ import { Label, List } from 'semantic-ui-react'
 
 import { LanguageDetails } from './details/details'
 
-import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetailRedux'
+import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetail'
 import { languages } from '../../stores'
 import { routes } from '../../stores/routes'
 

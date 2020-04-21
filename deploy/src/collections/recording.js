@@ -22,7 +22,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
         super(...arguments);
         this.collectionName = collections_1.collectionNames.recordings;
         this.findByContainer = this.queries.register('findByContainer', {
-            containerId: types.GqlString({
+            containerId: types.GqlId({
                 description: 'Die eindeutige Kennung der Ablage.',
                 validation: {
                     pattern: utils_2.uniqueIdPattern,

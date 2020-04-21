@@ -1,75 +1,67 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
-import { Dropdown, DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react'
+import { Dropdown, DropdownProps, Form } from 'semantic-ui-react'
 
 import { ISeries } from 'movie-db-api'
 
-import { ConfirmDeleteSeries } from '../../../components/confirm/confirmRedux'
-import { SeriesDetailActions } from '../../../components/detailActions/actionsRedux'
-import { SeriesTextInput } from '../../../components/textInput/textInputRedux'
+import { DeleteConfirm } from '../../../components/confirm/confirm'
+import { DetailActions } from '../../../components/detailActions/actions'
+import { TextInput } from '../../../components/textInput/textInput'
+import { series, translations } from '../../../stores'
 
 export interface ISeriesDetailsUiProps {
     id: string
 }
 
-export interface ISeriesDetailsProps {
-    hasError: boolean
-    lost: boolean
-    parent: string
-    parentHint: string
-    parentLabel: string
-    parentOptions: DropdownItemProps[]
-}
-
-export interface ISeriesDetailsActions {
-    loadDetails(id: string): void
-    setProp<TProp extends keyof ISeries>(prop: TProp, value: ISeries[TProp]): void
-}
-
-export type TSeriesDetailsProps = ISeriesDetailsProps & ISeriesDetailsUiProps & ISeriesDetailsActions
-
-export class CSeriesDetails extends React.PureComponent<TSeriesDetailsProps> {
+@observer
+export class SeriesDetails extends React.PureComponent<ISeriesDetailsUiProps> {
     render(): JSX.Element {
-        if (this.props.lost) {
+        if (!series.selected && this.props.id !== 'NEW') {
             return null
         }
 
+        const { workingCopy } = series
+
+        const mui = translations.strings.series
+        const emui = mui.edit
+
         return (
             <div className='movie-db-series-details'>
-                <ConfirmDeleteSeries />
-                <SeriesDetailActions />
-                <Form error={this.props.hasError}>
+                <DeleteConfirm scope='series' store={series} />
+                <DetailActions<ISeries> store={series} />
+                <Form error={series.errors !== true}>
                     <Form.Field>
-                        <label>{this.props.parentLabel}</label>
+                        <label>{emui.parentId}</label>
                         <Dropdown
                             clearable
                             fluid
-                            onChange={this.setParent}
-                            options={this.props.parentOptions}
-                            placeholder={this.props.parentHint}
+                            scrolling
                             search
                             selection
-                            scrolling
-                            value={this.props.parent || ''}
+                            options={series.possibleParents}
+                            placeholder={mui.noParent}
+                            value={workingCopy.parentId || ''}
+                            onChange={this.setSeries}
                         />
                     </Form.Field>
-                    <SeriesTextInput prop='name' required />
-                    <SeriesTextInput prop='description' textarea />
+                    <TextInput<ISeries> required prop='name' scope='series' store={series} />
+                    <TextInput<ISeries> textarea prop='description' scope='series' store={series} />
                 </Form>
             </div>
         )
     }
 
-    private readonly setParent = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
-        this.props.setProp('parentId', (typeof data.value === 'string' ? data.value : '') || undefined)
+    private readonly setSeries = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
+        series.workingCopy.parentId = (typeof data.value === 'string' ? data.value : '') || undefined
     }
 
-    componentWillMount(): void {
-        this.props.loadDetails(this.props.id)
+    UNSAFE_componentWillMount(): void {
+        series.select(this.props.id)
     }
 
-    componentWillReceiveProps(props: Readonly<TSeriesDetailsProps>, context: any): void {
+    UNSAFE_componentWillReceiveProps(props: Readonly<ISeriesDetailsUiProps>): void {
         if (props.id !== this.props.id) {
-            this.props.loadDetails(props.id)
+            series.select(props.id)
         }
     }
 }

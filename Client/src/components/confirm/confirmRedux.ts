@@ -31,31 +31,4 @@ function mapRecordingActions(
     }
 }
 
-function mapSeriesProps(
-    state: IClientState,
-    props: local.IDeleteConfirmLegacyUiProps
-): local.IDeleteConfirmLegacyProps {
-    const mui = state.mui
-
-    return {
-        html: mui.series.confirmHtml,
-        no: mui.no,
-        open: state.series.deleteOpen,
-        title: mui.confirm,
-        yes: mui.yes,
-    }
-}
-
-function mapSeriesActions(
-    dispatch: Dispatch<Action>,
-    props: local.IDeleteConfirmLegacyUiProps
-): local.IDeleteConfirmLegacyActions {
-    return {
-        confirm: () => dispatch(controller.SeriesActions.confirmDeleteDone(true)),
-        reject: () => dispatch(controller.SeriesActions.confirmDeleteDone(false)),
-    }
-}
-
 export const ConfirmDeleteRecording = connect(mapRecordingProps, mapRecordingActions)(local.CDeleteConfirmLegacy)
-
-export const ConfirmDeleteSeries = connect(mapSeriesProps, mapSeriesActions)(local.CDeleteConfirmLegacy)

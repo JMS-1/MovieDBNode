@@ -69,7 +69,9 @@ body {
     padding-right: 0.5em; }
   .movie-db-master-detail-route > .details {
     flex-basis: 0;
-    flex-grow: 1; }
+    flex-grow: 1;
+    height: 100%;
+    overflow: hidden; }
 
 .movie-db-root {
   height: 100%;
@@ -89,27 +91,30 @@ body {
 .movie-db-tree-level > .ui.label {
   width: 100%; }
 
-.movie-db-container-content > tbody > tr > td,
-.movie-db-container-content > tbody > tr > th,
-.movie-db-container-content > thead > tr > td,
-.movie-db-container-content > thead > tr > th {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; }
-  .movie-db-container-content > tbody > tr > td.position,
-  .movie-db-container-content > tbody > tr > th.position,
-  .movie-db-container-content > thead > tr > td.position,
-  .movie-db-container-content > thead > tr > th.position {
-    text-align: center; }
-    .movie-db-container-content > tbody > tr > td.position > a,
-    .movie-db-container-content > tbody > tr > th.position > a,
-    .movie-db-container-content > thead > tr > td.position > a,
-    .movie-db-container-content > thead > tr > th.position > a {
-      text-decoration: none; }
+.movie-db-container-content {
+  margin-top: 1em; }
+  .movie-db-container-content > tbody > tr > td,
+  .movie-db-container-content > tbody > tr > th,
+  .movie-db-container-content > thead > tr > td,
+  .movie-db-container-content > thead > tr > th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+    .movie-db-container-content > tbody > tr > td.position,
+    .movie-db-container-content > tbody > tr > th.position,
+    .movie-db-container-content > thead > tr > td.position,
+    .movie-db-container-content > thead > tr > th.position {
+      text-align: center; }
+      .movie-db-container-content > tbody > tr > td.position > a,
+      .movie-db-container-content > tbody > tr > th.position > a,
+      .movie-db-container-content > thead > tr > td.position > a,
+      .movie-db-container-content > thead > tr > th.position > a {
+        text-decoration: none; }
 
 .movie-db-container-details {
   padding: 0 1em 1em 1em;
-  overflow: auto; }
+  overflow: auto;
+  height: 100%; }
 
 .movie-db-genre-route > .master > .ui.list > .item > .ui.label {
   width: 100%; }
