@@ -4,9 +4,9 @@ import { routes } from './routes'
 import { ILanguage } from '../../../Server/src/model'
 
 export class LanguageStore extends ItemStore<ILanguage> {
-    protected readonly itemProps = '_id name'
+    readonly itemProps = '_id name'
 
-    protected readonly itemScope = 'languages'
+    readonly itemScope = 'languages'
 
     readonly itemRoute = routes.language
 

@@ -8,7 +8,7 @@ import { DetailActions } from '../../../components/detailActions/actions'
 import { ReportError } from '../../../components/message/messageRedux'
 import { TextInput } from '../../../components/textInput/textInput'
 import { containers, translations } from '../../../stores'
-//import { ContainerContent } from '../content/contentRedux'
+import { ContainerContent } from '../content/content'
 
 export interface IContainerDetailsUiProps {
     id: string
@@ -59,7 +59,7 @@ export class ContainerDetails extends React.PureComponent<IContainerDetailsUiPro
                     <TextInput<IContainer> textarea prop='description' scope='container' store={containers} />
                     <TextInput<IContainer> prop='parentLocation' scope='container' store={containers} />
                 </Form>
-                {/* <ContainerContent /> */}
+                <ContainerContent />
             </div>
         )
     }

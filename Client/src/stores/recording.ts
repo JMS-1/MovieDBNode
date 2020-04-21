@@ -4,10 +4,10 @@ import { routes } from './routes'
 import { IRecording } from '../../../Server/src/model'
 
 export class RecordingStore extends BasicItemStore<IRecording> {
-    protected readonly itemProps =
+    readonly itemProps =
         '_id containerId containerPosition containerType created description fullName genres languages links { description name url } name rentTo'
 
-    protected readonly itemScope = 'recordings'
+    readonly itemScope = 'recordings'
 
     readonly itemRoute = routes.recording
 

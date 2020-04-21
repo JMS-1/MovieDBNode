@@ -14,9 +14,9 @@ import { delayedDispatch } from '../store'
 const noSchema: ValidationSchema = { $$strict: true }
 
 export abstract class BasicItemStore<TItem extends { _id: string }> {
-    protected abstract readonly itemProps: string
+    abstract readonly itemProps: string
 
-    protected abstract readonly itemScope: string
+    abstract readonly itemScope: string
 
     abstract readonly itemRoute: routes
 
@@ -24,7 +24,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     @observable protected _items: Record<string, TItem> = {}
 
-    @observable private _selected?: string = undefined
+    @observable private _selected?: string = ''
 
     @observable deleteConfirm = false
 

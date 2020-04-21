@@ -1,4 +1,5 @@
 import { IMuiString } from '@jms-1/isxs-validation'
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Route } from 'react-router'
 import { Dimmer, Dropdown, Header, Loader, Menu, Message } from 'semantic-ui-react'
@@ -6,6 +7,7 @@ import { Dimmer, Dropdown, Header, Loader, Menu, Message } from 'semantic-ui-rea
 import { ContainerRoute } from '../../routes/container/container'
 import { GenreRoute } from '../../routes/genre/genre'
 import { LanguageRoute } from '../../routes/language/language'
+import { rootStore, translations } from '../../stores'
 import { routes } from '../../stores/routes'
 // import { Recording } from '../../routes/recording/details/detailsRedux'
 // import { RecordingRoute } from '../../routes/recording/recordingRedux'
@@ -14,26 +16,9 @@ import { routes } from '../../stores/routes'
 export interface IRootUiProps {}
 
 export interface IRootProps {
-    alternateTheme1: string
-    busy: boolean
-    containerRoute: string
-    createContainer: string
-    createGenre: string
-    createLanguage: string
-    createRecording: string
-    createRoute: string
-    createSeries: string
-    defaultTheme: string
     errors: IMuiString[]
-    genreRoute: string
-    alternateTheme2: string
-    languageRoute: string
     path: string
-    recordingRoute: string
-    seriesRoute: string
     theme: string
-    themeTitle: string
-    title: string
 }
 
 export interface IRootActions {
@@ -43,9 +28,16 @@ export interface IRootActions {
 
 export type TRootProps = IRootProps & IRootUiProps & IRootActions
 
+@observer
 export class CRoot extends React.PureComponent<TRootProps> {
     render(): JSX.Element {
-        const { errors, busy, path, theme } = this.props
+        const { isBusy } = rootStore
+
+        const tmui = translations.strings.themes
+        const rmui = translations.strings.routes
+        const cmui = rmui.create
+
+        const { errors, path, theme } = this.props
         const createContainer = path === `${routes.container}/NEW`
         const createRecording = path === `${routes.recording}/NEW`
         const createSeries = path === `${routes.series}/NEW`
@@ -60,10 +52,10 @@ export class CRoot extends React.PureComponent<TRootProps> {
 
         return (
             <div className='movie-db-root'>
-                <Dimmer page active={busy || errors.length > 0}>
-                    <Loader disabled={!busy} />
+                <Dimmer page active={isBusy || errors.length > 0}>
+                    <Loader disabled={!isBusy} />
                     <Message negative hidden={errors.length < 1} onDismiss={this.props.clearErrors}>
-                        <Header>{this.props.title}</Header>
+                        <Header>{translations.strings.webError}</Header>
                         <Message.List>
                             {errors.map((e, i) => (
                                 <Message.Item key={i}>{e.de || e.en || 'failed'}</Message.Item>
@@ -73,52 +65,52 @@ export class CRoot extends React.PureComponent<TRootProps> {
                 </Dimmer>
                 <Menu borderless>
                     <Menu.Item active={recording} as='a' href={`#${routes.recording}`}>
-                        {this.props.recordingRoute}
+                        {rmui.recording}
                     </Menu.Item>
                     <Menu.Item active={series} as='a' href={`#${routes.series}`}>
-                        {this.props.seriesRoute}
+                        {rmui.series}
                     </Menu.Item>
                     <Menu.Item active={container} as='a' href={`#${routes.container}`}>
-                        {this.props.containerRoute}
+                        {rmui.container}
                     </Menu.Item>
                     <Menu.Item active={language} as='a' href={`#${routes.language}`}>
-                        {this.props.languageRoute}
+                        {rmui.language}
                     </Menu.Item>
                     <Menu.Item active={genre} as='a' href={`#${routes.genre}`}>
-                        {this.props.genreRoute}
+                        {rmui.genre}
                     </Menu.Item>
                     <Menu.Item active={create}>
-                        <Dropdown text={this.props.createRoute}>
+                        <Dropdown text={cmui.title}>
                             <Dropdown.Menu>
                                 <Dropdown.Item active={createRecording} as='a' href={`#${routes.recording}/NEW`}>
-                                    {this.props.createRecording}
+                                    {cmui.recording}
                                 </Dropdown.Item>
                                 <Dropdown.Item active={createSeries} as='a' href={`#${routes.series}/NEW`}>
-                                    {this.props.createSeries}
+                                    {cmui.series}
                                 </Dropdown.Item>
                                 <Dropdown.Item active={createContainer} as='a' href={`#${routes.container}/NEW`}>
-                                    {this.props.createContainer}
+                                    {cmui.container}
                                 </Dropdown.Item>
                                 <Dropdown.Item active={createLanguage} as='a' href={`#${routes.language}/NEW`}>
-                                    {this.props.createLanguage}
+                                    {cmui.language}
                                 </Dropdown.Item>
                                 <Dropdown.Item active={createGenre} as='a' href={`#${routes.genre}/NEW`}>
-                                    {this.props.createGenre}
+                                    {cmui.genre}
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Menu.Item>
                     <Menu.Item>
-                        <Dropdown text={this.props.themeTitle}>
+                        <Dropdown text={tmui.title}>
                             <Dropdown.Menu>
                                 <Dropdown.Item active={theme === 'default'} onClick={this.defaultTheme}>
-                                    {this.props.defaultTheme}
+                                    {tmui.default}
                                 </Dropdown.Item>
                                 <Dropdown.Item active={theme === 'alternate.1'} onClick={this.alternateTheme1}>
-                                    {this.props.alternateTheme1}
+                                    {tmui.theme1}
                                 </Dropdown.Item>
                                 <Dropdown.Item active={theme === 'alternate.2'} onClick={this.alternateTheme2}>
-                                    {this.props.alternateTheme2}
+                                    {tmui.theme2}
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>

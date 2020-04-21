@@ -4,9 +4,9 @@ import { routes } from './routes'
 import { IGenre } from '../../../Server/src/model'
 
 export class GenreStore extends ItemStore<IGenre> {
-    protected readonly itemProps = '_id name'
+    readonly itemProps = '_id name'
 
-    protected readonly itemScope = 'genres'
+    readonly itemScope = 'genres'
 
     readonly itemRoute = routes.genre
 

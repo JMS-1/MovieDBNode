@@ -99,7 +99,7 @@ export const RecordingCollection = MongoConnection.createCollection(
         readonly findByContainer = this.queries.register(
             'findByContainer',
             {
-                containerId: types.GqlString({
+                containerId: types.GqlId({
                     description: 'Die eindeutige Kennung der Ablage.',
                     validation: {
                         pattern: uniqueIdPattern,
