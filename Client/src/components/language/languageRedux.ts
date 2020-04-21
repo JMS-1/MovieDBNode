@@ -1,7 +1,6 @@
+import { IClientState } from 'movie-db-client'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
-
-import { IClientState } from 'movie-db-client'
 
 import * as local from './language'
 
@@ -19,7 +18,4 @@ function mapDispatchToProps(dispatch: Dispatch<Action>, props: local.ILanguageUi
     return {}
 }
 
-export const Language = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(local.CLanguage)
+export const Language = connect(mapStateToProps, mapDispatchToProps)(local.CLanguage)

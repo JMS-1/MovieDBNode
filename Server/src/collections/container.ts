@@ -10,5 +10,7 @@ export const ContainerCollection = MongoConnection.createCollection(
         readonly collectionName = collectionNames.containers
 
         readonly entityName = 'Ablage'
+
+        readonly parentProp = 'containerId'
     }
 )

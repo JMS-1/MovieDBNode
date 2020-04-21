@@ -16,6 +16,8 @@ export const SeriesCollection = MongoConnection.createCollection(
 
         readonly entityName = 'Serie'
 
+        readonly parentProp = 'series'
+
         async initialize(): Promise<void> {
             const self = await this.collection
 

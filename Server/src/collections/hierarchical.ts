@@ -3,6 +3,8 @@ import { GqlRecord, TGqlLayoutType, TGqlType } from '@jms-1/mongodb-graphql/lib/
 
 import { collectionNames } from './collections'
 
+import { IRecording } from '../model'
+
 interface IHierarchicalItem {
     _id: string
     parentId?: string
@@ -14,6 +16,8 @@ export abstract class HierarchicalCollection<
     TLayout = TGqlLayoutType<TModel>
 > extends CollectionBase<TItem extends IHierarchicalItem ? TItem : never, TLayout> {
     abstract readonly entityName: string
+
+    abstract readonly parentProp: keyof IRecording
 
     private async demandParent(parentId?: string): Promise<boolean> {
         if (!parentId) {
@@ -62,7 +66,7 @@ export abstract class HierarchicalCollection<
 
     async beforeRemove(_id: string): Promise<void> {
         const recordings = await this.connection.getCollection(collectionNames.recordings)
-        const count = await recordings.countDocuments({ containerId: _id })
+        const count = await recordings.countDocuments({ [this.parentProp]: _id })
 
         switch (count) {
             case 0:

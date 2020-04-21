@@ -19,8 +19,6 @@ import { initializeDatabase } from './database'
 async function startup(): Promise<void> {
     await initializeDatabase()
 
-    // await runMigration()
-
     const app = express()
 
     app.use(express.static(join(__dirname, '../dist')))

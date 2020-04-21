@@ -1,8 +1,8 @@
 import { routerActions } from 'connected-react-router'
+import * as local from 'movie-db-client'
 import { Action } from 'redux'
 
 import { ISchemaResponse } from 'movie-db-api'
-import * as local from 'movie-db-client'
 
 import { delayedDispatch } from '../store'
 import { validate } from '../validation'
@@ -22,7 +22,7 @@ export abstract class Controller<TActions extends Action, TState> {
         if (!this._reducerMap) {
             this._reducerMap = this.getReducerMap()
 
-            for (let prop in this._reducerMap) {
+            for (const prop in this._reducerMap) {
                 if (this._reducerMap.hasOwnProperty(prop)) {
                     const type = <TActions['type']>prop
 
@@ -46,7 +46,7 @@ export abstract class EditController<
     TActions extends Action,
     TState extends local.IEditState<TItem>
 > extends Controller<TActions, TState> {
-    protected abstract readonly schema: keyof ISchemaResponse
+    protected abstract readonly schema: keyof ISchemaResponse | string
 
     protected abstract createEmpty(): TItem
 
@@ -55,7 +55,7 @@ export abstract class EditController<
     protected readonly customSave: boolean = false
 
     protected getWorkingCopy(state: TState): TItem {
-        return state.all.find(c => c._id === state.selected)
+        return state.all.find((c) => c._id === state.selected)
     }
 
     protected getInitialState(): TState {
@@ -104,7 +104,7 @@ export abstract class EditController<
 
     protected setProperty<TProp extends keyof TItem>(
         state: TState,
-        request: local.ISetGenericProperty<TItem, TProp>,
+        request: local.ISetGenericProperty<TItem, TProp>
     ): TState {
         const current = state.workingCopy || this.getWorkingCopy(state)
 
@@ -128,7 +128,7 @@ export abstract class EditController<
     }
 
     protected loadSchema(state: TState, response: local.ILoadSchemas): TState {
-        return this.validateItem({ ...state, validator: response.schemas[this.schema] })
+        return this.validateItem({ ...state, validator: response.schemas.recording })
     }
 
     protected cancelEdit(state: TState, request: local.IGenericCancelEdit): TState {
@@ -136,7 +136,7 @@ export abstract class EditController<
             return this.showList(state)
         }
 
-        return { ...state, workingCopy: undefined, validation: undefined }
+        return { ...state, validation: undefined, workingCopy: undefined }
     }
 
     protected saveDone(state: TState, response: local.IGenericSaveDone<TItem>): TState {
@@ -146,7 +146,7 @@ export abstract class EditController<
 
         const { _id } = response.item
 
-        state = { ...state, selected: _id, workingCopy: undefined, validation: undefined }
+        state = { ...state, selected: _id, validation: undefined, workingCopy: undefined }
 
         if (this.customSave) {
             return state
@@ -155,7 +155,7 @@ export abstract class EditController<
         delayedDispatch(routerActions.push(`${this.listRoute}/${_id}`))
 
         const all = [...state.all]
-        const index = all.findIndex(c => c._id === _id)
+        const index = all.findIndex((c) => c._id === _id)
 
         if (index < 0) {
             all.push(response.item)
@@ -185,7 +185,7 @@ export abstract class EditController<
     private showList(state: TState): TState {
         delayedDispatch(routerActions.push(this.listRoute))
 
-        return { ...state, selected: undefined, workingCopy: undefined, validation: undefined }
+        return { ...state, selected: undefined, validation: undefined, workingCopy: undefined }
     }
 
     protected deleteDone(state: TState, request: local.IGenericDeleteDone): TState {
