@@ -19,6 +19,10 @@ export const SeriesCollection = MongoConnection.createCollection(
         readonly parentProp = 'series'
 
         async initialize(): Promise<void> {
+            const db = await this.connection.database
+
+            await db.command({ collMod: this.collectionName, validator: {} })
+
             const self = await this.collection
 
             await self.createIndex({ fullName: 1 }, { name: 'series_full' })

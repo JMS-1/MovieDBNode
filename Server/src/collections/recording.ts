@@ -30,6 +30,10 @@ export const RecordingCollection = MongoConnection.createCollection(
         readonly collectionName = collectionNames.recordings
 
         async initialize(): Promise<void> {
+            const db = await this.connection.database
+
+            await db.command({ collMod: this.collectionName, validator: {} })
+
             const self = await this.collection
 
             await self.createIndex({ containerId: 1 }, { name: 'recording_container' })
