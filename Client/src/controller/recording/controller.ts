@@ -1,4 +1,3 @@
-import { routerActions } from 'connected-react-router'
 import * as local from 'movie-db-client'
 import { v4 as uuid } from 'uuid'
 
@@ -6,7 +5,8 @@ import * as api from 'movie-db-api'
 
 import { RecordingActions } from './actions'
 
-import { delayedDispatch, ServerApi } from '../../store'
+import { ServerApi } from '../../store'
+import { rootStore } from '../../stores'
 import { routes } from '../../stores/routes'
 import { EditController } from '../controller'
 
@@ -285,7 +285,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
     }
 
     private createCopy(state: local.IRecordingState, request: local.ICopyRecording): local.IRecordingState {
-        delayedDispatch(routerActions.push(`${routes.recording}/NEW`))
+        rootStore.router.push(`${routes.recording}/NEW`)
 
         const edit = state.workingCopy || (typeof state.edit !== 'string' && state.edit)
 
@@ -321,7 +321,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
 
         switch (state.afterSave) {
             case 'list':
-                delayedDispatch(routerActions.push(routes.recording))
+                rootStore.router.push(routes.recording)
                 break
             case 'copy': {
                 const { item } = response
@@ -332,7 +332,7 @@ const controller = new (class extends EditController<api.IRecording, TRecordingA
                     workingCopy: { ...item, _id: '', name: `Kopie von ${item.name || ''}` },
                 }
 
-                delayedDispatch(routerActions.push(`${routes.recording}/NEW`))
+                rootStore.router.push(`${routes.recording}/NEW`)
                 break
             }
         }

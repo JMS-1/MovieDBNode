@@ -1,10 +1,9 @@
-import { routerActions } from 'connected-react-router'
 import * as local from 'movie-db-client'
 import { Action } from 'redux'
 
 import { ISchemaResponse } from 'movie-db-api'
 
-import { delayedDispatch } from '../store'
+import { rootStore } from '../stores'
 import { validate } from '../validation'
 
 export abstract class Controller<TActions extends Action, TState> {
@@ -152,7 +151,7 @@ export abstract class EditController<
             return state
         }
 
-        delayedDispatch(routerActions.push(`${this.listRoute}/${_id}`))
+        rootStore.router.push(`${this.listRoute}/${_id}`)
 
         const all = [...state.all]
         const index = all.findIndex((c) => c._id === _id)
@@ -183,7 +182,7 @@ export abstract class EditController<
     }
 
     private showList(state: TState): TState {
-        delayedDispatch(routerActions.push(this.listRoute))
+        rootStore.router.push(this.listRoute)
 
         return { ...state, selected: undefined, validation: undefined, workingCopy: undefined }
     }

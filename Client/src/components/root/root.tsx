@@ -17,7 +17,6 @@ export interface IRootUiProps {}
 
 export interface IRootProps {
     errors: IMuiString[]
-    path: string
     theme: string
 }
 
@@ -37,7 +36,10 @@ export class CRoot extends React.PureComponent<TRootProps> {
         const rmui = translations.strings.routes
         const cmui = rmui.create
 
-        const { errors, path, theme } = this.props
+        const { errors, theme } = this.props
+
+        const path = rootStore.router.location.pathname
+
         const createContainer = path === `${routes.container}/NEW`
         const createRecording = path === `${routes.recording}/NEW`
         const createSeries = path === `${routes.series}/NEW`

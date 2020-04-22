@@ -4,7 +4,9 @@ import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
+import { createHashHistory } from 'history'
 import { observable, action } from 'mobx'
+import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import fetch from 'node-fetch'
 
 import { ContainerStore } from './container'
@@ -20,6 +22,7 @@ export class RootStore {
     readonly gql: ApolloClient<unknown>
     readonly languages: LanguageStore
     readonly recordings: RecordingStore
+    readonly router = new RouterStore()
     readonly series: SeriesStore
     readonly translations: TranslationStore
 
@@ -86,3 +89,8 @@ export class RootStore {
         }
     }
 }
+
+const browserHistory = createHashHistory()
+
+export const rootStore = new RootStore()
+export const history = syncHistoryWithStore(browserHistory, rootStore.router)

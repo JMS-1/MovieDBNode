@@ -1,13 +1,8 @@
 import { getMessage } from '@jms-1/isxs-tools'
-import { connectRouter, routerMiddleware } from 'connected-react-router'
-import { createHashHistory } from 'history'
-import { Action, applyMiddleware, combineReducers, createStore, Store } from 'redux'
-
 import { IClientState } from 'movie-db-client'
+import { Action, combineReducers, createStore, Store } from 'redux'
 
 import * as controller from './controller'
-
-export const history = createHashHistory({ hashType: 'hashbang' })
 
 let store: Store<IClientState>
 
@@ -19,11 +14,9 @@ export function initializeStore(): Store<IClientState> {
             genre: controller.GenreReducer,
             language: controller.LanguageReducer,
             mui: controller.MuiReducer,
-            router: connectRouter(history),
-            series: controller.SeriesReducer,
             recording: controller.RecordingReducer,
-        }),
-        applyMiddleware(routerMiddleware(history)),
+            series: controller.SeriesReducer,
+        })
     )
 
     return store
@@ -49,7 +42,7 @@ export class ServerApi {
                         store.dispatch(
                             controller.ApplicationActions.endWebRequest({
                                 en: `${webMethod}: ${xhr.statusText || `HTTP ${xhr.status}`}`,
-                            }),
+                            })
                         )
                     }
                 }
@@ -65,7 +58,7 @@ export class ServerApi {
                 xhr.send(data && JSON.stringify(data))
             } catch (error) {
                 store.dispatch(
-                    controller.ApplicationActions.endWebRequest({ en: `${webMethod}: ${getMessage(error)}` }),
+                    controller.ApplicationActions.endWebRequest({ en: `${webMethod}: ${getMessage(error)}` })
                 )
             }
         }, 0)

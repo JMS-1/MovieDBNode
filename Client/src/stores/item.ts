@@ -1,4 +1,3 @@
-import { routerActions } from 'connected-react-router'
 import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
 import { observable, action, computed } from 'mobx'
@@ -8,8 +7,6 @@ import { DropdownItemProps } from 'semantic-ui-react'
 import { RootStore } from './root'
 import { routes } from './routes'
 import { getGraphQlError, createFiltered } from './utils'
-
-import { delayedDispatch } from '../store'
 
 const noSchema: ValidationSchema = { $$strict: true }
 
@@ -56,7 +53,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
             this.deleteConfirm = false
 
-            delayedDispatch(routerActions.replace(this.itemRoute))
+            this.root.router.replace(this.itemRoute)
         } catch (error) {
             alert(getGraphQlError(error))
         } finally {
@@ -85,7 +82,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
             this._items[changed._id] = changed
 
             if (!item._id) {
-                delayedDispatch(routerActions.replace(`${this.itemRoute}/${changed._id}`))
+                this.root.router.replace(`${this.itemRoute}/${changed._id}`)
             }
         } catch (error) {
             alert(getGraphQlError(error))

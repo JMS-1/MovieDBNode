@@ -1,4 +1,3 @@
-import { routerActions } from 'connected-react-router'
 import { IClientState } from 'movie-db-client'
 import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
@@ -6,6 +5,7 @@ import { Action, Dispatch } from 'redux'
 import * as local from './item'
 
 import { getGenreMap, getLanguageMap, getRecordingMap } from '../../../controller'
+import { rootStore } from '../../../stores'
 import { routes } from '../../../stores/routes'
 
 function makeNumber(n: number): string {
@@ -39,7 +39,7 @@ function mapDispatchToProps(
     props: local.IRecordingItemUiProps
 ): local.IRecordingItemActions {
     return {
-        select: () => dispatch(routerActions.push(`${routes.recording}/${props.id}`)),
+        select: () => rootStore.router.push(`${routes.recording}/${props.id}`),
     }
 }
 
