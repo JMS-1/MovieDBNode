@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react'
 
-import { IContainer } from '../../../../../Server/src/model'
+import { IContainer, TContainerType } from '../../../../../Server/src/model'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { DetailActions } from '../../../components/detailActions/actions'
 import { ReportError } from '../../../components/message/messageRedux'
@@ -65,7 +65,7 @@ export class ContainerDetails extends React.PureComponent<IContainerDetailsUiPro
     }
 
     private readonly setType = (ev: React.SyntheticEvent<HTMLElement>, props: DropdownProps): void => {
-        containers.workingCopy.type = props.value as number
+        containers.workingCopy.type = props.value as TContainerType
     }
 
     private readonly setContainer = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {

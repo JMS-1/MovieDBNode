@@ -1,9 +1,9 @@
 import { observable } from 'mobx'
 import { SemanticICONS } from 'semantic-ui-react'
 
-import { containerType, mediaType } from 'movie-db-api'
-
 import { RootStore } from './root'
+
+import { TRecordingContainerType } from '../../../Server/src/model'
 
 export class TranslationStore {
     constructor(public readonly root: RootStore) {}
@@ -24,32 +24,6 @@ export class TranslationStore {
                 parentId: 'Übergeordnete Ablage',
                 parentLocation: 'Position in der übergeordneten Ablage',
                 type: 'Art der Ablage',
-            },
-            legacyTypes: {
-                [containerType.Box]: {
-                    icon: 'zip' as SemanticICONS,
-                    title: 'Große DVD Box',
-                },
-                [containerType.Disk]: {
-                    icon: 'hdd' as SemanticICONS,
-                    title: '(Externe) Festplatte',
-                },
-                [containerType.FeatureSet]: {
-                    icon: 'briefcase' as SemanticICONS,
-                    title: 'Kleine DVD Box',
-                },
-                [containerType.Folder]: {
-                    icon: 'folder' as SemanticICONS,
-                    title: 'Dateiverzeichnis',
-                },
-                [containerType.Shelf]: {
-                    icon: 'building' as SemanticICONS,
-                    title: 'Regal(fach)',
-                },
-                [containerType.Undefined]: {
-                    icon: 'help' as SemanticICONS,
-                    title: '(unbekannt)',
-                },
             },
             name: 'Aufzeichnung',
             noId: '(noch keine)',
@@ -111,12 +85,12 @@ export class TranslationStore {
         },
         media: {
             types: {
-                [mediaType.BluRay]: 'Blu-Ray',
-                [mediaType.DVD]: 'Gekaufte DVD',
-                [mediaType.RecordedDVD]: 'Selbstaufgenommene DVD',
-                [mediaType.SuperVideoCD]: 'Super-Video CD',
-                [mediaType.Undefined]: '(Unbekannt)',
-                [mediaType.VideoCD]: 'Video CD',
+                [TRecordingContainerType.BluRay]: 'Blu-Ray',
+                [TRecordingContainerType.DVD]: 'Gekaufte DVD',
+                [TRecordingContainerType.RecordedDVD]: 'Selbstaufgenommene DVD',
+                [TRecordingContainerType.SuperVideoCD]: 'Super-Video CD',
+                [TRecordingContainerType.Undefined]: '(Unbekannt)',
+                [TRecordingContainerType.VideoCD]: 'Video CD',
             },
         },
         no: 'Nein',

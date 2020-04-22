@@ -6,45 +6,6 @@ import { Button } from 'semantic-ui-react'
 
 import { translations } from '../../stores'
 
-export interface IDetailActionsLegacyUiProps {}
-
-export interface IDetailActionsLegacyProps {
-    cancelLabel: string
-    deleteLabel: string
-    hasChanges: boolean
-    hasError: boolean
-    saveLabel: string
-    showDelete: boolean
-}
-
-export interface IDetailActionsLegacyActions {
-    cancel(): void
-    confirmDelete(): void
-    save(): void
-}
-
-export type TDetailActionsLegacyProps = IDetailActionsLegacyProps &
-    IDetailActionsLegacyUiProps &
-    IDetailActionsLegacyActions
-
-export class CDetailActionsLegacy extends React.PureComponent<TDetailActionsLegacyProps> {
-    render(): JSX.Element {
-        const { hasChanges } = this.props
-
-        return (
-            <div className='movie-db-detail-actions'>
-                <Button disabled={!hasChanges} onClick={this.props.cancel}>
-                    {this.props.cancelLabel}
-                </Button>
-                <Button disabled={this.props.hasError || !hasChanges} onClick={this.props.save}>
-                    {this.props.saveLabel}
-                </Button>
-                {this.props.showDelete && <Button onClick={this.props.confirmDelete}>{this.props.deleteLabel}</Button>}
-            </div>
-        )
-    }
-}
-
 interface IDetailActionsStoreItem {
     _id: string
 }

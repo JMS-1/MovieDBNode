@@ -1,3 +1,4 @@
+import { observable } from 'mobx'
 import * as React from 'react'
 import { Button, Form, Icon, Input, TextArea } from 'semantic-ui-react'
 
@@ -39,10 +40,11 @@ interface IEditButtonProps {
     select(index: number): void
 }
 
+@observable
 class EditButton extends React.PureComponent<IEditButtonProps> {
     render(): JSX.Element {
         return (
-            <Button title={this.props.description} active={this.props.selected} onClick={this.onClick}>
+            <Button active={this.props.selected} title={this.props.description} onClick={this.onClick}>
                 {this.props.name || <>&nbsp;</>}
             </Button>
         )
@@ -51,6 +53,7 @@ class EditButton extends React.PureComponent<IEditButtonProps> {
     private readonly onClick = (): void => this.props.select(this.props.index)
 }
 
+@observable
 export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, IRecordingLinksState> {
     render(): JSX.Element {
         const { edit, selected } = this.state
@@ -69,17 +72,17 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
             <Form.Field className={this.className}>
                 <label>
                     {this.props.label}
-                    <Icon name={edit ? 'eye' : 'edit'} link onClick={this.toggleEdit} />
-                    {edit && <Icon name='add' link onClick={this.addLink} />}
+                    <Icon link name={edit ? 'eye' : 'edit'} onClick={this.toggleEdit} />
+                    {edit && <Icon link name='add' onClick={this.addLink} />}
                 </label>
                 {edit && link ? (
                     <>
                         <div>
                             {links.map((l, i) => (
                                 <EditButton
+                                    key={i}
                                     description={l.description}
                                     index={i}
-                                    key={i}
                                     name={l.name}
                                     select={this.select}
                                     selected={i === selected}
@@ -89,20 +92,20 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                         <div className='link-edit'>
                             <Form.Field required error={hasNameError}>
                                 <label>{this.props.name}</label>
-                                <Input input='text' onChange={this.setName} value={(link && link.name) || ''} />
+                                <Input input='text' value={(link && link.name) || ''} onChange={this.setName} />
                                 <ReportError errors={nameErrors} />
                             </Form.Field>
                             <Form.Field required error={hasUrlError}>
                                 <label>{this.props.url}</label>
-                                <Input input='text' onChange={this.setUrl} value={(link && link.url) || ''} />
+                                <Input input='text' value={(link && link.url) || ''} onChange={this.setUrl} />
                                 <ReportError errors={urlErrors} />
                             </Form.Field>
                             <Form.Field error={hasDescriptionError}>
                                 <label>{this.props.description}</label>
                                 <TextArea
-                                    onChange={this.setDescription}
                                     rows={6}
                                     value={(link && link.description) || ''}
+                                    onChange={this.setDescription}
                                 />
                                 <ReportError errors={descriptionErrors} />
                             </Form.Field>
@@ -112,7 +115,7 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                 ) : (
                     <div>
                         {links.map((l, i) => (
-                            <Button as='a' key={i} title={l.description} href={l.url} target='_blank'>
+                            <Button key={i} as='a' href={l.url} target='_blank' title={l.description}>
                                 {l.name || <>&nbsp;</>}
                             </Button>
                         ))}

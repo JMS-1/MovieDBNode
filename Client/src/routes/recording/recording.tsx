@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as ui from 'semantic-ui-react'
 
@@ -57,6 +58,7 @@ export type TRecordingRouteProps = IRecordingRouteProps & IRecordingRouteUiProps
 
 const pageSizes = [15, 30, 50, 75, 100, 250]
 
+@observer
 export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
     render(): JSX.Element {
         return (
@@ -73,51 +75,51 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                     <ui.Dropdown
                         clearable
                         fluid
-                        onChange={this.setLanguage}
-                        options={this.props.languageOptions}
-                        placeholder={this.props.languageHint}
+                        scrolling
                         search
                         selection
-                        scrolling
+                        options={this.props.languageOptions}
+                        placeholder={this.props.languageHint}
                         value={this.props.language || ''}
+                        onChange={this.setLanguage}
                     />
                     <ui.Dropdown
                         clearable
                         fluid
                         multiple
-                        onChange={this.setGenre}
+                        scrolling
+                        search
+                        selection
                         options={this.props.genreOptions}
                         placeholder={this.props.genreHint}
-                        search
-                        selection
-                        scrolling
                         value={this.props.genres}
+                        onChange={this.setGenre}
                     />
                     <ui.Dropdown
                         clearable
                         fluid
-                        onChange={this.setSeries}
+                        scrolling
+                        search
+                        selection
                         options={this.props.seriesOptions}
                         placeholder={this.props.seriesHint}
-                        search
-                        selection
-                        scrolling
                         value={this.props.series[0] || ''}
+                        onChange={this.setSeries}
                     />
                     <ui.Dropdown
                         clearable
                         fluid
-                        onChange={this.setRentTo}
+                        scrolling
+                        selection
                         options={this.props.rentOptions}
                         placeholder={this.props.rentToHint}
-                        selection
-                        scrolling
                         value={this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : ''}
+                        onChange={this.setRentTo}
                     />
                 </ui.Segment>
                 <div className='pager'>
                     <ui.Menu className='page-size'>
-                        {pageSizes.map(p => (
+                        {pageSizes.map((p) => (
                             <PageSizeSelector key={p} size={p} />
                         ))}
                     </ui.Menu>
@@ -128,19 +130,21 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                     />
                 </div>
                 <div className='table'>
-                    <ui.Table unstackable celled striped sortable compact fixed collapsing>
+                    <ui.Table celled collapsing compact fixed sortable striped unstackable>
                         <ui.Table.Header>
                             <ui.Table.Row>
                                 <ui.Table.HeaderCell
                                     className='name'
+                                    sorted={this.props.nameSort}
                                     onClick={this.sortName}
-                                    sorted={this.props.nameSort}>
+                                >
                                     {this.props.nameHeader}
                                 </ui.Table.HeaderCell>
                                 <ui.Table.HeaderCell
                                     className='created'
+                                    sorted={this.props.createdSort}
                                     onClick={this.sortCreated}
-                                    sorted={this.props.createdSort}>
+                                >
                                     {this.props.createdHeader}
                                 </ui.Table.HeaderCell>
                                 <ui.Table.HeaderCell className='languages'>
@@ -150,7 +154,7 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                             </ui.Table.Row>
                         </ui.Table.Header>
                         <ui.Table.Body>
-                            {this.props.list.map(r => (
+                            {this.props.list.map((r) => (
                                 <RecordingItem key={r} id={r} />
                             ))}
                         </ui.Table.Body>

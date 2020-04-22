@@ -4,49 +4,13 @@ import { Button, Header, Modal } from 'semantic-ui-react'
 
 import { translations } from '../../stores'
 
-export interface IDeleteConfirmLegacyUiProps {}
-
-export interface IDeleteConfirmLegacyProps {
-    html: string
-    no: string
-    open: boolean
-    title: string
-    yes: string
-}
-
-export interface IDeleteConfirmLegacyActions {
-    confirm(): void
-    reject(): void
-}
-
-export type TDeleteConfirmLegacyProps = IDeleteConfirmLegacyProps &
-    IDeleteConfirmLegacyUiProps &
-    IDeleteConfirmLegacyActions
-
-export class CDeleteConfirmLegacy extends React.PureComponent<TDeleteConfirmLegacyProps> {
-    render(): JSX.Element {
-        return (
-            <Modal className='movie-db-confirm-delete' open={this.props.open} onClose={this.props.reject}>
-                <Header>{this.props.title}</Header>
-                <Modal.Content>
-                    <div dangerouslySetInnerHTML={{ __html: this.props.html }} />
-                    <div className='actions'>
-                        <Button onClick={this.props.reject}>{this.props.no}</Button>
-                        <Button onClick={this.props.confirm}>{this.props.yes}</Button>
-                    </div>
-                </Modal.Content>
-            </Modal>
-        )
-    }
-}
-
 interface IDeleteConfirmStore {
     deleteConfirm: boolean
     remove(): Promise<void>
 }
 
 interface IDeleteConfirmProps {
-    scope: 'language' | 'genre' | 'container' | 'series'
+    scope: 'language' | 'genre' | 'container' | 'series' | 'recording'
     store: IDeleteConfirmStore
 }
 

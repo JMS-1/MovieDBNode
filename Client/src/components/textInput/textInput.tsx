@@ -8,52 +8,6 @@ import { Form, Input, TextArea, InputOnChangeData, TextAreaProps } from 'semanti
 import { translations } from '../../stores'
 import { ReportError } from '../message/messageRedux'
 
-export interface ITextInputLegacyUiProps<TItem> {
-    prop: keyof TItem
-    required?: boolean
-    textarea?: boolean
-}
-
-export interface ITextInputLegacyProps {
-    errors: string[]
-    label: string
-    value: string
-}
-
-export interface ITextInputLegacyActions<TItem> {
-    setValue(prop: keyof TItem, value: string): void
-}
-
-export type TTextInputLegacyProps<TItem> = ITextInputLegacyProps &
-    ITextInputLegacyUiProps<TItem> &
-    ITextInputLegacyActions<TItem>
-
-export class CTextInputLegacy<TItem> extends React.PureComponent<TTextInputLegacyProps<TItem>> {
-    render(): JSX.Element {
-        const { errors } = this.props
-
-        return (
-            <Form.Field
-                className='movie-db-input-text'
-                error={errors && errors.length > 0}
-                required={this.props.required}
-            >
-                <label>{this.props.label}</label>
-                {this.props.textarea ? (
-                    <TextArea rows={6} value={this.props.value || ''} onChange={this.setValue} />
-                ) : (
-                    <Input input='text' value={this.props.value || ''} onChange={this.setValue} />
-                )}
-                <ReportError errors={errors} />
-            </Form.Field>
-        )
-    }
-
-    private readonly setValue = (
-        ev: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>
-    ): void => this.props.setValue(this.props.prop, ev.currentTarget.value)
-}
-
 interface ITextInputStore<TItem> {
     getErrors(field: string): string[] | null
     readonly errors: true | ValidationError[]
@@ -63,7 +17,7 @@ interface ITextInputStore<TItem> {
 interface ITextInputProps<TItem> {
     prop: keyof TItem
     required?: boolean
-    scope: 'language' | 'genre' | 'container' | 'series'
+    scope: 'language' | 'genre' | 'container' | 'series' | 'recording'
     store: ITextInputStore<TItem>
     textarea?: boolean
 }
