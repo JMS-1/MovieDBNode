@@ -8,7 +8,7 @@ import { IRecording, TRecordingContainerType } from '../../../../../Server/src/m
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { TextInput } from '../../../components/textInput/textInput'
 import { translations, recordings, series, genres, languages, containers } from '../../../stores'
-// import { RecordingLinks } from '../links/linksRedux'
+import { RecordingLinks } from '../links/links'
 
 export interface IRecordingParams {
     id: string
@@ -44,7 +44,7 @@ export class Recording extends React.PureComponent<IRecordingUiProps> {
                 </div>
                 <Form error={errors !== true}>
                     <TextInput<IRecording> required prop='name' scope='recording' store={recordings} />
-                    {/* <RecordingLinks /> */}
+                    <RecordingLinks />
                     <TextInput<IRecording> textarea prop='description' scope='recording' store={recordings} />
                     <Form.Field>
                         <label>{emui.series}</label>

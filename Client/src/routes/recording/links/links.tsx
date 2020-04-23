@@ -1,31 +1,13 @@
-import { observable } from 'mobx'
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Button, Form, Icon, Input, TextArea } from 'semantic-ui-react'
 
 import { IRecordingLink } from 'movie-db-api'
 
 import { ReportError } from '../../../components/message/messageRedux'
+import { translations, recordings } from '../../../stores'
 
 export interface IRecordingLinksUiProps {}
-
-export type lookupErrors = (index: number, prop: keyof IRecordingLink) => string[]
-
-export interface IRecordingLinksProps {
-    deleteLabel: string
-    description: string
-    errors: string[]
-    getErrors: lookupErrors
-    label: string
-    links: IRecordingLink[]
-    name: string
-    url: string
-}
-
-export interface IRecordingLinksActions {
-    setLinks(links: IRecordingLink[]): void
-}
-
-export type TRecordingLinksProps = IRecordingLinksProps & IRecordingLinksUiProps & IRecordingLinksActions
 
 interface IRecordingLinksState {
     edit: boolean
@@ -33,14 +15,14 @@ interface IRecordingLinksState {
 }
 
 interface IEditButtonProps {
-    selected: boolean
     description: string
     index: number
     name: string
     select(index: number): void
+    selected: boolean
 }
 
-@observable
+@observer
 class EditButton extends React.PureComponent<IEditButtonProps> {
     render(): JSX.Element {
         return (
@@ -53,25 +35,30 @@ class EditButton extends React.PureComponent<IEditButtonProps> {
     private readonly onClick = (): void => this.props.select(this.props.index)
 }
 
-@observable
-export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, IRecordingLinksState> {
+@observer
+export class RecordingLinks extends React.PureComponent<IRecordingLinksUiProps, IRecordingLinksState> {
     render(): JSX.Element {
         const { edit, selected } = this.state
-        const { links, getErrors } = this.props
+        const { workingCopy } = recordings
 
-        const nameErrors = getErrors(selected, 'name')
+        const links = workingCopy.links || []
+
+        const nameErrors = recordings.getErrors('links', selected, 'name')
         const hasNameError = nameErrors && nameErrors.length > 0
-        const urlErrors = getErrors(selected, 'url')
+        const urlErrors = recordings.getErrors('links', selected, 'url')
         const hasUrlError = urlErrors && urlErrors.length > 0
-        const descriptionErrors = getErrors(selected, 'description')
+        const descriptionErrors = recordings.getErrors('links', selected, 'description')
         const hasDescriptionError = descriptionErrors && descriptionErrors.length > 0
 
         const link = links[selected]
 
+        const mui = translations.strings.recording
+        const emui = mui.linkEdit
+
         return (
             <Form.Field className={this.className}>
                 <label>
-                    {this.props.label}
+                    {mui.edit.links}
                     <Icon link name={edit ? 'eye' : 'edit'} onClick={this.toggleEdit} />
                     {edit && <Icon link name='add' onClick={this.addLink} />}
                 </label>
@@ -91,17 +78,17 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                         </div>
                         <div className='link-edit'>
                             <Form.Field required error={hasNameError}>
-                                <label>{this.props.name}</label>
+                                <label>{emui.name}</label>
                                 <Input input='text' value={(link && link.name) || ''} onChange={this.setName} />
                                 <ReportError errors={nameErrors} />
                             </Form.Field>
                             <Form.Field required error={hasUrlError}>
-                                <label>{this.props.url}</label>
+                                <label>{emui.url}</label>
                                 <Input input='text' value={(link && link.url) || ''} onChange={this.setUrl} />
                                 <ReportError errors={urlErrors} />
                             </Form.Field>
                             <Form.Field error={hasDescriptionError}>
-                                <label>{this.props.description}</label>
+                                <label>{emui.description}</label>
                                 <TextArea
                                     rows={6}
                                     value={(link && link.description) || ''}
@@ -109,7 +96,7 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
                                 />
                                 <ReportError errors={descriptionErrors} />
                             </Form.Field>
-                            <Button onClick={this.delLink}>{this.props.deleteLabel}</Button>
+                            <Button onClick={this.delLink}>{translations.strings.remove}</Button>
                         </div>
                     </>
                 ) : (
@@ -128,9 +115,9 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
     private get className(): string {
         let className = 'movie-db-container-links'
 
-        const { errors } = this.props
+        const { errors } = recordings
 
-        if (errors && errors.length > 0) {
+        if (errors !== true && errors.some((e) => e.field.match(/^links(\[\d+\].*)?$/))) {
             className += ' link-errors'
         }
 
@@ -151,32 +138,38 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
         this.setProp('url', ev.currentTarget.value)
 
     private readonly addLink = (): void => {
-        const links = [...this.props.links, { name: '', url: '' }]
+        const { workingCopy } = recordings
 
-        this.props.setLinks(links)
+        const links = [...(workingCopy.links || []), { description: undefined, name: '', url: '' }]
+
+        workingCopy.links = links
 
         this.setState({ selected: links.length - 1 })
     }
 
     private readonly delLink = (): void => {
-        const links = [...this.props.links]
+        const { workingCopy } = recordings
+
+        const links = [...(workingCopy.links || [])]
 
         links.splice(this.state.selected, 1)
 
-        this.props.setLinks(links)
+        workingCopy.links = links
 
         this.setState({ selected: 0 })
     }
 
     private setProp<TProp extends keyof IRecordingLink>(prop: TProp, value: IRecordingLink[TProp]): void {
-        const links = [...this.props.links]
+        const { workingCopy } = recordings
+
+        const links = [...(workingCopy.links || [])]
 
         let { selected } = this.state
         let edit = links[selected]
 
         if (!edit) {
             selected = links.length
-            edit = { name: '', url: '' }
+            edit = { description: undefined, name: '', url: '' }
 
             links.push(edit)
 
@@ -189,10 +182,10 @@ export class CRecordingLinks extends React.PureComponent<TRecordingLinksProps, I
 
         links[selected] = { ...edit, [prop]: value }
 
-        this.props.setLinks(links)
+        workingCopy.links = links
     }
 
-    componentWillMount(): void {
+    UNSAFE_componentWillMount(): void {
         this.setState({ edit: false, selected: 0 })
     }
 }
