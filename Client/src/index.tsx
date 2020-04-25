@@ -5,7 +5,7 @@ import { Router } from 'react-router'
 
 import { Root } from './components/root/rootRedux'
 import * as controller from './controller'
-import { initializeStore, ServerApi } from './store'
+import { initializeStore } from './store'
 import { rootStore, history } from './stores'
 
 const store = initializeStore()
@@ -22,8 +22,6 @@ render(
     </Router>,
     document.querySelector('client-root')
 )
-
-ServerApi.get('schemas', controller.ApplicationActions.loadSchemas)
 
 // Kleine Hilfe zum Styling während der Entwicklung.
 

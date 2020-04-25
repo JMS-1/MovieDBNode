@@ -2,8 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react'
 
-import { ISeries } from 'movie-db-api'
-
+import { ISeries } from '../../../../../Server/src/model'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { DetailActions } from '../../../components/detailActions/actions'
 import { TextInput } from '../../../components/textInput/textInput'

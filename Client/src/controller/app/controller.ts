@@ -1,13 +1,11 @@
 import * as local from 'movie-db-client'
 import { v4 as uuid } from 'uuid'
 
-import { addSchema } from '../../validation'
 import { Controller } from '../controller'
 
 type TApplicationActions =
     | local.IClearWebRequestErrors
     | local.IDoneWebRequest
-    | local.ILoadSchemas
     | local.ISetTheme
     | local.IStartWebRequest
 
@@ -15,7 +13,6 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
     protected getReducerMap(): local.IActionHandlerMap<TApplicationActions, local.IApplicationState> {
         return {
             [local.applicationActions.endReq]: this.endWebRequest,
-            [local.applicationActions.loadSchema]: this.loadSchemas,
             [local.applicationActions.resetErrors]: this.clearErrors,
             [local.applicationActions.setTheme]: this.setTheme,
             [local.applicationActions.startReq]: this.beginWebRequest,
@@ -27,22 +24,9 @@ const controller = new (class extends Controller<TApplicationActions, local.IApp
             busySince: 0,
             errors: [],
             requests: 0,
-            schemas: undefined,
             theme: undefined,
             themeId: uuid(),
         }
-    }
-
-    private loadSchemas(state: local.IApplicationState, response: local.ILoadSchemas): local.IApplicationState {
-        const schemas = response.schemas
-
-        for (const schema in schemas) {
-            if (schemas.hasOwnProperty(schema)) {
-                addSchema(schemas[<keyof typeof schemas>schema])
-            }
-        }
-
-        return { ...state, schemas }
     }
 
     private clearErrors(

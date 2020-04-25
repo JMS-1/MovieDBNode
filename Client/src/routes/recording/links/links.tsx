@@ -2,8 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Button, Form, Icon, Input, TextArea } from 'semantic-ui-react'
 
-import { IRecordingLink } from 'movie-db-api'
-
+import { ILink } from '../../../../../Server/src/model'
 import { ReportError } from '../../../components/message/message'
 import { translations, recordings } from '../../../stores'
 
@@ -159,7 +158,7 @@ export class RecordingLinks extends React.PureComponent<IRecordingLinksUiProps, 
         this.setState({ selected: 0 })
     }
 
-    private setProp<TProp extends keyof IRecordingLink>(prop: TProp, value: IRecordingLink[TProp]): void {
+    private setProp<TProp extends keyof ILink>(prop: TProp, value: ILink[TProp]): void {
         const { workingCopy } = recordings
 
         const links = [...(workingCopy.links || [])]

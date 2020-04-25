@@ -1,12 +1,11 @@
 import { Collection as MongoCollection } from 'mongodb'
 
-import { ISeries } from 'movie-db-api'
-
 import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
 import { HierarchicalCollection } from './hierarchical'
 import { refreshRecordingNames } from './utils'
 
+import { ISeries } from '../model'
 import { Series } from '../model/entities'
 
 export const SeriesCollection = MongoConnection.createCollection(

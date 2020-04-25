@@ -14,11 +14,8 @@ import { LanguageCollection } from './collections/language'
 import { RecordingCollection } from './collections/recording'
 import { SeriesCollection } from './collections/series'
 import { Config } from './config'
-import { initializeDatabase } from './database'
 
 async function startup(): Promise<void> {
-    await initializeDatabase()
-
     const app = express()
 
     app.use(express.static(join(__dirname, '../dist')))
