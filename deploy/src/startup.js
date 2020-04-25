@@ -18,9 +18,7 @@ const language_1 = require("./collections/language");
 const recording_1 = require("./collections/recording");
 const series_1 = require("./collections/series");
 const config_1 = require("./config");
-const database_1 = require("./database");
 async function startup() {
-    await database_1.initializeDatabase();
     const app = express_1.default();
     app.use(express_1.default.static(path_1.join(__dirname, '../dist')));
     app.use(body_parser_1.json());
