@@ -1,4 +1,3 @@
-import { IMuiString } from '@jms-1/isxs-validation'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Route } from 'react-router'
@@ -16,7 +15,7 @@ import { routes } from '../../stores/routes'
 export interface IRootUiProps {}
 
 export interface IRootProps {
-    errors: IMuiString[]
+    errors: string[]
     theme: string
 }
 
@@ -60,7 +59,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
                         <Header>{translations.strings.webError}</Header>
                         <Message.List>
                             {errors.map((e, i) => (
-                                <Message.Item key={i}>{e.de || e.en || 'failed'}</Message.Item>
+                                <Message.Item key={i}>{e || 'failed'}</Message.Item>
                             ))}
                         </Message.List>
                     </Message>

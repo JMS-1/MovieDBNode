@@ -1,4 +1,3 @@
-import { IMuiString } from '@jms-1/isxs-validation'
 import * as local from 'movie-db-client'
 
 export class ApplicationActions {
@@ -6,7 +5,7 @@ export class ApplicationActions {
         return { type: local.applicationActions.startReq }
     }
 
-    static endWebRequest(error: IMuiString): local.IDoneWebRequest {
+    static endWebRequest(error: string): local.IDoneWebRequest {
         return { error, type: local.applicationActions.endReq }
     }
 

@@ -1,10 +1,9 @@
 declare module 'movie-db-client' {
-    import { IMuiString } from '@jms-1/isxs-validation'
     import { Action } from 'redux'
 
     interface IApplicationState {
         readonly busySince: number
-        readonly errors: IMuiString[]
+        readonly errors: string[]
         readonly requests: number
         readonly theme: string
         readonly themeId: string
@@ -23,7 +22,7 @@ declare module 'movie-db-client' {
     }
 
     interface IDoneWebRequest extends Action {
-        error: IMuiString
+        error: string
         type: applicationActions.endReq
     }
 
