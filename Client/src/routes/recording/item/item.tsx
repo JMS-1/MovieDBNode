@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Icon, Table } from 'semantic-ui-react'
 
@@ -25,19 +26,20 @@ export interface IRecordingItemActions {
 
 export type TRecordingItemProps = IRecordingItemProps & IRecordingItemUiProps & IRecordingItemActions
 
+@observer
 export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
     render(): JSX.Element {
         const { rentTo } = this.props
 
         return (
             <Table.Row className='movie-db-recording-item'>
-                <Table.Cell className='name' selectable onClick={this.props.select}>
+                <Table.Cell selectable className='name' onClick={this.props.select}>
                     <div>{this.props.name}</div>
                     {rentTo && <Icon name='user outline' title={rentTo} />}
                 </Table.Cell>
                 <Table.Cell className='created'>{this.props.created}</Table.Cell>
                 <Table.Cell className='languages'>
-                    {this.languages.map(l => (
+                    {this.languages.map((l) => (
                         <React.Fragment key={l}>
                             <Language id={l} />
                             <span className='separator'>, </span>
@@ -45,7 +47,7 @@ export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
                     ))}
                 </Table.Cell>
                 <Table.Cell className='genres'>
-                    {this.genres.map(l => (
+                    {this.genres.map((l) => (
                         <React.Fragment key={l}>
                             <Genre id={l} />
                             <span className='separator'>, </span>

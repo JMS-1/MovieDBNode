@@ -111,5 +111,5 @@ export type IRecordingFindByContainerResult = TGetMethodResult<TRecordingCollect
 
 export type IQueryCountInfo = TGqlType<typeof entities.QueryCountInfo>
 
-export type IRecordingQueryArgs = TGetFilterArgs<TRecordingCollection, 'query'>
+export type IRecordingQueryArgs = TGetMethodArgs<TRecordingCollection, 'query'>
 export type IRecordingQueryResult = TGetMethodResult<TRecordingCollection, 'query'>

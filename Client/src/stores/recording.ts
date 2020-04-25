@@ -1,13 +1,16 @@
 import gql from 'graphql-tag'
-import { action, computed } from 'mobx'
+import { action, computed, observable } from 'mobx'
 import { DropdownItemProps } from 'semantic-ui-react'
+import { v4 as uuid } from 'uuid'
+
+import { IRecordingQueryResponse } from 'movie-db-api'
 
 import { translations } from '.'
 import { BasicItemStore } from './item'
 import { routes } from './routes'
 import { getGraphQlError } from './utils'
 
-import { IRecording, TRecordingContainerType } from '../../../Server/src/model'
+import { IRecording, TRecordingContainerType, IRecordingQueryArgs } from '../../../Server/src/model'
 
 const optionOrder: TRecordingContainerType[] = [
     TRecordingContainerType.Undefined,
@@ -18,6 +21,18 @@ const optionOrder: TRecordingContainerType[] = [
     TRecordingContainerType.BluRay,
 ]
 
+const initialFilter: IRecordingQueryArgs = {
+    firstPage: 1,
+    fullName: '',
+    genres: [],
+    language: '',
+    pageSize: 15,
+    rent: undefined,
+    series: [],
+    sort: 'created',
+    sortOrder: 'Descending',
+}
+
 export class RecordingStore extends BasicItemStore<IRecording> {
     readonly itemProps =
         '_id containerId containerPosition containerType created description fullName genres languages links { description name url } name rentTo'
@@ -27,6 +42,87 @@ export class RecordingStore extends BasicItemStore<IRecording> {
     readonly itemRoute = routes.recording
 
     protected readonly validationName = 'Recording'
+
+    private _correlationId = ''
+
+    @observable queryFilter = initialFilter
+
+    @observable queryResult: IRecordingQueryResponse = {
+        correlationId: '',
+        count: 0,
+        genres: [],
+        languages: [],
+        list: [],
+        total: 0,
+    }
+
+    @action
+    setFilterProp<TProp extends keyof IRecordingQueryArgs>(prop: TProp, value: IRecordingQueryArgs[TProp]): void {
+        if (value === this.queryFilter[prop]) {
+            return
+        }
+
+        this.queryFilter[prop] = value
+
+        this.query()
+    }
+
+    @action
+    reset(): void {
+        this.queryFilter = initialFilter
+
+        this.query()
+    }
+
+    async query(): Promise<void> {
+        this.root.outstandingRequests += 1
+
+        try {
+            this._correlationId = uuid()
+
+            const query = gql`
+                query (
+                    $correlationId: ID!,
+                    $firstPage: Int!,
+                    $fullName: String,
+                    $genres: [String!],
+                    $language: String,
+                    $pageSize: Int!,
+                    $rent: Boolean,
+                    $series: [String!],
+                    $sort: RecordingSort!,
+                    $sortOrder: SortDirection!
+                ){ 
+                    ${this.itemScope} { query(
+                        correlationId: $correlationId,
+                        firstPage: $firstPage,
+                        fullName: $fullName,
+                        genres: $genres,
+                        language: $language,
+                        pageSize: $pageSize,
+                        rent: $rent,
+                        series: $series,
+                        sort: $sort,
+                        sortOrder: $sortOrder
+                    ) { correlationId count total genres { _id count } languages { _id count } } }
+                }`
+
+            const res = await this.root.gql.query({
+                query,
+                variables: { ...this.queryFilter, correlationId: this._correlationId },
+            })
+
+            const response: IRecordingQueryResponse = res.data[this.itemScope].query
+
+            if (response.correlationId === this._correlationId) {
+                this.queryResult = response
+            }
+        } catch (error) {
+            alert(getGraphQlError(error))
+        } finally {
+            this.root.outstandingRequests -= 1
+        }
+    }
 
     protected createNew(): IRecording {
         return {
@@ -92,5 +188,15 @@ export class RecordingStore extends BasicItemStore<IRecording> {
         const mui = translations.strings.media.types
 
         return optionOrder.map((t) => ({ key: t, text: mui[t], value: t }))
+    }
+
+    @computed({ keepAlive: true })
+    get rentAsOptions(): DropdownItemProps[] {
+        const mui = translations.strings.recording
+
+        return [
+            { key: '1', text: mui.yesRent, value: '1' },
+            { key: '0', text: mui.noRent, value: '0' },
+        ]
     }
 }

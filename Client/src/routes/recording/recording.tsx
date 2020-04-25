@@ -1,57 +1,24 @@
+import { action } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as ui from 'semantic-ui-react'
 
-import { TRecordingSort, TSortOrder } from 'movie-db-api'
-
 import { RecordingItem } from './item/itemRedux'
-import { PageSizeSelector } from './size/sizeRedux'
+import { PageSizeSelector } from './size/size'
 
-import { RecordingSearch } from '../../components/search/searchRedux'
+import { Search } from '../../components/search/search'
 import { ISeriesMap } from '../../controller'
+import { translations, recordings, languages, genres, series } from '../../stores'
 
 export interface IRecordingRouteUiProps {}
 
 export interface IRecordingRouteProps {
-    clear: string
-    count: string
-    createdHeader: string
-    createdSort: TSortOrder
-    exportLabel: string
-    genreHeader: string
-    genreHint: string
-    genreOptions: ui.DropdownItemProps[]
-    genres: string[]
-    language: string
-    languageHeader: string
-    languageHint: string
-    languageOptions: ui.DropdownItemProps[]
-    lastPage: number
     list: string[]
-    nameHeader: string
-    nameSort: TSortOrder
-    page: number
-    pageSize: number
-    rentOptions: ui.DropdownItemProps[]
-    rentTo: boolean
-    rentToHint: string
-    series: string[]
-    seriesHint: string
     seriesMap: ISeriesMap
-    seriesOptions: ui.DropdownItemProps[]
 }
 
 export interface IRecordingRouteActions {
-    clearFilter(): void
     export(): void
-    query(): void
-    setGenres(ids: string[]): void
-    setLanguage(id: string): void
-    setPage(page: number): void
-    setPageSize(size: number): void
-    setRent(rentTo: boolean): void
-    setSeries(ids: string[]): void
-    toggleSort(sort: TRecordingSort): void
 }
 
 export type TRecordingRouteProps = IRecordingRouteProps & IRecordingRouteUiProps & IRecordingRouteActions
@@ -61,16 +28,24 @@ const pageSizes = [15, 30, 50, 75, 100, 250]
 @observer
 export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
     render(): JSX.Element {
+        const mui = translations.strings.recording
+
+        const queryCount = recordings.queryResult.count
+        const queryTotal = recordings.queryResult.total
+
+        const count = mui.count.replace(/\{count\}/g, `${queryCount}`).replace(/\{total\}/g, `${queryTotal}`)
+        const lastPage = Math.ceil(queryCount / recordings.queryFilter.pageSize)
+
         return (
             <div className='movie-db-recording-route'>
                 <div className='count'>
-                    <ui.Segment>{this.props.count}</ui.Segment>
-                    <ui.Button onClick={this.props.export}>{this.props.exportLabel}</ui.Button>
+                    <ui.Segment>{count}</ui.Segment>
+                    <ui.Button onClick={this.props.export}>{mui.export}</ui.Button>
                 </div>
                 <ui.Segment className='filter'>
                     <div className='search'>
-                        <RecordingSearch fluid />
-                        <ui.Button onClick={this.props.clearFilter}>{this.props.clear}</ui.Button>
+                        <Search fluid store={this} />
+                        <ui.Button onClick={this.onClearFilter}>{mui.clear}</ui.Button>
                     </div>
                     <ui.Dropdown
                         clearable
@@ -78,9 +53,9 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         scrolling
                         search
                         selection
-                        options={this.props.languageOptions}
-                        placeholder={this.props.languageHint}
-                        value={this.props.language || ''}
+                        options={languages.asOptions}
+                        placeholder={translations.strings.language.noSelect}
+                        value={recordings.queryFilter.language || ''}
                         onChange={this.setLanguage}
                     />
                     <ui.Dropdown
@@ -90,9 +65,9 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         scrolling
                         search
                         selection
-                        options={this.props.genreOptions}
-                        placeholder={this.props.genreHint}
-                        value={this.props.genres}
+                        options={genres.asOptions}
+                        placeholder={translations.strings.genre.noSelect}
+                        value={recordings.queryFilter.genres}
                         onChange={this.setGenre}
                     />
                     <ui.Dropdown
@@ -101,9 +76,9 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         scrolling
                         search
                         selection
-                        options={this.props.seriesOptions}
-                        placeholder={this.props.seriesHint}
-                        value={this.props.series[0] || ''}
+                        options={series.asOptions}
+                        placeholder={translations.strings.series.noSelect}
+                        value={recordings.queryFilter.series[0] || ''}
                         onChange={this.setSeries}
                     />
                     <ui.Dropdown
@@ -111,9 +86,9 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         fluid
                         scrolling
                         selection
-                        options={this.props.rentOptions}
-                        placeholder={this.props.rentToHint}
-                        value={this.props.rentTo ? '1' : this.props.rentTo === false ? '0' : ''}
+                        options={recordings.rentAsOptions}
+                        placeholder={mui.anyRent}
+                        value={recordings.queryFilter.rent ? '1' : recordings.queryFilter.rent === false ? '0' : ''}
                         onChange={this.setRentTo}
                     />
                 </ui.Segment>
@@ -124,8 +99,8 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         ))}
                     </ui.Menu>
                     <ui.Pagination
-                        activePage={this.props.page}
-                        totalPages={this.props.lastPage}
+                        activePage={recordings.queryFilter.firstPage}
+                        totalPages={lastPage}
                         onPageChange={this.onPage}
                     />
                 </div>
@@ -135,22 +110,32 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                             <ui.Table.Row>
                                 <ui.Table.HeaderCell
                                     className='name'
-                                    sorted={this.props.nameSort}
+                                    sorted={
+                                        recordings.queryFilter.sort === 'fullName'
+                                            ? recordings.queryFilter.sortOrder === 'Ascending'
+                                                ? 'ascending'
+                                                : 'descending'
+                                            : undefined
+                                    }
                                     onClick={this.sortName}
                                 >
-                                    {this.props.nameHeader}
+                                    {mui.name}
                                 </ui.Table.HeaderCell>
                                 <ui.Table.HeaderCell
                                     className='created'
-                                    sorted={this.props.createdSort}
+                                    sorted={
+                                        recordings.queryFilter.sort === 'created'
+                                            ? recordings.queryFilter.sortOrder === 'Ascending'
+                                                ? 'ascending'
+                                                : 'descending'
+                                            : undefined
+                                    }
                                     onClick={this.sortCreated}
                                 >
-                                    {this.props.createdHeader}
+                                    {mui.created}
                                 </ui.Table.HeaderCell>
-                                <ui.Table.HeaderCell className='languages'>
-                                    {this.props.languageHeader}
-                                </ui.Table.HeaderCell>
-                                <ui.Table.HeaderCell className='genres'>{this.props.genreHeader}</ui.Table.HeaderCell>
+                                <ui.Table.HeaderCell className='languages'>{mui.languages}</ui.Table.HeaderCell>
+                                <ui.Table.HeaderCell className='genres'>{mui.genres}</ui.Table.HeaderCell>
                             </ui.Table.Row>
                         </ui.Table.Header>
                         <ui.Table.Body>
@@ -164,29 +149,52 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
         )
     }
 
-    private readonly sortName = (): void => this.props.toggleSort('fullName')
+    @action
+    private changeFilterProp(field: 'created' | 'fullName'): void {
+        if (recordings.queryFilter.sort === field) {
+            recordings.setFilterProp(
+                'sortOrder',
+                recordings.queryFilter.sortOrder === 'Descending' ? 'Ascending' : 'Descending'
+            )
+        } else {
+            recordings.setFilterProp('sort', field)
+            recordings.setFilterProp('sortOrder', field === 'fullName' ? 'Ascending' : 'Descending')
+        }
+    }
 
-    private readonly sortCreated = (): void => this.props.toggleSort('created')
+    private readonly sortName = (): void => this.changeFilterProp('fullName')
+
+    private readonly sortCreated = (): void => this.changeFilterProp('created')
 
     private readonly onPage = (ev: React.MouseEvent<HTMLAnchorElement>, data: ui.PaginationProps): void =>
-        this.props.setPage(typeof data.activePage === 'number' ? data.activePage : 1)
+        recordings.setFilterProp('firstPage', typeof data.activePage === 'number' ? data.activePage : 1)
 
     private readonly setLanguage = (ev: React.SyntheticEvent<HTMLElement>, data: ui.DropdownProps): void =>
-        this.props.setLanguage(typeof data.value === 'string' ? data.value : undefined)
+        recordings.setFilterProp('language', typeof data.value === 'string' ? data.value : undefined)
 
     private readonly setRentTo = (ev: React.SyntheticEvent<HTMLElement>, data: ui.DropdownProps): void =>
-        this.props.setRent(data.value === '1' || (data.value !== '0' && undefined))
+        recordings.setFilterProp('rent', data.value === '1' || (data.value !== '0' && undefined))
 
     private readonly setGenre = (ev: React.SyntheticEvent<HTMLElement>, data: ui.DropdownProps): void =>
-        this.props.setGenres(Array.isArray(data.value) ? (data.value as string[]) : undefined)
+        recordings.setFilterProp('genres', Array.isArray(data.value) ? (data.value as string[]) : undefined)
 
     private readonly setSeries = (ev: React.SyntheticEvent<HTMLElement>, data: ui.DropdownProps): void => {
         const series = typeof data.value === 'string' && this.props.seriesMap[data.value]
 
-        this.props.setSeries((series && series.children) || [])
+        recordings.setFilterProp('series', series?.children || [])
     }
 
-    componentWillMount(): void {
-        this.props.query()
+    private readonly onClearFilter = (): void => recordings.reset()
+
+    UNSAFE_componentWillMount(): void {
+        recordings.query()
+    }
+
+    get filter(): string {
+        return recordings.queryFilter.fullName
+    }
+
+    set filter(filter: string) {
+        recordings.setFilterProp('fullName', filter)
     }
 }
