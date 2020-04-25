@@ -10,7 +10,6 @@ export function initializeStore(): Store<IClientState> {
     store = createStore(
         combineReducers<IClientState>({
             application: controller.ApplicationReducer,
-            mui: controller.MuiReducer,
         })
     )
 
