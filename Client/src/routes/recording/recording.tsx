@@ -171,7 +171,34 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
 
     private readonly onClearFilter = (): void => recordings.reset()
 
-    private readonly onExport = (): void => {}
+    private readonly onExport = (): void => {
+        /*
+        private startExport(state: local.IRecordingState, request: local.IStartRecordingExport): local.IRecordingState {
+            const req: api.IRecordingQueryRequest = {
+                correlationId: uuid(),
+                firstPage: 0,
+                fullName: state.search,
+                genres: state.genres,
+                language: state.language,
+                pageSize: Number.MAX_SAFE_INTEGER,
+                rent: state.rent,
+                series: state.series,
+                sort: 'fullName',
+                sortOrder: 'ascending',
+            }
+
+            ServerApi.post('recording/export/query', req, RecordingActions.exportDone)
+
+            return state
+        }
+
+        private exportDone(state: local.IRecordingState, request: local.IRecordingExportDone): local.IRecordingState {
+            window.open('api/recording/export', '_blank')
+
+            return state
+        }        
+        */
+    }
 
     UNSAFE_componentWillMount(): void {
         recordings.query()
