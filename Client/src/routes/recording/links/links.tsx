@@ -4,7 +4,7 @@ import { Button, Form, Icon, Input, TextArea } from 'semantic-ui-react'
 
 import { IRecordingLink } from 'movie-db-api'
 
-import { ReportError } from '../../../components/message/messageRedux'
+import { ReportError } from '../../../components/message/message'
 import { translations, recordings } from '../../../stores'
 
 export interface IRecordingLinksUiProps {}
@@ -50,7 +50,7 @@ export class RecordingLinks extends React.PureComponent<IRecordingLinksUiProps, 
         const descriptionErrors = recordings.getErrors('links', selected, 'description')
         const hasDescriptionError = descriptionErrors && descriptionErrors.length > 0
 
-        const link = links[selected]
+        const link = selected < links.length && links[selected]
 
         const mui = translations.strings.recording
         const emui = mui.linkEdit

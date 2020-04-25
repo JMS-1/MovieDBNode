@@ -1,19 +1,17 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
+
+import { genres } from '../../stores'
 
 export interface IGenreUiProps {
     id: string
 }
 
-export interface IGenreProps {
-    name: string
-}
-
-export interface IGenreActions {}
-
-export type TGenreProps = IGenreProps & IGenreUiProps & IGenreActions
-
-export class CGenre extends React.PureComponent<TGenreProps> {
+@observer
+export class Genre extends React.PureComponent<IGenreUiProps> {
     render(): JSX.Element {
-        return <>{this.props.name}</>
+        const { id } = this.props
+
+        return <>{genres.getItem(id)?.name || id}</>
     }
 }

@@ -5,40 +5,6 @@ import { Icon, Label, List, SemanticICONS } from 'semantic-ui-react'
 
 import { routes } from '../../stores/routes'
 
-export interface ILegacyNodeUiProps {
-    detail: string
-    scope: string
-}
-
-export interface ILegacyNodeProps {
-    list: JSX.Element[]
-    name: string
-    route: routes
-    type: SemanticICONS
-}
-
-export interface ILegacyNodeActions {}
-
-export type TLegacyNodeProps = ILegacyNodeProps & ILegacyNodeUiProps & ILegacyNodeActions
-
-export class CLegacyNode extends React.PureComponent<TLegacyNodeProps> {
-    render(): JSX.Element {
-        const { name, scope, type } = this.props
-
-        return (
-            <List className='movie-db-tree-level'>
-                {name && (
-                    <Label active={scope === this.props.detail} as='a' href={`#${this.props.route}/${scope}`}>
-                        {type && <Icon name={type} />}
-                        {name}
-                    </Label>
-                )}
-                {this.props.list}
-            </List>
-        )
-    }
-}
-
 interface INodeItem {
     readonly _id: string
     readonly parentId?: string

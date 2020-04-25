@@ -175,7 +175,7 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
 
             this._items = items
 
-            if (!this.selected) {
+            if (!this.selected && this.ordered.length > 0) {
                 this.select(this.ordered[0] || '')
             }
         } catch (error) {
@@ -211,6 +211,26 @@ export abstract class HierarchyStore<TItem extends { _id: string; parentId?: str
         const myName = item?.name || item?._id
 
         return parentName ? `${parentName} > ${myName}` : myName
+    }
+
+    private isPartOfFamily(child: TItem, id: string): boolean {
+        if (!child) {
+            return false
+        }
+
+        if (child._id === id) {
+            return true
+        }
+
+        if (child.parentId === id) {
+            return true
+        }
+
+        return this.isPartOfFamily(this._items[child.parentId], id)
+    }
+
+    getChildTree(id: string): string[] {
+        return Object.keys(this._items).filter((i) => this.isPartOfFamily(this._items[i], id))
     }
 
     @computed({ keepAlive: true })

@@ -1,43 +1,40 @@
+import { computed } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Icon, Table } from 'semantic-ui-react'
 
-import { Genre } from '../../../components/genre/genreRedux'
-import { Language } from '../../../components/language/languageRedux'
-import { IGenreMap, ILanguageMap } from '../../../controller'
+import { IRecording } from '../../../../../Server/src/model'
+import { Genre } from '../../../components/genre/genre'
+import { Language } from '../../../components/language/language'
+import { languages, genres, rootStore } from '../../../stores'
+import { routes } from '../../../stores/routes'
 
 export interface IRecordingItemUiProps {
-    id: string
+    recording: IRecording
 }
 
-export interface IRecordingItemProps {
-    created: string
-    genreMap: IGenreMap
-    genres: string[]
-    languageMap: ILanguageMap
-    languages: string[]
-    name: string
-    rentTo: string
+function makeNumber(n: number): string {
+    return n < 10 ? `0${n}` : `${n}`
 }
 
-export interface IRecordingItemActions {
-    select(): void
+function makeTime(date: Date): string {
+    return `${makeNumber(date.getDate())}.${makeNumber(1 + date.getMonth())}.${date.getFullYear()} ${makeNumber(
+        date.getHours()
+    )}:${makeNumber(date.getMinutes())}:${makeNumber(date.getSeconds())}`
 }
-
-export type TRecordingItemProps = IRecordingItemProps & IRecordingItemUiProps & IRecordingItemActions
 
 @observer
-export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
+export class RecordingItem extends React.PureComponent<IRecordingItemUiProps> {
     render(): JSX.Element {
-        const { rentTo } = this.props
+        const { recording } = this.props
 
         return (
             <Table.Row className='movie-db-recording-item'>
-                <Table.Cell selectable className='name' onClick={this.props.select}>
-                    <div>{this.props.name}</div>
-                    {rentTo && <Icon name='user outline' title={rentTo} />}
+                <Table.Cell selectable className='name' onClick={this.onSelect}>
+                    <div>{recording.fullName}</div>
+                    {recording.rentTo && <Icon name='user outline' title={recording.rentTo} />}
                 </Table.Cell>
-                <Table.Cell className='created'>{this.props.created}</Table.Cell>
+                <Table.Cell className='created'>{makeTime(new Date(recording.created))}</Table.Cell>
                 <Table.Cell className='languages'>
                     {this.languages.map((l) => (
                         <React.Fragment key={l}>
@@ -58,23 +55,29 @@ export class CRecordingItem extends React.PureComponent<TRecordingItemProps> {
         )
     }
 
-    private get languages(): string[] {
-        const { languageMap } = this.props
+    private readonly onSelect = (): void => {
+        rootStore.router.push(`${routes.recording}/${this.props.recording._id}`)
+    }
 
-        return [...(this.props.languages || [])].sort((l, r) => {
-            const left = languageMap[l]
-            const right = languageMap[r]
+    @computed
+    private get languages(): string[] {
+        const { recording } = this.props
+
+        return [...(recording.languages || [])].sort((l, r) => {
+            const left = languages.getItem(l)
+            const right = languages.getItem(r)
 
             return ((left && left.name) || l).localeCompare((right && right.name) || r)
         })
     }
 
+    @computed
     private get genres(): string[] {
-        const { genreMap } = this.props
+        const { recording } = this.props
 
-        return [...(this.props.genres || [])].sort((l, r) => {
-            const left = genreMap[l]
-            const right = genreMap[r]
+        return [...(recording.genres || [])].sort((l, r) => {
+            const left = genres.getItem(l)
+            const right = genres.getItem(r)
 
             return ((left && left.name) || l).localeCompare((right && right.name) || r)
         })

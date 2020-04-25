@@ -1,19 +1,15 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Header, Message } from 'semantic-ui-react'
+
+import { translations } from '../../stores'
 
 export interface IReportErrorUiProps {
     errors: string[]
 }
 
-export interface IReportErrorProps {
-    title: string
-}
-
-export interface IReportErrorActions {}
-
-export type TReportErrorProps = IReportErrorProps & IReportErrorUiProps & IReportErrorActions
-
-export class CReportError extends React.PureComponent<TReportErrorProps> {
+@observer
+export class ReportError extends React.PureComponent<IReportErrorUiProps> {
     render(): JSX.Element {
         const { errors } = this.props
 
@@ -22,8 +18,8 @@ export class CReportError extends React.PureComponent<TReportErrorProps> {
         }
 
         return (
-            <Message className='movie-db-input-message' error>
-                <Header>{this.props.title}</Header>
+            <Message error className='movie-db-input-message'>
+                <Header>{translations.strings.validationError}</Header>
                 <Message.List>
                     {errors.map((e, i) => (
                         <Message.Item key={i}>{e}</Message.Item>

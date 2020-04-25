@@ -3,14 +3,17 @@ import { action, computed, observable } from 'mobx'
 import { DropdownItemProps } from 'semantic-ui-react'
 import { v4 as uuid } from 'uuid'
 
-import { IRecordingQueryResponse } from 'movie-db-api'
-
 import { translations } from '.'
 import { BasicItemStore } from './item'
 import { routes } from './routes'
 import { getGraphQlError } from './utils'
 
-import { IRecording, TRecordingContainerType, IRecordingQueryArgs } from '../../../Server/src/model'
+import {
+    IRecording,
+    TRecordingContainerType,
+    IRecordingQueryArgs,
+    IRecordingQueryResult,
+} from '../../../Server/src/model'
 
 const optionOrder: TRecordingContainerType[] = [
     TRecordingContainerType.Undefined,
@@ -47,13 +50,13 @@ export class RecordingStore extends BasicItemStore<IRecording> {
 
     @observable queryFilter = initialFilter
 
-    @observable queryResult: IRecordingQueryResponse = {
+    @observable queryResult: IRecordingQueryResult = {
         correlationId: '',
         count: 0,
         genres: [],
         languages: [],
-        list: [],
         total: 0,
+        view: [],
     }
 
     @action
@@ -104,15 +107,19 @@ export class RecordingStore extends BasicItemStore<IRecording> {
                         series: $series,
                         sort: $sort,
                         sortOrder: $sortOrder
-                    ) { correlationId count total genres { _id count } languages { _id count } } }
+                    ) { correlationId count total genres { _id count } languages { _id count } view { ${this.itemProps} } } }
                 }`
 
             const res = await this.root.gql.query({
                 query,
-                variables: { ...this.queryFilter, correlationId: this._correlationId },
+                variables: {
+                    ...this.queryFilter,
+                    correlationId: this._correlationId,
+                    firstPage: this.queryFilter.firstPage - 1,
+                },
             })
 
-            const response: IRecordingQueryResponse = res.data[this.itemScope].query
+            const response: IRecordingQueryResult = res.data[this.itemScope].query
 
             if (response.correlationId === this._correlationId) {
                 this.queryResult = response

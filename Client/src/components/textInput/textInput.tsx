@@ -6,7 +6,7 @@ import * as React from 'react'
 import { Form, Input, TextArea, InputOnChangeData, TextAreaProps } from 'semantic-ui-react'
 
 import { translations } from '../../stores'
-import { ReportError } from '../message/messageRedux'
+import { ReportError } from '../message/message'
 
 interface ITextInputStore<TItem> {
     getErrors(field: string): string[] | null

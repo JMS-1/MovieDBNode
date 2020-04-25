@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 
 export interface IMasterDetailRouteUiProps {
@@ -5,6 +6,7 @@ export interface IMasterDetailRouteUiProps {
     className?: string
 }
 
+@observer
 export class MasterDetailRoute extends React.PureComponent<IMasterDetailRouteUiProps> {
     render(): JSX.Element {
         const children = React.Children.toArray(this.props.children)

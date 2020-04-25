@@ -1,19 +1,17 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
+
+import { languages } from '../../stores'
 
 export interface ILanguageUiProps {
     id: string
 }
 
-export interface ILanguageProps {
-    name: string
-}
-
-export interface ILanguageActions {}
-
-export type TLanguageProps = ILanguageProps & ILanguageUiProps & ILanguageActions
-
-export class CLanguage extends React.PureComponent<TLanguageProps> {
+@observer
+export class Language extends React.PureComponent<ILanguageUiProps> {
     render(): JSX.Element {
-        return <>{this.props.name}</>
+        const { id } = this.props
+
+        return <>{languages.getItem(id)?.name || id}</>
     }
 }

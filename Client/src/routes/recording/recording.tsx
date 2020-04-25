@@ -3,30 +3,18 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as ui from 'semantic-ui-react'
 
-import { RecordingItem } from './item/itemRedux'
+import { RecordingItem } from './item/item'
 import { PageSizeSelector } from './size/size'
 
 import { Search } from '../../components/search/search'
-import { ISeriesMap } from '../../controller'
 import { translations, recordings, languages, genres, series } from '../../stores'
 
 export interface IRecordingRouteUiProps {}
 
-export interface IRecordingRouteProps {
-    list: string[]
-    seriesMap: ISeriesMap
-}
-
-export interface IRecordingRouteActions {
-    export(): void
-}
-
-export type TRecordingRouteProps = IRecordingRouteProps & IRecordingRouteUiProps & IRecordingRouteActions
-
 const pageSizes = [15, 30, 50, 75, 100, 250]
 
 @observer
-export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
+export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> {
     render(): JSX.Element {
         const mui = translations.strings.recording
 
@@ -40,7 +28,7 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
             <div className='movie-db-recording-route'>
                 <div className='count'>
                     <ui.Segment>{count}</ui.Segment>
-                    <ui.Button onClick={this.props.export}>{mui.export}</ui.Button>
+                    <ui.Button onClick={this.onExport}>{mui.export}</ui.Button>
                 </div>
                 <ui.Segment className='filter'>
                     <div className='search'>
@@ -78,7 +66,7 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                         selection
                         options={series.asOptions}
                         placeholder={translations.strings.series.noSelect}
-                        value={recordings.queryFilter.series[0] || ''}
+                        value={(recordings.queryFilter.series.length > 0 && recordings.queryFilter.series[0]) || ''}
                         onChange={this.setSeries}
                     />
                     <ui.Dropdown
@@ -139,8 +127,8 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
                             </ui.Table.Row>
                         </ui.Table.Header>
                         <ui.Table.Body>
-                            {this.props.list.map((r) => (
-                                <RecordingItem key={r} id={r} />
+                            {recordings.queryResult.view.map((r) => (
+                                <RecordingItem key={r._id} recording={r} />
                             ))}
                         </ui.Table.Body>
                     </ui.Table>
@@ -178,13 +166,12 @@ export class CRecordingRoute extends React.PureComponent<TRecordingRouteProps> {
     private readonly setGenre = (ev: React.SyntheticEvent<HTMLElement>, data: ui.DropdownProps): void =>
         recordings.setFilterProp('genres', Array.isArray(data.value) ? (data.value as string[]) : undefined)
 
-    private readonly setSeries = (ev: React.SyntheticEvent<HTMLElement>, data: ui.DropdownProps): void => {
-        const series = typeof data.value === 'string' && this.props.seriesMap[data.value]
-
-        recordings.setFilterProp('series', series?.children || [])
-    }
+    private readonly setSeries = (ev: React.SyntheticEvent<HTMLElement>, data: ui.DropdownProps): void =>
+        recordings.setFilterProp('series', series.getChildTree(data.value as string))
 
     private readonly onClearFilter = (): void => recordings.reset()
+
+    private readonly onExport = (): void => {}
 
     UNSAFE_componentWillMount(): void {
         recordings.query()

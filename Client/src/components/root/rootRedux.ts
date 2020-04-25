@@ -11,7 +11,7 @@ function mapStateToProps(state: IClientState, props: local.IRootUiProps): local.
 
     return {
         errors: route.errors,
-        theme: state.application.theme,
+        theme: route.theme,
     }
 }
 
