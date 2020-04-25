@@ -4,12 +4,7 @@ declare module 'movie-db-client' {
 
     interface IClientState {
         readonly application: IApplicationState
-        readonly container: IContainerState
-        readonly genre: IGenreState
-        readonly language: ILanguageState
         readonly mui: IMuiState
-        readonly series: ISeriesState
-        readonly recording: IRecordingState
     }
 
     type IItemMui<TItem> = Required<{ [prop in keyof TItem]: string }>

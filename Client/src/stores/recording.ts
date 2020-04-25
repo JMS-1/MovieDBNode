@@ -206,4 +206,26 @@ export class RecordingStore extends BasicItemStore<IRecording> {
             { key: '0', text: mui.noRent, value: '0' },
         ]
     }
+
+    @computed({ keepAlive: true })
+    get languageCounts(): Record<string, number> {
+        const map: Record<string, number> = {}
+
+        for (const language of this.queryResult.languages) {
+            map[language._id] = language.count
+        }
+
+        return map
+    }
+
+    @computed({ keepAlive: true })
+    get genreCounts(): Record<string, number> {
+        const map: Record<string, number> = {}
+
+        for (const genre of this.queryResult.genres) {
+            map[genre._id] = genre.count
+        }
+
+        return map
+    }
 }

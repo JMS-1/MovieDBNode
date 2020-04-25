@@ -1,4 +1,4 @@
-import { action } from 'mobx'
+import { action, computed } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as ui from 'semantic-ui-react'
@@ -41,7 +41,7 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
                         scrolling
                         search
                         selection
-                        options={languages.asOptions}
+                        options={this.languageOptions}
                         placeholder={translations.strings.language.noSelect}
                         value={recordings.queryFilter.language || ''}
                         onChange={this.setLanguage}
@@ -53,7 +53,7 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
                         scrolling
                         search
                         selection
-                        options={genres.asOptions}
+                        options={this.genreOptions}
                         placeholder={translations.strings.genre.noSelect}
                         value={recordings.queryFilter.genres}
                         onChange={this.setGenre}
@@ -135,6 +135,20 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
                 </div>
             </div>
         )
+    }
+
+    @computed
+    get languageOptions(): ui.DropdownItemProps[] {
+        const { languageCounts } = recordings
+
+        return languages.asOptions.filter((l) => languageCounts[l.value as string] > 0)
+    }
+
+    @computed
+    get genreOptions(): ui.DropdownItemProps[] {
+        const { genreCounts } = recordings
+
+        return genres.asOptions.filter((g) => genreCounts[g.value as string] > 0)
     }
 
     @action

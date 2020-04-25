@@ -10,12 +10,7 @@ export function initializeStore(): Store<IClientState> {
     store = createStore(
         combineReducers<IClientState>({
             application: controller.ApplicationReducer,
-            container: controller.ContainerReducer,
-            genre: controller.GenreReducer,
-            language: controller.LanguageReducer,
             mui: controller.MuiReducer,
-            recording: controller.RecordingReducer,
-            series: controller.SeriesReducer,
         })
     )
 
