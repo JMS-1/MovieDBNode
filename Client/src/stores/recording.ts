@@ -32,8 +32,8 @@ const initialFilter: IRecordingQueryArgs = {
     pageSize: 15,
     rent: undefined,
     series: [],
-    sort: 'created',
-    sortOrder: 'Descending',
+    sort: 'fullName',
+    sortOrder: 'Ascending',
 }
 
 export class RecordingStore extends BasicItemStore<IRecording> {
