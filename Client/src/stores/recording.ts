@@ -42,6 +42,35 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
 
     private _correlationId = ''
 
+    private readonly _query = gql`
+        query (
+            $correlationId: ID,
+            $firstPage: Int!,
+            $forExport: Boolean,
+            $fullName: String,
+            $genres: [String!],
+            $language: String,
+            $pageSize: Int!,
+            $rent: Boolean,
+            $series: [String!],
+            $sort: RecordingSort!,
+            $sortOrder: SortDirection!
+        ){ 
+            ${this.itemScope} { query(
+                correlationId: $correlationId,
+                firstPage: $firstPage,
+                forExport: $forExport,
+                fullName: $fullName,
+                genres: $genres,
+                language: $language,
+                pageSize: $pageSize,
+                rent: $rent,
+                series: $series,
+                sort: $sort,
+                sortOrder: $sortOrder
+            ) { correlationId count total genres { _id count } languages { _id count } view { ${this.itemProps} } } }
+        }`
+
     @observable queryFilter = initialFilter
 
     @observable queryResult: model.IRecordingQueryResult = {
@@ -80,35 +109,8 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         try {
             this._correlationId = uuid()
 
-            const query = gql`
-                query (
-                    $correlationId: ID!,
-                    $firstPage: Int!,
-                    $fullName: String,
-                    $genres: [String!],
-                    $language: String,
-                    $pageSize: Int!,
-                    $rent: Boolean,
-                    $series: [String!],
-                    $sort: RecordingSort!,
-                    $sortOrder: SortDirection!
-                ){ 
-                    ${this.itemScope} { query(
-                        correlationId: $correlationId,
-                        firstPage: $firstPage,
-                        fullName: $fullName,
-                        genres: $genres,
-                        language: $language,
-                        pageSize: $pageSize,
-                        rent: $rent,
-                        series: $series,
-                        sort: $sort,
-                        sortOrder: $sortOrder
-                    ) { correlationId count total genres { _id count } languages { _id count } view { ${this.itemProps} } } }
-                }`
-
             const res = await this.root.gql.query({
-                query,
+                query: this._query,
                 variables: {
                     ...this.queryFilter,
                     correlationId: this._correlationId,
@@ -180,6 +182,31 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
             if (recording) {
                 this._items[recording._id] = recording
             }
+        } catch (error) {
+            this.root.requestFailed(error)
+        } finally {
+            this.root.doneRequest()
+        }
+    }
+
+    @action
+    async export(): Promise<void> {
+        this.root.startRequest()
+
+        try {
+            await this.root.gql.query({
+                query: this._query,
+                variables: {
+                    ...this.queryFilter,
+                    firstPage: 0,
+                    forExport: true,
+                    pageSize: 100000,
+                    sort: 'fullName',
+                    sortOrder: 'Ascending',
+                },
+            })
+
+            window.open('export', '_blank')
         } catch (error) {
             this.root.requestFailed(error)
         } finally {

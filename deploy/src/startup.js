@@ -11,18 +11,25 @@ const debug_1 = __importDefault(require("debug"));
 const express_1 = __importDefault(require("express"));
 const graphql_1 = require("graphql");
 const path_1 = require("path");
-const api_1 = require("./api");
 const container_1 = require("./collections/container");
 const genre_1 = require("./collections/genre");
 const language_1 = require("./collections/language");
 const recording_1 = require("./collections/recording");
 const series_1 = require("./collections/series");
 const config_1 = require("./config");
+const utfBom = Buffer.from([0xef, 0xbb, 0xbf]);
 async function startup() {
     const app = express_1.default();
     app.use(express_1.default.static(path_1.join(__dirname, '../dist')));
     app.use(body_parser_1.json());
-    api_1.installApi(app);
+    app.get('/export', (_request, response) => {
+        response.setHeader('Content-disposition', 'attachment; filename=export.csv');
+        response.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        response.status(200);
+        response.write(utfBom);
+        response.write(recording_1.csvData, 'utf-8');
+        response.end();
+    });
     const server = new apollo_server_express_1.ApolloServer({
         schema: new graphql_1.GraphQLSchema(await schema_1.createSchemaConfiguration({
             containers: container_1.ContainerCollection,

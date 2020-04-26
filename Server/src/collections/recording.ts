@@ -6,9 +6,15 @@ import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
 import { refreshRecordingNames } from './utils'
 
-import { IRecording, IQueryCountInfo, TRecordingSort } from '../model'
+import { IRecording, IQueryCountInfo, TRecordingSort, ILanguage, IGenre } from '../model'
 import { Recording, RecordingQueryResponse, RecordingSort } from '../model/entities'
 import { uniqueIdPattern } from '../model/utils'
+
+export let csvData = ''
+
+export function escape(str: string): string {
+    return `"${(str || '').replace(/"/g, '""')}"`
+}
 
 const escapeReg = /[.*+?^${}()|[\]\\]/g
 
@@ -92,6 +98,7 @@ export const RecordingCollection = MongoConnection.createCollection(
             return this.setFullName(item)
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         beforeUpdate(item: IRecording, id: string): Promise<void> {
             return this.demandForeignKeys(item)
         }
@@ -129,6 +136,9 @@ export const RecordingCollection = MongoConnection.createCollection(
                     description: '0-basierte Nummer der Ergebnisseite.',
                     validation: { min: 0, type: 'number' },
                 }),
+                forExport: types.GqlNullable(
+                    types.GqlBoolean({ description: 'Erlaubt den Abruf des Ergebnisses als CSV Inhalt.' })
+                ),
                 fullName: types.GqlNullable(
                     types.GqlString({
                         description: 'Optional ein Suchmuster für den vollständigen Namen einer Aufzeichnung.',
@@ -238,7 +248,7 @@ export const RecordingCollection = MongoConnection.createCollection(
                     )
                     .toArray()
 
-                return {
+                const response = {
                     correlationId: args.correlationId,
                     count: (countRes && countRes.total) || 0,
                     genres: (firstRes && firstRes.genres) || [],
@@ -246,6 +256,32 @@ export const RecordingCollection = MongoConnection.createCollection(
                     total: await self.countDocuments(),
                     view: (firstRes && firstRes.view) || [],
                 }
+
+                if (args.forExport) {
+                    const languageCollection = await this.connection.getCollection(collectionNames.languages)
+                    const languages = await languageCollection.find<ILanguage>().toArray()
+
+                    const languageMap: { [id: string]: string } = {}
+                    languages.forEach((l) => (languageMap[l._id] = l.name))
+
+                    const genreCollection = await this.connection.getCollection(collectionNames.genres)
+                    const genres = await genreCollection.find<IGenre>().toArray()
+
+                    const genreMap: { [id: string]: string } = {}
+                    genres.forEach((g) => (genreMap[g._id] = g.name))
+
+                    csvData = 'Name;Sprachen;Kategorien\r\n'
+
+                    for (const recording of response.view) {
+                        const name = escape(recording.fullName)
+                        const languages = escape((recording.languages || []).map((l) => languageMap[l] || l).join('; '))
+                        const genres = escape((recording.genres || []).map((l) => genreMap[l] || l).join('; '))
+
+                        csvData += `${name};${languages};${genres}\r\n`
+                    }
+                }
+
+                return response
             }
         )
     }

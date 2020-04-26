@@ -15,6 +15,11 @@ const utils_1 = require("./utils");
 const model_1 = require("../model");
 const entities_1 = require("../model/entities");
 const utils_2 = require("../model/utils");
+exports.csvData = '';
+function escape(str) {
+    return `"${(str || '').replace(/"/g, '""')}"`;
+}
+exports.escape = escape;
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
 const collation = { locale: 'en', strength: 2 };
 exports.RecordingCollection = connection_1.MongoConnection.createCollection(entities_1.Recording, class extends collection_1.Collection {
@@ -40,6 +45,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 description: '0-basierte Nummer der Ergebnisseite.',
                 validation: { min: 0, type: 'number' },
             }),
+            forExport: types.GqlNullable(types.GqlBoolean({ description: 'Erlaubt den Abruf des Ergebnisses als CSV Inhalt.' })),
             fullName: types.GqlNullable(types.GqlString({
                 description: 'Optional ein Suchmuster für den vollständigen Namen einer Aufzeichnung.',
             })),
@@ -111,7 +117,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 { $group: { _id: '$languages', count: { $sum: 1 } } },
             ], { collation })
                 .toArray();
-            return {
+            const response = {
                 correlationId: args.correlationId,
                 count: (countRes && countRes.total) || 0,
                 genres: (firstRes && firstRes.genres) || [],
@@ -119,6 +125,24 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 total: await self.countDocuments(),
                 view: (firstRes && firstRes.view) || [],
             };
+            if (args.forExport) {
+                const languageCollection = await this.connection.getCollection(collections_1.collectionNames.languages);
+                const languages = await languageCollection.find().toArray();
+                const languageMap = {};
+                languages.forEach((l) => (languageMap[l._id] = l.name));
+                const genreCollection = await this.connection.getCollection(collections_1.collectionNames.genres);
+                const genres = await genreCollection.find().toArray();
+                const genreMap = {};
+                genres.forEach((g) => (genreMap[g._id] = g.name));
+                exports.csvData = 'Name;Sprachen;Kategorien\r\n';
+                for (const recording of response.view) {
+                    const name = escape(recording.fullName);
+                    const languages = escape((recording.languages || []).map((l) => languageMap[l] || l).join('; '));
+                    const genres = escape((recording.genres || []).map((l) => genreMap[l] || l).join('; '));
+                    exports.csvData += `${name};${languages};${genres}\r\n`;
+                }
+            }
+            return response;
         });
     }
     async initialize() {

@@ -7,13 +7,14 @@ import express from 'express'
 import { GraphQLSchema } from 'graphql'
 import { join } from 'path'
 
-import { installApi } from './api'
 import { ContainerCollection } from './collections/container'
 import { GenreCollection } from './collections/genre'
 import { LanguageCollection } from './collections/language'
-import { RecordingCollection } from './collections/recording'
+import { RecordingCollection, csvData } from './collections/recording'
 import { SeriesCollection } from './collections/series'
 import { Config } from './config'
+
+const utfBom = Buffer.from([0xef, 0xbb, 0xbf])
 
 async function startup(): Promise<void> {
     const app = express()
@@ -21,7 +22,14 @@ async function startup(): Promise<void> {
     app.use(express.static(join(__dirname, '../dist')))
     app.use(json())
 
-    installApi(app)
+    app.get('/export', (_request, response) => {
+        response.setHeader('Content-disposition', 'attachment; filename=export.csv')
+        response.setHeader('Content-Type', 'text/csv; charset=utf-8')
+        response.status(200)
+        response.write(utfBom)
+        response.write(csvData, 'utf-8')
+        response.end()
+    })
 
     const server = new ApolloServer({
         schema: new GraphQLSchema(
