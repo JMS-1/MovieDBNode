@@ -5,7 +5,6 @@ import { SemanticICONS, DropdownItemProps, Icon } from 'semantic-ui-react'
 
 import { HierarchyStore } from './item'
 import { routes } from './routes'
-import { getGraphQlError } from './utils'
 
 import { IContainer, TContainerType, IRecording } from '../../../Server/src/model'
 
@@ -83,7 +82,7 @@ export class ContainerStore extends HierarchyStore<IContainer> {
 
         const recordingId = ++this._recordingId
 
-        this.root.outstandingRequests += 1
+        this.root.startRequest()
 
         try {
             const recordings = this.root.recordings
@@ -95,9 +94,9 @@ export class ContainerStore extends HierarchyStore<IContainer> {
                 this._recordings = res.data[recordings.itemScope].findByContainer || []
             }
         } catch (error) {
-            alert(getGraphQlError(error))
+            this.root.requestFailed(error)
         } finally {
-            this.root.outstandingRequests -= 1
+            this.root.doneRequest()
         }
     }
 

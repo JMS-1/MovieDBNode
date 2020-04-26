@@ -6,25 +6,19 @@ import { v4 as uuid } from 'uuid'
 import { translations } from '.'
 import { BasicItemStore } from './item'
 import { routes } from './routes'
-import { getGraphQlError } from './utils'
 
-import {
-    IRecording,
-    TRecordingContainerType,
-    IRecordingQueryArgs,
-    IRecordingQueryResult,
-} from '../../../Server/src/model'
+import * as model from '../../../Server/src/model'
 
-const optionOrder: TRecordingContainerType[] = [
-    TRecordingContainerType.Undefined,
-    TRecordingContainerType.VideoCD,
-    TRecordingContainerType.SuperVideoCD,
-    TRecordingContainerType.RecordedDVD,
-    TRecordingContainerType.DVD,
-    TRecordingContainerType.BluRay,
+const optionOrder: model.TRecordingContainerType[] = [
+    model.TRecordingContainerType.Undefined,
+    model.TRecordingContainerType.VideoCD,
+    model.TRecordingContainerType.SuperVideoCD,
+    model.TRecordingContainerType.RecordedDVD,
+    model.TRecordingContainerType.DVD,
+    model.TRecordingContainerType.BluRay,
 ]
 
-const initialFilter: IRecordingQueryArgs = {
+const initialFilter: model.IRecordingQueryArgs = {
     firstPage: 1,
     fullName: '',
     genres: [],
@@ -36,7 +30,7 @@ const initialFilter: IRecordingQueryArgs = {
     sortOrder: 'Ascending',
 }
 
-export class RecordingStore extends BasicItemStore<IRecording> {
+export class RecordingStore extends BasicItemStore<model.IRecording> {
     readonly itemProps =
         '_id containerId containerPosition containerType created description fullName genres languages links { description name url } name rentTo'
 
@@ -50,7 +44,7 @@ export class RecordingStore extends BasicItemStore<IRecording> {
 
     @observable queryFilter = initialFilter
 
-    @observable queryResult: IRecordingQueryResult = {
+    @observable queryResult: model.IRecordingQueryResult = {
         correlationId: '',
         count: 0,
         genres: [],
@@ -60,7 +54,10 @@ export class RecordingStore extends BasicItemStore<IRecording> {
     }
 
     @action
-    setFilterProp<TProp extends keyof IRecordingQueryArgs>(prop: TProp, value: IRecordingQueryArgs[TProp]): void {
+    setFilterProp<TProp extends keyof model.IRecordingQueryArgs>(
+        prop: TProp,
+        value: model.IRecordingQueryArgs[TProp]
+    ): void {
         if (value === this.queryFilter[prop]) {
             return
         }
@@ -78,7 +75,7 @@ export class RecordingStore extends BasicItemStore<IRecording> {
     }
 
     async query(): Promise<void> {
-        this.root.outstandingRequests += 1
+        this.root.startRequest()
 
         try {
             this._correlationId = uuid()
@@ -119,19 +116,19 @@ export class RecordingStore extends BasicItemStore<IRecording> {
                 },
             })
 
-            const response: IRecordingQueryResult = res.data[this.itemScope].query
+            const response: model.IRecordingQueryResult = res.data[this.itemScope].query
 
             if (response.correlationId === this._correlationId) {
                 this.queryResult = response
             }
         } catch (error) {
-            alert(getGraphQlError(error))
+            this.root.requestFailed(error)
         } finally {
-            this.root.outstandingRequests -= 1
+            this.root.doneRequest()
         }
     }
 
-    protected createNew(): IRecording {
+    protected createNew(): model.IRecording {
         return {
             _id: undefined,
             containerId: undefined,
@@ -149,7 +146,7 @@ export class RecordingStore extends BasicItemStore<IRecording> {
         }
     }
 
-    protected toProtocol(recording: IRecording): Partial<IRecording> {
+    protected toProtocol(recording: model.IRecording): Partial<model.IRecording> {
         return {
             containerId: recording.containerId || null,
             containerPosition: recording.containerPosition,
@@ -172,21 +169,21 @@ export class RecordingStore extends BasicItemStore<IRecording> {
             return
         }
 
-        this.root.outstandingRequests += 1
+        this.root.startRequest()
 
         try {
             const query = gql`query ($id: ID!){ ${this.itemScope} { findById(_id: $id) { ${this.itemProps} } } }`
 
             const res = await this.root.gql.query({ query, variables: { id } })
-            const recording: IRecording = res.data[this.itemScope].findById
+            const recording: model.IRecording = res.data[this.itemScope].findById
 
             if (recording) {
                 this._items[recording._id] = recording
             }
         } catch (error) {
-            alert(getGraphQlError(error))
+            this.root.requestFailed(error)
         } finally {
-            this.root.outstandingRequests -= 1
+            this.root.doneRequest()
         }
     }
 

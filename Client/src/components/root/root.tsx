@@ -14,28 +14,14 @@ import { routes } from '../../stores/routes'
 
 export interface IRootUiProps {}
 
-export interface IRootProps {
-    errors: string[]
-    theme: string
-}
-
-export interface IRootActions {
-    clearErrors(): void
-    setTheme(theme: string): void
-}
-
-export type TRootProps = IRootProps & IRootUiProps & IRootActions
-
 @observer
-export class CRoot extends React.PureComponent<TRootProps> {
+export class Root extends React.PureComponent<IRootUiProps> {
     render(): JSX.Element {
-        const { isBusy } = rootStore
+        const { isBusy, errors, theme } = rootStore
 
         const tmui = translations.strings.themes
         const rmui = translations.strings.routes
         const cmui = rmui.create
-
-        const { errors, theme } = this.props
 
         const path = rootStore.router.location.pathname
 
@@ -55,7 +41,7 @@ export class CRoot extends React.PureComponent<TRootProps> {
             <div className='movie-db-root'>
                 <Dimmer page active={isBusy || errors.length > 0}>
                     <Loader disabled={!isBusy} />
-                    <Message negative hidden={errors.length < 1} onDismiss={this.props.clearErrors}>
+                    <Message negative hidden={errors.length < 1} onDismiss={this.onClearErrors}>
                         <Header>{translations.strings.webError}</Header>
                         <Message.List>
                             {errors.map((e, i) => (
@@ -130,9 +116,11 @@ export class CRoot extends React.PureComponent<TRootProps> {
         )
     }
 
-    private readonly defaultTheme = (): void => this.props.setTheme('default')
+    private readonly defaultTheme = (): void => rootStore.setTheme('default')
 
-    private readonly alternateTheme1 = (): void => this.props.setTheme('alternate.1')
+    private readonly alternateTheme1 = (): void => rootStore.setTheme('alternate.1')
 
-    private readonly alternateTheme2 = (): void => this.props.setTheme('alternate.2')
+    private readonly alternateTheme2 = (): void => rootStore.setTheme('alternate.2')
+
+    private readonly onClearErrors = (): void => rootStore.clearErrors()
 }

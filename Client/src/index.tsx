@@ -1,24 +1,17 @@
 import * as React from 'react'
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
 import { Router } from 'react-router'
 
-import { Root } from './components/root/rootRedux'
-import * as controller from './controller'
-import { initializeStore } from './store'
+import { Root } from './components/root/root'
 import { rootStore, history } from './stores'
 
-const store = initializeStore()
-
-store.dispatch(controller.ApplicationActions.setTheme('default'))
+rootStore.setTheme('default')
 
 rootStore.startup()
 
 render(
     <Router history={history}>
-        <Provider store={store}>
-            <Root />
-        </Provider>
+        <Root />
     </Router>,
     document.querySelector('client-root')
 )

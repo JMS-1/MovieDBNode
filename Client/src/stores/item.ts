@@ -6,7 +6,7 @@ import { DropdownItemProps } from 'semantic-ui-react'
 
 import { RootStore } from './root'
 import { routes } from './routes'
-import { getGraphQlError, createFiltered } from './utils'
+import { createFiltered } from './utils'
 
 const noSchema: ValidationSchema = { $$strict: true }
 
@@ -40,7 +40,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     @action
     async remove(item?: TItem): Promise<void> {
-        this.root.outstandingRequests += 1
+        this.root.startRequest()
 
         const id = (item || this.workingCopy)._id
 
@@ -55,9 +55,9 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
             this.root.router.replace(this.itemRoute)
         } catch (error) {
-            alert(getGraphQlError(error))
+            this.root.requestFailed(error)
         } finally {
-            this.root.outstandingRequests -= 1
+            this.root.doneRequest()
         }
     }
 
@@ -67,7 +67,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
             item = this.workingCopy
         }
 
-        this.root.outstandingRequests += 1
+        this.root.startRequest()
 
         try {
             const res = await this.root.gql.mutate({
@@ -85,9 +85,9 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
                 this.root.router.replace(`${this.itemRoute}/${changed._id}`)
             }
         } catch (error) {
-            alert(getGraphQlError(error))
+            this.root.requestFailed(error)
         } finally {
-            this.root.outstandingRequests -= 1
+            this.root.doneRequest()
         }
     }
 
@@ -159,7 +159,7 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
 
     @action
     private async load(): Promise<void> {
-        this.root.outstandingRequests += 1
+        this.root.startRequest()
 
         try {
             const query = gql`{ ${this.itemScope} { find(page: 1, pageSize: 1000) { items { ${this.itemProps} } } } }`
@@ -179,9 +179,9 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
                 this.select(this.ordered[0] || '')
             }
         } catch (error) {
-            alert(getGraphQlError(error))
+            this.root.requestFailed(error)
         } finally {
-            this.root.outstandingRequests -= 1
+            this.root.doneRequest()
         }
     }
 

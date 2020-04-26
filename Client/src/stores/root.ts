@@ -8,6 +8,7 @@ import { createHashHistory } from 'history'
 import { observable, action } from 'mobx'
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import fetch from 'node-fetch'
+import { v4 as uuid } from 'uuid'
 
 import { ContainerStore } from './container'
 import { GenreStore } from './genre'
@@ -16,7 +17,11 @@ import { RecordingStore } from './recording'
 import { SeriesStore } from './series'
 import { TranslationStore } from './translations'
 
+type TThemes = 'default' | 'alternate.1' | 'alternate.2'
+
 export class RootStore {
+    private readonly _themeId = uuid()
+
     readonly containers: ContainerStore
     readonly genres: GenreStore
     readonly gql: ApolloClient<unknown>
@@ -26,14 +31,24 @@ export class RootStore {
     readonly series: SeriesStore
     readonly translations: TranslationStore
 
-    @observable outstandingRequests = 0
+    @observable private _outstandingRequests = 0
 
     @observable readonly inputValidations: Record<string, ValidationSchema> = {}
 
     @observable readonly updateValidations: Record<string, ValidationSchema> = {}
 
+    @observable readonly errors: string[] = []
+
+    @observable private _busySince = 0
+
+    @observable private _theme: TThemes = 'default'
+
     get isBusy(): boolean {
-        return this.outstandingRequests > 0
+        return this._outstandingRequests > 0
+    }
+
+    get busySince(): number {
+        return this._busySince
     }
 
     constructor() {
@@ -51,6 +66,56 @@ export class RootStore {
         this.translations = new TranslationStore(this)
     }
 
+    get theme(): TThemes {
+        return this._theme
+    }
+
+    @action
+    setTheme(theme: TThemes): void {
+        this._theme = theme
+
+        let link = document.getElementById(this._themeId) as HTMLLinkElement
+
+        if (!link) {
+            link = document.querySelector('head').appendChild(document.createElement('link'))
+
+            link.id = this._themeId
+            link.rel = 'stylesheet'
+        }
+
+        link.href = `${theme}/semantic.min.css`
+    }
+
+    @action
+    clearErrors(): void {
+        this.errors.splice(0)
+    }
+
+    @action
+    startRequest(): void {
+        if (!this._outstandingRequests) {
+            this._busySince = Date.now()
+        }
+
+        this._outstandingRequests += 1
+    }
+
+    @action
+    doneRequest(): void {
+        this._outstandingRequests -= 1
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    @action requestFailed(error: any): void {
+        const gql: Error[] = error.graphQLErrors
+
+        if (Array.isArray(gql) && gql.length > 0) {
+            gql.forEach((e) => this.errors.push(e.message))
+        } else {
+            this.errors.push(getMessage(error))
+        }
+    }
+
     startup(): void {
         this.containers.startup()
         this.genres.startup()
@@ -62,7 +127,7 @@ export class RootStore {
 
     @action
     private async loadValidations(): Promise<void> {
-        this.outstandingRequests += 1
+        this.startRequest()
 
         try {
             const query = gql`
@@ -83,9 +148,9 @@ export class RootStore {
                 this.updateValidations[validation.name] = JSON.parse(validation.update)
             }
         } catch (error) {
-            alert(getMessage(error))
+            this.requestFailed(error)
         } finally {
-            this.outstandingRequests -= 1
+            this.doneRequest()
         }
     }
 }
