@@ -3,14 +3,14 @@ import { computed, action, observable } from 'mobx'
 import * as React from 'react'
 import { SemanticICONS, DropdownItemProps, Icon } from 'semantic-ui-react'
 
-import { HierarchyStore } from './item'
+import { HierarchyItemStore } from './hierarchicalItem'
 import { routes } from './routes'
 
 import { IContainer, TContainerType, IRecording } from '../../../Server/src/model'
 
 const optionOrder = ['Undefined', 'FeatureSet', 'Box', 'Shelf', 'Folder', 'Disk']
 
-export class ContainerStore extends HierarchyStore<IContainer> {
+export class ContainerStore extends HierarchyItemStore<IContainer> {
     readonly itemProps = '_id name description parentId parentLocation type'
 
     readonly itemScope = 'containers'

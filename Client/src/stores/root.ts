@@ -54,6 +54,7 @@ export class RootStore {
     constructor() {
         this.gql = new ApolloClient({
             cache: new InMemoryCache(),
+            defaultOptions: { query: { fetchPolicy: 'no-cache' } },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             link: createHttpLink({ fetch: fetch as any, uri: `${window.location.origin}/graphql` }),
         })

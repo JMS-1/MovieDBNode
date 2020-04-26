@@ -4,7 +4,7 @@ import { DropdownItemProps } from 'semantic-ui-react'
 import { v4 as uuid } from 'uuid'
 
 import { translations } from '.'
-import { BasicItemStore } from './item'
+import { BasicItemStore } from './basicItem'
 import { routes } from './routes'
 
 import * as model from '../../../Server/src/model'

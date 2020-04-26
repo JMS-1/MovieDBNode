@@ -1,12 +1,12 @@
 import { computed } from 'mobx'
 
-import { HierarchyStore } from './item'
+import { HierarchyItemStore } from './hierarchicalItem'
 import { routes } from './routes'
 import { createFiltered } from './utils'
 
 import { ISeries } from '../../../Server/src/model'
 
-export class SeriesStore extends HierarchyStore<ISeries> {
+export class SeriesStore extends HierarchyItemStore<ISeries> {
     readonly itemProps = '_id name description parentId fullName'
 
     readonly itemScope = 'series'
