@@ -67,4 +67,24 @@ export abstract class HierarchyItemStore<
 
         return this.asOptions.filter((i) => !forbidden.has(i.value as string))
     }
+
+    @computed({ keepAlive: true })
+    get childTree(): Record<string, string[]> {
+        const tree: Record<string, string[]> = {}
+
+        Object.keys(this._items).forEach((id) => {
+            const item = this._items[id]
+            const parentId = item.parentId || ''
+
+            const list = tree[parentId]
+
+            if (list) {
+                list.push(id)
+            } else {
+                tree[parentId] = [id]
+            }
+        })
+
+        return tree
+    }
 }

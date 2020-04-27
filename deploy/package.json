@@ -19,7 +19,7 @@
         "@types/history": "^4.7.5",
         "@types/mongodb": "^3.5.14",
         "@types/node": "^13.13.4",
-        "@types/react-dom": "^16.9.6",
+        "@types/react-dom": "^16.9.7",
         "@types/react-router": "^5.1.7",
         "@types/react-router-dom": "^5.1.5",
         "@types/uuid": "^7.0.3",
