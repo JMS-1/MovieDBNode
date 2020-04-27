@@ -69,8 +69,8 @@ export abstract class HierarchyItemStore<
     }
 
     @computed({ keepAlive: true })
-    get childTree(): Record<string, string[]> {
-        const tree: Record<string, string[]> = {}
+    get childTree(): Record<string, Set<string>> {
+        const tree: Record<string, Set<string>> = {}
 
         Object.keys(this._items).forEach((id) => {
             const item = this._items[id]
@@ -79,9 +79,9 @@ export abstract class HierarchyItemStore<
             const list = tree[parentId]
 
             if (list) {
-                list.push(id)
+                list.add(id)
             } else {
-                tree[parentId] = [id]
+                tree[parentId] = new Set([id])
             }
         })
 

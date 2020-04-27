@@ -14,7 +14,7 @@ interface INodeStore<TItem extends INodeItem> {
     getIcon?(item: TItem): SemanticICONS
     getItem(id: string): TItem | undefined
     getName(item: TItem): string
-    readonly childTree: Record<string, string[]>
+    readonly childTree: Record<string, Set<string>>
     readonly filter: string
     readonly itemRoute: routes
     readonly orderedAndFiltered: string[]
@@ -25,6 +25,8 @@ interface INodeProps<TItem extends INodeItem> {
     scope: string
     store: INodeStore<TItem>
 }
+
+const emptySet = new Set<string>()
 
 @observer
 export class Node<TItem extends INodeItem> extends React.PureComponent<INodeProps<TItem>> {
@@ -51,7 +53,7 @@ export class Node<TItem extends INodeItem> extends React.PureComponent<INodeProp
     private get children(): JSX.Element[] {
         const { store, scope } = this.props
 
-        const children = new Set(store.childTree[this.props.id || ''] || [])
+        const children = store.childTree[this.props.id || ''] || emptySet
 
         return store.orderedAndFiltered
             .filter(children.has.bind(children))
