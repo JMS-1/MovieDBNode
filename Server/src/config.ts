@@ -6,6 +6,8 @@ export interface IConfiguration {
     password: string
     port: number
     user: string
+    gqlPassword: string
+    gqlUser: string
 }
 
 function loadConfig(name: string): IConfiguration {

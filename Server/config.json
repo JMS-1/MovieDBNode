@@ -1,5 +1,7 @@
 {
     "db": "mongodb://localhost:27017/movie-db",
+    "gqlPassword": "",
+    "gqlUser": "",
     "password": "",
     "port": 29099,
     "user": ""

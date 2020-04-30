@@ -1,6 +1,6 @@
 import { getMessage } from '@jms-1/isxs-tools'
 import { createSchemaConfiguration } from '@jms-1/mongodb-graphql/lib/schema'
-import { ApolloServer } from 'apollo-server-express'
+import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 import { json } from 'body-parser'
 import debug from 'debug'
 import express from 'express'
@@ -32,6 +32,49 @@ async function startup(): Promise<void> {
     })
 
     const server = new ApolloServer({
+        context: ({ req, res }) => {
+            const context = { isAdmin: false, isAuth: false, requireAuth: false, res }
+
+            const auth = /^Basic (.+)$/.exec(req.headers.authorization || '')
+
+            if (auth) {
+                const user = /^([^:]*):([^:]*)$/.exec(Buffer.from(auth[1], 'base64').toString())
+
+                if (user) {
+                    context.isAuth = true
+                    context.isAdmin = user[1] === Config.gqlUser && user[2] === Config.gqlPassword
+                }
+            }
+
+            return context
+        },
+        plugins: [
+            {
+                requestDidStart() {
+                    return {
+                        didEncounterErrors(requestContext) {
+                            if (requestContext?.context?.requireAuth === false) {
+                                const gqlErrors = requestContext?.errors || []
+
+                                if (gqlErrors.some((e) => e.originalError instanceof AuthenticationError)) {
+                                    requestContext.context.requireAuth = true
+                                }
+                            }
+                        },
+                        willSendResponse(requestContext) {
+                            if (requestContext?.context?.requireAuth) {
+                                requestContext.context.res.status(401)
+
+                                requestContext.response.http.headers.set(
+                                    'WWW-Authenticate',
+                                    'Basic realm="neuroomNet CMS"'
+                                )
+                            }
+                        },
+                    }
+                },
+            },
+        ],
         schema: new GraphQLSchema(
             await createSchemaConfiguration({
                 containers: ContainerCollection,

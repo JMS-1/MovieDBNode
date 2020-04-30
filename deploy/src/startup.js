@@ -31,6 +31,42 @@ async function startup() {
         response.end();
     });
     const server = new apollo_server_express_1.ApolloServer({
+        context: ({ req, res }) => {
+            const context = { isAdmin: false, isAuth: false, requireAuth: false, res };
+            const auth = /^Basic (.+)$/.exec(req.headers.authorization || '');
+            if (auth) {
+                const user = /^([^:]*):([^:]*)$/.exec(Buffer.from(auth[1], 'base64').toString());
+                if (user) {
+                    context.isAuth = true;
+                    context.isAdmin = user[1] === config_1.Config.gqlUser && user[2] === config_1.Config.gqlPassword;
+                }
+            }
+            return context;
+        },
+        plugins: [
+            {
+                requestDidStart() {
+                    return {
+                        didEncounterErrors(requestContext) {
+                            var _a;
+                            if (((_a = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context) === null || _a === void 0 ? void 0 : _a.requireAuth) === false) {
+                                const gqlErrors = (requestContext === null || requestContext === void 0 ? void 0 : requestContext.errors) || [];
+                                if (gqlErrors.some((e) => e.originalError instanceof apollo_server_express_1.AuthenticationError)) {
+                                    requestContext.context.requireAuth = true;
+                                }
+                            }
+                        },
+                        willSendResponse(requestContext) {
+                            var _a;
+                            if ((_a = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context) === null || _a === void 0 ? void 0 : _a.requireAuth) {
+                                requestContext.context.res.status(401);
+                                requestContext.response.http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"');
+                            }
+                        },
+                    };
+                },
+            },
+        ],
         schema: new graphql_1.GraphQLSchema(await schema_1.createSchemaConfiguration({
             containers: container_1.ContainerCollection,
             genres: genre_1.GenreCollection,
