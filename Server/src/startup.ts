@@ -65,10 +65,12 @@ async function startup(): Promise<void> {
                             if (requestContext?.context?.requireAuth) {
                                 requestContext.context.res.status(401)
 
-                                requestContext.response.http.headers.set(
-                                    'WWW-Authenticate',
-                                    'Basic realm="neuroomNet CMS"'
-                                )
+                                if (requestContext.response?.http) {
+                                    requestContext.response.http.headers.set(
+                                        'WWW-Authenticate',
+                                        'Basic realm="neuroomNet CMS"'
+                                    )
+                                }
                             }
                         },
                     }

@@ -57,10 +57,12 @@ async function startup() {
                             }
                         },
                         willSendResponse(requestContext) {
-                            var _a;
+                            var _a, _b;
                             if ((_a = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context) === null || _a === void 0 ? void 0 : _a.requireAuth) {
                                 requestContext.context.res.status(401);
-                                requestContext.response.http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"');
+                                if ((_b = requestContext.response) === null || _b === void 0 ? void 0 : _b.http) {
+                                    requestContext.response.http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"');
+                                }
                             }
                         },
                     };
