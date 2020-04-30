@@ -33,12 +33,14 @@ async function startup() {
     const server = new apollo_server_express_1.ApolloServer({
         context: ({ req, res }) => {
             const context = { isAdmin: false, isAuth: false, requireAuth: false, res };
-            const auth = /^Basic (.+)$/.exec(req.headers.authorization || '');
-            if (auth) {
-                const user = /^([^:]*):([^:]*)$/.exec(Buffer.from(auth[1], 'base64').toString());
-                if (user) {
-                    context.isAuth = true;
-                    context.isAdmin = user[1] === config_1.Config.gqlUser && user[2] === config_1.Config.gqlPassword;
+            if (req) {
+                const auth = /^Basic (.+)$/.exec(req.headers.authorization || '');
+                if (auth) {
+                    const user = /^([^:]*):([^:]*)$/.exec(Buffer.from(auth[1], 'base64').toString());
+                    if (user) {
+                        context.isAuth = true;
+                        context.isAdmin = user[1] === config_1.Config.gqlUser && user[2] === config_1.Config.gqlPassword;
+                    }
                 }
             }
             return context;
@@ -57,11 +59,13 @@ async function startup() {
                             }
                         },
                         willSendResponse(requestContext) {
-                            var _a, _b;
-                            if ((_a = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context) === null || _a === void 0 ? void 0 : _a.requireAuth) {
-                                requestContext.context.res.status(401);
-                                if ((_b = requestContext.response) === null || _b === void 0 ? void 0 : _b.http) {
-                                    requestContext.response.http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"');
+                            var _a;
+                            const context = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context;
+                            if ((context === null || context === void 0 ? void 0 : context.requireAuth) && context.res) {
+                                context.res.status(401);
+                                const http = (_a = requestContext.response) === null || _a === void 0 ? void 0 : _a.http;
+                                if (http) {
+                                    http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"');
                                 }
                             }
                         },

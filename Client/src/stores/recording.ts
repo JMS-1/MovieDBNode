@@ -8,6 +8,7 @@ import { BasicItemStore } from './basicItem'
 import { routes } from './routes'
 
 import * as model from '../../../Server/src/model'
+import { TRecordingContainerType } from '../../../Server/src/model'
 
 const optionOrder: model.TRecordingContainerType[] = [
     model.TRecordingContainerType.Undefined,
@@ -148,11 +149,13 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         }
     }
 
-    protected toProtocol(recording: model.IRecording): Partial<model.IRecording> {
+    protected toProtocol(recording: model.IRecording, toSend = false): Partial<model.IRecording> {
         return {
             containerId: recording.containerId || null,
             containerPosition: recording.containerPosition,
-            containerType: recording.containerType,
+            containerType: toSend
+                ? recording.containerType
+                : (TRecordingContainerType[recording.containerType] as TRecordingContainerType),
             description: recording.description,
             genres: [...(recording.genres || [])],
             languages: [...(recording.languages || [])],
@@ -214,11 +217,29 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         }
     }
 
+    @action
+    createCopy(): void {
+        const current = this.toProtocol(this.workingCopy, true)
+
+        if (this.workingCopy._id) {
+            this.select('')
+        } else {
+            this.workingCopy.reset()
+        }
+
+        for (const key of Object.keys(current)) {
+            const field = key as keyof model.IRecording
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            this.workingCopy[field] = current[field] as any
+        }
+    }
+
     @computed({ keepAlive: true })
     get typeAsOptions(): DropdownItemProps[] {
         const mui = translations.strings.media.types
 
-        return optionOrder.map((t) => ({ key: t, text: mui[t], value: t }))
+        return optionOrder.map((t) => ({ key: t, text: mui[t], value: TRecordingContainerType[t] }))
     }
 
     @computed({ keepAlive: true })

@@ -35,14 +35,16 @@ async function startup(): Promise<void> {
         context: ({ req, res }) => {
             const context = { isAdmin: false, isAuth: false, requireAuth: false, res }
 
-            const auth = /^Basic (.+)$/.exec(req.headers.authorization || '')
+            if (req) {
+                const auth = /^Basic (.+)$/.exec(req.headers.authorization || '')
 
-            if (auth) {
-                const user = /^([^:]*):([^:]*)$/.exec(Buffer.from(auth[1], 'base64').toString())
+                if (auth) {
+                    const user = /^([^:]*):([^:]*)$/.exec(Buffer.from(auth[1], 'base64').toString())
 
-                if (user) {
-                    context.isAuth = true
-                    context.isAdmin = user[1] === Config.gqlUser && user[2] === Config.gqlPassword
+                    if (user) {
+                        context.isAuth = true
+                        context.isAdmin = user[1] === Config.gqlUser && user[2] === Config.gqlPassword
+                    }
                 }
             }
 
@@ -62,14 +64,15 @@ async function startup(): Promise<void> {
                             }
                         },
                         willSendResponse(requestContext) {
-                            if (requestContext?.context?.requireAuth) {
-                                requestContext.context.res.status(401)
+                            const context = requestContext?.context
 
-                                if (requestContext.response?.http) {
-                                    requestContext.response.http.headers.set(
-                                        'WWW-Authenticate',
-                                        'Basic realm="neuroomNet CMS"'
-                                    )
+                            if (context?.requireAuth && context.res) {
+                                context.res.status(401)
+
+                                const http = requestContext.response?.http
+
+                                if (http) {
+                                    http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"')
                                 }
                             }
                         },

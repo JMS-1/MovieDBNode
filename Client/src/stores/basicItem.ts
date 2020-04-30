@@ -64,7 +64,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
     }
 
     @action
-    async addOrUpdate(item?: TItem): Promise<void> {
+    async addOrUpdate(item?: TItem): Promise<boolean> {
         if (!item) {
             item = this.workingCopy
         }
@@ -88,9 +88,13 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
             }
         } catch (error) {
             this.root.requestFailed(error)
+
+            return false
         } finally {
             this.root.doneRequest()
         }
+
+        return true
     }
 
     getErrors(field: string, index?: number, subField?: string): string[] | null {

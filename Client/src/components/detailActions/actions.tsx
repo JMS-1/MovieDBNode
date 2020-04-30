@@ -11,7 +11,7 @@ interface IDetailActionsStoreItem {
 }
 
 interface IDetailActionsStore<TItem extends IDetailActionsStoreItem> {
-    addOrUpdate(): Promise<void>
+    addOrUpdate(): Promise<boolean>
     deleteConfirm: boolean
     errors: true | ValidationError[]
     workingCopy: TItem & IViewModel<TItem>
@@ -45,7 +45,7 @@ export class DetailActions<TItem extends IDetailActionsStoreItem> extends React.
         )
     }
 
-    private readonly onSave = (): Promise<void> => this.props.store.addOrUpdate()
+    private readonly onSave = (): Promise<boolean> => this.props.store.addOrUpdate()
 
     private readonly onCancel = (): void => this.props.store.workingCopy.reset()
 

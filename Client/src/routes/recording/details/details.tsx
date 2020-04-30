@@ -7,7 +7,7 @@ import { isArray } from 'util'
 import { IRecording, TRecordingContainerType } from '../../../../../Server/src/model'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { TextInput } from '../../../components/textInput/textInput'
-import { translations, recordings, series, genres, languages, containers } from '../../../stores'
+import { translations, recordings, series, genres, languages, containers, rootStore } from '../../../stores'
 import { RecordingLinks } from '../links/links'
 
 export interface IRecordingParams {
@@ -132,16 +132,20 @@ export class Recording extends React.PureComponent<IRecordingUiProps> {
         recordings.workingCopy.reset()
     }
 
-    private readonly onCopy = (): void => {
-        alert('copy')
+    private readonly onCopy = async (): Promise<void> => {
+        recordings.createCopy()
     }
 
-    private readonly onSaveAndBack = (): void => {
-        alert('save & back')
+    private readonly onSaveAndBack = async (): Promise<void> => {
+        if (await recordings.addOrUpdate()) {
+            rootStore.router.push(recordings.itemRoute)
+        }
     }
 
-    private readonly onSaveAndCopy = (): void => {
-        alert('save & back')
+    private readonly onSaveAndCopy = async (): Promise<void> => {
+        if (await recordings.addOrUpdate()) {
+            recordings.createCopy()
+        }
     }
 
     private readonly setSeries = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
