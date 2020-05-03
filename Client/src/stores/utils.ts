@@ -57,3 +57,8 @@ export function createFiltered<TItem extends IFilterNode>(
 
     return Array.from(filtered).sort((l, r) => (getName(items[l]) || l).localeCompare(getName(items[r]) || r))
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getMessage(error: any, defaultMessage = 'failed'): string {
+    return ((typeof error === 'string' ? error : error && `${error.message}`) || '').trim() || defaultMessage
+}

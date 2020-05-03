@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const isxs_tools_1 = require("@jms-1/isxs-tools");
 const schema_1 = require("@jms-1/mongodb-graphql/lib/schema");
 const apollo_server_express_1 = require("apollo-server-express");
 const body_parser_1 = require("body-parser");
@@ -17,6 +16,7 @@ const language_1 = require("./collections/language");
 const recording_1 = require("./collections/recording");
 const series_1 = require("./collections/series");
 const config_1 = require("./config");
+const utils_1 = require("./utils");
 const utfBom = Buffer.from([0xef, 0xbb, 0xbf]);
 async function startup() {
     const app = express_1.default();
@@ -85,7 +85,7 @@ async function startup() {
     app.listen(config_1.Config.port);
 }
 function startupError(error) {
-    debug_1.default('startup')('%s', isxs_tools_1.getMessage(error));
+    debug_1.default('startup')('%s', utils_1.getMessage(error));
 }
 try {
     startup().then(undefined, startupError).catch(startupError);

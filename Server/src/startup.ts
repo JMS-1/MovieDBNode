@@ -1,4 +1,3 @@
-import { getMessage } from '@jms-1/isxs-tools'
 import { createSchemaConfiguration } from '@jms-1/mongodb-graphql/lib/schema'
 import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 import { json } from 'body-parser'
@@ -13,6 +12,7 @@ import { LanguageCollection } from './collections/language'
 import { RecordingCollection, csvData } from './collections/recording'
 import { SeriesCollection } from './collections/series'
 import { Config } from './config'
+import { getMessage } from './utils'
 
 const utfBom = Buffer.from([0xef, 0xbb, 0xbf])
 

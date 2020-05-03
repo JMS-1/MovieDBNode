@@ -1,4 +1,3 @@
-import { getMessage } from '@jms-1/isxs-tools'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
@@ -16,6 +15,7 @@ import { LanguageStore } from './language'
 import { RecordingStore } from './recording'
 import { SeriesStore } from './series'
 import { TranslationStore } from './translations'
+import { getMessage } from './utils'
 
 type TThemes = 'default' | 'alternate.1' | 'alternate.2'
 
