@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const collections_1 = require("./collections");
 async function refreshRecordingNames(filter, recordings) {
     const query = [
         { $match: filter },
-        { $lookup: { as: 'series', foreignField: '_id', from: 'series', localField: 'series' } },
+        { $lookup: { as: 'series', foreignField: '_id', from: collections_1.collectionNames.series, localField: 'series' } },
         { $project: { _id: 1, name: 1, series: { $ifNull: [{ $arrayElemAt: ['$series', 0] }, null] } } },
         {
             $project: {

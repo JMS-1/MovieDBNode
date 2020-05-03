@@ -20,8 +20,8 @@ var TRecordingContainerType;
 })(TRecordingContainerType = exports.TRecordingContainerType || (exports.TRecordingContainerType = {}));
 var TRecordingSort;
 (function (TRecordingSort) {
-    TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
     TRecordingSort[TRecordingSort["created"] = 1] = "created";
+    TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
 })(TRecordingSort = exports.TRecordingSort || (exports.TRecordingSort = {}));
 
 //# sourceMappingURL=enum.js.map
