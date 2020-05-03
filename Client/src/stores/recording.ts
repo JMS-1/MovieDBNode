@@ -33,7 +33,7 @@ const initialFilter: model.IRecordingQueryArgs = {
 
 export class RecordingStore extends BasicItemStore<model.IRecording> {
     readonly itemProps =
-        '_id containerId containerPosition containerType created description fullName genres languages links { description name url } name rentTo'
+        '_id name rentTo series containerId containerPosition containerType created description fullName genres languages links { description name url }'
 
     readonly itemScope = 'recordings'
 
@@ -237,6 +237,8 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             this.workingCopy[field] = current[field] as any
         }
+
+        this.workingCopy.name = `Kopie von ${this.workingCopy.name}`
     }
 
     @computed({ keepAlive: true })

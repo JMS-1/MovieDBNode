@@ -116,7 +116,7 @@ export class RecordingLinks extends React.PureComponent<IRecordingLinksUiProps, 
 
         const { errors } = recordings
 
-        if (errors !== true && errors.some((e) => e.field.match(/^links(\[\d+\].*)?$/))) {
+        if (errors !== true && errors.some((e) => (e.field || '').match(/^links(\[\d+\].*)?$/))) {
             className += ' link-errors'
         }
 
