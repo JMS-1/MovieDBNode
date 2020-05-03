@@ -1,3 +1,4 @@
+import { TSortDirection } from '@jms-1/mongodb-graphql'
 import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
 import * as types from '@jms-1/mongodb-graphql/lib/types'
 import { FilterQuery, CollationDocument } from 'mongodb'
@@ -216,7 +217,7 @@ export const RecordingCollection = MongoConnection.createCollection(
                             {
                                 $sort: {
                                     [args.sort === TRecordingSort.created ? 'created' : 'fullName']:
-                                        args.sortOrder === types.TSortDirection.Ascending ? +1 : -1,
+                                        args.sortOrder === TSortDirection.Ascending ? +1 : -1,
                                 },
                             },
                             { $skip: args.firstPage * args.pageSize },

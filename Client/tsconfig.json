@@ -13,6 +13,7 @@
         "noUnusedLocals": true,
         "removeComments": true,
         "sourceMap": true,
+        "skipLibCheck": true,
         "strictPropertyInitialization": false,
         "target": "es2017"
     },
