@@ -94,6 +94,10 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
 
         this.queryFilter[prop] = value
 
+        if (prop !== 'firstPage') {
+            this.queryFilter.firstPage = 1
+        }
+
         this.query()
     }
 

@@ -40,7 +40,7 @@ export class Root extends React.PureComponent<IRootUiProps> {
         return (
             <div className='movie-db-root'>
                 <Dimmer page active={isBusy || errors.length > 0}>
-                    <Loader disabled={!isBusy} />
+                    <Loader active={isBusy} />
                     <Message negative hidden={errors.length < 1} onDismiss={this.onClearErrors}>
                         <Header>{translations.strings.webError}</Header>
                         <Message.List>

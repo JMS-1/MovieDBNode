@@ -39,16 +39,10 @@ export class RootStore {
 
     @observable readonly errors: string[] = []
 
-    @observable private _busySince = 0
-
     @observable private _theme: TThemes = 'default'
 
     get isBusy(): boolean {
         return this._outstandingRequests > 0
-    }
-
-    get busySince(): number {
-        return this._busySince
     }
 
     constructor() {
@@ -94,10 +88,6 @@ export class RootStore {
 
     @action
     startRequest(): void {
-        if (!this._outstandingRequests) {
-            this._busySince = Date.now()
-        }
-
         this._outstandingRequests += 1
     }
 
