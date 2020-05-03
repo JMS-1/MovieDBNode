@@ -258,31 +258,33 @@ export const RecordingCollection = MongoConnection.createCollection(
                     view: (firstRes && firstRes.view) || [],
                 }
 
-                if (args.forExport) {
-                    const languageCollection = await this.connection.getCollection(collectionNames.languages)
-                    const languages = await languageCollection.find<ILanguage>().toArray()
-
-                    const languageMap: { [id: string]: string } = {}
-                    languages.forEach((l) => (languageMap[l._id] = l.name))
-
-                    const genreCollection = await this.connection.getCollection(collectionNames.genres)
-                    const genres = await genreCollection.find<IGenre>().toArray()
-
-                    const genreMap: { [id: string]: string } = {}
-                    genres.forEach((g) => (genreMap[g._id] = g.name))
-
-                    csvData = 'Name;Sprachen;Kategorien\r\n'
-
-                    for (const recording of response.view) {
-                        const name = escape(recording.fullName)
-                        const languages = escape((recording.languages || []).map((l) => languageMap[l] || l).join('; '))
-                        const genres = escape((recording.genres || []).map((l) => genreMap[l] || l).join('; '))
-
-                        csvData += `${name};${languages};${genres}\r\n`
-                    }
+                if (!args.forExport) {
+                    return response
                 }
 
-                return response
+                const languageCollection = await this.connection.getCollection(collectionNames.languages)
+                const languages = await languageCollection.find<ILanguage>().toArray()
+
+                const languageMap: { [id: string]: string } = {}
+                languages.forEach((l) => (languageMap[l._id] = l.name))
+
+                const genreCollection = await this.connection.getCollection(collectionNames.genres)
+                const genres = await genreCollection.find<IGenre>().toArray()
+
+                const genreMap: { [id: string]: string } = {}
+                genres.forEach((g) => (genreMap[g._id] = g.name))
+
+                csvData = 'Name;Sprachen;Kategorien\r\n'
+
+                for (const recording of response.view) {
+                    const name = escape(recording.fullName)
+                    const languages = escape((recording.languages || []).map((l) => languageMap[l] || l).join('; '))
+                    const genres = escape((recording.genres || []).map((l) => genreMap[l] || l).join('; '))
+
+                    csvData += `${name};${languages};${genres}\r\n`
+                }
+
+                return { correlationId: args.correlationId, count: 0, genres: [], languages: [], total: 0, view: [] }
             }
         )
     }

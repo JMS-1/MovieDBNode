@@ -1,5 +1,7 @@
 import { FilterQuery, Collection } from 'mongodb'
 
+import { collectionNames } from './collections'
+
 import { IRecording } from '../model'
 
 interface IAggregateFullName {
@@ -13,7 +15,7 @@ export async function refreshRecordingNames(
 ): Promise<IAggregateFullName[]> {
     const query = [
         { $match: filter },
-        { $lookup: { as: 'series', foreignField: '_id', from: 'series', localField: 'series' } },
+        { $lookup: { as: 'series', foreignField: '_id', from: collectionNames.series, localField: 'series' } },
         { $project: { _id: 1, name: 1, series: { $ifNull: [{ $arrayElemAt: ['$series', 0] }, null] } } },
         {
             $project: {

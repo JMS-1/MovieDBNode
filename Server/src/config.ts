@@ -3,11 +3,11 @@ import { join } from 'path'
 
 export interface IConfiguration {
     db: string
+    gqlPassword: string
+    gqlUser: string
     password: string
     port: number
     user: string
-    gqlPassword: string
-    gqlUser: string
 }
 
 function loadConfig(name: string): IConfiguration {

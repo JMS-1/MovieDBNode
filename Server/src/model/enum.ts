@@ -17,6 +17,6 @@ export enum TRecordingContainerType {
 }
 
 export enum TRecordingSort {
-    fullName = 0,
     created = 1,
+    fullName = 0,
 }

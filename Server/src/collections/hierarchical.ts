@@ -25,6 +25,7 @@ export abstract class HierarchicalCollection<
         }
 
         const self = await this.collection
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const parent = await self.findOne({ _id: parentId } as any)
 

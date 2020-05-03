@@ -35,7 +35,7 @@ async function startup(): Promise<void> {
         context: ({ req, res }) => {
             const context = { isAdmin: false, isAuth: false, requireAuth: false, res }
 
-            if (req) {
+            if (req?.headers) {
                 const auth = /^Basic (.+)$/.exec(req.headers.authorization || '')
 
                 if (auth) {
@@ -56,7 +56,7 @@ async function startup(): Promise<void> {
                     return {
                         didEncounterErrors(requestContext) {
                             if (requestContext?.context?.requireAuth === false) {
-                                const gqlErrors = requestContext?.errors || []
+                                const gqlErrors = requestContext.errors || []
 
                                 if (gqlErrors.some((e) => e.originalError instanceof AuthenticationError)) {
                                     requestContext.context.requireAuth = true
@@ -71,7 +71,7 @@ async function startup(): Promise<void> {
 
                                 const http = requestContext.response?.http
 
-                                if (http) {
+                                if (http?.headers?.set) {
                                     http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"')
                                 }
                             }
