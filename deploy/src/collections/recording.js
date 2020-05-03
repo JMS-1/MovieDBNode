@@ -7,6 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongodb_graphql_1 = require("@jms-1/mongodb-graphql");
 const collection_1 = require("@jms-1/mongodb-graphql/lib/collection");
 const types = __importStar(require("@jms-1/mongodb-graphql/lib/types"));
 const collections_1 = require("./collections");
@@ -95,7 +96,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                     view: [
                         {
                             $sort: {
-                                [args.sort === model_1.TRecordingSort.created ? 'created' : 'fullName']: args.sortOrder === types.TSortDirection.Ascending ? +1 : -1,
+                                [args.sort === model_1.TRecordingSort.created ? 'created' : 'fullName']: args.sortOrder === mongodb_graphql_1.TSortDirection.Ascending ? +1 : -1,
                             },
                         },
                         { $skip: args.firstPage * args.pageSize },
