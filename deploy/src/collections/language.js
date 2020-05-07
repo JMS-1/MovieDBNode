@@ -1,29 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const collection_1 = require("@jms-1/mongodb-graphql/lib/collection");
 const collections_1 = require("./collections");
 const connection_1 = require("./connection");
+const foreignKey_1 = require("./foreignKey");
 const entities_1 = require("../model/entities");
-exports.LanguageCollection = connection_1.MongoConnection.createCollection(entities_1.Language, class extends collection_1.Collection {
+exports.LanguageCollection = connection_1.MongoConnection.createCollection(entities_1.Language, class extends foreignKey_1.ForeignKeyCollection {
     constructor() {
         super(...arguments);
         this.collectionName = collections_1.collectionNames.languages;
-    }
-    async initialize() {
-        const db = await this.connection.database;
-        await db.command({ collMod: this.collectionName, validator: {} });
-    }
-    async beforeRemove(_id) {
-        const recordings = await this.connection.getCollection(collections_1.collectionNames.recordings);
-        const count = await recordings.countDocuments({ languages: _id });
-        switch (count) {
-            case 0:
-                return;
-            case 1:
-                throw new Error('Sprache wird noch für eine Aufzeichnung verwendet');
-            default:
-                throw new Error(`Sprache wird noch für ${count} Aufzeichnungen verwendet`);
-        }
+        this.entityName = 'Sprache';
+        this.parentProp = 'languages';
     }
 });
 

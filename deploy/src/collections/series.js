@@ -13,8 +13,7 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
         this.parentProp = 'series';
     }
     async initialize() {
-        const db = await this.connection.database;
-        await db.command({ collMod: this.collectionName, validator: {} });
+        await super.initialize();
         const self = await this.collection;
         await self.createIndex({ fullName: 1 }, { name: 'series_full' });
         await self.createIndex({ name: 1 }, { name: 'series_name' });
@@ -31,7 +30,8 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
         const self = await this.collection;
         const children = await self.find({ parentId: series._id }).toArray();
         await super.afterRemove(series);
-        await this.updateFullNameByChildren(children, '', self, new Set());
+        const seriesIds = await this.updateFullNameByChildren(children, '', self, new Set());
+        await utils_1.refreshRecordingNames({ series: { $in: Array.from(seriesIds) } }, await this.connection.getCollection(collections_1.collectionNames.recordings));
     }
     async updateFullName(series, parent, self, updated) {
         if (updated.has(series._id)) {
@@ -54,9 +54,6 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
     }
     async refreshFullNames(series) {
         const self = await this.collection;
-        if (!series) {
-            return this.updateFullNameByParent(null, '', self, new Set());
-        }
         const parent = await self.findOne({ _id: series.parentId });
         return this.updateFullName(series, parent === null || parent === void 0 ? void 0 : parent.fullName, self, new Set());
     }

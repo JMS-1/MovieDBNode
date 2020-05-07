@@ -1,7 +1,7 @@
 {
     "dependencies": {
         "@jms-1/mongodb-graphql": "^1.0.1",
-        "apollo-server-express": "^2.12.0",
+        "apollo-server-express": "^2.13.0",
         "body-parser": "^1.19.0",
         "debug": "^4.1.1",
         "express": "^4.17.1",
@@ -16,8 +16,8 @@
         "@types/debug": "^4.1.5",
         "@types/express": "^4.17.6",
         "@types/history": "^4.7.5",
-        "@types/mongodb": "^3.5.14",
-        "@types/node": "^13.13.4",
+        "@types/mongodb": "^3.5.16",
+        "@types/node": "^13.13.5",
         "@types/react-dom": "^16.9.7",
         "@types/react-router": "^5.1.7",
         "@types/react-router-dom": "^5.1.5",

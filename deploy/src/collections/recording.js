@@ -59,7 +59,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
             language: types.GqlNullable(types.GqlString({ description: 'Optional die Sprache die eine Aufzeichnung haben muss.' })),
             pageSize: types.GqlInt({
                 description: 'Die Größe einer Ergebnisseite.',
-                validation: { max: 100000, min: 1, type: 'number' },
+                validation: { min: 1, type: 'number' },
             }),
             rent: types.GqlNullable(types.GqlBoolean({ description: 'Optional gesetzt um nur verliehene Aufzeichnungen zu erhalten.' })),
             series: types.GqlNullable(types.GqlArray(types.GqlString({
@@ -71,21 +71,22 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
             sort: entities_1.RecordingSort,
             sortOrder: types.SortDirection,
         }, entities_1.RecordingQueryResponse, 'Freie Suche über Aufzeichnungen.', async (args) => {
+            var _a, _b, _c;
             const filter = {};
             if (args.language) {
-                filter.languages = args.language.toString();
+                filter.languages = args.language;
             }
-            if (args.genres && args.genres.length > 0) {
-                filter.genres = { $all: args.genres.map((s) => s.toString()) };
+            if (((_a = args.genres) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+                filter.genres = { $all: args.genres };
             }
-            if (args.series && args.series.length > 0) {
-                filter.series = { $in: args.series.map((s) => s.toString()) };
+            if (((_b = args.series) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+                filter.series = { $in: args.series };
             }
             if (typeof args.rent === 'boolean') {
                 filter.rentTo = { $exists: args.rent };
             }
             if (args.fullName) {
-                filter.fullName = { $options: 'i', $regex: args.fullName.toString().replace(escapeReg, '\\$&') };
+                filter.fullName = { $options: 'i', $regex: args.fullName.replace(escapeReg, '\\$&') };
             }
             const query = [{ $match: filter }];
             const baseQuery = [...query];
@@ -109,7 +110,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 .aggregate(query, { collation })
                 .toArray();
             const firstRes = result && result[0];
-            const countRes = firstRes && firstRes.count && firstRes.count[0];
+            const countRes = (_c = firstRes === null || firstRes === void 0 ? void 0 : firstRes.count) === null || _c === void 0 ? void 0 : _c[0];
             delete filter.languages;
             const languageInfo = await self
                 .aggregate([
@@ -120,11 +121,11 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 .toArray();
             const response = {
                 correlationId: args.correlationId,
-                count: (countRes && countRes.total) || 0,
-                genres: (firstRes && firstRes.genres) || [],
+                count: (countRes === null || countRes === void 0 ? void 0 : countRes.total) || 0,
+                genres: (firstRes === null || firstRes === void 0 ? void 0 : firstRes.genres) || [],
                 languages: languageInfo || [],
                 total: await self.countDocuments(),
-                view: (firstRes && firstRes.view) || [],
+                view: (firstRes === null || firstRes === void 0 ? void 0 : firstRes.view) || [],
             };
             if (!args.forExport) {
                 return response;
@@ -175,9 +176,9 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
     }
     async demandForeignKeys(item) {
         await this.validateForeignKeys(collections_1.collectionNames.containers, 'Ablage', item.containerId);
-        await this.validateForeignKeys(collections_1.collectionNames.series, 'Serie', item.series);
-        await this.validateForeignKeys(collections_1.collectionNames.languages, 'Sprache', item.languages);
         await this.validateForeignKeys(collections_1.collectionNames.genres, 'Kategorie', item.genres);
+        await this.validateForeignKeys(collections_1.collectionNames.languages, 'Sprache', item.languages);
+        await this.validateForeignKeys(collections_1.collectionNames.series, 'Serie', item.series);
     }
     async setFullName(item) {
         var _a;
@@ -193,7 +194,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
     afterInsert(item) {
         return this.setFullName(item);
     }
-    beforeUpdate(item, id) {
+    beforeUpdate(item) {
         return this.demandForeignKeys(item);
     }
     afterUpdate(item) {

@@ -1,7 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const foreignKey_1 = require("./foreignKey");
-class HierarchicalCollection extends foreignKey_1.ForeignKeyCollection {
+const collection_1 = require("@jms-1/mongodb-graphql/lib/collection");
+const collections_1 = require("./collections");
+class ForeignKeyCollection extends collection_1.CollectionBase {
+    async beforeRemove(_id) {
+        const recordings = await this.connection.getCollection(collections_1.collectionNames.recordings);
+        const count = await recordings.countDocuments({ [this.parentProp]: _id });
+        switch (count) {
+            case 0:
+                return;
+            case 1:
+                throw new Error(`${this.entityName} wird noch für eine Aufzeichnung verwendet`);
+            default:
+                throw new Error(`${this.entityName} wird noch für ${count} Aufzeichnungen verwendet`);
+        }
+    }
+}
+exports.ForeignKeyCollection = ForeignKeyCollection;
+class HierarchicalCollection extends ForeignKeyCollection {
     async demandParent(parentId) {
         if (!parentId) {
             return false;
@@ -35,9 +51,8 @@ class HierarchicalCollection extends foreignKey_1.ForeignKeyCollection {
     }
     async afterRemove(item) {
         const self = await this.collection;
-        await self.updateMany({ parentId: item._id }, { $unset: { parentId: null } });
+        await self.updateMany({ parentId: item._id }, { $set: { parentId: item.parentId || null } });
     }
 }
 exports.HierarchicalCollection = HierarchicalCollection;
-
-//# sourceMappingURL=hierarchical.js.map
+//# sourceMappingURL=hierarchical copy.js.map

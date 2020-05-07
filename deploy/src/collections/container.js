@@ -11,10 +11,6 @@ exports.ContainerCollection = connection_1.MongoConnection.createCollection(enti
         this.entityName = 'Ablage';
         this.parentProp = 'containerId';
     }
-    async initialize() {
-        const db = await this.connection.database;
-        await db.command({ collMod: this.collectionName, validator: {} });
-    }
 });
 
 //# sourceMappingURL=container.js.map

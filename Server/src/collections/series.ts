@@ -12,15 +12,11 @@ export const SeriesCollection = MongoConnection.createCollection(
     Series,
     class extends HierarchicalCollection<typeof Series> {
         readonly collectionName = collectionNames.series
-
         readonly entityName = 'Serie'
-
         readonly parentProp = 'series'
 
         async initialize(): Promise<void> {
-            const db = await this.connection.database
-
-            await db.command({ collMod: this.collectionName, validator: {} })
+            await super.initialize()
 
             const self = await this.collection
 
@@ -48,7 +44,12 @@ export const SeriesCollection = MongoConnection.createCollection(
 
             await super.afterRemove(series)
 
-            await this.updateFullNameByChildren(children, '', self, new Set<string>())
+            const seriesIds = await this.updateFullNameByChildren(children, '', self, new Set<string>())
+
+            await refreshRecordingNames(
+                { series: { $in: Array.from(seriesIds) } },
+                await this.connection.getCollection(collectionNames.recordings)
+            )
         }
 
         private async updateFullName(
@@ -94,13 +95,8 @@ export const SeriesCollection = MongoConnection.createCollection(
             return this.updateFullNameByChildren(await self.find({ parentId }).toArray(), parentName, self, updated)
         }
 
-        async refreshFullNames(series?: ISeries): Promise<Set<string>> {
+        private async refreshFullNames(series: ISeries): Promise<Set<string>> {
             const self = await this.collection
-
-            if (!series) {
-                return this.updateFullNameByParent(null, '', self, new Set<string>())
-            }
-
             const parent = await self.findOne({ _id: series.parentId })
 
             return this.updateFullName(series, parent?.fullName, self, new Set<string>())

@@ -1,33 +1,14 @@
-import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
-
 import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
+import { ForeignKeyCollection } from './foreignKey'
 
 import { Genre } from '../model/entities'
 
 export const GenreCollection = MongoConnection.createCollection(
     Genre,
-    class extends Collection<typeof Genre> {
+    class extends ForeignKeyCollection<typeof Genre> {
         readonly collectionName = collectionNames.genres
-
-        async initialize(): Promise<void> {
-            const db = await this.connection.database
-
-            await db.command({ collMod: this.collectionName, validator: {} })
-        }
-
-        async beforeRemove(_id: string): Promise<void> {
-            const recordings = await this.connection.getCollection(collectionNames.recordings)
-            const count = await recordings.countDocuments({ genres: _id })
-
-            switch (count) {
-                case 0:
-                    return
-                case 1:
-                    throw new Error('Kategorie wird noch für eine Aufzeichnung verwendet')
-                default:
-                    throw new Error(`Kategorie wird noch für ${count} Aufzeichnungen verwendet`)
-            }
-        }
+        readonly entityName = 'Kategorie'
+        readonly parentProp = 'genres'
     }
 )

@@ -8,15 +8,7 @@ export const ContainerCollection = MongoConnection.createCollection(
     Container,
     class extends HierarchicalCollection<typeof Container> {
         readonly collectionName = collectionNames.containers
-
         readonly entityName = 'Ablage'
-
         readonly parentProp = 'containerId'
-
-        async initialize(): Promise<void> {
-            const db = await this.connection.database
-
-            await db.command({ collMod: this.collectionName, validator: {} })
-        }
     }
 )

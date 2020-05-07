@@ -76,9 +76,9 @@ export const RecordingCollection = MongoConnection.createCollection(
 
         private async demandForeignKeys(item: IRecording): Promise<void> {
             await this.validateForeignKeys(collectionNames.containers, 'Ablage', item.containerId)
-            await this.validateForeignKeys(collectionNames.series, 'Serie', item.series)
-            await this.validateForeignKeys(collectionNames.languages, 'Sprache', item.languages)
             await this.validateForeignKeys(collectionNames.genres, 'Kategorie', item.genres)
+            await this.validateForeignKeys(collectionNames.languages, 'Sprache', item.languages)
+            await this.validateForeignKeys(collectionNames.series, 'Serie', item.series)
         }
 
         private async setFullName(item: IRecording): Promise<void> {
@@ -99,8 +99,7 @@ export const RecordingCollection = MongoConnection.createCollection(
             return this.setFullName(item)
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        beforeUpdate(item: IRecording, id: string): Promise<void> {
+        beforeUpdate(item: IRecording): Promise<void> {
             return this.demandForeignKeys(item)
         }
 
@@ -161,7 +160,7 @@ export const RecordingCollection = MongoConnection.createCollection(
                 ),
                 pageSize: types.GqlInt({
                     description: 'Die Größe einer Ergebnisseite.',
-                    validation: { max: 100000, min: 1, type: 'number' },
+                    validation: { min: 1, type: 'number' },
                 }),
                 rent: types.GqlNullable(
                     types.GqlBoolean({ description: 'Optional gesetzt um nur verliehene Aufzeichnungen zu erhalten.' })
@@ -186,15 +185,15 @@ export const RecordingCollection = MongoConnection.createCollection(
                 const filter: FilterQuery<IRecording> = {}
 
                 if (args.language) {
-                    filter.languages = args.language.toString()
+                    filter.languages = args.language
                 }
 
-                if (args.genres && args.genres.length > 0) {
-                    filter.genres = { $all: args.genres.map((s) => s.toString()) }
+                if (args.genres?.length > 0) {
+                    filter.genres = { $all: args.genres }
                 }
 
-                if (args.series && args.series.length > 0) {
-                    filter.series = { $in: args.series.map((s) => s.toString()) }
+                if (args.series?.length > 0) {
+                    filter.series = { $in: args.series }
                 }
 
                 if (typeof args.rent === 'boolean') {
@@ -202,13 +201,14 @@ export const RecordingCollection = MongoConnection.createCollection(
                 }
 
                 if (args.fullName) {
-                    filter.fullName = { $options: 'i', $regex: args.fullName.toString().replace(escapeReg, '\\$&') }
+                    filter.fullName = { $options: 'i', $regex: args.fullName.replace(escapeReg, '\\$&') }
                 }
 
-                const query = [{ $match: filter }]
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const query: any[] = [{ $match: filter }]
                 const baseQuery = [...query]
 
-                // Für die eigentliche Ergebnisermittlung sind aller Filter aktiv.
+                // Für die eigentliche Ergebnisermittlung sind alle Filter aktiv.
                 query.push({
                     $facet: {
                         count: [{ $count: 'total' }],
@@ -224,8 +224,7 @@ export const RecordingCollection = MongoConnection.createCollection(
                             { $limit: args.pageSize },
                         ],
                     },
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                } as any)
+                })
 
                 const self = await this.collection
                 const result = await self
@@ -233,7 +232,7 @@ export const RecordingCollection = MongoConnection.createCollection(
                     .toArray()
 
                 const firstRes = result && result[0]
-                const countRes = firstRes && firstRes.count && firstRes.count[0]
+                const countRes = firstRes?.count?.[0]
 
                 // Für die Bewertung der Sprachen muss der Sprachfilter deaktiviert werden.
                 delete filter.languages
@@ -251,11 +250,11 @@ export const RecordingCollection = MongoConnection.createCollection(
 
                 const response = {
                     correlationId: args.correlationId,
-                    count: (countRes && countRes.total) || 0,
-                    genres: (firstRes && firstRes.genres) || [],
+                    count: countRes?.total || 0,
+                    genres: firstRes?.genres || [],
                     languages: languageInfo || [],
                     total: await self.countDocuments(),
-                    view: (firstRes && firstRes.view) || [],
+                    view: firstRes?.view || [],
                 }
 
                 if (!args.forExport) {
