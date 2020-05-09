@@ -1,8 +1,8 @@
 html,
 body,
 client-root {
-  width: 100%;
-  height: 100%; }
+  height: 100%;
+  width: 100%; }
   html > .ui.dimmer,
   body > .ui.dimmer,
   client-root > .ui.dimmer {
@@ -19,9 +19,9 @@ client-root {
       right: 0.5em;
       top: 0.3em;
       transform: unset; }
-      html > .ui.dimmer .ui.loader:after,
-      body > .ui.dimmer .ui.loader:after,
-      client-root > .ui.dimmer .ui.loader:after {
+      html > .ui.dimmer .ui.loader::after,
+      body > .ui.dimmer .ui.loader::after,
+      client-root > .ui.dimmer .ui.loader::after {
         border-color: black lightgray lightgray; }
   html .movie-db-tree,
   body .movie-db-tree,
@@ -48,9 +48,9 @@ body {
   margin: 0; }
 
 .movie-db-confirm-delete > .content > .actions {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
   margin-top: 1em; }
   .movie-db-confirm-delete > .content > .actions > .ui.button {
@@ -60,9 +60,9 @@ body {
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  padding: 0 0.5em 0.5em 0.5em; }
+  padding: 0 0.5em 0.5em; }
   .movie-db-master-detail-route > .master {
-    background: white;
+    background: #ffffff;
     flex-shrink: 0;
     min-width: 10vw;
     overflow: auto;
@@ -74,16 +74,16 @@ body {
     overflow: hidden; }
 
 .movie-db-root {
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
   overflow: hidden; }
   .movie-db-root > .ui.menu {
     flex-shrink: 0;
     margin-bottom: 4px; }
   .movie-db-root > .content {
-    flex-grow: 1;
     flex-basis: 0;
+    flex-grow: 1;
     overflow: hidden; }
     .movie-db-root > .content .movie-db-route {
       height: 100%; }
@@ -97,9 +97,9 @@ body {
   .movie-db-container-content > tbody > tr > th,
   .movie-db-container-content > thead > tr > td,
   .movie-db-container-content > thead > tr > th {
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; }
+    text-overflow: ellipsis;
+    white-space: nowrap; }
     .movie-db-container-content > tbody > tr > td.position,
     .movie-db-container-content > tbody > tr > th.position,
     .movie-db-container-content > thead > tr > td.position,
@@ -112,37 +112,37 @@ body {
         text-decoration: none; }
 
 .movie-db-container-details {
-  padding: 0 1em 1em 1em;
+  height: 100%;
   overflow: auto;
-  height: 100%; }
+  padding: 0 1em 1em; }
 
 .movie-db-genre-route > .master > .ui.list > .item > .ui.label {
   width: 100%; }
 
 .movie-db-genre-details {
-  padding: 0 1em 1em 1em;
-  overflow: auto; }
+  overflow: auto;
+  padding: 0 1em 1em; }
 
 .movie-db-language-route > .master > .ui.list > .item > .ui.label {
   width: 100%; }
 
 .movie-db-language-details {
-  padding: 0 1em 1em 1em;
-  overflow: auto; }
+  overflow: auto;
+  padding: 0 1em 1em; }
 
 .movie-db-recording-route {
-  overflow: hidden;
-  height: calc(100% - 1em);
-  padding: 0.5em;
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  height: calc(100% - 1em);
+  overflow: hidden;
+  padding: 0.5em; }
   .movie-db-recording-route > .filter > .search {
+    align-items: center;
     display: flex;
-    flex-direction: row;
-    align-items: center; }
+    flex-direction: row; }
     .movie-db-recording-route > .filter > .search > .movie-db-search {
-      flex-grow: 1;
-      flex-basis: 0; }
+      flex-basis: 0;
+      flex-grow: 1; }
     .movie-db-recording-route > .filter > .search > .ui.button {
       flex-shrink: 0;
       margin-left: 0.5em; }
@@ -153,40 +153,40 @@ body {
   .movie-db-recording-route > .page-size {
     align-self: flex-start; }
   .movie-db-recording-route > .count {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
     width: 100%; }
     .movie-db-recording-route > .count > .ui.segment {
       margin-bottom: 0; }
   .movie-db-recording-route > .pager {
+    align-items: center;
     display: flex;
-    flex-direction: row;
-    align-items: center; }
+    flex-direction: row; }
     .movie-db-recording-route > .pager > .ui.menu {
       margin-bottom: 0; }
     .movie-db-recording-route > .pager > .ui.pagination {
       margin-left: 0.5em; }
   .movie-db-recording-route > .table {
-    overflow: auto;
-    margin-top: 0.5em; }
+    margin-top: 0.5em;
+    overflow: auto; }
     .movie-db-recording-route > .table > .ui.table > thead > tr > th.created,
     .movie-db-recording-route > .table > .ui.table > tbody > tr > td.created {
-      width: 12em;
+      max-width: 12em;
       min-width: 12em;
-      max-width: 12em; }
+      width: 12em; }
     .movie-db-recording-route > .table > .ui.table > thead > tr > th.name,
     .movie-db-recording-route > .table > .ui.table > tbody > tr > td.name {
-      width: 40em;
+      max-width: 40em;
       min-width: 40em;
-      max-width: 40em; }
+      width: 40em; }
     .movie-db-recording-route > .table > .ui.table > thead > tr > th.languages, .movie-db-recording-route > .table > .ui.table > thead > tr > th.genres,
     .movie-db-recording-route > .table > .ui.table > tbody > tr > td.languages,
     .movie-db-recording-route > .table > .ui.table > tbody > tr > td.genres {
-      width: 20em;
+      max-width: 20em;
       min-width: 20em;
-      max-width: 20em; }
+      width: 20em; }
     .movie-db-recording-route > .table > .ui.table > thead > tr > th {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -195,29 +195,29 @@ body {
         cursor: default; }
 
 .movie-db-recording-edit {
-  padding: 0 1em 1em 1em;
+  height: calc(100% - 1em);
   overflow: auto;
-  height: calc(100% - 1em); }
+  padding: 0 1em 1em; }
 
 .movie-db-recording-item > td {
-  white-space: nowrap;
   overflow: hidden;
+  padding: 0.3em 0.2em !important;
   text-overflow: ellipsis;
-  padding: 0.3em 0.2em !important; }
+  white-space: nowrap; }
   .movie-db-recording-item > td > span.separator:last-child {
     display: none; }
   .movie-db-recording-item > td.name {
+    align-self: center;
+    cursor: pointer;
     display: flex;
     flex-direction: row;
-    align-self: center;
-    justify-content: space-between;
-    cursor: pointer; }
+    justify-content: space-between; }
     .movie-db-recording-item > td.name > div {
-      flex-grow: 1;
       flex-basis: 0;
-      white-space: nowrap;
+      flex-grow: 1;
       overflow: hidden;
-      text-overflow: ellipsis; }
+      text-overflow: ellipsis;
+      white-space: nowrap; }
     .movie-db-recording-item > td.name > .ui.icon {
       flex-shrink: 0; }
 
@@ -231,5 +231,5 @@ body {
   color: var(--semantic-error-color) !important; }
 
 .movie-db-series-details {
-  padding: 0 1em 1em 1em;
-  overflow: auto; }
+  overflow: auto;
+  padding: 0 1em 1em; }

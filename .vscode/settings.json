@@ -7,7 +7,8 @@
     },
     "css.validate": false,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": true,
+        "source.fixAll.stylelint": true
     },
     "editor.formatOnSave": true,
     "eslint.enable": true,
@@ -15,16 +16,7 @@
         "typescript",
         "typescriptreact"
     ],
-    "files.associations": {
-        "*.{overrides,variables}": "less"
-    },
-    "files.exclude": {
-        "Server/src/**/*.js": true,
-        "Server/src/**/*.js.map": true
-    },
-    "less.validate": false,
     "scss.validate": false,
-    "stylelint.autoFixOnSave": true,
     "stylelint.enable": true,
     "typescript.tsdk": "node_modules/typescript/lib"
 }

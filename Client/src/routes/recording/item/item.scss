@@ -1,27 +1,27 @@
 .movie-db-recording-item {
     > td {
-        white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis;
         padding: 0.3em 0.2em !important;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 
         > span.separator:last-child {
             display: none;
         }
 
         &.name {
+            align-self: center;
+            cursor: pointer;
             display: flex;
             flex-direction: row;
-            align-self: center;
             justify-content: space-between;
-            cursor: pointer;
 
             > div {
-                flex-grow: 1;
                 flex-basis: 0;
-                white-space: nowrap;
+                flex-grow: 1;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             > .ui.icon {

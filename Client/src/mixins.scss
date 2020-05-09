@@ -1,5 +1,5 @@
 @mixin fix-width($width) {
-    width: $width;
-    min-width: $width;
     max-width: $width;
+    min-width: $width;
+    width: $width;
 }

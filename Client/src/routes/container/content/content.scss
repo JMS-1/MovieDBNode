@@ -1,14 +1,14 @@
 .movie-db-container-content {
     margin-top: 1em;
-    
+
     > tbody,
     > thead {
         > tr {
             > td,
             > th {
-                white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                white-space: nowrap;
 
                 &.position {
                     text-align: center;

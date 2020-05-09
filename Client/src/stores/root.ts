@@ -108,6 +108,8 @@ export class RootStore {
     }
 
     startup(): void {
+        this.setTheme('default')
+
         this.containers.startup()
         this.genres.startup()
         this.languages.startup()

@@ -5,8 +5,6 @@ import { Router } from 'react-router'
 import { Root } from './components/root/root'
 import { rootStore, history } from './stores'
 
-rootStore.setTheme('default')
-
 rootStore.startup()
 
 render(
