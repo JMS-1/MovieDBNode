@@ -14,7 +14,6 @@ export abstract class HierarchicalCollection<
     TLayout = TGqlLayoutType<TModel>
 > extends ForeignKeyCollection<TModel, TItem, TLayout> {
     abstract readonly entityName: string
-
     abstract readonly parentProp: keyof IRecording
 
     private async demandParent(parentId?: string): Promise<boolean> {
