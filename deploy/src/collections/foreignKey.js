@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ForeignKeyCollection = void 0;
 const collection_1 = require("@jms-1/mongodb-graphql/lib/collection");
 const collections_1 = require("./collections");
 class ForeignKeyCollection extends collection_1.CollectionBase {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TRecordingSort = exports.TRecordingContainerType = exports.TContainerType = void 0;
 var TContainerType;
 (function (TContainerType) {
     TContainerType[TContainerType["Box"] = 2] = "Box";

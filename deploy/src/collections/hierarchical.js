@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HierarchicalCollection = void 0;
 const foreignKey_1 = require("./foreignKey");
 class HierarchicalCollection extends foreignKey_1.ForeignKeyCollection {
     async demandParent(parentId) {

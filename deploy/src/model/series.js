@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Series = void 0;
 const types_1 = require("@jms-1/mongodb-graphql/lib/types");
 const utils_1 = require("./utils");
 exports.Series = types_1.GqlObject('Series', {

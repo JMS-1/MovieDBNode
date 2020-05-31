@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.refreshRecordingNames = void 0;
 const collections_1 = require("./collections");
 async function refreshRecordingNames(filter, recordings) {
     const query = [

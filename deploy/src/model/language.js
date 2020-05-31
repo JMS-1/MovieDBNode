@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Language = void 0;
 const types_1 = require("@jms-1/mongodb-graphql/lib/types");
 exports.Language = types_1.GqlObject('Language', {
     _id: types_1.GqlId({ computed: true, description: 'Automatisch vergebene eindeutige Kennung der Sprache.' }),
