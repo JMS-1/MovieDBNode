@@ -1,17 +1,17 @@
-version: '3.3'
+version: '3.8'
 services:
     movie-db:
         environment:
             - DEBUG=startup,api,database
         image: movie-db
         networks:
-            - iSxS
+            - movie-db
         deploy:
             replicas: 1
             placement:
                 constraints:
                     - node.hostname==${THISHOST}
 networks:
-    iSxS:
+    movie-db:
         external:
             name: host
