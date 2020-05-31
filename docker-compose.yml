@@ -9,3 +9,5 @@ services:
             placement:
                 constraints:
                     - node.hostname==${THISHOST}
+        ports:
+            - "80:29099"
