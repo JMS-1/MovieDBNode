@@ -4,14 +4,8 @@ services:
         environment:
             - DEBUG=startup,api,database
         image: movie-db
-        networks:
-            - movie-db
         deploy:
             replicas: 1
             placement:
                 constraints:
                     - node.hostname==${THISHOST}
-networks:
-    movie-db:
-        external:
-            name: host
