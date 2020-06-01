@@ -140,7 +140,7 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
             _id: undefined,
             containerId: undefined,
             containerPosition: undefined,
-            containerType: undefined,
+            containerType: 'Undefined',
             created: undefined,
             description: undefined,
             fullName: undefined,
