@@ -10,4 +10,4 @@ services:
                 constraints:
                     - node.hostname==${THISHOST}
         ports:
-            - "29099:80"
+            - "80:29099"
