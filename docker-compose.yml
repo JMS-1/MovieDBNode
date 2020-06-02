@@ -4,10 +4,5 @@ services:
         environment:
             - DEBUG=startup,api,database
         image: movie-db
-        deploy:
-            replicas: 1
-            placement:
-                constraints:
-                    - node.hostname==${THISHOST}
         ports:
             - "80:29099"
