@@ -33,8 +33,6 @@
             "console": "internalConsole",
             "envFile": "${workspaceFolder}/.vscode/.env",
             "name": "Server",
-            "port": 23902,
-            "protocol": "inspector",
             "request": "launch",
             "runtimeArgs": [
                 "run-script",
@@ -43,7 +41,7 @@
             "runtimeExecutable": "npm",
             "smartStep": true,
             "sourceMaps": true,
-            "type": "node"
+            "type": "pwa-node"
         },
         {
             "console": "externalTerminal",

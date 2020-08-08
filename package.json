@@ -69,7 +69,7 @@
     "prettier": "@insynergie/prettier-config",
     "scripts": {
         "build-client": "node node_modules/webpack/bin/webpack.js --mode development",
-        "debug-server": "node --inspect-brk=23902 Server/src/startup",
+        "debug-server": "node Server/src/startup",
         "make": "gulp",
         "start": "node src/startup",
         "start-server": "node Server/src/startup",
