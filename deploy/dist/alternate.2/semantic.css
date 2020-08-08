@@ -1,5 +1,5 @@
  /*
- * # Fomantic UI - 2.8.4
+ * # Fomantic UI - 2.8.6
  * https://github.com/fomantic/Fomantic-UI
  * http://fomantic-ui.com/
  *
@@ -1389,16 +1389,19 @@ body {
 .ui.button > .icon:not(.button) {
   height: auto;
   opacity: 0.8;
-  margin: 0 0.46153846em 0 -0.23076923em;
   -webkit-transition: opacity 0.1s ease;
   transition: opacity 0.1s ease;
-  vertical-align: '';
   color: '';
 }
 
 .ui.button:not(.icon) > .icon:not(.button):not(.dropdown),
 .ui.button:not(.icon) > .icons:not(.button):not(.dropdown) {
   margin: 0 0.46153846em 0 -0.23076923em;
+  vertical-align: baseline;
+}
+
+.ui.button:not(.icon) > .icons:not(.button):not(.dropdown) > .icon {
+  vertical-align: baseline;
 }
 
 .ui.button:not(.icon) > .right.icon:not(.button):not(.dropdown) {
@@ -1522,14 +1525,19 @@ body {
 ---------------*/
 
 .ui.icon.buttons .button,
-.ui.icon.button {
+.ui.icon.button:not(.animated) {
   padding: 0.75em 0.75em 0.75em;
 }
 
+.ui.animated.icon.button > .content > .icon,
 .ui.icon.buttons .button > .icon,
 .ui.icon.button > .icon {
   opacity: 0.9;
   margin: 0 !important;
+  vertical-align: top;
+}
+
+.ui.animated.button > .content > .icon {
   vertical-align: top;
 }
 
@@ -8870,55 +8878,49 @@ i.inverted.circular.black.icon.icon.icon.icon {
 i.icon,
 i.icons {
   font-size: 16px;
+  line-height: 1;
 }
 
 i.mini.mini.mini.icon,
 i.mini.mini.mini.icons {
-  line-height: 1;
-  vertical-align: middle;
   font-size: 0.4em;
+  vertical-align: middle;
 }
 
 i.tiny.tiny.tiny.icon,
 i.tiny.tiny.tiny.icons {
-  line-height: 1;
-  vertical-align: middle;
   font-size: 0.5em;
+  vertical-align: middle;
 }
 
 i.small.small.small.icon,
 i.small.small.small.icons {
-  line-height: 1;
-  vertical-align: middle;
   font-size: 13px;
+  vertical-align: middle;
 }
 
 i.large.large.large.icon,
 i.large.large.large.icons {
-  line-height: 1;
-  vertical-align: middle;
   font-size: 18px;
+  vertical-align: middle;
 }
 
 i.big.big.big.icon,
 i.big.big.big.icons {
-  line-height: 1;
-  vertical-align: middle;
   font-size: 20px;
+  vertical-align: middle;
 }
 
 i.huge.huge.huge.icon,
 i.huge.huge.huge.icons {
-  line-height: 1;
-  vertical-align: middle;
   font-size: 28px;
+  vertical-align: middle;
 }
 
 i.massive.massive.massive.icon,
 i.massive.massive.massive.icons {
-  line-height: 1;
-  vertical-align: middle;
   font-size: 32px;
+  vertical-align: middle;
 }
 
 /*******************************
@@ -8995,7 +8997,7 @@ i.icons .inverted.corner.icon {
 }
 
 /*
-* Font Awesome 5.12.0 by @fontawesome [https://fontawesome.com]
+* Font Awesome 5.13.0 by @fontawesome [https://fontawesome.com]
 * License - https://fontawesome.com/license (Icons: CC BY 4.0 License, Fonts: SIL OFL 1.1 License, CSS: MIT License)
 */
 
@@ -9461,6 +9463,10 @@ i.icon.box:before {
 
 i.icon.box.open:before {
   content: "\f49e";
+}
+
+i.icon.box.tissue:before {
+  content: "\f95b";
 }
 
 i.icon.boxes:before {
@@ -10095,6 +10101,10 @@ i.icon.directions:before {
   content: "\f5eb";
 }
 
+i.icon.disease:before {
+  content: "\f7fa";
+}
+
 i.icon.divide:before {
   content: "\f529";
 }
@@ -10297,6 +10307,10 @@ i.icon.fast.backward:before {
 
 i.icon.fast.forward:before {
   content: "\f050";
+}
+
+i.icon.faucet:before {
+  content: "\f905";
 }
 
 i.icon.fax:before {
@@ -10719,8 +10733,16 @@ i.icon.hand.holding.heart:before {
   content: "\f4be";
 }
 
+i.icon.hand.holding.medical:before {
+  content: "\f95c";
+}
+
 i.icon.hand.holding.usd:before {
   content: "\f4c0";
+}
+
+i.icon.hand.holding.water:before {
+  content: "\f4c1";
 }
 
 i.icon.hand.lizard:before {
@@ -10767,6 +10789,10 @@ i.icon.hand.scissors:before {
   content: "\f257";
 }
 
+i.icon.hand.sparkles:before {
+  content: "\f95d";
+}
+
 i.icon.hand.spock:before {
   content: "\f259";
 }
@@ -10779,8 +10805,20 @@ i.icon.hands.helping:before {
   content: "\f4c4";
 }
 
+i.icon.hands.wash:before {
+  content: "\f95e";
+}
+
 i.icon.handshake:before {
   content: "\f2b5";
+}
+
+i.icon.handshake.alternate.slash:before {
+  content: "\f95f";
+}
+
+i.icon.handshake.slash:before {
+  content: "\f960";
 }
 
 i.icon.hanukiah:before {
@@ -10809,6 +10847,22 @@ i.icon.hat.wizard:before {
 
 i.icon.hdd:before {
   content: "\f0a0";
+}
+
+i.icon.head.side.cough:before {
+  content: "\f961";
+}
+
+i.icon.head.side.cough.slash:before {
+  content: "\f962";
+}
+
+i.icon.head.side.mask:before {
+  content: "\f963";
+}
+
+i.icon.head.side.virus:before {
+  content: "\f964";
 }
 
 i.icon.heading:before {
@@ -10891,6 +10945,10 @@ i.icon.hospital.symbol:before {
   content: "\f47e";
 }
 
+i.icon.hospital.user:before {
+  content: "\f80d";
+}
+
 i.icon.hot.tub:before {
   content: "\f593";
 }
@@ -10921,6 +10979,10 @@ i.icon.hourglass.start:before {
 
 i.icon.house.damage:before {
   content: "\f6f1";
+}
+
+i.icon.house.user:before {
+  content: "\f965";
 }
 
 i.icon.hryvnia:before {
@@ -11055,6 +11117,10 @@ i.icon.laptop.code:before {
   content: "\f5fc";
 }
 
+i.icon.laptop.house:before {
+  content: "\f966";
+}
+
 i.icon.laptop.medical:before {
   content: "\f812";
 }
@@ -11169,6 +11235,14 @@ i.icon.low.vision:before {
 
 i.icon.luggage.cart:before {
   content: "\f59d";
+}
+
+i.icon.lungs:before {
+  content: "\f604";
+}
+
+i.icon.lungs.virus:before {
+  content: "\f967";
 }
 
 i.icon.magic:before {
@@ -11531,6 +11605,10 @@ i.icon.pencil.ruler:before {
   content: "\f5ae";
 }
 
+i.icon.people.arrows:before {
+  content: "\f968";
+}
+
 i.icon.people.carry:before {
   content: "\f4ce";
 }
@@ -11605,6 +11683,10 @@ i.icon.plane.arrival:before {
 
 i.icon.plane.departure:before {
   content: "\f5b0";
+}
+
+i.icon.plane.slash:before {
+  content: "\f969";
 }
 
 i.icon.play:before {
@@ -11697,6 +11779,14 @@ i.icon.procedures:before {
 
 i.icon.project.diagram:before {
   content: "\f542";
+}
+
+i.icon.pump.medical:before {
+  content: "\f96a";
+}
+
+i.icon.pump.soap:before {
+  content: "\f96b";
 }
 
 i.icon.puzzle.piece:before {
@@ -11947,6 +12037,10 @@ i.icon.shield.alternate:before {
   content: "\f3ed";
 }
 
+i.icon.shield.virus:before {
+  content: "\f96c";
+}
+
 i.icon.ship:before {
   content: "\f21a";
 }
@@ -12085,6 +12179,10 @@ i.icon.snowman:before {
 
 i.icon.snowplow:before {
   content: "\f7d2";
+}
+
+i.icon.soap:before {
+  content: "\f96e";
 }
 
 i.icon.socks:before {
@@ -12251,12 +12349,24 @@ i.icon.stopwatch:before {
   content: "\f2f2";
 }
 
+i.icon.stopwatch.20:before {
+  content: "\f96f";
+}
+
 i.icon.store:before {
   content: "\f54e";
 }
 
 i.icon.store.alternate:before {
   content: "\f54f";
+}
+
+i.icon.store.alternate.slash:before {
+  content: "\f970";
+}
+
+i.icon.store.slash:before {
+  content: "\f971";
 }
 
 i.icon.stream:before {
@@ -12497,6 +12607,10 @@ i.icon.toilet:before {
 
 i.icon.toilet.paper:before {
   content: "\f71e";
+}
+
+i.icon.toilet.paper.slash:before {
+  content: "\f972";
 }
 
 i.icon.toolbox:before {
@@ -12797,6 +12911,18 @@ i.icon.video.slash:before {
 
 i.icon.vihara:before {
   content: "\f6a7";
+}
+
+i.icon.virus:before {
+  content: "\f974";
+}
+
+i.icon.virus.slash:before {
+  content: "\f975";
+}
+
+i.icon.viruses:before {
+  content: "\f976";
 }
 
 i.icon.voicemail:before {
@@ -15205,6 +15331,11 @@ i.icon.d.and.d.beyond:before {
   font-family: 'brand-icons';
 }
 
+i.icon.dailymotion:before {
+  content: "\f952";
+  font-family: 'brand-icons';
+}
+
 i.icon.dashcube:before {
   content: "\f210";
   font-family: 'brand-icons';
@@ -15735,6 +15866,11 @@ i.icon.instagram:before {
   font-family: 'brand-icons';
 }
 
+i.icon.instagram.square:before {
+  content: "\f955";
+  font-family: 'brand-icons';
+}
+
 i.icon.intercom:before {
   content: "\f7af";
   font-family: 'brand-icons';
@@ -15987,6 +16123,11 @@ i.icon.mix:before {
 
 i.icon.mixcloud:before {
   content: "\f289";
+  font-family: 'brand-icons';
+}
+
+i.icon.mixer:before {
+  content: "\f956";
   font-family: 'brand-icons';
 }
 
@@ -16367,6 +16508,11 @@ i.icon.servicestack:before {
 
 i.icon.shirtsinbulk:before {
   content: "\f214";
+  font-family: 'brand-icons';
+}
+
+i.icon.shopify:before {
+  content: "\f957";
   font-family: 'brand-icons';
 }
 
@@ -19178,16 +19324,16 @@ img.ui.bordered.image {
   border-bottom: 1px solid #E0B4B4;
 }
 
-.ui.form > .field.error > .ui.left.action.input > .ui.button,
+.ui.form > .field.error > .ui[class*="left action"].input > .ui.button,
 .ui.form > .field.error > .ui.labeled.input:not(.right):not([class*="corner labeled"]) > .ui.label,
-.ui.left.action.input.error > .ui.button,
+.ui[class*="left action"].input.error > .ui.button,
 .ui.labeled.input.error:not(.right):not([class*="corner labeled"]) > .ui.label {
   border-left: 1px solid #E0B4B4;
 }
 
-.ui.form > .field.error > .ui.action.input:not(.left) > input + .ui.button,
+.ui.form > .field.error > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form > .field.error > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
-.ui.action.input.error:not(.left) > input + .ui.button,
+.ui.action.input.error:not([class*="left action"]) > input + .ui.button,
 .ui.right.labeled.input.error:not([class*="corner labeled"]) > input + .ui.label {
   border-right: 1px solid #E0B4B4;
 }
@@ -19205,16 +19351,16 @@ img.ui.bordered.image {
   border-bottom: 1px solid #A9D5DE;
 }
 
-.ui.form > .field.info > .ui.left.action.input > .ui.button,
+.ui.form > .field.info > .ui[class*="left action"].input > .ui.button,
 .ui.form > .field.info > .ui.labeled.input:not(.right):not([class*="corner labeled"]) > .ui.label,
-.ui.left.action.input.info > .ui.button,
+.ui[class*="left action"].input.info > .ui.button,
 .ui.labeled.input.info:not(.right):not([class*="corner labeled"]) > .ui.label {
   border-left: 1px solid #A9D5DE;
 }
 
-.ui.form > .field.info > .ui.action.input:not(.left) > input + .ui.button,
+.ui.form > .field.info > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form > .field.info > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
-.ui.action.input.info:not(.left) > input + .ui.button,
+.ui.action.input.info:not([class*="left action"]) > input + .ui.button,
 .ui.right.labeled.input.info:not([class*="corner labeled"]) > input + .ui.label {
   border-right: 1px solid #A9D5DE;
 }
@@ -19232,16 +19378,16 @@ img.ui.bordered.image {
   border-bottom: 1px solid #A3C293;
 }
 
-.ui.form > .field.success > .ui.left.action.input > .ui.button,
+.ui.form > .field.success > .ui[class*="left action"].input > .ui.button,
 .ui.form > .field.success > .ui.labeled.input:not(.right):not([class*="corner labeled"]) > .ui.label,
-.ui.left.action.input.success > .ui.button,
+.ui[class*="left action"].input.success > .ui.button,
 .ui.labeled.input.success:not(.right):not([class*="corner labeled"]) > .ui.label {
   border-left: 1px solid #A3C293;
 }
 
-.ui.form > .field.success > .ui.action.input:not(.left) > input + .ui.button,
+.ui.form > .field.success > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form > .field.success > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
-.ui.action.input.success:not(.left) > input + .ui.button,
+.ui.action.input.success:not([class*="left action"]) > input + .ui.button,
 .ui.right.labeled.input.success:not([class*="corner labeled"]) > input + .ui.label {
   border-right: 1px solid #A3C293;
 }
@@ -19259,16 +19405,16 @@ img.ui.bordered.image {
   border-bottom: 1px solid #C9BA9B;
 }
 
-.ui.form > .field.warning > .ui.left.action.input > .ui.button,
+.ui.form > .field.warning > .ui[class*="left action"].input > .ui.button,
 .ui.form > .field.warning > .ui.labeled.input:not(.right):not([class*="corner labeled"]) > .ui.label,
-.ui.left.action.input.warning > .ui.button,
+.ui[class*="left action"].input.warning > .ui.button,
 .ui.labeled.input.warning:not(.right):not([class*="corner labeled"]) > .ui.label {
   border-left: 1px solid #C9BA9B;
 }
 
-.ui.form > .field.warning > .ui.action.input:not(.left) > input + .ui.button,
+.ui.form > .field.warning > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form > .field.warning > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
-.ui.action.input.warning:not(.left) > input + .ui.button,
+.ui.action.input.warning:not([class*="left action"]) > input + .ui.button,
 .ui.right.labeled.input.warning:not([class*="corner labeled"]) > input + .ui.label {
   border-right: 1px solid #C9BA9B;
 }
@@ -19633,12 +19779,32 @@ a.ui.label {
   margin-bottom: 2rem !important;
 }
 
+.ui.segment:not(.basic) > .ui.top.attached.label {
+  margin-top: -1px;
+}
+
+.ui.segment:not(.basic) > .ui.bottom.attached.label {
+  margin-bottom: -1px;
+}
+
+.ui.segment:not(.basic) > .ui.attached.label:not(.right) {
+  margin-left: -1px;
+}
+
+.ui.segment:not(.basic) > .ui.right.attached.label {
+  margin-right: -1px;
+}
+
+.ui.segment:not(.basic) > .ui.attached.label:not(.left):not(.right) {
+  width: calc(100% + 2px);
+}
+
 /*******************************
              Types
 *******************************/
 
 .ui.image.label {
-  width: auto !important;
+  width: auto;
   margin-top: 0;
   margin-bottom: 0;
   max-width: 9999px;
@@ -19649,6 +19815,10 @@ a.ui.label {
   border-radius: 0.30769231rem;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+.ui.image.label.attached:not(.basic) {
+  padding: 0.5833em 0.833em 0.5833em 0.5em;
 }
 
 .ui.image.label img {
@@ -19664,6 +19834,16 @@ a.ui.label {
   margin: -0.5833em -0.833em -0.5833em 0.5em;
   padding: 0.5833em 0.833em;
   border-radius: 0 0.30769231rem 0.30769231rem 0;
+}
+
+.ui.bottom.attached.image.label:not(.right) > img,
+.ui.top.right.attached.image.label > img {
+  border-top-left-radius: 0;
+}
+
+.ui.top.attached.image.label:not(.right) > img,
+.ui.bottom.right.attached.image.label > img {
+  border-bottom-left-radius: 0;
 }
 
 /*-------------------
@@ -19953,7 +20133,7 @@ a.ui.label {
 
 .ui[class*="top left attached"].label {
   width: auto;
-  margin-top: 0 !important;
+  margin-top: 0;
   border-radius: 0.23076923rem 0 0.30769231rem 0;
 }
 
@@ -20078,6 +20258,18 @@ a.ui.active.label:hover:before {
   color: rgba(0, 0, 0, 0.87);
   -webkit-box-shadow: none;
   box-shadow: none;
+  padding-top: calc(0.5833em - 1px);
+  padding-bottom: calc(0.5833em - 1px);
+  padding-right: calc(0.833em - 1px);
+}
+
+.ui.basic.labels:not(.tag):not(.image):not(.ribbon) .label,
+.ui.basic.label:not(.tag):not(.image):not(.ribbon) {
+  padding-left: calc(0.833em - 1px);
+}
+
+.ui.basic.image.label {
+  padding-left: calc(0.5em - 1px);
 }
 
 /* Link */
@@ -25901,6 +26093,14 @@ ol.ui.suffixed.list li:before,
   display: none;
 }
 
+.ui.right.vertical.steps .step:after {
+  border-width: 1px 0 0 1px;
+  left: 0;
+  right: 100%;
+  -webkit-transform: translateY(-50%) translateX(-50%) rotate(-45deg);
+  transform: translateY(-50%) translateX(-50%) rotate(-45deg);
+}
+
 .ui.vertical.steps .active.step:after {
   display: block;
 }
@@ -27002,34 +27202,34 @@ ol.ui.suffixed.list li:before,
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.075) inset, 0px 0px 5px rgba(81, 167, 232, 0.5);
 }
 
-.ui.form .ui.action.input:not(.left) input:not([type]):focus,
-.ui.form .ui.action.input:not(.left) input[type="date"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="datetime-local"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="email"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="number"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="password"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="search"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="tel"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="time"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="text"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="file"]:focus,
-.ui.form .ui.action.input:not(.left) input[type="url"]:focus {
+.ui.form .ui.action.input:not([class*="left action"]) input:not([type]):focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="date"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="datetime-local"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="email"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="number"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="password"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="search"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="tel"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="time"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="text"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="file"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) input[type="url"]:focus {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.ui.form .ui.action.input.left input:not([type]),
-.ui.form .ui.action.input.left input[type="date"],
-.ui.form .ui.action.input.left input[type="datetime-local"],
-.ui.form .ui.action.input.left input[type="email"],
-.ui.form .ui.action.input.left input[type="number"],
-.ui.form .ui.action.input.left input[type="password"],
-.ui.form .ui.action.input.left input[type="search"],
-.ui.form .ui.action.input.left input[type="tel"],
-.ui.form .ui.action.input.left input[type="time"],
-.ui.form .ui.action.input.left input[type="text"],
-.ui.form .ui.action.input.left input[type="file"],
-.ui.form .ui.action.input.left input[type="url"] {
+.ui.form .ui[class*="left action"].input input:not([type]),
+.ui.form .ui[class*="left action"].input input[type="date"],
+.ui.form .ui[class*="left action"].input input[type="datetime-local"],
+.ui.form .ui[class*="left action"].input input[type="email"],
+.ui.form .ui[class*="left action"].input input[type="number"],
+.ui.form .ui[class*="left action"].input input[type="password"],
+.ui.form .ui[class*="left action"].input input[type="search"],
+.ui.form .ui[class*="left action"].input input[type="tel"],
+.ui.form .ui[class*="left action"].input input[type="time"],
+.ui.form .ui[class*="left action"].input input[type="text"],
+.ui.form .ui[class*="left action"].input input[type="file"],
+.ui.form .ui[class*="left action"].input input[type="url"] {
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
 }
@@ -30902,27 +31102,29 @@ ol.ui.suffixed.list li:before,
       Very compact
   -----------------*/
 
-.ui[class*="very compact"].grid > .column:not(.row),
-.ui[class*="very compact"].grid > .row > .column {
+.ui.ui.ui[class*="very compact"].grid > .column:not(.row),
+.ui.ui.ui[class*="very compact"].grid > .row > .column {
   padding-left: 0.19225rem;
-  padding-right: 0.3845rem;
+  padding-right: 0.19225rem;
 }
 
-.ui[class*="very compact"].grid > * {
+.ui.ui.ui[class*="very compact"].grid > * {
   padding-left: 0.19225rem;
   padding-right: 0.19225rem;
 }
 
 /* Row */
 
-.ui[class*="very compact"].grid > .row {
+.ui.ui.ui[class*="very compact"].grid > .row {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+  padding-left: 0.57675rem;
+  padding-right: 0.57675rem;
 }
 
 /* Columns */
 
-.ui[class*="very compact"].grid > .column:not(.row) {
+.ui.ui.ui[class*="very compact"].grid > .column:not(.row) {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
@@ -41892,6 +42094,10 @@ a.inverted.ui.card:hover,
   transform-origin: center center;
 }
 
+.ui.page.dimmer.modals {
+  -moz-perspective: none;
+}
+
 body.animating.in.dimmable,
 body.dimmed.dimmable {
   overflow: hidden;
@@ -42473,7 +42679,7 @@ body.dimmable > .dimmer {
   top: 0;
   left: 100%;
   right: auto;
-  margin: 0 0 0 -0.5em !important;
+  margin: 0 -0.5em !important;
   border-radius: 0.2307em !important;
   z-index: 21 !important;
 }
@@ -42560,9 +42766,9 @@ body.dimmable > .dimmer {
 
 /* Automatically float dropdown menu right on last menu item */
 
-.ui.menu .right.menu .dropdown:last-child .menu,
-.ui.menu .right.dropdown.item .menu,
-.ui.buttons > .ui.dropdown:last-child .menu {
+.ui.menu .right.menu .dropdown:last-child > .menu:not(.left),
+.ui.menu .right.dropdown.item > .menu:not(.left),
+.ui.buttons > .ui.dropdown:last-child > .menu:not(.left) {
   left: auto;
   right: 0;
 }
@@ -43763,13 +43969,21 @@ select.ui.dropdown {
 }
 
 .ui.simple.dropdown > .menu > .item:active > .menu,
-.ui.simple.dropdown:hover > .menu > .item:hover > .menu {
+.ui.simple.dropdown .menu .item:hover > .menu {
   overflow: visible;
   width: auto;
   height: auto;
   top: 0 !important;
-  left: 100% !important;
+  left: 100%;
   opacity: 1;
+}
+
+.ui.simple.dropdown > .menu > .item:active > .left.menu,
+.ui.simple.dropdown .menu .item:hover > .left.menu,
+.right.menu .ui.simple.dropdown > .menu > .item:active > .menu:not(.right),
+.right.menu .ui.simple.dropdown > .menu .item:hover > .menu:not(.right) {
+  left: auto;
+  right: 100%;
 }
 
 .ui.simple.disabled.dropdown:hover .menu {
@@ -44779,7 +44993,7 @@ select.ui.dropdown {
   text-align: right;
 }
 
-.ui.modal .actions > .button {
+.ui.modal .actions > .button:not(.fluid) {
   margin-left: 0.75em;
 }
 
@@ -44877,7 +45091,7 @@ select.ui.dropdown {
     flex-direction: column;
   }
 
-  .ui.modal .content > .image {
+  .ui.modal > .content > .image {
     display: block;
     max-width: 100%;
     margin: 0 auto !important;
@@ -44892,7 +45106,7 @@ select.ui.dropdown {
 
   /*rtl:ignore*/
 
-  .ui.modal .content > .description {
+  .ui.modal > .content > .description {
     display: block;
     width: 100% !important;
     margin: 0 !important;
@@ -46700,40 +46914,69 @@ a.ui.nag {
 /* Single Digits */
 
 .ui.indicating.progress[data-percent="1"] .bar,
+.ui.indicating.progress[data-percent^="1."] .bar,
 .ui.indicating.progress[data-percent="2"] .bar,
+.ui.indicating.progress[data-percent^="2."] .bar,
 .ui.indicating.progress[data-percent="3"] .bar,
+.ui.indicating.progress[data-percent^="3."] .bar,
 .ui.indicating.progress[data-percent="4"] .bar,
+.ui.indicating.progress[data-percent^="4."] .bar,
 .ui.indicating.progress[data-percent="5"] .bar,
+.ui.indicating.progress[data-percent^="5."] .bar,
 .ui.indicating.progress[data-percent="6"] .bar,
+.ui.indicating.progress[data-percent^="6."] .bar,
 .ui.indicating.progress[data-percent="7"] .bar,
+.ui.indicating.progress[data-percent^="7."] .bar,
 .ui.indicating.progress[data-percent="8"] .bar,
-.ui.indicating.progress[data-percent="9"] .bar {
+.ui.indicating.progress[data-percent^="8."] .bar,
+.ui.indicating.progress[data-percent="9"] .bar,
+.ui.indicating.progress[data-percent^="9."] .bar {
   background-color: #D95C5C;
 }
 
 .ui.indicating.progress[data-percent="0"] .label,
+.ui.indicating.progress[data-percent^="0."] .label,
 .ui.indicating.progress[data-percent="1"] .label,
+.ui.indicating.progress[data-percent^="1."] .label,
 .ui.indicating.progress[data-percent="2"] .label,
+.ui.indicating.progress[data-percent^="2."] .label,
 .ui.indicating.progress[data-percent="3"] .label,
+.ui.indicating.progress[data-percent^="3."] .label,
 .ui.indicating.progress[data-percent="4"] .label,
+.ui.indicating.progress[data-percent^="4."] .label,
 .ui.indicating.progress[data-percent="5"] .label,
+.ui.indicating.progress[data-percent^="5."] .label,
 .ui.indicating.progress[data-percent="6"] .label,
+.ui.indicating.progress[data-percent^="6."] .label,
 .ui.indicating.progress[data-percent="7"] .label,
+.ui.indicating.progress[data-percent^="7."] .label,
 .ui.indicating.progress[data-percent="8"] .label,
-.ui.indicating.progress[data-percent="9"] .label {
+.ui.indicating.progress[data-percent^="8."] .label,
+.ui.indicating.progress[data-percent="9"] .label,
+.ui.indicating.progress[data-percent^="9."] .label {
   color: rgba(0, 0, 0, 0.87);
 }
 
 .ui.inverted.indicating.progress[data-percent="0"] .label,
+.ui.inverted.indicating.progress[data-percent^="0."] .label,
 .ui.inverted.indicating.progress[data-percent="1"] .label,
+.ui.inverted.indicating.progress[data-percent^="1."] .label,
 .ui.inverted.indicating.progress[data-percent="2"] .label,
+.ui.inverted.indicating.progress[data-percent^="2."] .label,
 .ui.inverted.indicating.progress[data-percent="3"] .label,
+.ui.inverted.indicating.progress[data-percent^="3."] .label,
 .ui.inverted.indicating.progress[data-percent="4"] .label,
+.ui.inverted.indicating.progress[data-percent^="4."] .label,
 .ui.inverted.indicating.progress[data-percent="5"] .label,
+.ui.inverted.indicating.progress[data-percent^="5."] .label,
 .ui.inverted.indicating.progress[data-percent="6"] .label,
+.ui.inverted.indicating.progress[data-percent^="6."] .label,
 .ui.inverted.indicating.progress[data-percent="7"] .label,
+.ui.inverted.indicating.progress[data-percent^="7."] .label,
 .ui.inverted.indicating.progress[data-percent="8"] .label,
-.ui.inverted.indicating.progress[data-percent="9"] .label {
+.ui.inverted.indicating.progress[data-percent^="8."] .label,
+.ui.inverted.indicating.progress[data-percent="9"] .label,
+.ui.inverted.indicating.progress[data-percent^="9."] .label {
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -48389,6 +48632,116 @@ a.ui.nag {
 *******************************/
 
 /*-------------------
+       Scrolling
+  --------------------*/
+
+.ui.scrolling.search > .results,
+.ui.search.long > .results,
+.ui.search.short > .results {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media only screen and (max-width: 1048.98px) {
+  .ui.scrolling.search > .results {
+    max-height: 12.08923077em;
+  }
+}
+
+@media only screen and (min-width: 1049px) {
+  .ui.scrolling.search > .results {
+    max-height: 18.13384615em;
+  }
+}
+
+@media only screen and (min-width: 1049px) {
+  .ui.scrolling.search > .results {
+    max-height: 24.17846154em;
+  }
+}
+
+@media only screen and (min-width: 1920px) {
+  .ui.scrolling.search > .results {
+    max-height: 36.26769231em;
+  }
+}
+
+@media only screen and (max-width: 1048.98px) {
+  .ui.search.short > .results {
+    max-height: 12.08923077em;
+  }
+
+  .ui.search[class*="very short"] > .results {
+    max-height: 9.06692308em;
+  }
+
+  .ui.search.long > .results {
+    max-height: 24.17846154em;
+  }
+
+  .ui.search[class*="very long"] > .results {
+    max-height: 36.26769231em;
+  }
+}
+
+@media only screen and (min-width: 1049px) {
+  .ui.search.short > .results {
+    max-height: 18.13384615em;
+  }
+
+  .ui.search[class*="very short"] > .results {
+    max-height: 13.60038462em;
+  }
+
+  .ui.search.long > .results {
+    max-height: 36.26769231em;
+  }
+
+  .ui.search[class*="very long"] > .results {
+    max-height: 54.40153846em;
+  }
+}
+
+@media only screen and (min-width: 1049px) {
+  .ui.search.short > .results {
+    max-height: 24.17846154em;
+  }
+
+  .ui.search[class*="very short"] > .results {
+    max-height: 18.13384615em;
+  }
+
+  .ui.search.long > .results {
+    max-height: 48.35692308em;
+  }
+
+  .ui.search[class*="very long"] > .results {
+    max-height: 72.53538462em;
+  }
+}
+
+@media only screen and (min-width: 1920px) {
+  .ui.search.short > .results {
+    max-height: 36.26769231em;
+  }
+
+  .ui.search[class*="very short"] > .results {
+    max-height: 27.20076923em;
+  }
+
+  .ui.search.long > .results {
+    max-height: 72.53538462em;
+  }
+
+  .ui.search[class*="very long"] > .results {
+    max-height: 108.80307692em;
+  }
+}
+
+/*-------------------
        Left / Right
   --------------------*/
 
@@ -49555,8 +49908,8 @@ body.pushable > .pusher {
 */
 
 /*--------------
-     Browse
----------------*/
+       Browse
+  ---------------*/
 
 .transition.browse {
   -webkit-animation-duration: 500ms;
@@ -49740,8 +50093,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-     Drop
----------------*/
+       Drop
+  ---------------*/
 
 .drop.transition {
   -webkit-transform-origin: top center;
@@ -49821,8 +50174,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-      Fade
----------------*/
+        Fade
+  ---------------*/
 
 .transition.fade.in {
   -webkit-animation-name: fadeIn;
@@ -50143,8 +50496,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-     Flips
----------------*/
+       Flips
+  ---------------*/
 
 .flip.transition.in,
 .flip.transition.out {
@@ -50289,8 +50642,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-      Scale
----------------*/
+        Scale
+  ---------------*/
 
 .scale.transition.in {
   -webkit-animation-name: scaleIn;
@@ -50361,8 +50714,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-      Fly
----------------*/
+        Fly
+  ---------------*/
 
 /* Inward */
 
@@ -50902,8 +51255,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-     Slide
----------------*/
+       Slide
+  ---------------*/
 
 .transition.slide.in,
 .transition[class*="slide down"].in {
@@ -50923,15 +51276,15 @@ body.pushable > .pusher {
 .transition[class*="slide left"].in {
   -webkit-animation-name: slideInX;
   animation-name: slideInX;
-  -webkit-transform-origin: center right;
-  transform-origin: center right;
+  -webkit-transform-origin: right center;
+  transform-origin: right center;
 }
 
 .transition[class*="slide right"].in {
   -webkit-animation-name: slideInX;
   animation-name: slideInX;
-  -webkit-transform-origin: center left;
-  transform-origin: center left;
+  -webkit-transform-origin: left center;
+  transform-origin: left center;
 }
 
 .transition.slide.out,
@@ -50952,15 +51305,15 @@ body.pushable > .pusher {
 .transition[class*="slide left"].out {
   -webkit-animation-name: slideOutX;
   animation-name: slideOutX;
-  -webkit-transform-origin: center right;
-  transform-origin: center right;
+  -webkit-transform-origin: right center;
+  transform-origin: right center;
 }
 
 .transition[class*="slide right"].out {
   -webkit-animation-name: slideOutX;
   animation-name: slideOutX;
-  -webkit-transform-origin: center left;
-  transform-origin: center left;
+  -webkit-transform-origin: left center;
+  transform-origin: left center;
 }
 
 /* In */
@@ -51080,8 +51433,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-     Swing
----------------*/
+       Swing
+  ---------------*/
 
 .transition.swing {
   -webkit-animation-duration: 800ms;
@@ -51105,15 +51458,15 @@ body.pushable > .pusher {
 .transition[class*="swing left"].in {
   -webkit-animation-name: swingInY;
   animation-name: swingInY;
-  -webkit-transform-origin: center right;
-  transform-origin: center right;
+  -webkit-transform-origin: right center;
+  transform-origin: right center;
 }
 
 .transition[class*="swing right"].in {
   -webkit-animation-name: swingInY;
   animation-name: swingInY;
-  -webkit-transform-origin: center left;
-  transform-origin: center left;
+  -webkit-transform-origin: left center;
+  transform-origin: left center;
 }
 
 .transition.swing.out,
@@ -51134,15 +51487,15 @@ body.pushable > .pusher {
 .transition[class*="swing left"].out {
   -webkit-animation-name: swingOutY;
   animation-name: swingOutY;
-  -webkit-transform-origin: center right;
-  transform-origin: center right;
+  -webkit-transform-origin: right center;
+  transform-origin: right center;
 }
 
 .transition[class*="swing right"].out {
   -webkit-animation-name: swingOutY;
   animation-name: swingOutY;
-  -webkit-transform-origin: center left;
-  transform-origin: center left;
+  -webkit-transform-origin: left center;
+  transform-origin: left center;
 }
 
 /* In */
@@ -51382,8 +51735,8 @@ body.pushable > .pusher {
 }
 
 /*--------------
-      Zoom
----------------*/
+        Zoom
+  ---------------*/
 
 .transition.zoom.in {
   -webkit-animation-name: zoomIn;
