@@ -17,17 +17,21 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     protected abstract readonly validationName: string
 
-    @observable protected _items: Record<string, TItem> = {}
+    _items: Record<string, TItem> = {}
 
-    @observable private _selected?: string = ''
+    _selected?: string = ''
 
-    @observable deleteConfirm = false
+    deleteConfirm = false
 
-    @observable filter = ''
+    filter = ''
 
     constructor(public readonly root: RootStore) {
         makeObservable(this, {
+            _items: observable,
+            _selected: observable,
+            deleteConfirm: observable,
             errors: computed({ keepAlive: true }),
+            filter: observable,
             inputValidation: computed({ keepAlive: true }),
             selected: computed({ keepAlive: true }),
             updateValidation: computed({ keepAlive: true }),

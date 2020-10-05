@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { SemanticICONS } from 'semantic-ui-react'
 
 import { RootStore } from './root'
@@ -6,9 +6,11 @@ import { RootStore } from './root'
 import { TRecordingContainerType } from '../../../Server/src/model'
 
 export class TranslationStore {
-    constructor(public readonly root: RootStore) {}
+    constructor(public readonly root: RootStore) {
+        makeObservable(this, { strings: observable })
+    }
 
-    @observable readonly strings = {
+    strings = {
         cancel: 'Abbrechen',
         confirm: 'Bestätigung erforderlich',
         container: {

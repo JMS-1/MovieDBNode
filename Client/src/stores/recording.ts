@@ -72,9 +72,9 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
             ) { correlationId count total genres { _id count } languages { _id count } view { ${this.itemProps} } } }
         }`
 
-    @observable queryFilter = initialFilter
+    queryFilter = initialFilter
 
-    @observable queryResult: model.IRecordingQueryResult = {
+    queryResult: model.IRecordingQueryResult = {
         correlationId: '',
         count: 0,
         genres: [],
@@ -89,6 +89,8 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         makeObservable(this, {
             genreCounts: computed({ keepAlive: true }),
             languageCounts: computed({ keepAlive: true }),
+            queryFilter: observable,
+            queryResult: observable,
             rentAsOptions: computed({ keepAlive: true }),
             typeAsOptions: computed({ keepAlive: true }),
         })

@@ -4,7 +4,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
 import { createHashHistory } from 'history'
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import fetch from 'node-fetch'
 import { v4 as uuid } from 'uuid'
@@ -31,21 +31,29 @@ export class RootStore {
     readonly series: SeriesStore
     readonly translations: TranslationStore
 
-    @observable private _outstandingRequests = 0
+    _outstandingRequests = 0
 
-    @observable readonly inputValidations: Record<string, ValidationSchema> = {}
+    inputValidations: Record<string, ValidationSchema> = {}
 
-    @observable readonly updateValidations: Record<string, ValidationSchema> = {}
+    updateValidations: Record<string, ValidationSchema> = {}
 
-    @observable readonly errors: string[] = []
+    errors: string[] = []
 
-    @observable private _theme: TThemes = 'default'
+    _theme: TThemes = 'default'
 
     get isBusy(): boolean {
         return this._outstandingRequests > 0
     }
 
     constructor() {
+        makeObservable(this, {
+            _outstandingRequests: observable,
+            _theme: observable,
+            errors: observable,
+            inputValidations: observable,
+            updateValidations: observable,
+        })
+
         this.gql = new ApolloClient({
             cache: new InMemoryCache(),
             defaultOptions: { query: { fetchPolicy: 'no-cache' } },

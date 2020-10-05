@@ -20,14 +20,14 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
 
     protected readonly validationName = 'Container'
 
-    @observable private _recordings: IRecording[] = []
+    _recordings: IRecording[] = []
 
     private _recordingId = 0
 
     constructor(root: RootStore) {
         super(root)
 
-        makeObservable(this, { typesAsOptions: computed({ keepAlive: true }) })
+        makeObservable(this, { _recordings: observable, typesAsOptions: computed({ keepAlive: true }) })
     }
 
     getName(container: IContainer): string {
