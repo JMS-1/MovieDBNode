@@ -198,10 +198,10 @@ export const RecordingCollection = MongoConnection.createCollection(
 
                 switch (args.rent) {
                     case true:
-                        filter.$and = [{ rentTo: { $ne: '' } }, { rentTo: { $ne: null } }]
+                        filter.rentTo = { $nin: ['', null] }
                         break
                     case false:
-                        filter.$or = [{ rentTo: { $eq: '' } }, { rentTo: { $eq: null } }]
+                        filter.rentTo = { $in: ['', null] }
                         break
                 }
 
