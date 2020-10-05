@@ -95,8 +95,13 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
             if (((_b = args.series) === null || _b === void 0 ? void 0 : _b.length) > 0) {
                 filter.series = { $in: args.series };
             }
-            if (typeof args.rent === 'boolean') {
-                filter.rentTo = { $exists: args.rent };
+            switch (args.rent) {
+                case true:
+                    filter.$and = [{ rentTo: { $ne: '' } }, { rentTo: { $ne: null } }];
+                    break;
+                case false:
+                    filter.$or = [{ rentTo: { $eq: '' } }, { rentTo: { $eq: null } }];
+                    break;
             }
             if (args.fullName) {
                 filter.fullName = { $options: 'i', $regex: args.fullName.replace(escapeReg, '\\$&') };

@@ -196,8 +196,13 @@ export const RecordingCollection = MongoConnection.createCollection(
                     filter.series = { $in: args.series }
                 }
 
-                if (typeof args.rent === 'boolean') {
-                    filter.rentTo = { $exists: args.rent }
+                switch (args.rent) {
+                    case true:
+                        filter.$and = [{ rentTo: { $ne: '' } }, { rentTo: { $ne: null } }]
+                        break
+                    case false:
+                        filter.$or = [{ rentTo: { $eq: '' } }, { rentTo: { $eq: null } }]
+                        break
                 }
 
                 if (args.fullName) {
