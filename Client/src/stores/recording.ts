@@ -88,7 +88,7 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
 
         makeObservable(this, {
             afterQuery: action,
-            createCopy:action,
+            createCopy: action,
             genreCounts: computed({ keepAlive: true }),
             languageCounts: computed({ keepAlive: true }),
             load: action,
