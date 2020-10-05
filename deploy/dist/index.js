@@ -3118,18 +3118,15 @@ var routes;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeriesStore = void 0;
-const mobx_1 = __webpack_require__(/*! mobx */ "./node_modules/mobx/dist/mobx.esm.js");
 const hierarchicalItem_1 = __webpack_require__(/*! ./hierarchicalItem */ "./Client/src/stores/hierarchicalItem.ts");
 const routes_1 = __webpack_require__(/*! ./routes */ "./Client/src/stores/routes.ts");
-const utils_1 = __webpack_require__(/*! ./utils */ "./Client/src/stores/utils.ts");
 class SeriesStore extends hierarchicalItem_1.HierarchyItemStore {
-    constructor(root) {
-        super(root);
+    constructor() {
+        super(...arguments);
         this.itemProps = '_id name description parentId fullName';
         this.itemScope = 'series';
         this.itemRoute = routes_1.routes.series;
         this.validationName = 'Series';
-        mobx_1.makeObservable(this, { orderedAndFiltered: mobx_1.computed({ keepAlive: true }) });
     }
     getName(series) {
         return (series === null || series === void 0 ? void 0 : series.name) || (series === null || series === void 0 ? void 0 : series._id);
@@ -3149,9 +3146,6 @@ class SeriesStore extends hierarchicalItem_1.HierarchyItemStore {
             name: series.name,
             parentId: series.parentId || null,
         };
-    }
-    get orderedAndFiltered() {
-        return utils_1.createFiltered(this._items, this.filter, this.getName.bind(this));
     }
 }
 exports.SeriesStore = SeriesStore;
