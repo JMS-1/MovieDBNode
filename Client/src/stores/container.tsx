@@ -27,7 +27,11 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
     constructor(root: RootStore) {
         super(root)
 
-        makeObservable(this, { _recordings: observable, typesAsOptions: computed({ keepAlive: true }) })
+        makeObservable(this, {
+            _recordings: observable,
+            loadRecordings: action,
+            typesAsOptions: computed({ keepAlive: true }),
+        })
     }
 
     getName(container: IContainer): string {
@@ -77,8 +81,7 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
         }
     }
 
-    @action
-    private async loadRecordings(): Promise<void> {
+    async loadRecordings(): Promise<void> {
         this._recordings = []
 
         const id = this.selected?._id

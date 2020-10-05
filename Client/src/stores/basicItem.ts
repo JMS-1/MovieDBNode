@@ -29,10 +29,15 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         makeObservable(this, {
             _items: observable,
             _selected: observable,
+            addOrUpdate: action,
+            afterAddOrUpdate: action,
+            afterRemove: action,
             deleteConfirm: observable,
             errors: computed({ keepAlive: true }),
             filter: observable,
             inputValidation: computed({ keepAlive: true }),
+            remove: action,
+            select: action,
             selected: computed({ keepAlive: true }),
             updateValidation: computed({ keepAlive: true }),
             workingCopy: computed({ keepAlive: true }),
@@ -47,12 +52,18 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         delete this._items[id]
     }
 
-    @action
     select(id: string): void {
         this._selected = id === 'NEW' ? '' : id || ''
     }
 
-    @action
+    afterRemove(id: string): void {
+        this.afterDelete(id)
+
+        this.deleteConfirm = false
+
+        this.root.router.replace(this.itemRoute)
+    }
+
     async remove(item?: TItem): Promise<void> {
         this.root.startRequest()
 
@@ -63,11 +74,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
             await this.root.gql.mutate({ mutation, variables: { id } })
 
-            this.afterDelete(id)
-
-            this.deleteConfirm = false
-
-            this.root.router.replace(this.itemRoute)
+            this.afterRemove(id)
         } catch (error) {
             this.root.requestFailed(error)
         } finally {
@@ -75,7 +82,14 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         }
     }
 
-    @action
+    afterAddOrUpdate(changed: TItem, added: boolean): void {
+        this._items[changed._id] = changed
+
+        if (added) {
+            this.root.router.replace(`${this.itemRoute}/${changed._id}`)
+        }
+    }
+
     async addOrUpdate(item?: TItem): Promise<boolean> {
         if (!item) {
             item = this.workingCopy
@@ -91,13 +105,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
                 variables: { data: this.toProtocol(item, true), id: item._id },
             })
 
-            const changed: TItem = res.data[this.itemScope][item._id ? 'update' : 'add']
-
-            this._items[changed._id] = changed
-
-            if (!item._id) {
-                this.root.router.replace(`${this.itemRoute}/${changed._id}`)
-            }
+            this.afterAddOrUpdate(res.data[this.itemScope][item._id ? 'update' : 'add'], !item._id)
         } catch (error) {
             this.root.requestFailed(error)
 

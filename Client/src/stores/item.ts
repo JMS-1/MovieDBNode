@@ -11,7 +11,9 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
 
         makeObservable(this, {
             asOptions: computed({ keepAlive: true }),
+            load: action,
             ordered: computed({ keepAlive: true }),
+            setItems: action,
         })
     }
 
@@ -25,27 +27,29 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
         this.load()
     }
 
-    @action
-    protected async load(): Promise<void> {
+    setItems(all: TItem[]): void {
+        const items: Record<string, TItem> = {}
+
+        for (const item of all || []) {
+            items[item._id] = item
+        }
+
+        this._items = items
+
+        if (!this.selected && this.ordered.length > 0) {
+            this.select(this.ordered[0] || '')
+        }
+    }
+
+    async load(): Promise<void> {
         this.root.startRequest()
 
         try {
             const query = gql`{ ${this.itemScope} { find(page: 1, pageSize: 1000) { items { ${this.itemProps} } } } }`
 
             const res = await this.root.gql.query({ query })
-            const all: TItem[] = res.data[this.itemScope].find.items || []
 
-            const items: Record<string, TItem> = {}
-
-            for (const item of all || []) {
-                items[item._id] = item
-            }
-
-            this._items = items
-
-            if (!this.selected && this.ordered.length > 0) {
-                this.select(this.ordered[0] || '')
-            }
+            this.setItems(res.data[this.itemScope].find.items || [])
         } catch (error) {
             this.root.requestFailed(error)
         } finally {

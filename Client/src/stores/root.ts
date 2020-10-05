@@ -49,8 +49,15 @@ export class RootStore {
         makeObservable(this, {
             _outstandingRequests: observable,
             _theme: observable,
+            clearErrors: action,
+            doneRequest: action,
             errors: observable,
             inputValidations: observable,
+            loadValidations: action,
+            requestFailed: action,
+            setTheme: action,
+            setValidations: action,
+            startRequest: action,
             updateValidations: observable,
         })
 
@@ -73,7 +80,6 @@ export class RootStore {
         return this._theme
     }
 
-    @action
     setTheme(theme: TThemes): void {
         this._theme = theme
 
@@ -89,23 +95,20 @@ export class RootStore {
         link.href = `${theme}/semantic.min.css`
     }
 
-    @action
     clearErrors(): void {
         this.errors.splice(0)
     }
 
-    @action
     startRequest(): void {
         this._outstandingRequests += 1
     }
 
-    @action
     doneRequest(): void {
         this._outstandingRequests -= 1
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    @action requestFailed(error: any): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    requestFailed(error: any): void {
         const gql: Error[] = error.graphQLErrors
 
         if (Array.isArray(gql) && gql.length > 0) {
@@ -126,8 +129,15 @@ export class RootStore {
         this.loadValidations()
     }
 
-    @action
-    private async loadValidations(): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    setValidations(all: any): void {
+        for (const validation of all) {
+            this.inputValidations[validation.name] = JSON.parse(validation.input)
+            this.updateValidations[validation.name] = JSON.parse(validation.update)
+        }
+    }
+
+    async loadValidations(): Promise<void> {
         this.startRequest()
 
         try {
@@ -142,12 +152,8 @@ export class RootStore {
             `
 
             const res = await this.gql.query({ query })
-            const all = res.data.validation || []
 
-            for (const validation of all) {
-                this.inputValidations[validation.name] = JSON.parse(validation.input)
-                this.updateValidations[validation.name] = JSON.parse(validation.update)
-            }
+            this.setValidations(res.data.validation || [])
         } catch (error) {
             this.requestFailed(error)
         } finally {

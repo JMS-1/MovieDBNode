@@ -87,16 +87,22 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         super(root)
 
         makeObservable(this, {
+            afterQuery: action,
+            createCopy:action,
             genreCounts: computed({ keepAlive: true }),
             languageCounts: computed({ keepAlive: true }),
+            load: action,
+            query: action,
             queryFilter: observable,
             queryResult: observable,
             rentAsOptions: computed({ keepAlive: true }),
+            reset: action,
+            setFilterProp: action,
+            setRecording: action,
             typeAsOptions: computed({ keepAlive: true }),
         })
     }
 
-    @action
     setFilterProp<TProp extends keyof model.IRecordingQueryArgs>(
         prop: TProp,
         value: model.IRecordingQueryArgs[TProp]
@@ -114,11 +120,16 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         this.query()
     }
 
-    @action
     reset(): void {
         this.queryFilter = initialFilter
 
         this.query()
+    }
+
+    afterQuery(response: model.IRecordingQueryResult): void {
+        if (response.correlationId === this._correlationId) {
+            this.queryResult = response
+        }
     }
 
     async query(): Promise<void> {
@@ -136,11 +147,7 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
                 },
             })
 
-            const response: model.IRecordingQueryResult = res.data[this.itemScope].query
-
-            if (response.correlationId === this._correlationId) {
-                this.queryResult = response
-            }
+            this.afterQuery(res.data[this.itemScope].query)
         } catch (error) {
             this.root.requestFailed(error)
         } finally {
@@ -183,7 +190,12 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         }
     }
 
-    @action
+    setRecording(recording: model.IRecording): void {
+        if (recording) {
+            this._items[recording._id] = recording
+        }
+    }
+
     async load(id: string): Promise<void> {
         this.select(id)
 
@@ -197,11 +209,8 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
             const query = gql`query ($id: ID!){ ${this.itemScope} { findById(_id: $id) { ${this.itemProps} } } }`
 
             const res = await this.root.gql.query({ query, variables: { id } })
-            const recording: model.IRecording = res.data[this.itemScope].findById
 
-            if (recording) {
-                this._items[recording._id] = recording
-            }
+            this.setRecording(res.data[this.itemScope].findById)
         } catch (error) {
             this.root.requestFailed(error)
         } finally {
@@ -209,7 +218,6 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         }
     }
 
-    @action
     async export(): Promise<void> {
         this.root.startRequest()
 
@@ -234,7 +242,6 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         }
     }
 
-    @action
     createCopy(): void {
         const current = this.toProtocol(this.workingCopy, true)
 

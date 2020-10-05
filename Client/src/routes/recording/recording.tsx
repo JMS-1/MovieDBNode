@@ -18,7 +18,7 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
     constructor(props: Readonly<IRecordingRouteUiProps>) {
         super(props)
 
-        makeObservable(this, { genreOptions: computed, languageOptions: computed })
+        makeObservable(this, { changeFilterProp: action, genreOptions: computed, languageOptions: computed })
     }
 
     render(): JSX.Element {
@@ -155,8 +155,7 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
         return genres.asOptions.filter((g) => genreCounts[g.value as string] > 0)
     }
 
-    @action
-    private changeFilterProp(field: 'created' | 'fullName'): void {
+    changeFilterProp(field: 'created' | 'fullName'): void {
         if (recordings.queryFilter.sort === field) {
             recordings.setFilterProp(
                 'sortOrder',
