@@ -1,5 +1,6 @@
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 
+import { RootStore } from '.'
 import { HierarchyItemStore } from './hierarchicalItem'
 import { routes } from './routes'
 import { createFiltered } from './utils'
@@ -14,6 +15,12 @@ export class SeriesStore extends HierarchyItemStore<ISeries> {
     readonly itemRoute = routes.series
 
     protected readonly validationName = 'Series'
+
+    constructor(root: RootStore) {
+        super(root)
+
+        makeObservable(this, { orderedAndFiltered: computed({ keepAlive: true }) })
+    }
 
     getName(series: ISeries): string {
         return series?.name || series?._id
@@ -37,7 +44,6 @@ export class SeriesStore extends HierarchyItemStore<ISeries> {
         }
     }
 
-    @computed({ keepAlive: true })
     get orderedAndFiltered(): string[] {
         return createFiltered(this._items, this.filter, this.getName.bind(this))
     }

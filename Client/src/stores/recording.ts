@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import { action, computed, observable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 import { DropdownItemProps } from 'semantic-ui-react'
 import { v4 as uuid } from 'uuid'
 
-import { translations } from '.'
+import { RootStore, translations } from '.'
 import { BasicItemStore } from './basicItem'
 import { routes } from './routes'
 
@@ -81,6 +81,17 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         languages: [],
         total: 0,
         view: [],
+    }
+
+    constructor(root: RootStore) {
+        super(root)
+
+        makeObservable(this, {
+            genreCounts: computed({ keepAlive: true }),
+            languageCounts: computed({ keepAlive: true }),
+            rentAsOptions: computed({ keepAlive: true }),
+            typeAsOptions: computed({ keepAlive: true }),
+        })
     }
 
     @action
@@ -241,14 +252,12 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         this.workingCopy.name = `Kopie von ${this.workingCopy.name}`
     }
 
-    @computed({ keepAlive: true })
     get typeAsOptions(): DropdownItemProps[] {
         const mui = translations.strings.media.types
 
         return optionOrder.map((t) => ({ key: t, text: mui[t], value: TRecordingContainerType[t] }))
     }
 
-    @computed({ keepAlive: true })
     get rentAsOptions(): DropdownItemProps[] {
         const mui = translations.strings.recording
 
@@ -258,7 +267,6 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         ]
     }
 
-    @computed({ keepAlive: true })
     get languageCounts(): Record<string, number> {
         const map: Record<string, number> = {}
 
@@ -269,7 +277,6 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         return map
     }
 
-    @computed({ keepAlive: true })
     get genreCounts(): Record<string, number> {
         const map: Record<string, number> = {}
 

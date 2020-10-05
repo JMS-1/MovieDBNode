@@ -1,4 +1,4 @@
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Icon, Table } from 'semantic-ui-react'
@@ -25,6 +25,12 @@ function makeTime(date: Date): string {
 
 @observer
 export class RecordingItem extends React.PureComponent<IRecordingItemUiProps> {
+    constructor(props: Readonly<IRecordingItemUiProps>) {
+        super(props)
+
+        makeObservable(this, { genres: computed, languages: computed })
+    }
+
     render(): JSX.Element {
         const { recording } = this.props
 
@@ -59,8 +65,7 @@ export class RecordingItem extends React.PureComponent<IRecordingItemUiProps> {
         rootStore.router.push(`${routes.recording}/${this.props.recording._id}`)
     }
 
-    @computed
-    private get languages(): string[] {
+    get languages(): string[] {
         const { recording } = this.props
 
         return [...(recording.languages || [])].sort((l, r) => {
@@ -71,8 +76,7 @@ export class RecordingItem extends React.PureComponent<IRecordingItemUiProps> {
         })
     }
 
-    @computed
-    private get genres(): string[] {
+    get genres(): string[] {
         const { recording } = this.props
 
         return [...(recording.genres || [])].sort((l, r) => {

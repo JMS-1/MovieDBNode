@@ -1,4 +1,4 @@
-import { action, computed } from 'mobx'
+import { action, computed, makeObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as ui from 'semantic-ui-react'
@@ -15,6 +15,12 @@ const pageSizes = [15, 30, 50, 75, 100, 250]
 
 @observer
 export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> {
+    constructor(props: Readonly<IRecordingRouteUiProps>) {
+        super(props)
+
+        makeObservable(this, { genreOptions: computed, languageOptions: computed })
+    }
+
     render(): JSX.Element {
         const mui = translations.strings.recording
 
@@ -137,14 +143,12 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
         )
     }
 
-    @computed
     get languageOptions(): ui.DropdownItemProps[] {
         const { languageCounts } = recordings
 
         return languages.asOptions.filter((l) => languageCounts[l.value as string] > 0)
     }
 
-    @computed
     get genreOptions(): ui.DropdownItemProps[] {
         const { genreCounts } = recordings
 
@@ -187,6 +191,7 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
 
     private readonly onExport = (): Promise<void> => recordings.export()
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     UNSAFE_componentWillMount(): void {
         recordings.query()
     }

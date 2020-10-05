@@ -1,10 +1,20 @@
 import gql from 'graphql-tag'
-import { action, computed } from 'mobx'
+import { action, computed, makeObservable } from 'mobx'
 import { DropdownItemProps } from 'semantic-ui-react'
 
+import { RootStore } from '.'
 import { BasicItemStore } from './basicItem'
 
 export abstract class ItemStore<TItem extends { _id: string }> extends BasicItemStore<TItem> {
+    constructor(root: RootStore) {
+        super(root)
+
+        makeObservable(this, {
+            asOptions: computed({ keepAlive: true }),
+            ordered: computed({ keepAlive: true }),
+        })
+    }
+
     abstract getName(item: TItem): string
 
     getFullName(item: TItem): string {
@@ -43,14 +53,12 @@ export abstract class ItemStore<TItem extends { _id: string }> extends BasicItem
         }
     }
 
-    @computed({ keepAlive: true })
     get ordered(): string[] {
         return Object.keys(this._items).sort((l, r) =>
             (this.getFullName(this._items[l]) || l).localeCompare(this.getFullName(this._items[r]) || r)
         )
     }
 
-    @computed({ keepAlive: true })
     get asOptions(): DropdownItemProps[] {
         const items = this._items
 

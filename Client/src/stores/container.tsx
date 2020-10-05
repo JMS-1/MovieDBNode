@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
-import { computed, action, observable } from 'mobx'
+import { computed, action, observable, makeObservable } from 'mobx'
 import * as React from 'react'
 import { SemanticICONS, DropdownItemProps, Icon } from 'semantic-ui-react'
 
+import { RootStore } from '.'
 import { HierarchyItemStore } from './hierarchicalItem'
 import { routes } from './routes'
 
@@ -22,6 +23,12 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
     @observable private _recordings: IRecording[] = []
 
     private _recordingId = 0
+
+    constructor(root: RootStore) {
+        super(root)
+
+        makeObservable(this, { typesAsOptions: computed({ keepAlive: true }) })
+    }
 
     getName(container: IContainer): string {
         return container?.name || container?._id
@@ -100,7 +107,6 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
         }
     }
 
-    @computed({ keepAlive: true })
     get typesAsOptions(): DropdownItemProps[] {
         const mui = this.root.translations.strings.container.types
 

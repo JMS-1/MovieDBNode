@@ -1,4 +1,4 @@
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Icon, Label, List, SemanticICONS } from 'semantic-ui-react'
@@ -30,6 +30,12 @@ const emptySet = new Set<string>()
 
 @observer
 export class Node<TItem extends INodeItem> extends React.PureComponent<INodeProps<TItem>> {
+    constructor(props: Readonly<INodeProps<TItem>>) {
+        super(props)
+
+        makeObservable(this, { children: computed })
+    }
+
     render(): JSX.Element | null {
         const { store } = this.props
 
@@ -49,8 +55,7 @@ export class Node<TItem extends INodeItem> extends React.PureComponent<INodeProp
         )
     }
 
-    @computed
-    private get children(): JSX.Element[] {
+    get children(): JSX.Element[] {
         const { store, scope } = this.props
 
         const children = store.childTree[this.props.id || ''] || emptySet

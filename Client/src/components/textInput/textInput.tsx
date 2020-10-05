@@ -1,5 +1,5 @@
 import { ValidationError } from 'fastest-validator'
-import { computed } from 'mobx'
+import { computed, makeObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import { IViewModel } from 'mobx-utils'
 import * as React from 'react'
@@ -24,6 +24,12 @@ interface ITextInputProps<TItem> {
 
 @observer
 export class TextInput<TItem> extends React.PureComponent<ITextInputProps<TItem>> {
+    constructor(props: Readonly<ITextInputProps<TItem>>) {
+        super(props)
+
+        makeObservable(this, { errors: computed })
+    }
+
     render(): JSX.Element {
         const { prop, scope } = this.props
 
@@ -48,8 +54,7 @@ export class TextInput<TItem> extends React.PureComponent<ITextInputProps<TItem>
         )
     }
 
-    @computed
-    private get errors(): string[] {
+    get errors(): string[] {
         return this.props.store.getErrors(this.props.prop as string)
     }
 

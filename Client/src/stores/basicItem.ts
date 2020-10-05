@@ -1,6 +1,6 @@
 import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, makeObservable } from 'mobx'
 import { createViewModel, IViewModel } from 'mobx-utils'
 
 import { RootStore } from './root'
@@ -25,7 +25,15 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
     @observable filter = ''
 
-    constructor(public readonly root: RootStore) {}
+    constructor(public readonly root: RootStore) {
+        makeObservable(this, {
+            errors: computed({ keepAlive: true }),
+            inputValidation: computed({ keepAlive: true }),
+            selected: computed({ keepAlive: true }),
+            updateValidation: computed({ keepAlive: true }),
+            workingCopy: computed({ keepAlive: true }),
+        })
+    }
 
     protected abstract createNew(): TItem
 
@@ -121,17 +129,14 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         return this._items[id]
     }
 
-    @computed({ keepAlive: true })
     get selected(): TItem {
         return this._items[this._selected]
     }
 
-    @computed({ keepAlive: true })
     get workingCopy(): TItem & IViewModel<TItem> {
         return createViewModel(this.selected || observable(this.createNew()))
     }
 
-    @computed({ keepAlive: true })
     get errors(): ValidationError[] | true {
         const validator = new Validator()
 
@@ -141,12 +146,10 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         )
     }
 
-    @computed({ keepAlive: true })
     get inputValidation(): ValidationSchema {
         return this.root.inputValidations[this.validationName] || noSchema
     }
 
-    @computed({ keepAlive: true })
     get updateValidation(): ValidationSchema {
         return this.root.updateValidations[this.validationName] || noSchema
     }
