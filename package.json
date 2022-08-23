@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "@jms-1/mongodb-graphql": "^2.0.0",
+        "@jms-1/mongodb-graphql": "^2.1.0",
         "apollo-server-express": "^3.10.1",
         "apollo-server-plugin-base": "^3.6.2",
         "body-parser": "^1.20.0",

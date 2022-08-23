@@ -90,6 +90,8 @@ async function startup(): Promise<void> {
         ),
     })
 
+    await server.start()
+
     server.applyMiddleware({ app })
 
     app.listen(Config.port)
