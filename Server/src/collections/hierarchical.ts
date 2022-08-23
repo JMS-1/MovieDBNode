@@ -1,6 +1,7 @@
 import { GqlRecord, TGqlLayoutType, TGqlType } from '@jms-1/mongodb-graphql/lib/types'
+import { Filter } from 'mongodb'
 
-import { IItem, ForeignKeyCollection } from './foreignKey'
+import { ForeignKeyCollection, IItem } from './foreignKey'
 
 import { IRecording } from '../model'
 
@@ -24,7 +25,7 @@ export abstract class HierarchicalCollection<
         const self = await this.collection
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const parent = await self.findOne({ _id: parentId } as any)
+        const parent = await self.findOne({ _id: parentId } as Filter<unknown>)
 
         if (!parent) {
             throw new Error(`Übergeordnete ${this.entityName} unbekannt.`)

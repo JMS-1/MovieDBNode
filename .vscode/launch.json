@@ -1,10 +1,7 @@
 {
     "compounds": [
         {
-            "configurations": [
-                "Client",
-                "Server"
-            ],
+            "configurations": ["Client", "Server"],
             "name": "All"
         }
     ],
@@ -16,10 +13,7 @@
             "name": "Client",
             "port": 29091,
             "request": "launch",
-            "runtimeArgs": [
-                "--remote-debugging-port=29091",
-                "--new-window"
-            ],
+            "runtimeArgs": ["--remote-debugging-port=29091", "--new-window"],
             "sourceMapPathOverrides": {
                 "webpack:///./*": "${workspaceFolder}/*"
             },
@@ -34,24 +28,18 @@
             "envFile": "${workspaceFolder}/.vscode/.env",
             "name": "Server",
             "request": "launch",
-            "runtimeArgs": [
-                "run-script",
-                "debug-server"
-            ],
+            "runtimeArgs": ["run-script", "debug-server"],
             "runtimeExecutable": "npm",
             "smartStep": true,
             "sourceMaps": true,
-            "type": "pwa-node"
+            "type": "node"
         },
         {
             "console": "externalTerminal",
             "envFile": "${workspaceFolder}/.vscode/.env",
             "name": "Start Server",
             "request": "launch",
-            "runtimeArgs": [
-                "run-script",
-                "start-server"
-            ],
+            "runtimeArgs": ["run-script", "start-server"],
             "runtimeExecutable": "npm",
             "type": "node"
         }

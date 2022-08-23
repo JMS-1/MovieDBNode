@@ -1,13 +1,13 @@
 import { TSortDirection } from '@jms-1/mongodb-graphql'
 import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
 import * as types from '@jms-1/mongodb-graphql/lib/types'
-import { FilterQuery, CollationDocument } from 'mongodb'
+import { Filter } from 'mongodb'
 
 import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
 import { refreshRecordingNames } from './utils'
 
-import { IRecording, IQueryCountInfo, TRecordingSort, ILanguage, IGenre } from '../model'
+import { IGenre, ILanguage, IQueryCountInfo, IRecording, TRecordingSort } from '../model'
 import { Recording, RecordingQueryResponse, RecordingSort } from '../model/entities'
 import { uniqueIdPattern } from '../model/utils'
 
@@ -19,7 +19,7 @@ export function escape(str: string): string {
 
 const escapeReg = /[.*+?^${}()|[\]\\]/g
 
-const collation: CollationDocument = { locale: 'en', strength: 2 }
+const collation = { locale: 'en', strength: 2 }
 
 interface IAggregateCount {
     total: number
@@ -31,6 +31,7 @@ interface IAggregationResult {
     view: IRecording[]
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const RecordingCollection = MongoConnection.createCollection(
     Recording,
     class extends Collection<typeof Recording> {
@@ -182,7 +183,7 @@ export const RecordingCollection = MongoConnection.createCollection(
             RecordingQueryResponse,
             'Freie Suche über Aufzeichnungen.',
             async (args) => {
-                const filter: FilterQuery<IRecording> = {}
+                const filter: Filter<IRecording> = {}
 
                 if (args.language) {
                     filter.languages = args.language
@@ -232,9 +233,7 @@ export const RecordingCollection = MongoConnection.createCollection(
                 })
 
                 const self = await this.collection
-                const result = await self
-                    .aggregate<IAggregationResult>(query, { collation })
-                    .toArray()
+                const result = await self.aggregate<IAggregationResult>(query, { collation }).toArray()
 
                 const firstRes = result && result[0]
                 const countRes = firstRes?.count?.[0]
@@ -267,13 +266,13 @@ export const RecordingCollection = MongoConnection.createCollection(
                 }
 
                 const languageCollection = await this.connection.getCollection(collectionNames.languages)
-                const languages = await languageCollection.find<ILanguage>().toArray()
+                const languages = await languageCollection.find<ILanguage>({}).toArray()
 
                 const languageMap: { [id: string]: string } = {}
                 languages.forEach((l) => (languageMap[l._id] = l.name))
 
                 const genreCollection = await this.connection.getCollection(collectionNames.genres)
-                const genres = await genreCollection.find<IGenre>().toArray()
+                const genres = await genreCollection.find<IGenre>({}).toArray()
 
                 const genreMap: { [id: string]: string } = {}
                 genres.forEach((g) => (genreMap[g._id] = g.name))

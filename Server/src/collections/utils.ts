@@ -1,4 +1,4 @@
-import { FilterQuery, Collection } from 'mongodb'
+import { Collection, Filter } from 'mongodb'
 
 import { collectionNames } from './collections'
 
@@ -10,7 +10,7 @@ interface IAggregateFullName {
 }
 
 export async function refreshRecordingNames(
-    filter: FilterQuery<IRecording>,
+    filter: Filter<IRecording>,
     recordings: Collection<IRecording>
 ): Promise<IAggregateFullName[]> {
     const query = [

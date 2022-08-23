@@ -9,7 +9,7 @@ import { join } from 'path'
 import { ContainerCollection } from './collections/container'
 import { GenreCollection } from './collections/genre'
 import { LanguageCollection } from './collections/language'
-import { RecordingCollection, csvData } from './collections/recording'
+import { csvData, RecordingCollection } from './collections/recording'
 import { SeriesCollection } from './collections/series'
 import { Config } from './config'
 import { getMessage } from './utils'
@@ -19,6 +19,7 @@ const utfBom = Buffer.from([0xef, 0xbb, 0xbf])
 async function startup(): Promise<void> {
     const app = express()
 
+    // eslint-disable-next-line import/no-named-as-default-member
     app.use(express.static(join(__dirname, '../dist')))
     app.use(json())
 
@@ -52,32 +53,30 @@ async function startup(): Promise<void> {
         },
         plugins: [
             {
-                requestDidStart() {
-                    return {
-                        didEncounterErrors(requestContext) {
-                            if (requestContext?.context?.requireAuth === false) {
-                                const gqlErrors = requestContext.errors || []
+                requestDidStart: async () => ({
+                    didEncounterErrors: async (requestContext) => {
+                        if (requestContext?.context?.requireAuth === false) {
+                            const gqlErrors = requestContext.errors || []
 
-                                if (gqlErrors.some((e) => e.originalError instanceof AuthenticationError)) {
-                                    requestContext.context.requireAuth = true
-                                }
+                            if (gqlErrors.some((e) => e.originalError instanceof AuthenticationError)) {
+                                requestContext.context.requireAuth = true
                             }
-                        },
-                        willSendResponse(requestContext) {
-                            const context = requestContext?.context
+                        }
+                    },
+                    willSendResponse: async (requestContext) => {
+                        const context = requestContext?.context
 
-                            if (context?.requireAuth && context.res) {
-                                context.res.status(401)
+                        if (context?.requireAuth && context.res) {
+                            context.res.status(401)
 
-                                const http = requestContext.response?.http
+                            const http = requestContext.response?.http
 
-                                if (http?.headers?.set) {
-                                    http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"')
-                                }
+                            if (http?.headers?.set) {
+                                http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"')
                             }
-                        },
-                    }
-                },
+                        }
+                    },
+                }),
             },
         ],
         schema: new GraphQLSchema(

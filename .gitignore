@@ -1,8 +1,8 @@
-yarn-error.log
-
-node_modules
-
-yarn.lock
+/node_modules
+/yarn.lock
+/yarn-error.log
+/.yarn/*
+!/.yarn/releases
 
 .vscode/chrome
 
