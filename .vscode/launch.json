@@ -24,7 +24,10 @@
             "webRoot": "${workspaceFolder}"
         },
         {
-            "console": "internalConsole",
+            "console": "integratedTerminal",
+            "env": {
+                "DEBUG": "*"
+            },
             "envFile": "${workspaceFolder}/.vscode/.env",
             "name": "Server",
             "request": "launch",

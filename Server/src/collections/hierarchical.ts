@@ -38,8 +38,10 @@ export abstract class HierarchicalCollection<
         await this.demandParent(item.parentId)
     }
 
-    async beforeUpdate(item: TItem & IHierarchicalItem, id: string): Promise<void> {
-        if (!(await this.demandParent(item.parentId))) {
+    async beforeUpdate(item: Partial<TItem>, id: string): Promise<void> {
+        const hitem = item as Partial<TItem> & IHierarchicalItem
+
+        if (!(await this.demandParent(hitem.parentId))) {
             return
         }
 
@@ -50,7 +52,7 @@ export abstract class HierarchicalCollection<
 
         all.forEach((c) => (parentMap[c._id] = c.parentId))
 
-        parentMap[id] = item.parentId
+        parentMap[id] = hitem.parentId
 
         const cycleTest = new Set<string>()
 
