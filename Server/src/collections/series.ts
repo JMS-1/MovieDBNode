@@ -54,7 +54,7 @@ export const SeriesCollection = MongoConnection.createCollection(
 
         private async updateFullName(
             series: ISeries,
-            parent: string,
+            parent: string | undefined,
             self: MongoCollection<ISeries>,
             updated: Set<string>
         ): Promise<Set<string>> {

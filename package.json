@@ -70,13 +70,13 @@
     "name": "movie-db-neu",
     "prettier": "@insynergie/prettier-config",
     "scripts": {
-        "build-client": "node node_modules/webpack/bin/webpack.js --mode development",
+        "build-client": "(cd Client && node ../node_modules/webpack/bin/webpack.js --mode development)",
         "build-server": "(cd Server && tsc)",
         "debug-server": "node Server/src/startup",
         "make": "gulp",
         "start": "node src/startup",
         "start-server": "node Server/src/startup",
-        "watch-client": "node node_modules/webpack/bin/webpack.js --mode development --watch",
+        "watch-client": "(cd Client && node ../node_modules/webpack/bin/webpack.js serve --port 29500 --hot)",
         "watch-server": "(cd Server && tsc --watch)"
     },
     "stylelint": {

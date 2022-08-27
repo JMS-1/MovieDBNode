@@ -189,20 +189,20 @@ export const RecordingCollection = MongoConnection.createCollection(
                     filter.languages = args.language
                 }
 
-                if (args.genres?.length > 0) {
+                if (args.genres && args.genres.length > 0) {
                     filter.genres = { $all: args.genres }
                 }
 
-                if (args.series?.length > 0) {
+                if (args.series && args.series.length > 0) {
                     filter.series = { $in: args.series }
                 }
 
                 switch (args.rent) {
                     case true:
-                        filter.rentTo = { $nin: ['', null] }
+                        filter.rentTo = { $nin: ['', null as unknown as string] }
                         break
                     case false:
-                        filter.rentTo = { $in: ['', null] }
+                        filter.rentTo = { $in: ['', null as unknown as string] }
                         break
                 }
 

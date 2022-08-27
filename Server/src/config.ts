@@ -14,7 +14,7 @@ function loadConfig(name: string): IConfiguration {
     const defPath = join(__dirname, `../config${name}.json`)
 
     if (!existsSync(defPath)) {
-        return undefined
+        return undefined as unknown as IConfiguration
     }
 
     const raw = readFileSync(defPath).toString()

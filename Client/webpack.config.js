@@ -2,7 +2,7 @@ const path = require('path')
 
 const copyStatic = require('copy-webpack-plugin')
 
-const publicFolder = path.join(__dirname, 'Client/public')
+const publicFolder = path.join(__dirname, 'public')
 
 const extractCss = require('mini-css-extract-plugin')
 
@@ -12,7 +12,7 @@ const ReactRefreshTypeScript = require('react-refresh-typescript')
 module.exports = (env) => ({
     devtool: 'source-map',
 
-    entry: { index: path.join(__dirname, './Client/src/index.tsx') },
+    entry: { index: path.join(__dirname, 'src/index.tsx') },
 
     mode: env.production ? 'production' : 'development',
 
@@ -53,7 +53,7 @@ module.exports = (env) => ({
         ],
     },
 
-    output: { filename: '[name].js', path: path.join(__dirname, 'Client/build') },
+    output: { filename: '[name].js', path: path.join(__dirname, 'build') },
 
     performance: { maxAssetSize: 4000000, maxEntrypointSize: 4000000 },
 
