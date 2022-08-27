@@ -1,7 +1,7 @@
 import { ItemStore } from './item'
 import { routes } from './routes'
 
-import { IGenre } from '../../../Server/src/model'
+import { IGenre } from '../../../Server/src/model/client'
 
 export class GenreStore extends ItemStore<IGenre> {
     readonly itemProps = '_id name'

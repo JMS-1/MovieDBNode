@@ -1,20 +1,21 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Form } from 'semantic-ui-react'
 
-import { IGenre } from '../../../../../Server/src/model'
+import { IGenre } from '../../../../../Server/src/model/client'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { DetailActions } from '../../../components/detailActions/actions'
 import { TextInput } from '../../../components/textInput/textInput'
 import { genres } from '../../../stores'
 
 export interface IGenreDetailsUiProps {
-    id: string
+    id: string | undefined
 }
 
 @observer
 export class GenreDetails extends React.PureComponent<IGenreDetailsUiProps> {
-    render(): JSX.Element {
+    render(): JSX.Element | null {
         if (!genres.selected && this.props.id !== 'NEW') {
             return null
         }

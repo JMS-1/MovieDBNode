@@ -1,7 +1,7 @@
 import { HierarchyItemStore } from './hierarchicalItem'
 import { routes } from './routes'
 
-import { ISeries } from '../../../Server/src/model'
+import { ISeries } from '../../../Server/src/model/client'
 
 export class SeriesStore extends HierarchyItemStore<ISeries> {
     readonly itemProps = '_id name description parentId fullName'

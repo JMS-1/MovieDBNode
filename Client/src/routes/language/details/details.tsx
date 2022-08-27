@@ -1,15 +1,16 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Form } from 'semantic-ui-react'
 
-import { ILanguage } from '../../../../../Server/src/model'
+import { ILanguage } from '../../../../../Server/src/model/client'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { DetailActions } from '../../../components/detailActions/actions'
 import { TextInput } from '../../../components/textInput/textInput'
 import { languages } from '../../../stores'
 
 export interface ILanguageDetailsUiProps {
-    id: string
+    id: string | undefined
 }
 
 @observer

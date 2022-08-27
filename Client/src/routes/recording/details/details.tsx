@@ -1,8 +1,10 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Button, Dropdown, DropdownProps, Form } from 'semantic-ui-react'
 
-import { IRecording, TRecordingContainerType } from '../../../../../Server/src/model'
+import { IRecording } from '../../../../../Server/src/model/client'
+import { TRecordingContainerType } from '../../../../../Server/src/model/enum'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { TextInput } from '../../../components/textInput/textInput'
 import { containers, genres, languages, recordings, rootStore, series, translations } from '../../../stores'
@@ -165,12 +167,12 @@ export class Recording extends React.PureComponent<IRecordingUiProps> {
     }
 
     UNSAFE_componentWillMount(): void {
-        recordings.load(this.props.match.params.id)
+        recordings.load(this.props.match?.params.id)
     }
 
     UNSAFE_componentWillReceiveProps(props: Readonly<IRecordingUiProps>): void {
-        if (props.match.params.id !== this.props.match.params.id) {
-            recordings.load(props.match.params.id)
+        if (props.match?.params.id !== this.props.match?.params.id) {
+            recordings.load(props.match?.params.id)
         }
     }
 }

@@ -1,3 +1,4 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Label, List } from 'semantic-ui-react'
@@ -15,7 +16,7 @@ export interface IGenreRouteUiProps {
 @observer
 export class GenreRoute extends React.PureComponent<IGenreRouteUiProps> {
     render(): JSX.Element {
-        const { id } = this.props.match.params
+        const id = this.props.match?.params.id
 
         return (
             <MasterDetailRoute className='movie-db-genre-route'>

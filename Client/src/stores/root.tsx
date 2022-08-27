@@ -2,10 +2,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { ValidationSchema } from 'fastest-validator'
+// eslint-disable-next-line import/no-named-as-default
 import gql from 'graphql-tag'
 import { action, makeObservable, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
-import fetch from 'node-fetch'
 import * as React from 'react'
 import { HashRouter } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
@@ -65,8 +65,7 @@ export class RootStore {
         this.gql = new ApolloClient({
             cache: new InMemoryCache(),
             defaultOptions: { query: { fetchPolicy: 'no-cache' } },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            link: createHttpLink({ fetch: fetch as any, uri: `${window.location.origin}/graphql` }),
+            link: createHttpLink({ fetch, uri: `${window.location.origin}/graphql` }),
         })
 
         this.containers = new ContainerStore(this)

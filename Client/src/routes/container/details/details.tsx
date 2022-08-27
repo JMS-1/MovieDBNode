@@ -1,8 +1,10 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react'
 
-import { IContainer, TContainerType } from '../../../../../Server/src/model'
+import { IContainer } from '../../../../../Server/src/model/client'
+import { TContainerType } from '../../../../../Server/src/model/enum'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { DetailActions } from '../../../components/detailActions/actions'
 import { ReportError } from '../../../components/message/message'
@@ -11,12 +13,12 @@ import { containers, translations } from '../../../stores'
 import { ContainerContent } from '../content/content'
 
 export interface IContainerDetailsUiProps {
-    id: string
+    id: string | undefined
 }
 
 @observer
 export class ContainerDetails extends React.PureComponent<IContainerDetailsUiProps> {
-    render(): JSX.Element {
+    render(): JSX.Element | null {
         if (!containers.selected && this.props.id !== 'NEW') {
             return null
         }

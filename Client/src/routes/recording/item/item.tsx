@@ -1,12 +1,13 @@
 import { computed, makeObservable } from 'mobx'
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Icon, Table } from 'semantic-ui-react'
 
-import { IRecording } from '../../../../../Server/src/model'
+import { IRecording } from '../../../../../Server/src/model/client'
 import { Genre } from '../../../components/genre/genre'
 import { Language } from '../../../components/language/language'
-import { languages, genres, rootStore } from '../../../stores'
+import { genres, languages, rootStore } from '../../../stores'
 import { routes } from '../../../stores/routes'
 
 export interface IRecordingItemUiProps {

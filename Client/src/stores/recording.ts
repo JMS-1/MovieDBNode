@@ -7,16 +7,16 @@ import { RootStore, translations } from '.'
 import { BasicItemStore } from './basicItem'
 import { routes } from './routes'
 
-import * as model from '../../../Server/src/model'
-import { TRecordingContainerType } from '../../../Server/src/model'
+import * as model from '../../../Server/src/model/client'
+import { TRecordingContainerType } from '../../../Server/src/model/enum'
 
-const optionOrder: model.TRecordingContainerType[] = [
-    model.TRecordingContainerType.Undefined,
-    model.TRecordingContainerType.VideoCD,
-    model.TRecordingContainerType.SuperVideoCD,
-    model.TRecordingContainerType.RecordedDVD,
-    model.TRecordingContainerType.DVD,
-    model.TRecordingContainerType.BluRay,
+const optionOrder: TRecordingContainerType[] = [
+    TRecordingContainerType.Undefined,
+    TRecordingContainerType.VideoCD,
+    TRecordingContainerType.SuperVideoCD,
+    TRecordingContainerType.RecordedDVD,
+    TRecordingContainerType.DVD,
+    TRecordingContainerType.BluRay,
 ]
 
 const initialFilter: model.IRecordingQueryArgs = {
@@ -196,7 +196,7 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
         }
     }
 
-    async load(id: string): Promise<void> {
+    async load(id: string | undefined): Promise<void> {
         this.select(id)
 
         if (!id || id === 'NEW') {

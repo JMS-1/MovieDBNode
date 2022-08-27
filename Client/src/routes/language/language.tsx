@@ -1,3 +1,4 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Label, List } from 'semantic-ui-react'
@@ -15,7 +16,7 @@ export interface ILanguageRouteUiProps {
 @observer
 export class LanguageRoute extends React.PureComponent<ILanguageRouteUiProps> {
     render(): JSX.Element {
-        const { id } = this.props.match.params
+        const id = this.props.match?.params.id
 
         return (
             <MasterDetailRoute className='movie-db-language-route'>

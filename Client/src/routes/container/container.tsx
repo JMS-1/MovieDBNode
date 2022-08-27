@@ -1,3 +1,4 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
@@ -13,7 +14,7 @@ export interface IContainerRouteUiProps {
 @observer
 export class ContainerRoute extends React.PureComponent<IContainerRouteUiProps> {
     render(): JSX.Element {
-        const { id } = this.props.match.params
+        const id = this.props.match?.params.id
 
         return (
             <MasterDetailRoute className='movie-db-container-route'>

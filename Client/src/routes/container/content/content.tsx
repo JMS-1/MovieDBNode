@@ -1,15 +1,16 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Table } from 'semantic-ui-react'
 
-import { translations, containers } from '../../../stores'
+import { containers, translations } from '../../../stores'
 import { routes } from '../../../stores/routes'
 
 export interface IContainerContentUiProps {}
 
 @observer
 export class ContainerContent extends React.PureComponent<IContainerContentUiProps> {
-    render(): JSX.Element {
+    render(): JSX.Element | null {
         const { recordings } = containers
 
         if (recordings.length < 1) {

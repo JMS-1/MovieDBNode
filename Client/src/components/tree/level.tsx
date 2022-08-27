@@ -23,7 +23,7 @@ interface INodeStore<TItem extends INodeItem> {
 
 interface INodeProps<TItem extends INodeItem> {
     id: string
-    scope: string
+    scope: string | undefined
     store: INodeStore<TItem>
 }
 

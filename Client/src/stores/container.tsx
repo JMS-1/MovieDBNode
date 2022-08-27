@@ -7,7 +7,8 @@ import { RootStore } from '.'
 import { HierarchyItemStore } from './hierarchicalItem'
 import { routes } from './routes'
 
-import { IContainer, IRecording, TContainerType } from '../../../Server/src/model'
+import { IContainer, IRecording } from '../../../Server/src/model/client'
+import { TContainerType } from '../../../Server/src/model/enum'
 
 const optionOrder = ['Undefined', 'FeatureSet', 'Box', 'Shelf', 'Folder', 'Disk']
 
@@ -50,7 +51,7 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
         return types[type as keyof typeof types]?.icon || 'help'
     }
 
-    select(id: string): void {
+    select(id: string | undefined): void {
         super.select(id)
 
         this.loadRecordings()

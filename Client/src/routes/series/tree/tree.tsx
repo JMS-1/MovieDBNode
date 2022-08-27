@@ -1,13 +1,14 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-import { ISeries } from '../../../../../Server/src/model'
+import { ISeries } from '../../../../../Server/src/model/client'
 import { Search } from '../../../components/search/search'
 import { Node } from '../../../components/tree/level'
 import { series } from '../../../stores'
 
 export interface ISeriesTreeUiProps {
-    id: string
+    id: string | undefined
 }
 
 export interface ISeriesTreeProps {}

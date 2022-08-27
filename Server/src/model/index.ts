@@ -1,4 +1,4 @@
-import { TGetFilterArgs, TGetMethodArgs, TGetMethodResult, TGqlType, TCollection } from '@jms-1/mongodb-graphql'
+import { TCollection, TGetFilterArgs, TGetMethodArgs, TGetMethodResult, TGqlType } from '@jms-1/mongodb-graphql'
 
 import * as entities from './entities'
 

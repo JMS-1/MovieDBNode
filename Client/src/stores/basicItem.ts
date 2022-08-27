@@ -52,7 +52,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         delete this._items[id]
     }
 
-    select(id: string): void {
+    select(id: string | undefined): void {
         this._selected = id === 'NEW' ? '' : id || ''
     }
 

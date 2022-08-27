@@ -18,5 +18,6 @@
         "strictPropertyInitialization": false,
         "target": "es2019"
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx"]
+    "exclude": ["node_modules"],
+    "include": ["src/**/*.ts", "src/**/*.tsx", "../Server/src/model/client.ts", "../Server/src/model/enum.ts"]
 }

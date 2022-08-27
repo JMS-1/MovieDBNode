@@ -1,10 +1,11 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Button, Form, Icon, Input, TextArea } from 'semantic-ui-react'
 
-import { ILink } from '../../../../../Server/src/model'
+import { ILink } from '../../../../../Server/src/model/client'
 import { ReportError } from '../../../components/message/message'
-import { translations, recordings } from '../../../stores'
+import { recordings, translations } from '../../../stores'
 
 export interface IRecordingLinksUiProps {}
 
@@ -14,7 +15,7 @@ interface IRecordingLinksState {
 }
 
 interface IEditButtonProps {
-    description: string
+    description: string | undefined
     index: number
     name: string
     select(index: number): void

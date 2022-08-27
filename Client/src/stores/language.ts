@@ -1,7 +1,7 @@
 import { ItemStore } from './item'
 import { routes } from './routes'
 
-import { ILanguage } from '../../../Server/src/model'
+import { ILanguage } from '../../../Server/src/model/client'
 
 export class LanguageStore extends ItemStore<ILanguage> {
     readonly itemProps = '_id name'

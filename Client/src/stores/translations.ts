@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import { makeObservable, observable } from 'mobx'
 import { SemanticICONS } from 'semantic-ui-react'
 
 import { RootStore } from './root'
 
-import { TRecordingContainerType } from '../../../Server/src/model'
+import { TRecordingContainerType } from '../../../Server/src/model/enum'
 
 export class TranslationStore {
     constructor(public readonly root: RootStore) {

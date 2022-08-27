@@ -1,13 +1,14 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-import { IContainer } from '../../../../../Server/src/model'
+import { IContainer } from '../../../../../Server/src/model/client'
 import { Search } from '../../../components/search/search'
 import { Node } from '../../../components/tree/level'
 import { containers } from '../../../stores'
 
 export interface IContainerTreeUiProps {
-    id: string
+    id: string | undefined
 }
 
 export interface IContainerTreeProps {}

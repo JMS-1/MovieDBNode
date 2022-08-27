@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 export enum routes {
     container = '/container',
     genre = '/genre',

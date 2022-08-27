@@ -1,20 +1,21 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react'
 
-import { ISeries } from '../../../../../Server/src/model'
+import { ISeries } from '../../../../../Server/src/model/client'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { DetailActions } from '../../../components/detailActions/actions'
 import { TextInput } from '../../../components/textInput/textInput'
 import { series, translations } from '../../../stores'
 
 export interface ISeriesDetailsUiProps {
-    id: string
+    id: string | undefined
 }
 
 @observer
 export class SeriesDetails extends React.PureComponent<ISeriesDetailsUiProps> {
-    render(): JSX.Element {
+    render(): JSX.Element | null {
         if (!series.selected && this.props.id !== 'NEW') {
             return null
         }

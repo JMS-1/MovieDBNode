@@ -1,4 +1,5 @@
 import { action, computed, makeObservable } from 'mobx'
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as ui from 'semantic-ui-react'
@@ -72,7 +73,7 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
                         selection
                         options={series.asOptions}
                         placeholder={translations.strings.series.noSelect}
-                        value={(recordings.queryFilter.series.length > 0 && recordings.queryFilter.series[0]) || ''}
+                        value={recordings.queryFilter.series?.[0] || ''}
                         onChange={this.setSeries}
                     />
                     <ui.Dropdown
@@ -196,7 +197,7 @@ export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> 
     }
 
     get filter(): string {
-        return recordings.queryFilter.fullName
+        return recordings.queryFilter.fullName || ''
     }
 
     set filter(filter: string) {
