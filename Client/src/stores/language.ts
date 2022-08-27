@@ -17,7 +17,7 @@ export class LanguageStore extends ItemStore<ILanguage> {
     }
 
     protected createNew(): ILanguage {
-        return { _id: undefined, name: '' }
+        return { _id: undefined as unknown as string, name: '' }
     }
 
     protected toProtocol(language: ILanguage): Partial<ILanguage> {

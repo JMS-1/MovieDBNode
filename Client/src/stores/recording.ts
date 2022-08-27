@@ -157,13 +157,13 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
 
     protected createNew(): model.IRecording {
         return {
-            _id: undefined,
+            _id: undefined as unknown as string,
             containerId: undefined,
             containerPosition: undefined,
             containerType: 'Undefined',
-            created: undefined,
+            created: undefined as unknown as string,
             description: undefined,
-            fullName: undefined,
+            fullName: undefined as unknown as string,
             genres: [],
             languages: [],
             links: [],
@@ -175,7 +175,7 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
 
     protected toProtocol(recording: model.IRecording, toSend = false): Partial<model.IRecording> {
         return {
-            containerId: recording.containerId || null,
+            containerId: (recording.containerId || null) as unknown as string,
             containerPosition: recording.containerPosition,
             containerType: toSend
                 ? recording.containerType
@@ -185,8 +185,8 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
             languages: [...(recording.languages || [])],
             links: recording.links.map((l) => ({ description: l.description, name: l.name, url: l.url })),
             name: recording.name,
-            rentTo: recording.rentTo || null,
-            series: recording.series || null,
+            rentTo: (recording.rentTo || null) as unknown as string,
+            series: (recording.series || null) as unknown as string,
         }
     }
 

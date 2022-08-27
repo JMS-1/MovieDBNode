@@ -1,9 +1,10 @@
 import { ValidationError } from 'fastest-validator'
 import { computed, makeObservable } from 'mobx'
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import { IViewModel } from 'mobx-utils'
 import * as React from 'react'
-import { Form, Input, TextArea, InputOnChangeData, TextAreaProps } from 'semantic-ui-react'
+import { Form, Input, InputOnChangeData, TextArea, TextAreaProps } from 'semantic-ui-react'
 
 import { translations } from '../../stores'
 import { ReportError } from '../message/message'
@@ -54,7 +55,7 @@ export class TextInput<TItem> extends React.PureComponent<ITextInputProps<TItem>
         )
     }
 
-    get errors(): string[] {
+    get errors(): string[] | null {
         return this.props.store.getErrors(this.props.prop as string)
     }
 

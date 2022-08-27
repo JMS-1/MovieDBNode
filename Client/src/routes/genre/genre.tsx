@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
 import { Label, List } from 'semantic-ui-react'
 
 import { GenreDetails } from './details/details'
@@ -9,11 +8,9 @@ import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDeta
 import { genres } from '../../stores'
 import { routes } from '../../stores/routes'
 
-interface IGenreRouteParams {
-    id?: string
+export interface IGenreRouteUiProps {
+    match?: { params: { id?: string } }
 }
-
-export interface IGenreRouteUiProps extends RouteComponentProps<IGenreRouteParams> {}
 
 @observer
 export class GenreRoute extends React.PureComponent<IGenreRouteUiProps> {

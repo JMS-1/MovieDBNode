@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
 import { Label, List } from 'semantic-ui-react'
 
 import { LanguageDetails } from './details/details'
@@ -9,11 +8,9 @@ import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDeta
 import { languages } from '../../stores'
 import { routes } from '../../stores/routes'
 
-interface ILanguageRouteParams {
-    id?: string
+export interface ILanguageRouteUiProps {
+    match?: { params: { id?: string } }
 }
-
-export interface ILanguageRouteUiProps extends RouteComponentProps<ILanguageRouteParams> {}
 
 @observer
 export class LanguageRoute extends React.PureComponent<ILanguageRouteUiProps> {

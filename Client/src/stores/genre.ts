@@ -17,7 +17,7 @@ export class GenreStore extends ItemStore<IGenre> {
     }
 
     protected createNew(): IGenre {
-        return { _id: undefined, name: '' }
+        return { _id: undefined as unknown as string, name: '' }
     }
 
     protected toProtocol(genre: IGenre): Partial<IGenre> {

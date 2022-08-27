@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { Route } from 'react-router'
+import { Route, Routes } from 'react-router'
 import { Dimmer, Dropdown, Header, Loader, Menu, Message } from 'semantic-ui-react'
 
 import { ContainerRoute } from '../../routes/container/container'
@@ -104,13 +104,15 @@ export class Root extends React.PureComponent<IRootUiProps> {
                     </Menu.Item>
                 </Menu>
                 <div className='content'>
-                    <Route exact component={RecordingRoute} path='/' />
-                    <Route component={ContainerRoute} path={`${routes.container}/:id?`} />
-                    <Route component={GenreRoute} path={`${routes.genre}/:id?`} />
-                    <Route component={LanguageRoute} path={`${routes.language}/:id?`} />
-                    <Route component={Recording} path={`${routes.recording}/:id`} />
-                    <Route component={SeriesRoute} path={`${routes.series}/:id?`} />
-                    <Route exact component={RecordingRoute} path={routes.recording} />
+                    <Routes>
+                        <Route element={<RecordingRoute />} path='/' />
+                        <Route element={<ContainerRoute />} path={`${routes.container}/:id?`} />
+                        <Route element={<GenreRoute />} path={`${routes.genre}/:id?`} />
+                        <Route element={<LanguageRoute />} path={`${routes.language}/:id?`} />
+                        <Route element={<Recording />} path={`${routes.recording}/:id`} />
+                        <Route element={<SeriesRoute />} path={`${routes.series}/:id?`} />
+                        <Route element={<RecordingRoute />} path={routes.recording} />
+                    </Routes>
                 </div>
             </div>
         )

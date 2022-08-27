@@ -1,17 +1,14 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
 
 import { ContainerDetails } from './details/details'
 import { ContainerTree } from './tree/tree'
 
 import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetail'
 
-export interface IContainerRouteParams {
-    id?: string
+export interface IContainerRouteUiProps {
+    match?: { params: { id?: string } }
 }
-
-export interface IContainerRouteUiProps extends RouteComponentProps<IContainerRouteParams> {}
 
 @observer
 export class ContainerRoute extends React.PureComponent<IContainerRouteUiProps> {

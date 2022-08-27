@@ -33,7 +33,7 @@ export abstract class HierarchyItemStore<
         }
     }
 
-    private isPartOfFamily(child: TItem, id: string): boolean {
+    private isPartOfFamily(child: TItem | undefined, id: string): boolean {
         if (!child) {
             return false
         }
@@ -46,7 +46,7 @@ export abstract class HierarchyItemStore<
             return true
         }
 
-        return this.isPartOfFamily(this._items[child.parentId], id)
+        return this.isPartOfFamily(child.parentId ? this._items[child.parentId] : undefined, id)
     }
 
     getChildTree(id: string): string[] {
@@ -66,7 +66,9 @@ export abstract class HierarchyItemStore<
 
         for (let check = new Set(forbidden); check.size > 0; ) {
             const children = new Set<string>(
-                Object.keys(this._items).filter((id) => !forbidden.has(id) && forbidden.has(this._items[id].parentId))
+                Object.keys(this._items).filter(
+                    (id) => !forbidden.has(id) && forbidden.has(this._items[id].parentId || '')
+                )
             )
 
             check = children

@@ -18,7 +18,7 @@ export class SeriesStore extends HierarchyItemStore<ISeries> {
 
     protected createNew(): ISeries {
         return {
-            _id: undefined,
+            _id: undefined as unknown as string,
             description: undefined,
             fullName: undefined,
             name: '',
@@ -30,7 +30,7 @@ export class SeriesStore extends HierarchyItemStore<ISeries> {
         return {
             description: series.description,
             name: series.name,
-            parentId: series.parentId || null,
+            parentId: (series.parentId || null) as unknown as string,
         }
     }
 }

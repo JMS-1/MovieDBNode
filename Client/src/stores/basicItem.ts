@@ -1,6 +1,6 @@
 import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
-import { observable, action, computed, makeObservable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 import { createViewModel, IViewModel } from 'mobx-utils'
 
 import { RootStore } from './root'
@@ -134,15 +134,15 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
         const forField = errors.filter((e) => e.field === field)
 
-        return forField.length > 0 ? forField.map((e) => e.message) : null
+        return forField.length > 0 ? forField.map((e) => e.message || 'unknown') : null
     }
 
     getItem(id: string): TItem | undefined {
         return this._items[id]
     }
 
-    get selected(): TItem {
-        return this._items[this._selected]
+    get selected(): TItem | undefined {
+        return this._selected ? this._items[this._selected] : undefined
     }
 
     get workingCopy(): TItem & IViewModel<TItem> {
@@ -155,7 +155,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         return validator.validate(
             this.toProtocol(this.workingCopy),
             this.workingCopy._id ? this.updateValidation : this.inputValidation
-        )
+        ) as ValidationError[] | true
     }
 
     get inputValidation(): ValidationSchema {

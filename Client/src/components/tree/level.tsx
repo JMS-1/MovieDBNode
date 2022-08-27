@@ -1,4 +1,5 @@
 import { computed, makeObservable } from 'mobx'
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Icon, Label, List, SemanticICONS } from 'semantic-ui-react'
@@ -11,7 +12,7 @@ interface INodeItem {
 }
 
 interface INodeStore<TItem extends INodeItem> {
-    getIcon?(item: TItem): SemanticICONS
+    getIcon?(item: TItem | undefined): SemanticICONS
     getItem(id: string): TItem | undefined
     getName(item: TItem): string
     readonly childTree: Record<string, Set<string>>

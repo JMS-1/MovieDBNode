@@ -3,10 +3,11 @@ import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { ValidationSchema } from 'fastest-validator'
 import gql from 'graphql-tag'
-import { createHashHistory } from 'history'
-import { observable, action, makeObservable } from 'mobx'
-import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
+import { action, makeObservable, observable } from 'mobx'
+import { RouterStore } from 'mobx-react-router'
 import fetch from 'node-fetch'
+import * as React from 'react'
+import { HashRouter } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 
 import { ContainerStore } from './container'
@@ -76,6 +77,11 @@ export class RootStore {
         this.translations = new TranslationStore(this)
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    public readonly Router: React.FC<{ children?: React.ReactNode }> = (props) => (
+        <HashRouter>{props.children}</HashRouter>
+    )
+
     get theme(): TThemes {
         return this._theme
     }
@@ -86,7 +92,8 @@ export class RootStore {
         let link = document.getElementById(this._themeId) as HTMLLinkElement
 
         if (!link) {
-            link = document.querySelector('head').appendChild(document.createElement('link'))
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            link = document.querySelector('head')!.appendChild(document.createElement('link'))
 
             link.id = this._themeId
             link.rel = 'stylesheet'
@@ -162,7 +169,4 @@ export class RootStore {
     }
 }
 
-const browserHistory = createHashHistory()
-
 export const rootStore = new RootStore()
-export const history = syncHistoryWithStore(browserHistory, rootStore.router)

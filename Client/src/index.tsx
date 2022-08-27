@@ -1,17 +1,18 @@
+import './index.scss'
+
 import * as React from 'react'
-import { render } from 'react-dom'
-import { Router } from 'react-router'
+import { createRoot } from 'react-dom/client'
 
 import { Root } from './components/root/root'
-import { rootStore, history } from './stores'
+import { rootStore } from './stores'
 
 rootStore.startup()
 
-render(
-    <Router history={history}>
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+createRoot(document.querySelector('client-root')!).render(
+    <rootStore.Router>
         <Root />
-    </Router>,
-    document.querySelector('client-root')
+    </rootStore.Router>
 )
 
 // Kleine Hilfe zum Styling während der Entwicklung.

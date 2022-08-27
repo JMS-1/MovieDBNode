@@ -7,7 +7,7 @@ import { RecordingItem } from './item/item'
 import { PageSizeSelector } from './size/size'
 
 import { Search } from '../../components/search/search'
-import { translations, recordings, languages, genres, series } from '../../stores'
+import { genres, languages, recordings, series, translations } from '../../stores'
 
 export interface IRecordingRouteUiProps {}
 

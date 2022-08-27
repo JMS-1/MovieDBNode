@@ -1,3 +1,4 @@
+// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Header, Message } from 'semantic-ui-react'
@@ -5,12 +6,12 @@ import { Header, Message } from 'semantic-ui-react'
 import { translations } from '../../stores'
 
 export interface IReportErrorUiProps {
-    errors: string[]
+    errors: string[] | undefined | null
 }
 
 @observer
 export class ReportError extends React.PureComponent<IReportErrorUiProps> {
-    render(): JSX.Element {
+    render(): JSX.Element | null {
         const { errors } = this.props
 
         if (!errors) {

@@ -1,20 +1,16 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
 import { Button, Dropdown, DropdownProps, Form } from 'semantic-ui-react'
-import { isArray } from 'util'
 
 import { IRecording, TRecordingContainerType } from '../../../../../Server/src/model'
 import { DeleteConfirm } from '../../../components/confirm/confirm'
 import { TextInput } from '../../../components/textInput/textInput'
-import { translations, recordings, series, genres, languages, containers, rootStore } from '../../../stores'
+import { containers, genres, languages, recordings, rootStore, series, translations } from '../../../stores'
 import { RecordingLinks } from '../links/links'
 
-export interface IRecordingParams {
-    id: string
+export interface IRecordingUiProps {
+    match?: { params: { id?: string } }
 }
-
-export interface IRecordingUiProps extends RouteComponentProps<IRecordingParams> {}
 
 const noSelection: string[] = []
 
@@ -161,11 +157,11 @@ export class Recording extends React.PureComponent<IRecordingUiProps> {
     }
 
     private readonly setGenres = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
-        recordings.workingCopy.genres = isArray(data.value) ? (data.value as string[]) : []
+        recordings.workingCopy.genres = Array.isArray(data.value) ? (data.value as string[]) : []
     }
 
     private readonly setLanguages = (ev: React.SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
-        recordings.workingCopy.languages = isArray(data.value) ? (data.value as string[]) : []
+        recordings.workingCopy.languages = Array.isArray(data.value) ? (data.value as string[]) : []
     }
 
     UNSAFE_componentWillMount(): void {

@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import { computed, action, observable, makeObservable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 import * as React from 'react'
-import { SemanticICONS, DropdownItemProps, Icon } from 'semantic-ui-react'
+import { DropdownItemProps, Icon, SemanticICONS } from 'semantic-ui-react'
 
 import { RootStore } from '.'
 import { HierarchyItemStore } from './hierarchicalItem'
 import { routes } from './routes'
 
-import { IContainer, TContainerType, IRecording } from '../../../Server/src/model'
+import { IContainer, IRecording, TContainerType } from '../../../Server/src/model'
 
 const optionOrder = ['Undefined', 'FeatureSet', 'Box', 'Shelf', 'Folder', 'Disk']
 
@@ -62,7 +62,7 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
 
     protected createNew(): IContainer {
         return {
-            _id: undefined,
+            _id: undefined as unknown as string,
             description: undefined,
             name: '',
             parentId: undefined,
@@ -75,7 +75,7 @@ export class ContainerStore extends HierarchyItemStore<IContainer> {
         return {
             description: container.description,
             name: container.name,
-            parentId: container.parentId || null,
+            parentId: (container.parentId || null) as unknown as string,
             parentLocation: container.parentLocation,
             type: toSend ? container.type : (TContainerType[container.type] as TContainerType),
         }
