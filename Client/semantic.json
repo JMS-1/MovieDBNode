@@ -1,5 +1,5 @@
 {
-    "base": "Client/src/semantic",
+    "base": "src/semantic",
     "paths": {
         "source": {
             "config": "src/theme.config",
@@ -8,12 +8,12 @@
             "themes": "src/themes/"
         },
         "output": {
-            "packaged": "../../../Server/dist/default/",
+            "packaged": "../../public/default/",
             "uncompressed": "../../../.scratch/components/",
             "compressed": "../../../.scratch/components/",
-            "themes": "../../../Server/dist/default/themes/"
+            "themes": "../../public/default/themes/"
         },
-        "clean": "../../../Server/dist/default/"
+        "clean": "../../public/default/"
     },
     "permission": false,
     "autoInstall": false,

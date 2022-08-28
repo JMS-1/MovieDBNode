@@ -22,7 +22,6 @@
         "extract-loader": "^5.1.0",
         "file-loader": "^6.2.0",
         "filter-webpack-output": "^1.2.0",
-        "fomantic-ui": "^2.8.8",
         "gulp": "^4.0.2",
         "gulp-debug": "^4.0.0",
         "gulp-rename": "^2.0.0",

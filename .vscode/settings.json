@@ -14,7 +14,8 @@
     "eslint.enable": true,
     "eslint.validate": ["typescript", "typescriptreact"],
     "files.exclude": {
-        "Server/src/**/*.js*": true
+        "Server/src/**/*.js*": true,
+        "Client/node_modules": true
     },
     "scss.validate": false,
     "stylelint.enable": true,
