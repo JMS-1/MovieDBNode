@@ -45,7 +45,7 @@
     "name": "client",
     "scripts": {
         "build": "webpack --mode production",
-        "themes": "(cd src/semantic && gulp build)",
+        "themes": "gulp theme --theme=alternate.1 && gulp theme --theme=alternate.2 && gulp theme --theme=default",
         "watch": "webpack serve --port 29500 --hot"
     },
     "version": "1.0.0"

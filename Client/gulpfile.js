@@ -4,7 +4,7 @@ const shell = require('gulp-shell')
 
 const theme = process.argv.find((a) => a.startsWith('--theme=')).substring(8)
 
-gulp.task('build', async () => {
+gulp.task('theme', async () => {
     fs.copyFileSync(`semantic.${theme}.json`, 'semantic.json')
 
     process.chdir('src/semantic/src')
