@@ -5,19 +5,20 @@
     "[typescriptreact]": {
         "editor.formatOnSave": false
     },
-    "css.validate": false,
+    "css.validate": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,
-        "source.fixAll.stylelint": true
+        "source.fixAll": true
     },
     "editor.formatOnSave": true,
     "eslint.enable": true,
     "eslint.validate": ["typescript", "typescriptreact"],
     "files.exclude": {
-        "Server/src/**/*.js*": true,
-        "Client/node_modules": true
+        "Server/src/**/*.js": true,
+        "Server/src/**/*.js.map": true,
+        "node_modules": true
     },
-    "scss.validate": false,
+    "scss.validate": true,
     "stylelint.enable": true,
+    "stylelint.validate": ["css", "less", "postcss", "scss"],
     "typescript.tsdk": "node_modules/typescript/lib"
 }
