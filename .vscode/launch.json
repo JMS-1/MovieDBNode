@@ -11,15 +11,15 @@
                 "runtimeExecutable": "/snap/bin/chromium"
             },
             "name": "Client",
-            "port": 29091,
+            "port": 29501,
             "request": "launch",
-            "runtimeArgs": ["--remote-debugging-port=29091", "--new-window"],
+            "runtimeArgs": ["--remote-debugging-port=29501", "--new-window"],
             "sourceMapPathOverrides": {
-                "webpack:///./*": "${workspaceFolder}/*"
+                "webpack://client/./*": "${workspaceFolder}/Client/*"
             },
             "sourceMaps": true,
             "type": "chrome",
-            "url": "http://localhost:29098",
+            "url": "http://localhost:29500?gql=http://localhost:29098",
             "userDataDir": "${workspaceFolder}/.vscode/chrome",
             "webRoot": "${workspaceFolder}"
         },

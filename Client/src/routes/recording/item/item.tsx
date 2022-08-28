@@ -63,7 +63,7 @@ export class RecordingItem extends React.PureComponent<IRecordingItemUiProps> {
     }
 
     private readonly onSelect = (): void => {
-        history.pushState({}, `#${routes.recording}/${this.props.recording._id}`)
+        window.location.href = `#${routes.recording}/${this.props.recording._id}`
     }
 
     get languages(): string[] {

@@ -234,7 +234,7 @@ export class RecordingStore extends BasicItemStore<model.IRecording> {
                 },
             })
 
-            window.open('export', '_blank')
+            window.open(`${this.root.server}/export`, '_blank')
         } catch (error) {
             this.root.requestFailed(error)
         } finally {

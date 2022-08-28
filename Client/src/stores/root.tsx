@@ -30,6 +30,8 @@ export class RootStore {
     readonly series: SeriesStore
     readonly translations: TranslationStore
 
+    readonly server: string
+
     _outstandingRequests = 0
 
     inputValidations: Record<string, ValidationSchema> = {}
@@ -60,10 +62,14 @@ export class RootStore {
             updateValidations: observable,
         })
 
+        const { search, origin } = window.location
+
+        this.server = search.startsWith('?gql=') ? search.substring(5) : origin
+
         this.gql = new ApolloClient({
             cache: new InMemoryCache(),
             defaultOptions: { query: { fetchPolicy: 'no-cache' } },
-            link: createHttpLink({ fetch, uri: `${window.location.origin}/graphql` }),
+            link: createHttpLink({ fetch, uri: `${this.server}/graphql` }),
         })
 
         this.containers = new ContainerStore(this)

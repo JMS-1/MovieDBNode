@@ -1,95 +1,26 @@
 {
     "tasks": [
         {
-            "label": "build TSX",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "script": "build-client",
-            "type": "npm"
-        },
-        {
-            "label": "build sematic",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "task": "build-default-ui",
-            "type": "gulp"
-        },
-        {
-            "label": "build sematic (alternate 1)",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "task": "build-alternate-1-ui",
-            "type": "gulp"
-        },
-        {
-            "label": "build sematic (alternate 2)",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "task": "build-alternate-2-ui",
-            "type": "gulp"
-        },
-        {
-            "isBackground": true,
-            "label": "watch TSX",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "script": "watch-client",
-            "type": "npm"
-        },
-        {
-            "isBackground": true,
-            "label": "watch semantic",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "task": "watch-default-ui",
-            "type": "gulp"
-        },
-        {
-            "isBackground": true,
-            "label": "watch SASS",
-            "problemMatcher": "$tsc",
-            "task": "watch-sass",
-            "type": "gulp"
-        },
-        {
-            "label": "build SASS",
-            "problemMatcher": "$tsc",
-            "task": "build-sass",
-            "type": "gulp"
-        },
-        {
-            "args": ["--watch", "-p", "\"${workspaceFolder}/Server/tsconfig.json\""],
-            "command": "${workspaceFolder}/node_modules/.bin/tsc",
-            "isBackground": true,
-            "label": "watch API",
-            "problemMatcher": "$tsc-watch",
-            "type": "shell"
-        },
-        {
-            "dependsOn": ["watch TSX", "watch SASS"],
-            "group": "build",
-            "label": "watch",
-            "problemMatcher": []
-        },
-        {
-            "label": "build API",
-            "problemMatcher": [],
-            "task": "build-server",
-            "type": "gulp"
-        },
-        {
             "label": "build Client",
-            "problemMatcher": [],
-            "task": "build-client",
-            "type": "gulp"
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "script": "build",
+            "options": { "cwd": "Client" },
+            "type": "npm"
         },
         {
-            "group": "build",
-            "label": "build",
-            "problemMatcher": [],
-            "task": "build",
-            "type": "gulp"
+            "label": "build Themes",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "options": { "cwd": "Client" },
+            "script": "themes",
+            "type": "npm"
         },
         {
-            "group": "build",
-            "label": "deploy",
-            "problemMatcher": [],
-            "task": "deploy",
-            "type": "gulp"
+            "isBackground": true,
+            "label": "watch Client",
+            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
+            "script": "watch",
+            "options": { "cwd": "Client" },
+            "type": "npm"
         }
     ],
     "version": "2.0.0"
