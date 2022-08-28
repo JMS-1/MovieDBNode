@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -84,15 +88,15 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
             sort: entities_1.RecordingSort,
             sortOrder: types.SortDirection,
         }, entities_1.RecordingQueryResponse, 'Freie Suche über Aufzeichnungen.', async (args) => {
-            var _a, _b, _c;
+            var _a;
             const filter = {};
             if (args.language) {
                 filter.languages = args.language;
             }
-            if (((_a = args.genres) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+            if (args.genres && args.genres.length > 0) {
                 filter.genres = { $all: args.genres };
             }
-            if (((_b = args.series) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+            if (args.series && args.series.length > 0) {
                 filter.series = { $in: args.series };
             }
             switch (args.rent) {
@@ -124,11 +128,9 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 },
             });
             const self = await this.collection;
-            const result = await self
-                .aggregate(query, { collation })
-                .toArray();
+            const result = await self.aggregate(query, { collation }).toArray();
             const firstRes = result && result[0];
-            const countRes = (_c = firstRes === null || firstRes === void 0 ? void 0 : firstRes.count) === null || _c === void 0 ? void 0 : _c[0];
+            const countRes = (_a = firstRes === null || firstRes === void 0 ? void 0 : firstRes.count) === null || _a === void 0 ? void 0 : _a[0];
             delete filter.languages;
             const languageInfo = await self
                 .aggregate([
@@ -149,11 +151,11 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 return response;
             }
             const languageCollection = await this.connection.getCollection(collections_1.collectionNames.languages);
-            const languages = await languageCollection.find().toArray();
+            const languages = await languageCollection.find({}).toArray();
             const languageMap = {};
             languages.forEach((l) => (languageMap[l._id] = l.name));
             const genreCollection = await this.connection.getCollection(collections_1.collectionNames.genres);
-            const genres = await genreCollection.find().toArray();
+            const genres = await genreCollection.find({}).toArray();
             const genreMap = {};
             genres.forEach((g) => (genreMap[g._id] = g.name));
             exports.csvData = 'Name;Sprachen;Kategorien\r\n';
@@ -200,7 +202,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
     }
     async setFullName(item) {
         var _a;
-        const names = await utils_1.refreshRecordingNames({ _id: item._id }, await this.collection);
+        const names = await (0, utils_1.refreshRecordingNames)({ _id: item._id }, await this.collection);
         if (((_a = names[0]) === null || _a === void 0 ? void 0 : _a._id) === item._id) {
             item.fullName = names[0].fullName;
         }
@@ -219,5 +221,4 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
         return this.setFullName(item);
     }
 });
-
 //# sourceMappingURL=recording.js.map

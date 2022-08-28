@@ -25,25 +25,14 @@
         },
         {
             "console": "integratedTerminal",
-            "env": {
-                "DEBUG": "*"
-            },
             "envFile": "${workspaceFolder}/.vscode/.env",
             "name": "Server",
             "request": "launch",
-            "runtimeArgs": ["run-script", "debug-server"],
+            "resolveSourceMapLocations": null,
+            "runtimeArgs": ["run-script", "debug:server"],
             "runtimeExecutable": "npm",
             "smartStep": true,
             "sourceMaps": true,
-            "type": "node"
-        },
-        {
-            "console": "externalTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.env",
-            "name": "Start Server",
-            "request": "launch",
-            "runtimeArgs": ["run-script", "start-server"],
-            "runtimeExecutable": "npm",
             "type": "node"
         }
     ],

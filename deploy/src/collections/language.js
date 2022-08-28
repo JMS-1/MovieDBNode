@@ -13,5 +13,4 @@ exports.LanguageCollection = connection_1.MongoConnection.createCollection(entit
         this.parentProp = 'languages';
     }
 });
-
 //# sourceMappingURL=language.js.map

@@ -25,14 +25,14 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
     }
     async afterUpdate(series) {
         const seriesIds = await this.refreshFullNames(series);
-        await utils_1.refreshRecordingNames({ series: { $in: Array.from(seriesIds) } }, await this.connection.getCollection(collections_1.collectionNames.recordings));
+        await (0, utils_1.refreshRecordingNames)({ series: { $in: Array.from(seriesIds) } }, await this.connection.getCollection(collections_1.collectionNames.recordings));
     }
     async afterRemove(series) {
         const self = await this.collection;
         const children = await self.find({ parentId: series._id }).toArray();
         await super.afterRemove(series);
         const seriesIds = await this.updateFullNameByChildren(children, '', self, new Set());
-        await utils_1.refreshRecordingNames({ series: { $in: Array.from(seriesIds) } }, await this.connection.getCollection(collections_1.collectionNames.recordings));
+        await (0, utils_1.refreshRecordingNames)({ series: { $in: Array.from(seriesIds) } }, await this.connection.getCollection(collections_1.collectionNames.recordings));
     }
     async updateFullName(series, parent, self, updated) {
         if (updated.has(series._id)) {
@@ -59,5 +59,4 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
         return this.updateFullName(series, parent === null || parent === void 0 ? void 0 : parent.fullName, self, new Set());
     }
 });
-
 //# sourceMappingURL=series.js.map

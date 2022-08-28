@@ -39,7 +39,7 @@
     "main": "index.js",
     "name": "client",
     "scripts": {
-        "build": "webpack --mode production",
+        "build": "rimraf build && webpack --mode production",
         "themes": "gulp theme --theme=alternate.1 && gulp theme --theme=alternate.2 && gulp theme --theme=default",
         "watch": "webpack serve --port 29500 --hot"
     },

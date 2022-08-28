@@ -24,5 +24,4 @@ var TRecordingSort;
     TRecordingSort[TRecordingSort["created"] = 1] = "created";
     TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
 })(TRecordingSort = exports.TRecordingSort || (exports.TRecordingSort = {}));
-
 //# sourceMappingURL=enum.js.map

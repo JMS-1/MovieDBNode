@@ -18,14 +18,15 @@ class HierarchicalCollection extends foreignKey_1.ForeignKeyCollection {
         await this.demandParent(item.parentId);
     }
     async beforeUpdate(item, id) {
-        if (!(await this.demandParent(item.parentId))) {
+        const hitem = item;
+        if (!(await this.demandParent(hitem.parentId))) {
             return;
         }
         const self = await this.collection;
         const all = await self.find({}, { projection: { _id: 1, parentId: 1 } }).toArray();
         const parentMap = {};
-        all.forEach((c) => (parentMap[c._id] = c.parentId));
-        parentMap[id] = item.parentId;
+        all.forEach((c) => (parentMap[c._id] = c.parentId || ''));
+        parentMap[id] = hitem.parentId || '';
         const cycleTest = new Set();
         for (; id; id = parentMap[id]) {
             if (cycleTest.has(id)) {
@@ -40,5 +41,4 @@ class HierarchicalCollection extends foreignKey_1.ForeignKeyCollection {
     }
 }
 exports.HierarchicalCollection = HierarchicalCollection;
-
 //# sourceMappingURL=hierarchical.js.map

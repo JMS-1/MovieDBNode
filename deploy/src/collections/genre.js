@@ -13,5 +13,4 @@ exports.GenreCollection = connection_1.MongoConnection.createCollection(entities
         this.parentProp = 'genres';
     }
 });
-
 //# sourceMappingURL=genre.js.map

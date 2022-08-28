@@ -9,5 +9,4 @@ var collectionNames;
     collectionNames["recordings"] = "recordings";
     collectionNames["series"] = "series";
 })(collectionNames = exports.collectionNames || (exports.collectionNames = {}));
-
 //# sourceMappingURL=collections.js.map

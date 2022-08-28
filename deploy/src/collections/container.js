@@ -13,5 +13,4 @@ exports.ContainerCollection = connection_1.MongoConnection.createCollection(enti
         this.parentProp = 'containerId';
     }
 });
-
 //# sourceMappingURL=container.js.map

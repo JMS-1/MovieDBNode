@@ -22,5 +22,4 @@ class ForeignKeyCollection extends collection_1.CollectionBase {
     }
 }
 exports.ForeignKeyCollection = ForeignKeyCollection;
-
 //# sourceMappingURL=foreignKey.js.map

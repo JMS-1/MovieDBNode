@@ -27,5 +27,4 @@ async function refreshRecordingNames(filter, recordings) {
     return results;
 }
 exports.refreshRecordingNames = refreshRecordingNames;
-
 //# sourceMappingURL=utils.js.map

@@ -19,9 +19,9 @@ const config_1 = require("./config");
 const utils_1 = require("./utils");
 const utfBom = Buffer.from([0xef, 0xbb, 0xbf]);
 async function startup() {
-    const app = express_1.default();
-    app.use(express_1.default.static(path_1.join(__dirname, '../dist')));
-    app.use(body_parser_1.json());
+    const app = (0, express_1.default)();
+    app.use(express_1.default.static((0, path_1.join)(__dirname, '../dist')));
+    app.use((0, body_parser_1.json)());
     app.get('/export', (_request, response) => {
         response.setHeader('Content-disposition', 'attachment; filename=export.csv');
         response.setHeader('Content-Type', 'text/csv; charset=utf-8');
@@ -47,33 +47,31 @@ async function startup() {
         },
         plugins: [
             {
-                requestDidStart() {
-                    return {
-                        didEncounterErrors(requestContext) {
-                            var _a;
-                            if (((_a = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context) === null || _a === void 0 ? void 0 : _a.requireAuth) === false) {
-                                const gqlErrors = requestContext.errors || [];
-                                if (gqlErrors.some((e) => e.originalError instanceof apollo_server_express_1.AuthenticationError)) {
-                                    requestContext.context.requireAuth = true;
-                                }
+                requestDidStart: async () => ({
+                    didEncounterErrors: async (requestContext) => {
+                        var _a;
+                        if (((_a = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context) === null || _a === void 0 ? void 0 : _a.requireAuth) === false) {
+                            const gqlErrors = requestContext.errors || [];
+                            if (gqlErrors.some((e) => e.originalError instanceof apollo_server_express_1.AuthenticationError)) {
+                                requestContext.context.requireAuth = true;
                             }
-                        },
-                        willSendResponse(requestContext) {
-                            var _a, _b;
-                            const context = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context;
-                            if ((context === null || context === void 0 ? void 0 : context.requireAuth) && context.res) {
-                                context.res.status(401);
-                                const http = (_a = requestContext.response) === null || _a === void 0 ? void 0 : _a.http;
-                                if ((_b = http === null || http === void 0 ? void 0 : http.headers) === null || _b === void 0 ? void 0 : _b.set) {
-                                    http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"');
-                                }
+                        }
+                    },
+                    willSendResponse: async (requestContext) => {
+                        var _a, _b;
+                        const context = requestContext === null || requestContext === void 0 ? void 0 : requestContext.context;
+                        if ((context === null || context === void 0 ? void 0 : context.requireAuth) && context.res) {
+                            context.res.status(401);
+                            const http = (_a = requestContext.response) === null || _a === void 0 ? void 0 : _a.http;
+                            if ((_b = http === null || http === void 0 ? void 0 : http.headers) === null || _b === void 0 ? void 0 : _b.set) {
+                                http.headers.set('WWW-Authenticate', 'Basic realm="neuroomNet CMS"');
                             }
-                        },
-                    };
-                },
+                        }
+                    },
+                }),
             },
         ],
-        schema: new graphql_1.GraphQLSchema(await schema_1.createSchemaConfiguration({
+        schema: new graphql_1.GraphQLSchema(await (0, schema_1.createSchemaConfiguration)({
             containers: container_1.ContainerCollection,
             genres: genre_1.GenreCollection,
             languages: language_1.LanguageCollection,
@@ -81,11 +79,12 @@ async function startup() {
             series: series_1.SeriesCollection,
         })),
     });
+    await server.start();
     server.applyMiddleware({ app });
     app.listen(config_1.Config.port);
 }
 function startupError(error) {
-    debug_1.default('startup')('%s', utils_1.getMessage(error));
+    (0, debug_1.default)('startup')('%s', (0, utils_1.getMessage)(error));
 }
 try {
     startup().then(undefined, startupError).catch(startupError);
@@ -93,5 +92,4 @@ try {
 catch (error) {
     startupError(error);
 }
-
 //# sourceMappingURL=startup.js.map
