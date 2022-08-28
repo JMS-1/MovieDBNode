@@ -15,6 +15,7 @@ export interface IRecordingRouteUiProps {}
 const pageSizes = [15, 30, 50, 75, 100, 250]
 
 @observer
+// eslint-disable-next-line unused-imports/no-unused-vars-ts
 export class RecordingRoute extends React.PureComponent<IRecordingRouteUiProps> {
     constructor(props: Readonly<IRecordingRouteUiProps>) {
         super(props)

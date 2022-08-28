@@ -1,26 +1,19 @@
-// eslint-disable-next-line unused-imports/no-unused-imports-ts
 import { observer } from 'mobx-react'
 import * as React from 'react'
+import { useParams } from 'react-router'
 
 import { ContainerDetails } from './details/details'
 import { ContainerTree } from './tree/tree'
 
 import { MasterDetailRoute } from '../../components/masterDetailRoute/masterDetail'
 
-export interface IContainerRouteUiProps {
-    match?: { params: { id?: string } }
-}
+export const ContainerRoute: React.FC = observer((_props) => {
+    const { id } = useParams()
 
-@observer
-export class ContainerRoute extends React.PureComponent<IContainerRouteUiProps> {
-    render(): JSX.Element {
-        const id = this.props.match?.params.id
-
-        return (
-            <MasterDetailRoute className='movie-db-container-route'>
-                <ContainerTree id={id} />
-                <ContainerDetails id={id} />
-            </MasterDetailRoute>
-        )
-    }
-}
+    return (
+        <MasterDetailRoute className='movie-db-container-route'>
+            <ContainerTree id={id} />
+            <ContainerDetails id={id} />
+        </MasterDetailRoute>
+    )
+})

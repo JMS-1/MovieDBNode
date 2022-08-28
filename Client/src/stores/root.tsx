@@ -5,7 +5,6 @@ import { ValidationSchema } from 'fastest-validator'
 // eslint-disable-next-line import/no-named-as-default
 import gql from 'graphql-tag'
 import { action, makeObservable, observable } from 'mobx'
-import { RouterStore } from 'mobx-react-router'
 import * as React from 'react'
 import { HashRouter } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
@@ -28,7 +27,6 @@ export class RootStore {
     readonly gql: ApolloClient<unknown>
     readonly languages: LanguageStore
     readonly recordings: RecordingStore
-    readonly router = new RouterStore()
     readonly series: SeriesStore
     readonly translations: TranslationStore
 

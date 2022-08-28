@@ -61,7 +61,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
 
         this.deleteConfirm = false
 
-        this.root.router.replace(this.itemRoute)
+        history.replaceState({}, `#${this.itemRoute}`)
     }
 
     async remove(item?: TItem): Promise<void> {
@@ -86,7 +86,7 @@ export abstract class BasicItemStore<TItem extends { _id: string }> {
         this._items[changed._id] = changed
 
         if (added) {
-            this.root.router.replace(`${this.itemRoute}/${changed._id}`)
+            history.replaceState({}, `#${this.itemRoute}/${changed._id}`)
         }
     }
 

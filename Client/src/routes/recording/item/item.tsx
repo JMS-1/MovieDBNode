@@ -7,7 +7,7 @@ import { Icon, Table } from 'semantic-ui-react'
 import { IRecording } from '../../../../../Server/src/model/client'
 import { Genre } from '../../../components/genre/genre'
 import { Language } from '../../../components/language/language'
-import { genres, languages, rootStore } from '../../../stores'
+import { genres, languages } from '../../../stores'
 import { routes } from '../../../stores/routes'
 
 export interface IRecordingItemUiProps {
@@ -63,7 +63,7 @@ export class RecordingItem extends React.PureComponent<IRecordingItemUiProps> {
     }
 
     private readonly onSelect = (): void => {
-        rootStore.router.push(`${routes.recording}/${this.props.recording._id}`)
+        history.pushState({}, `#${routes.recording}/${this.props.recording._id}`)
     }
 
     get languages(): string[] {
