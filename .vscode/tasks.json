@@ -1,25 +1,25 @@
 {
     "tasks": [
         {
-            "label": "build Client",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "script": "build",
-            "options": { "cwd": "Client" },
-            "type": "npm"
-        },
-        {
-            "label": "build Themes",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "options": { "cwd": "Client" },
-            "script": "themes",
-            "type": "npm"
-        },
-        {
             "isBackground": true,
-            "label": "watch Client",
-            "problemMatcher": ["$awesometsc", "$awesomets-lint"],
-            "script": "watch",
-            "options": { "cwd": "Client" },
+            "label": "watch client",
+            "options": {
+                "cwd": "Client"
+            },
+            "problemMatcher": {
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "(.*?)"
+                    },
+                    "endsPattern": {
+                        "regexp": "bundle generation complete"
+                    }
+                },
+                "owner": "typescript",
+                "pattern": "$tsc"
+            },
+            "script": "start",
             "type": "npm"
         }
     ],

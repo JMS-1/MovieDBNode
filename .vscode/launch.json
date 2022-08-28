@@ -14,12 +14,12 @@
             "port": 29501,
             "request": "launch",
             "runtimeArgs": ["--remote-debugging-port=29501", "--new-window"],
-            "sourceMapPathOverrides": {
-                "webpack://client/./*": "${workspaceFolder}/Client/*"
-            },
             "sourceMaps": true,
             "type": "chrome",
             "url": "http://localhost:29500?gql=http://localhost:29098",
+            "sourceMapPathOverrides": {
+                "webpack://*": "${workspaceFolder}/Client/*"
+            },
             "userDataDir": "${workspaceFolder}/.vscode/chrome",
             "webRoot": "${workspaceFolder}"
         },

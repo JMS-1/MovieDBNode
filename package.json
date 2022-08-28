@@ -37,15 +37,14 @@
     "name": "movie-db-neu",
     "prettier": "@insynergie/prettier-config",
     "scripts": {
-        "build": "npm run build:server && npm run themes && npm run build:client",
+        "build": "npm run build:server && npm run build:client",
         "build:client": "(cd Client && npm run build)",
         "build:server": "(cd Server && tsc)",
         "debug:server": "node Server/src/startup",
         "deploy": "npm run build && gulp deploy",
         "start": "node src/startup",
         "start:server": "node Server/src/startup",
-        "themes": "(cd Client && npm run themes)",
-        "watch:client": "(cd Client && npm run watch)",
+        "watch:client": "(cd Client && npm run start)",
         "watch:server": "(cd Server && tsc --watch)"
     },
     "stylelint": {
@@ -54,5 +53,5 @@
             "**/*.min.css"
         ]
     },
-    "version": "2.1.0"
+    "version": "2.2.0"
 }
