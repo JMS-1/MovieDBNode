@@ -25,6 +25,11 @@ declare module 'api' {
         series?: string
     }
 
+    interface ICounted {
+        _id: string
+        count: number
+    }
+
     interface IRecordingQueryRequest {
         correlationId?: string
         firstPage: number
@@ -42,8 +47,8 @@ declare module 'api' {
     interface IRecordingQueryResult {
         correlationId: string
         count: number
-        genres: IGenre[]
-        languages: ILanguage[]
+        genres: ICounted[]
+        languages: ICounted[]
         total: number
         view: IRecording[]
     }
