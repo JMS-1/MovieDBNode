@@ -53,11 +53,7 @@ export const RecordingCollection = MongoConnection.createCollection(
             await self.createIndex({ series: 1 }, { name: 'recording_series' })
         }
 
-        private async validateForeignKeys(
-            collectionName: string,
-            scope: string,
-            ids?: string | string[]
-        ): Promise<void> {
+        async validateForeignKeys(collectionName: string, scope: string, ids?: string | string[]): Promise<void> {
             if (!ids) {
                 return
             }
@@ -75,14 +71,14 @@ export const RecordingCollection = MongoConnection.createCollection(
             }
         }
 
-        private async demandForeignKeys(item: IRecording): Promise<void> {
+        async demandForeignKeys(item: IRecording): Promise<void> {
             await this.validateForeignKeys(collectionNames.containers, 'Ablage', item.containerId)
             await this.validateForeignKeys(collectionNames.genres, 'Kategorie', item.genres)
             await this.validateForeignKeys(collectionNames.languages, 'Sprache', item.languages)
             await this.validateForeignKeys(collectionNames.series, 'Serie', item.series)
         }
 
-        private async setFullName(item: IRecording): Promise<void> {
+        async setFullName(item: IRecording): Promise<void> {
             const names = await refreshRecordingNames({ _id: item._id }, await this.collection)
 
             if (names[0]?._id === item._id) {

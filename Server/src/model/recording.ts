@@ -3,11 +3,13 @@ import * as types from '@jms-1/mongodb-graphql/lib/types'
 import { TRecordingContainerType, TRecordingSort } from './enum'
 import { uniqueIdPattern } from './utils'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const RecordingContainerType = types.GqlEnum('RecordingContainerType', TRecordingContainerType, {
     description: 'Ablageart einer Aufzeichnung.',
     sortable: true,
 })
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const Link = types.GqlObject(
     'Link',
     {
@@ -40,6 +42,7 @@ export const Link = types.GqlObject(
     { description: 'Beschreibt einen Verweis.' }
 )
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const Recording = types.GqlObject(
     'Recording',
     {
@@ -136,10 +139,12 @@ export const Recording = types.GqlObject(
     { description: 'Beschreibt eine Aufzeichnung.' }
 )
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const RecordingSort = types.GqlEnum('RecordingSort', TRecordingSort, {
     description: 'Eigenschaften, nach denen die Aufzeichnungen sortiert werden können.',
 })
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const QueryCountInfo = types.GqlObject(
     'QueryCountInfo',
     {
@@ -149,6 +154,7 @@ export const QueryCountInfo = types.GqlObject(
     { description: 'Beschreibt die Anzahl von Aufzeichnungen für ein bestimmtes Kriterium.' }
 )
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const RecordingQueryResponse = types.GqlObject(
     'RecordingQueryResponse',
     {

@@ -1,2 +1,7 @@
 <pre>{{ result | json }}</pre>
+<div>
+    <button (click)="onPrev()">-</button>
+    {{ pageSize }}
+    <button (click)="onNext()">+</button>
+</div>
 <router-outlet></router-outlet>

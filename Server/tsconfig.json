@@ -14,10 +14,6 @@
         "strictPropertyInitialization": false,
         "target": "es2017"
     },
-    "exclude": [
-        "node_modules"
-    ],
-    "include": [
-        "src/**/*.ts",
-    ]
+    "exclude": ["node_modules"],
+    "include": ["src/**/*.ts"]
 }

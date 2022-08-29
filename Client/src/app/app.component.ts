@@ -11,11 +11,7 @@ import { RecordingsService } from './services/recordings/recordings.service'
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-    private _query?: ReturnType<RecordingsService['query']>
-
-    private _subscription?: Subscription
-
-    private _queryId = uuid()
+    private _query?: Subscription
 
     result: IRecordingQueryResult = {
         correlationId: '',
@@ -29,30 +25,22 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private readonly _recordings: RecordingsService) {}
 
     ngOnInit(): void {
-        this._queryId = uuid()
-
-        this._query = this._recordings.query(this._queryId)
-
-        this._subscription = this._query.subscribe((state) => {
-            if (state.loading) {
-                return
-            }
-
-            if (state.error) {
-                return
-            }
-
-            const reply = state.data.recordings.query
-
-            if (reply.correlationId !== this._queryId) {
-                return
-            }
-
-            this.result = reply
-        })
+        this._query = this._recordings.query.subscribe((result) => (this.result = result))
     }
 
     ngOnDestroy(): void {
-        this._subscription?.unsubscribe()
+        this._query?.unsubscribe()
+    }
+
+    get pageSize(): number {
+        return this._recordings.pageSize
+    }
+
+    onPrev(): void {
+        this._recordings.pageSize -= 1
+    }
+
+    onNext(): void {
+        this._recordings.pageSize += 1
     }
 }

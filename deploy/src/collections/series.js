@@ -6,7 +6,7 @@ const connection_1 = require("./connection");
 const hierarchical_1 = require("./hierarchical");
 const utils_1 = require("./utils");
 const entities_1 = require("../model/entities");
-exports.SeriesCollection = connection_1.MongoConnection.createCollection(entities_1.Series, class extends hierarchical_1.HierarchicalCollection {
+class SeriesHierarchicalCollection extends hierarchical_1.HierarchicalCollection {
     constructor() {
         super(...arguments);
         this.collectionName = collections_1.collectionNames.series;
@@ -58,5 +58,6 @@ exports.SeriesCollection = connection_1.MongoConnection.createCollection(entitie
         const parent = await self.findOne({ _id: series.parentId });
         return this.updateFullName(series, parent === null || parent === void 0 ? void 0 : parent.fullName, self, new Set());
     }
-});
+}
+exports.SeriesCollection = connection_1.MongoConnection.createCollection(entities_1.Series, SeriesHierarchicalCollection);
 //# sourceMappingURL=series.js.map
