@@ -6,12 +6,14 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { GraphQLModule } from './graphql.module'
 import { ConfigService } from './services/config/config.service'
-import { RecordingsService } from './services/recordings/recordings.service'
+import { ErrorService } from './services/error/error.service'
+import { LanguageService } from './services/languages/language.service'
+import { RecordingService } from './services/recordings/recording.service'
 
 @NgModule({
+    bootstrap: [AppComponent],
     declarations: [AppComponent],
     imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule],
-    providers: [ConfigService, RecordingsService],
-    bootstrap: [AppComponent],
+    providers: [ConfigService, RecordingService, ErrorService, LanguageService],
 })
 export class AppModule {}

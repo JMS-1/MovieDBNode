@@ -1,19 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IRecordingQueryResult } from 'api'
-import { Observable, Subscription } from 'rxjs'
-import { v4 as uuid } from 'uuid'
+import { ILanguage, IRecordingQueryResult } from 'api'
+import { Subscription } from 'rxjs'
 
-import { RecordingsService } from './services/recordings/recordings.service'
+import { LanguageService } from './services/languages/language.service'
+import { RecordingService } from './services/recordings/recording.service'
 
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
+    templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit, OnDestroy {
-    private _query?: Subscription
+    private _recordings?: Subscription
 
-    result: IRecordingQueryResult = {
+    private _languages?: Subscription
+
+    recordings: IRecordingQueryResult = {
         correlationId: '',
         count: 0,
         genres: [],
@@ -22,25 +24,32 @@ export class AppComponent implements OnInit, OnDestroy {
         view: [],
     }
 
-    constructor(private readonly _recordings: RecordingsService) {}
+    languages: Record<string, ILanguage> = {}
+
+    constructor(
+        private readonly _recordingService: RecordingService,
+        private readonly _languageService: LanguageService
+    ) {}
 
     ngOnInit(): void {
-        this._query = this._recordings.query.subscribe((result) => (this.result = result))
+        this._recordings = this._recordingService.query?.subscribe((result) => (this.recordings = result))
+        this._languages = this._languageService.query?.subscribe((result) => (this.languages = result))
     }
 
     ngOnDestroy(): void {
-        this._query?.unsubscribe()
+        this._recordings?.unsubscribe()
+        this._languages?.unsubscribe()
     }
 
     get pageSize(): number {
-        return this._recordings.pageSize
+        return this._recordingService.pageSize
     }
 
     onPrev(): void {
-        this._recordings.pageSize -= 1
+        this._recordingService.pageSize -= 1
     }
 
     onNext(): void {
-        this._recordings.pageSize += 1
+        this._recordingService.pageSize += 1
     }
 }

@@ -1,8 +1,11 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnDestroy } from '@angular/core'
 import { IRecordingQueryRequest, IRecordingQueryResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
 import { Observable, Observer } from 'rxjs'
 import { v4 as uuid } from 'uuid'
+
+import { ErrorService } from '../error/error.service'
+import { createMulticastObservable, IMulticastObservable } from '../utils'
 
 const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IRecordingQueryRequest>(`
   query (
@@ -68,11 +71,7 @@ const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IR
 `)
 
 @Injectable({ providedIn: 'root' })
-export class RecordingsService {
-    private readonly _observers: Observer<IRecordingQueryResult>[] = []
-
-    private _lastResult?: IRecordingQueryResult
-
+export class RecordingService implements OnDestroy {
     private _filter: IRecordingQueryRequest = {
         correlationId: '',
         firstPage: 0,
@@ -80,7 +79,7 @@ export class RecordingsService {
         fullName: undefined,
         genres: undefined,
         language: undefined,
-        pageSize: 50,
+        pageSize: 10,
         rent: undefined,
         series: undefined,
         sort: 'fullName',
@@ -100,26 +99,14 @@ export class RecordingsService {
         this.reload()
     }
 
-    public readonly query: Observable<IRecordingQueryResult>
+    private _query?: IMulticastObservable<IRecordingQueryResult>
 
-    constructor(private readonly _gql: Apollo) {
-        this.query = new Observable<IRecordingQueryResult>((observer) => {
-            this._observers.push(observer)
+    get query(): Observable<IRecordingQueryResult> | undefined {
+        return this._query
+    }
 
-            if (this._lastResult) {
-                observer.next(this._lastResult)
-            }
-
-            return {
-                unsubscribe: () => {
-                    const index = this._observers.findIndex((o) => o === observer)
-
-                    if (index >= 0) {
-                        this._observers.splice(index, 1)
-                    }
-                },
-            }
-        })
+    constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
+        this._query = createMulticastObservable()
 
         this.reload()
     }
@@ -129,26 +116,26 @@ export class RecordingsService {
 
         this._filter.correlationId = correlationId
 
-        const query = this._gql.query({ query: queryRecordings, variables: this._filter }).subscribe((response) => {
-            try {
-                if (response.loading || response.error || response.partial) {
-                    return
-                }
-
-                const result = response.data.recordings.query
-
-                if (result.correlationId !== this._filter.correlationId) {
-                    return
-                }
-
-                this._lastResult = result
-
-                for (const observer of this._observers.slice(0)) {
-                    observer.next(result)
-                }
-            } finally {
-                query?.unsubscribe()
+        this._errors.serverCall(this._gql.query({ query: queryRecordings, variables: this._filter }), (response) => {
+            if (response.loading || response.error || response.partial) {
+                return
             }
+
+            const result = response.data.recordings.query
+
+            if (result.correlationId !== this._filter.correlationId) {
+                return
+            }
+
+            this._query?.next(result)
         })
+    }
+
+    ngOnDestroy(): void {
+        const query = this._query
+
+        this._query = undefined
+
+        query?.destroy()
     }
 }

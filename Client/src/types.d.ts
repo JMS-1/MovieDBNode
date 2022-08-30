@@ -52,4 +52,13 @@ declare module 'api' {
         total: number
         view: IRecording[]
     }
+
+    interface ILanguage {
+        _id: string
+        name: string
+    }
+
+    interface ILanguageFindResult {
+        items: ILanguage[]
+    }
 }
