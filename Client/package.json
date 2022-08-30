@@ -32,7 +32,6 @@
     "private": true,
     "scripts": {
         "build": "ng build",
-        "ng": "ng",
         "start": "ng serve --port 29500",
         "test": "ng test",
         "watch": "ng build --watch --configuration development"

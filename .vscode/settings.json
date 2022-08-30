@@ -1,11 +1,11 @@
 {
+    "[json]": {
+        "editor.formatOnSave": false
+    },
     "[typescript]": {
         "editor.formatOnSave": false
     },
     "[typescriptreact]": {
-        "editor.formatOnSave": false
-    },
-    "[json]": {
         "editor.formatOnSave": false
     },
     "css.validate": true,
@@ -18,6 +18,7 @@
     "eslint.enable": true,
     "eslint.validate": ["typescript", "typescriptreact"],
     "files.exclude": {
+        ".scratch": true,
         "Server/src/**/*.js": true,
         "Server/src/**/*.js.map": true,
         "node_modules": true
