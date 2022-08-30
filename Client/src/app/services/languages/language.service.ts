@@ -21,8 +21,8 @@ const queryLanguages = gql<{ languages: { find: ILanguageFindResult } }, EmptyOb
 export class LanguageService {
     private _query?: IMulticastObservable<Record<string, ILanguage>>
 
-    get query(): Observable<Record<string, ILanguage>> | undefined {
-        return this._query
+    get map(): Record<string, ILanguage> {
+        return this._query?.current() || {}
     }
 
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {

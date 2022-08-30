@@ -13,8 +13,6 @@ import { RecordingService } from './services/recordings/recording.service'
 export class AppComponent implements OnInit, OnDestroy {
     private _recordings?: Subscription
 
-    private _languages?: Subscription
-
     recordings: IRecordingQueryResult = {
         correlationId: '',
         count: 0,
@@ -24,8 +22,6 @@ export class AppComponent implements OnInit, OnDestroy {
         view: [],
     }
 
-    languages: Record<string, ILanguage> = {}
-
     constructor(
         private readonly _recordingService: RecordingService,
         private readonly _languageService: LanguageService
@@ -33,12 +29,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this._recordings = this._recordingService.query?.subscribe((result) => (this.recordings = result))
-        this._languages = this._languageService.query?.subscribe((result) => (this.languages = result))
     }
 
     ngOnDestroy(): void {
         this._recordings?.unsubscribe()
-        this._languages?.unsubscribe()
+    }
+
+    get languages(): Record<string, ILanguage> {
+        return this._languageService.map
     }
 
     get pageSize(): number {
