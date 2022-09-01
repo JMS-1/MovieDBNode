@@ -61,4 +61,38 @@ declare module 'api' {
     interface ILanguageFindResult {
         items: ILanguage[]
     }
+
+    interface IGenre {
+        _id: string
+        name: string
+    }
+
+    interface IGenreFindResult {
+        items: IGenre[]
+    }
+
+    interface ISeries {
+        _id: string
+        description?: string
+        fullName?: string
+        name: string
+        parentId?: string
+    }
+
+    interface ISeriesFindResult {
+        items: ISeries[]
+    }
+
+    interface IContainer {
+        _id: string
+        description?: string
+        name: string
+        parentId?: string
+        parentLocation?: string
+        type: 'Box' | 'Disk' | 'FeatureSet' | 'Folder' | 'Shelf' | 'Undefined'
+    }
+
+    interface IContainerFindResult {
+        items: IContainer[]
+    }
 }

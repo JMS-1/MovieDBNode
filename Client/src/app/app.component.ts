@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ILanguage, IRecordingQueryResult } from 'api'
+import { IRecordingQueryResult } from 'api'
 import { Subscription } from 'rxjs'
 
-import { LanguageService } from './services/languages/language.service'
 import { RecordingService } from './services/recordings/recording.service'
 
 @Component({
@@ -22,10 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
         view: [],
     }
 
-    constructor(
-        private readonly _recordingService: RecordingService,
-        private readonly _languageService: LanguageService
-    ) {}
+    constructor(private readonly _recordingService: RecordingService) {}
 
     ngOnInit(): void {
         this._recordings = this._recordingService.query?.subscribe((result) => (this.recordings = result))
@@ -33,10 +29,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this._recordings?.unsubscribe()
-    }
-
-    get languages(): Record<string, ILanguage> {
-        return this._languageService.map
     }
 
     get pageSize(): number {

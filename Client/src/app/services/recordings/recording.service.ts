@@ -70,21 +70,23 @@ const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IR
   }
 `)
 
+const initialFilter: IRecordingQueryRequest = {
+    correlationId: '',
+    firstPage: 0,
+    forExport: undefined,
+    fullName: undefined,
+    genres: undefined,
+    language: undefined,
+    pageSize: 10,
+    rent: undefined,
+    series: undefined,
+    sort: 'fullName',
+    sortOrder: 'Ascending',
+}
+
 @Injectable({ providedIn: 'root' })
 export class RecordingService implements OnDestroy {
-    private _filter: IRecordingQueryRequest = {
-        correlationId: '',
-        firstPage: 0,
-        forExport: undefined,
-        fullName: undefined,
-        genres: undefined,
-        language: undefined,
-        pageSize: 10,
-        rent: undefined,
-        series: undefined,
-        sort: 'fullName',
-        sortOrder: 'Ascending',
-    }
+    private _filter = { ...initialFilter }
 
     get pageSize(): number {
         return this._filter.pageSize
@@ -96,6 +98,19 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.pageSize = pageSize
+        this.reload()
+    }
+
+    get language(): string {
+        return this._filter.language || ''
+    }
+
+    set language(language: string) {
+        if (language === this._filter.language) {
+            return
+        }
+
+        this._filter.language = language
         this.reload()
     }
 
