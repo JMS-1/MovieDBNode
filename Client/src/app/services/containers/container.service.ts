@@ -21,11 +21,11 @@ export class ContainerService {
     private _query?: IMulticastObservable<Record<string, IContainer>>
 
     get map(): Record<string, IContainer> {
-        return this._query?.current() || {}
+        return {}
     }
 
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
-        this._query = createMulticastObservable()
+        this._query = createMulticastObservable({})
 
         this._errors.serverCall(this._gql.query({ query: queryContainers }), (response) => {
             if (response.loading || response.error || response.partial) {

@@ -18,10 +18,10 @@
     "eslint.enable": true,
     "eslint.validate": ["typescript", "typescriptreact"],
     "files.exclude": {
+        "**/node_modules": true,
         ".scratch": true,
         "Server/src/**/*.js": true,
-        "Server/src/**/*.js.map": true,
-        "node_modules": true
+        "Server/src/**/*.js.map": true
     },
     "scss.validate": true,
     "stylelint.enable": true,

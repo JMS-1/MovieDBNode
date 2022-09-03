@@ -77,7 +77,7 @@ const initialFilter: IRecordingQueryRequest = {
     fullName: undefined,
     genres: undefined,
     language: undefined,
-    pageSize: 10,
+    pageSize: 2,
     rent: undefined,
     series: undefined,
     sort: 'fullName',
@@ -121,7 +121,14 @@ export class RecordingService implements OnDestroy {
     }
 
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
-        this._query = createMulticastObservable()
+        this._query = createMulticastObservable({
+            correlationId: '',
+            count: 0,
+            genres: [],
+            languages: [],
+            total: 0,
+            view: [],
+        })
 
         this.reload()
     }

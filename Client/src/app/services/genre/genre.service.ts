@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { IGenre, IGenreFindResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
 import { EmptyObject } from 'apollo-angular/types'
+import { from, Observable } from 'rxjs'
 
 import { ErrorService } from '../error/error.service'
 import { createMulticastObservable, IMulticastObservable } from '../utils'
@@ -20,12 +21,8 @@ const queryGenres = gql<{ genres: { find: IGenreFindResult } }, EmptyObject>(`
 export class GenreService {
     private _query?: IMulticastObservable<Record<string, IGenre>>
 
-    get map(): Record<string, IGenre> {
-        return this._query?.current() || {}
-    }
-
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
-        this._query = createMulticastObservable()
+        this._query = createMulticastObservable({})
 
         this._errors.serverCall(this._gql.query({ query: queryGenres }), (response) => {
             if (response.loading || response.error || response.partial) {

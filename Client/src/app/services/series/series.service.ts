@@ -21,11 +21,11 @@ export class SeriesService {
     private _query?: IMulticastObservable<Record<string, ISeries>>
 
     get map(): Record<string, ISeries> {
-        return this._query?.current() || {}
+        return {}
     }
 
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
-        this._query = createMulticastObservable()
+        this._query = createMulticastObservable({})
 
         this._errors.serverCall(this._gql.query({ query: querySeries }), (response) => {
             if (response.loading || response.error || response.partial) {

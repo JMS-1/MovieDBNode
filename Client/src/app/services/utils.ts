@@ -1,12 +1,11 @@
 import { Observable, Observer } from 'rxjs'
 
 export interface IMulticastObservable<T> extends Observable<T> {
-    current(): T | undefined
     destroy(): void
     next(value: T): void
 }
 
-export function createMulticastObservable<T>(initialResult?: T): IMulticastObservable<T> {
+export function createMulticastObservable<T>(initialResult: T): IMulticastObservable<T> {
     const observers: Observer<T>[] = []
 
     const observable = new Observable<T>((observer) => {
@@ -40,8 +39,6 @@ export function createMulticastObservable<T>(initialResult?: T): IMulticastObser
             observer.complete()
         }
     }
-
-    observable.current = () => initialResult
 
     return observable
 }

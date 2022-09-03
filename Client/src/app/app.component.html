@@ -1,5 +1,5 @@
 <app-language-filter></app-language-filter>
-<pre>{{ recordings | json }}</pre>
+<div>{{ recordings.view.length }}/{{ recordings.count }}/{{ recordings.total }}</div>
 <div>
     <button (click)="onPrev()">-</button>
     {{ pageSize }}
