@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { ILanguage, ILanguageFindResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
 import { EmptyObject } from 'apollo-angular/types'
-import { Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 import { ErrorService } from '../error/error.service'
 import { createMulticastObservable, IMulticastObservable } from '../utils'
@@ -19,15 +19,13 @@ const queryLanguages = gql<{ languages: { find: ILanguageFindResult } }, EmptyOb
 
 @Injectable()
 export class LanguageService {
-    private _query?: IMulticastObservable<Record<string, ILanguage>>
+    private readonly _query = new BehaviorSubject<Record<string, ILanguage>>({})
 
     get map(): Observable<Record<string, ILanguage>> | undefined {
         return this._query
     }
 
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
-        this._query = createMulticastObservable({})
-
         this._errors.serverCall(this._gql.query({ query: queryLanguages }), (response) => {
             if (response.loading || response.error || response.partial) {
                 return
@@ -40,13 +38,5 @@ export class LanguageService {
                 )
             )
         })
-    }
-
-    ngOnDestroy(): void {
-        const query = this._query
-
-        this._query = undefined
-
-        query?.destroy()
     }
 }
