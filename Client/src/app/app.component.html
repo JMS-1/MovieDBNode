@@ -1,8 +1,12 @@
 <app-language-filter></app-language-filter>
 <div>{{ recordings.view.length }}/{{ recordings.count }}/{{ recordings.total }}</div>
 <div>
-    <button (click)="onPrev()">-</button>
+    <div class="ui primary icon button" (click)="onPrev()">
+        <i class="icon arrow left"></i>
+    </div>
     {{ pageSize }}
-    <button (click)="onNext()">+</button>
+    <div class="ui primary icon button" (click)="onNext()">
+        <i class="icon arrow right"></i>
+    </div>
 </div>
 <router-outlet></router-outlet>

@@ -3,6 +3,7 @@ import { IRecordingQueryResult } from 'api'
 import { Subscription } from 'rxjs'
 
 import { RecordingService } from './services/recordings/recording.service'
+import { ThemeService } from './services/themes/theme.service'
 
 @Component({
     selector: 'app-root',
@@ -21,10 +22,12 @@ export class AppComponent implements OnInit, OnDestroy {
         view: [],
     }
 
-    constructor(private readonly _recordingService: RecordingService) {}
+    constructor(private readonly _recordingService: RecordingService, private readonly _themes: ThemeService) {}
 
     ngOnInit(): void {
         this._recordings = this._recordingService.query?.subscribe((result) => (this.recordings = result))
+
+        console.log(this._themes)
     }
 
     ngOnDestroy(): void {

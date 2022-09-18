@@ -13,6 +13,7 @@ import { GenreService } from './services/genre/genre.service'
 import { LanguageService } from './services/languages/language.service'
 import { RecordingService } from './services/recordings/recording.service'
 import { SeriesService } from './services/series/series.service'
+import { ThemeService } from './services/themes/theme.service'
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -26,6 +27,7 @@ import { SeriesService } from './services/series/series.service'
         LanguageService,
         RecordingService,
         SeriesService,
+        ThemeService,
     ],
 })
 export class AppModule {}
