@@ -1,0 +1,11 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@headerFont        : "Segoe UI",Arial,Helvetica,Geneva,sans-serif;
+@pageFont          : "Segoe UI",Arial,Helvetica,Geneva,sans-serif;
+@pageBackground    : #f0f0f0;
+
+@trackBackground   : transparent;
+
+@importGoogleFonts : false;

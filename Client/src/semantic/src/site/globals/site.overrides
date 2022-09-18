@@ -1,0 +1,12 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+:root {
+    --semantic-error-color: @negativeTextColor;
+    --semantic-text-color: @textColor;
+}
+
+body {
+    display: unset;
+}

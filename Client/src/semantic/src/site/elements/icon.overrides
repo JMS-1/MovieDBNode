@@ -1,0 +1,8 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.dropdown > .dropdown.icon.clear:before {
+    font-family: 'Icons';
+    content: '\f00d';
+}
