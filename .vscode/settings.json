@@ -19,7 +19,6 @@
     "eslint.validate": ["typescript", "typescriptreact"],
     "files.exclude": {
         "**/node_modules": true,
-        ".scratch": true,
         "Server/src/**/*.js": true,
         "Server/src/**/*.js.map": true
     },

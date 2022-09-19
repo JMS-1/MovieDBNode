@@ -6,7 +6,6 @@
 
 .vscode/chrome
 
-.scratch
 
 Server/src/**/*.js
 Server/src/**/*.js.map
