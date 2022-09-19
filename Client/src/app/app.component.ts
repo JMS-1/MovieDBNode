@@ -22,12 +22,10 @@ export class AppComponent implements OnInit, OnDestroy {
         view: [],
     }
 
-    constructor(private readonly _recordingService: RecordingService, private readonly _themes: ThemeService) {}
+    constructor(private readonly _recordingService: RecordingService, readonly _themes: ThemeService) {}
 
     ngOnInit(): void {
-        this._recordings = this._recordingService.query?.subscribe((result) => (this.recordings = result))
-
-        console.log(this._themes)
+        this._recordings = this._recordingService.result.subscribe((result) => (this.recordings = result))
     }
 
     ngOnDestroy(): void {

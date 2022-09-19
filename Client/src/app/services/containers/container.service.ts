@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnDestroy } from '@angular/core'
 import { IContainer, IContainerFindResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
 import { EmptyObject } from 'apollo-angular/types'
+import { BehaviorSubject } from 'rxjs'
 
 import { ErrorService } from '../error/error.service'
-import { createMulticastObservable, IMulticastObservable } from '../utils'
 
 const queryContainers = gql<{ containers: { find: IContainerFindResult } }, EmptyObject>(`
   query {
@@ -17,35 +17,18 @@ const queryContainers = gql<{ containers: { find: IContainerFindResult } }, Empt
 `)
 
 @Injectable()
-export class ContainerService {
-    private _query?: IMulticastObservable<Record<string, IContainer>>
-
-    get map(): Record<string, IContainer> {
-        return {}
-    }
+export class ContainerService implements OnDestroy {
+    private readonly _query = new BehaviorSubject({})
 
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
-        this._query = createMulticastObservable({})
-
-        this._errors.serverCall(this._gql.query({ query: queryContainers }), (response) => {
-            if (response.loading || response.error || response.partial) {
-                return
-            }
-
+        this._errors.serverCall(this._gql.query({ query: queryContainers }), (data) => {
             this._query?.next(
-                response.data.containers.find.items.reduce(
-                    (m, l) => ((m[l._id] = l), m),
-                    {} as Record<string, IContainer>
-                )
+                data.containers.find.items.reduce((m, l) => ((m[l._id] = l), m), {} as Record<string, IContainer>)
             )
         })
     }
 
     ngOnDestroy(): void {
-        const query = this._query
-
-        this._query = undefined
-
-        query?.destroy()
+        this._query.complete()
     }
 }

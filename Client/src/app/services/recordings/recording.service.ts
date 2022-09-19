@@ -1,11 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core'
 import { IRecordingQueryRequest, IRecordingQueryResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
-import { Observable, Observer } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 
 import { ErrorService } from '../error/error.service'
-import { createMulticastObservable, IMulticastObservable } from '../utils'
 
 const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IRecordingQueryRequest>(`
   query (
@@ -86,6 +85,19 @@ const initialFilter: IRecordingQueryRequest = {
 
 @Injectable({ providedIn: 'root' })
 export class RecordingService implements OnDestroy {
+    private readonly _query = new BehaviorSubject<IRecordingQueryResult>({
+        correlationId: '',
+        count: 0,
+        genres: [],
+        languages: [],
+        total: 0,
+        view: [],
+    })
+
+    get result(): Observable<IRecordingQueryResult> {
+        return this._query
+    }
+
     private _filter = { ...initialFilter }
 
     get pageSize(): number {
@@ -114,36 +126,17 @@ export class RecordingService implements OnDestroy {
         this.reload()
     }
 
-    private _query?: IMulticastObservable<IRecordingQueryResult>
-
-    get query(): Observable<IRecordingQueryResult> | undefined {
-        return this._query
-    }
-
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
-        this._query = createMulticastObservable({
-            correlationId: '',
-            count: 0,
-            genres: [],
-            languages: [],
-            total: 0,
-            view: [],
-        })
-
         this.reload()
     }
 
-    reload(): void {
+    private reload(): void {
         const correlationId = uuid()
 
         this._filter.correlationId = correlationId
 
-        this._errors.serverCall(this._gql.query({ query: queryRecordings, variables: this._filter }), (response) => {
-            if (response.loading || response.error || response.partial) {
-                return
-            }
-
-            const result = response.data.recordings.query
+        this._errors.serverCall(this._gql.query({ query: queryRecordings, variables: this._filter }), (data) => {
+            const result = data.recordings.query
 
             if (result.correlationId !== this._filter.correlationId) {
                 return
@@ -154,10 +147,6 @@ export class RecordingService implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        const query = this._query
-
-        this._query = undefined
-
-        query?.destroy()
+        this._query.complete()
     }
 }

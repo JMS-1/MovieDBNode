@@ -1,1 +1,12 @@
-<div>[language filter] {{ languages | json }}</div>
+<div>
+    <div class="ui clearable selection dropdown" #filter>
+        <input type="hidden" name="_language_" value="BB" />
+        <i class="dropdown icon"></i>
+        <div class="default text">[Language]</div>
+        <div class="menu">
+            <div class="item" data-value="AA">a</div>
+            <div class="item" data-value="BB">b</div>
+            <div class="item" data-value="CC">c</div>
+        </div>
+    </div>
+</div>
