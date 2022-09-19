@@ -8,9 +8,6 @@
 
 .scratch
 
-Server/dist/**/*
-!Server/dist/**/index.html
-
 Server/src/**/*.js
 Server/src/**/*.js.map
 
@@ -19,3 +16,5 @@ Server/config.custom.json
 deploy/config.custom.json
 deploy/node_modules
 deploy/src/daemon
+
+deploy/dist/assets/*/components
