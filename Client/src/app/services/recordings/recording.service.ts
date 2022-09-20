@@ -72,13 +72,13 @@ const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IR
 const initialFilter: IRecordingQueryRequest = {
     correlationId: '',
     firstPage: 0,
-    forExport: undefined,
-    fullName: undefined,
-    genres: undefined,
-    language: undefined,
-    pageSize: 2,
+    forExport: false,
+    fullName: '',
+    genres: [],
+    language: '',
+    pageSize: 10,
     rent: undefined,
-    series: undefined,
+    series: [],
     sort: 'fullName',
     sortOrder: 'Ascending',
 }
@@ -98,7 +98,7 @@ export class RecordingService implements OnDestroy {
         return this._query
     }
 
-    private _filter = { ...initialFilter }
+    private _filter = JSON.parse(JSON.stringify(initialFilter))
 
     get pageSize(): number {
         return this._filter.pageSize
@@ -123,6 +123,24 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.language = language
+        this.reload()
+    }
+
+    get genres(): string[] {
+        return this._filter.genres || []
+    }
+
+    set genres(genres: string[]) {
+        if (JSON.stringify(genres) === JSON.stringify(this._filter.genres)) {
+            return
+        }
+
+        this._filter.genres = genres
+        this.reload()
+    }
+
+    reset(): void {
+        this._filter = JSON.parse(JSON.stringify(initialFilter))
         this.reload()
     }
 

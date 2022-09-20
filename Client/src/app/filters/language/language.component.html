@@ -1,9 +1,3 @@
 <div>
-    <semantic-single-select
-        (select)="selected = $event"
-        [items]="orderedAsItems"
-        [selected]="selected"
-    ></semantic-single-select>
-    <button (click)="selected = 'e2ca375c-a5e2-4516-b155-75a4aa193456'">[French]</button>
-    <button (click)="selected = ''">[Clear]</button>
+    <semantic-single-select [items]="orderedAsItems" [(selected)]="selected"></semantic-single-select>
 </div>

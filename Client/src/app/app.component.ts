@@ -32,6 +32,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this._recordings?.unsubscribe()
     }
 
+    clear(): void {
+        this._recordingService.reset()
+    }
+
     get pageSize(): number {
         return this._recordingService.pageSize
     }

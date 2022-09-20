@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
+import { AfterViewInit, Component, OnChanges } from '@angular/core'
 import * as angular from '@angular/core'
 
 import { ISelectItem } from '../../utils'
@@ -7,25 +6,25 @@ import { ISelectItem } from '../../utils'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any
 
-@angular.Component({
-    selector: 'semantic-single-select',
-    styleUrls: ['./select.component.scss'],
-    templateUrl: './select.component.html',
+@Component({
+    selector: 'semantic-multi-select',
+    styleUrls: ['./multi.component.scss'],
+    templateUrl: './multi.component.html',
 })
-export class SelectComponent implements angular.AfterViewInit, angular.OnChanges {
-    @angular.ViewChild('singleSelect') dropdown?: angular.ElementRef<HTMLDivElement>
+export class MultiSelectComponent implements OnChanges, AfterViewInit {
+    @angular.ViewChild('multiSelect') dropdown?: angular.ElementRef<HTMLDivElement>
 
     @angular.Input() hint = '(bitte auswählen)'
 
-    @angular.Input() selected = ''
+    @angular.Input() selected = [] as string[]
 
-    @angular.Output() selectedChange = new angular.EventEmitter<string>()
+    @angular.Output() selectedChange = new angular.EventEmitter<string[]>()
 
     @angular.Input() items: ISelectItem[] = []
 
     private _events = true
 
-    private setSelected(selected: string): void {
+    private setSelected(selected: string[]): void {
         this._events = false
 
         try {
@@ -40,7 +39,14 @@ export class SelectComponent implements angular.AfterViewInit, angular.OnChanges
 
         elem.dropdown({
             forceSelection: false,
-            onChange: (s: string) => this._events && this.selectedChange.emit(s),
+            onChange: (s: string) =>
+                this._events &&
+                this.selectedChange.emit(
+                    (s || '')
+                        .split(',')
+                        .map((s) => s.trim())
+                        .filter((s) => s)
+                ),
         })
 
         setTimeout(() => {

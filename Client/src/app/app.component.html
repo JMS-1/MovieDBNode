@@ -1,4 +1,8 @@
 <app-language-filter></app-language-filter>
+<app-genre-filter></app-genre-filter>
+<div>
+    <Button class="ui negative button" (click)="clear()">Clear Filter</Button>
+</div>
 <div>{{ recordings.view.length }}/{{ recordings.count }}/{{ recordings.total }}</div>
 <div>
     <div class="ui primary icon button" (click)="onPrev()">

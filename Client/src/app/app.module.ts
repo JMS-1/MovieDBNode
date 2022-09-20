@@ -5,8 +5,10 @@ import { BrowserModule } from '@angular/platform-browser'
 
 import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
+import { GenreFilterComponent } from './filters/genre/genre.component'
 import { LanguageFilterComponent } from './filters/language/language.component'
 import { GraphQLModule } from './graphql.module'
+import { MultiSelectComponent } from './semantic/multi/multi.component'
 import { SelectComponent } from './semantic/select/select.component'
 import { ConfigService } from './services/config/config.service'
 import { ContainerService } from './services/containers/container.service'
@@ -19,7 +21,7 @@ import { ThemeService } from './services/themes/theme.service'
 
 @NgModule({
     bootstrap: [AppComponent],
-    declarations: [AppComponent, LanguageFilterComponent, SelectComponent],
+    declarations: [AppComponent, GenreFilterComponent, LanguageFilterComponent, MultiSelectComponent, SelectComponent],
     imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule, FormsModule],
     providers: [
         ConfigService,

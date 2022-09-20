@@ -1,8 +1,9 @@
 import { Component, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { createSorted, ISelectItem } from 'src/app/semantic/select/select.component'
-import { LanguageService } from 'src/app/services/languages/language.service'
-import { RecordingService } from 'src/app/services/recordings/recording.service'
+
+import { LanguageService } from '../..//services/languages/language.service'
+import { RecordingService } from '../..//services/recordings/recording.service'
+import { createSorted, ISelectItem } from '../../utils'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any
