@@ -1,0 +1,9 @@
+<div class="ui clearable search selection dropdown" #singleSelect>
+    <i class="dropdown icon"></i>
+    <div class="default text">[Language]</div>
+    <div class="menu">
+        <div class="item" *ngFor="let item of items" [attr.data-value]="item.key">
+            {{ item.text }}
+        </div>
+    </div>
+</div>

@@ -1,11 +1,13 @@
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
 
 import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { LanguageFilterComponent } from './filters/language/language.component'
 import { GraphQLModule } from './graphql.module'
+import { SelectComponent } from './semantic/select/select.component'
 import { ConfigService } from './services/config/config.service'
 import { ContainerService } from './services/containers/container.service'
 import { ErrorService } from './services/error/error.service'
@@ -17,8 +19,8 @@ import { ThemeService } from './services/themes/theme.service'
 
 @NgModule({
     bootstrap: [AppComponent],
-    declarations: [AppComponent, LanguageFilterComponent],
-    imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule],
+    declarations: [AppComponent, LanguageFilterComponent, SelectComponent],
+    imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule, FormsModule],
     providers: [
         ConfigService,
         ContainerService,

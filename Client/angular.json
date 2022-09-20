@@ -50,7 +50,7 @@
                         "polyfills": "src/polyfills.ts",
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",
-                            "src/assets/default/semantic.js"
+                            "src/assets/default/semantic.min.js"
                         ],
                         "styles": [
                             "src/styles.scss"

@@ -1,6 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core'
+import { Component, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
+import { createSorted, ISelectItem } from 'src/app/semantic/select/select.component'
 import { LanguageService } from 'src/app/services/languages/language.service'
+import { RecordingService } from 'src/app/services/recordings/recording.service'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any
@@ -10,24 +12,24 @@ declare let $: any
     styleUrls: ['./language.component.scss'],
     templateUrl: './language.component.html',
 })
-export class LanguageFilterComponent implements OnDestroy, AfterViewInit {
+export class LanguageFilterComponent implements OnDestroy {
     private readonly _subscription: Subscription
 
-    languages: string[] = []
+    orderedAsItems: ISelectItem[] = []
 
-    @ViewChild('filter') dropdown?: ElementRef<HTMLDivElement>
-
-    constructor(private readonly _languages: LanguageService) {
-        this._subscription = this._languages.map.subscribe((v) => {
-            this.languages = Object.keys(v).map((id) => v[id].name)
-        })
-    }
-
-    ngAfterViewInit(): void {
-        $(this.dropdown?.nativeElement).dropdown()
+    constructor(private readonly _languages: LanguageService, private readonly _recordings: RecordingService) {
+        this._subscription = createSorted(this._languages.map).subscribe((l) => (this.orderedAsItems = l))
     }
 
     ngOnDestroy(): void {
         this._subscription.unsubscribe()
+    }
+
+    get selected(): string {
+        return this._recordings.language
+    }
+
+    set selected(selected: string) {
+        this._recordings.language = selected
     }
 }

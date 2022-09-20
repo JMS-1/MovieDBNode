@@ -1,12 +1,9 @@
 <div>
-    <div class="ui clearable selection dropdown" #filter>
-        <input type="hidden" name="_language_" value="BB" />
-        <i class="dropdown icon"></i>
-        <div class="default text">[Language]</div>
-        <div class="menu">
-            <div class="item" data-value="AA">a</div>
-            <div class="item" data-value="BB">b</div>
-            <div class="item" data-value="CC">c</div>
-        </div>
-    </div>
+    <semantic-single-select
+        (select)="selected = $event"
+        [items]="orderedAsItems"
+        [selected]="selected"
+    ></semantic-single-select>
+    <button (click)="selected = 'e2ca375c-a5e2-4516-b155-75a4aa193456'">[French]</button>
+    <button (click)="selected = ''">[Clear]</button>
 </div>
