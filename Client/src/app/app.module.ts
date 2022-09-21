@@ -7,6 +7,7 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { GenreFilterComponent } from './filters/genre/genre.component'
 import { LanguageFilterComponent } from './filters/language/language.component'
+import { SeriesFilterComponent } from './filters/series/series.component'
 import { GraphQLModule } from './graphql.module'
 import { MultiSelectComponent } from './semantic/multi/multi.component'
 import { SelectComponent } from './semantic/select/select.component'
@@ -21,7 +22,14 @@ import { ThemeService } from './services/themes/theme.service'
 
 @NgModule({
     bootstrap: [AppComponent],
-    declarations: [AppComponent, GenreFilterComponent, LanguageFilterComponent, MultiSelectComponent, SelectComponent],
+    declarations: [
+        AppComponent,
+        GenreFilterComponent,
+        LanguageFilterComponent,
+        MultiSelectComponent,
+        SelectComponent,
+        SeriesFilterComponent,
+    ],
     imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule, FormsModule],
     providers: [
         ConfigService,

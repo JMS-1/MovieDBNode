@@ -43,11 +43,13 @@ export class SelectComponent implements angular.AfterViewInit, angular.OnChanges
             onChange: (s: string) => this._events && this.selectedChange.emit(s),
         })
 
+        elem.dropdown('destroy')
+
         setTimeout(() => {
             this.setSelected(this.selected)
 
             elem.css('visibility', '')
-        }, 100)
+        }, 100000)
     }
 
     ngOnChanges(changes: angular.SimpleChanges): void {
