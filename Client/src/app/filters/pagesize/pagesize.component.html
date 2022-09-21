@@ -1,0 +1,3 @@
+<div class="ui menu">
+    <a *ngFor="let item of items" [ngClass]="item.className" (click)="item.onClick()">{{ item.count }}</a>
+</div>

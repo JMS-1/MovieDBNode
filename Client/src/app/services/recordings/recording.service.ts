@@ -77,7 +77,7 @@ const initialFilter: IRecordingQueryRequest = {
     fullName: '',
     genres: [],
     language: '',
-    pageSize: 10,
+    pageSize: 15,
     rent: undefined,
     series: [],
     sort: 'fullName',
