@@ -12,7 +12,7 @@ declare let $: any
     styleUrls: ['./select.component.scss'],
     templateUrl: './select.component.html',
 })
-export class SelectComponent implements angular.AfterViewInit, angular.OnChanges {
+export class SelectComponent implements angular.AfterViewInit, angular.OnChanges, angular.OnDestroy {
     @angular.ViewChild('singleSelect') dropdown?: angular.ElementRef<HTMLDivElement>
 
     @angular.Input() hint = '(bitte auswählen)'
@@ -40,16 +40,17 @@ export class SelectComponent implements angular.AfterViewInit, angular.OnChanges
 
         elem.dropdown({
             forceSelection: false,
+            fullTextSearch: true,
+            ignoreDiacritics: true,
+            match: 'text',
             onChange: (s: string) => this._events && this.selectedChange.emit(s),
         })
-
-        elem.dropdown('destroy')
 
         setTimeout(() => {
             this.setSelected(this.selected)
 
             elem.css('visibility', '')
-        }, 100000)
+        }, 100)
     }
 
     ngOnChanges(changes: angular.SimpleChanges): void {
@@ -58,5 +59,9 @@ export class SelectComponent implements angular.AfterViewInit, angular.OnChanges
         if (selected) {
             this.setSelected(selected.firstChange ? selected.previousValue : selected.currentValue)
         }
+    }
+
+    ngOnDestroy(): void {
+        $(this.dropdown?.nativeElement)?.dropdown('destroy')
     }
 }

@@ -1,4 +1,3 @@
-import { AfterViewInit, Component, OnChanges } from '@angular/core'
 import * as angular from '@angular/core'
 
 import { ISelectItem } from '../../utils'
@@ -6,12 +5,12 @@ import { ISelectItem } from '../../utils'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any
 
-@Component({
+@angular.Component({
     selector: 'semantic-multi-select',
     styleUrls: ['./multi.component.scss'],
     templateUrl: './multi.component.html',
 })
-export class MultiSelectComponent implements OnChanges, AfterViewInit {
+export class MultiSelectComponent implements angular.OnChanges, angular.AfterViewInit, angular.OnDestroy {
     @angular.ViewChild('multiSelect') dropdown?: angular.ElementRef<HTMLDivElement>
 
     @angular.Input() hint = '(bitte auswählen)'
@@ -39,6 +38,9 @@ export class MultiSelectComponent implements OnChanges, AfterViewInit {
 
         elem.dropdown({
             forceSelection: false,
+            fullTextSearch: true,
+            ignoreDiacritics: true,
+            match: 'text',
             onChange: (s: string) =>
                 this._events &&
                 this.selectedChange.emit(
@@ -62,5 +64,9 @@ export class MultiSelectComponent implements OnChanges, AfterViewInit {
         if (selected) {
             this.setSelected(selected.firstChange ? selected.previousValue : selected.currentValue)
         }
+    }
+
+    ngOnDestroy(): void {
+        $(this.dropdown?.nativeElement)?.dropdown('destroy')
     }
 }

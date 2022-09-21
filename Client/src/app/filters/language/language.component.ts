@@ -19,7 +19,7 @@ export class LanguageFilterComponent implements OnDestroy {
     orderedAsItems: ISelectItem[] = []
 
     constructor(private readonly _languages: LanguageService, private readonly _recordings: RecordingService) {
-        this._subscription = createSorted(this._languages.map).subscribe((l) => (this.orderedAsItems = l))
+        this._subscription = createSorted(this._languages.map, 'name').subscribe((l) => (this.orderedAsItems = l))
     }
 
     ngOnDestroy(): void {

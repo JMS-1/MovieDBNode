@@ -27,7 +27,7 @@ export class GenreService implements OnDestroy {
     constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
         this._errors.serverCall(this._gql.query({ query: queryGenres }), (data) => {
             this._query?.next(
-                data.genres.find.items.reduce((m, l) => ((m[l._id] = l), m), {} as Record<string, IGenre>)
+                data.genres.find.items.reduce((m, g) => ((m[g._id] = g), m), {} as Record<string, IGenre>)
             )
         })
     }

@@ -1,16 +1,19 @@
-<app-language-filter></app-language-filter>
-<app-genre-filter></app-genre-filter>
-<div>
-    <Button class="ui negative button" (click)="clear()">Clear Filter</Button>
-</div>
-<div>{{ recordings.view.length }}/{{ recordings.count }}/{{ recordings.total }}</div>
-<div>
-    <div class="ui primary icon button" (click)="onPrev()">
-        <i class="icon arrow left"></i>
+<div class="page">
+    <div class="filter">
+        <div class="ui negative button" (click)="clear()">Clear Filter</div>
+        <app-language-filter></app-language-filter>
+        <app-genre-filter></app-genre-filter>
+        <app-series-filter></app-series-filter>
     </div>
-    {{ pageSize }}
-    <div class="ui primary icon button" (click)="onNext()">
-        <i class="icon arrow right"></i>
+    <div>{{ recordings.view.length }}/{{ recordings.count }}/{{ recordings.total }}</div>
+    <div>
+        <div class="ui primary icon button" (click)="onPrev()">
+            <i class="icon arrow left"></i>
+        </div>
+        {{ pageSize }}
+        <div class="ui primary icon button" (click)="onNext()">
+            <i class="icon arrow right"></i>
+        </div>
     </div>
+    <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>

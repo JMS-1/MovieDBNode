@@ -51,7 +51,11 @@
         "extends": "@insynergie/stylelint-config",
         "ignoreFiles": [
             "**/*.min.css"
-        ]
+        ],
+        "rules": {
+            "property-no-vendor-prefix": null,
+            "value-no-vendor-prefix": null
+        }
     },
     "version": "2.2.0"
 }

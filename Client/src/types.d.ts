@@ -74,7 +74,7 @@ declare module 'api' {
     interface ISeries {
         _id: string
         description?: string
-        fullName?: string
+        fullName: string
         name: string
         parentId?: string
     }

@@ -16,7 +16,7 @@ export class GenreFilterComponent implements OnDestroy {
     orderedAsItems: ISelectItem[] = []
 
     constructor(private readonly _genres: GenreService, private readonly _recordings: RecordingService) {
-        this._subscription = createSorted(this._genres.map).subscribe((l) => (this.orderedAsItems = l))
+        this._subscription = createSorted(this._genres.map, 'name').subscribe((l) => (this.orderedAsItems = l))
     }
 
     ngOnDestroy(): void {

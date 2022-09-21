@@ -1,10 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core'
 import { IRecordingQueryRequest, IRecordingQueryResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
-import { BehaviorSubject, Observable } from 'rxjs'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 
 import { ErrorService } from '../error/error.service'
+import { ISeriesNode, SeriesService } from '../series/series.service'
 
 const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IRecordingQueryRequest>(`
   query (
@@ -94,11 +95,23 @@ export class RecordingService implements OnDestroy {
         view: [],
     })
 
+    private _rootSeries = ''
+
+    private readonly _seriesWatch: Subscription
+
+    private _seriesMap: Record<string, ISeriesNode> = {}
+
+    constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService, series: SeriesService) {
+        this._seriesWatch = series.map.subscribe((map) => ((this._seriesMap = map), this.reload()))
+
+        this.reload()
+    }
+
     get result(): Observable<IRecordingQueryResult> {
         return this._query
     }
 
-    private _filter = JSON.parse(JSON.stringify(initialFilter))
+    private _filter: IRecordingQueryRequest = JSON.parse(JSON.stringify(initialFilter))
 
     get pageSize(): number {
         return this._filter.pageSize
@@ -126,6 +139,19 @@ export class RecordingService implements OnDestroy {
         this.reload()
     }
 
+    get series(): string {
+        return this._rootSeries || ''
+    }
+
+    set series(series: string) {
+        if (series === this._rootSeries) {
+            return
+        }
+
+        this._rootSeries = series
+        this.reload()
+    }
+
     get genres(): string[] {
         return this._filter.genres || []
     }
@@ -141,22 +167,22 @@ export class RecordingService implements OnDestroy {
 
     reset(): void {
         this._filter = JSON.parse(JSON.stringify(initialFilter))
-        this.reload()
-    }
+        this._rootSeries = ''
 
-    constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
         this.reload()
     }
 
     private reload(): void {
         const correlationId = uuid()
 
-        this._filter.correlationId = correlationId
+        const filter = this.filter
 
-        this._errors.serverCall(this._gql.query({ query: queryRecordings, variables: this._filter }), (data) => {
+        filter.correlationId = correlationId
+
+        this._errors.serverCall(this._gql.query({ query: queryRecordings, variables: filter }), (data) => {
             const result = data.recordings.query
 
-            if (result.correlationId !== this._filter.correlationId) {
+            if (result.correlationId !== filter.correlationId) {
                 return
             }
 
@@ -164,7 +190,19 @@ export class RecordingService implements OnDestroy {
         })
     }
 
+    private get filter(): IRecordingQueryRequest {
+        const filter: IRecordingQueryRequest = JSON.parse(JSON.stringify(this._filter))
+
+        if (this._rootSeries) {
+            filter.series = (this._seriesMap[this._rootSeries]?.allChildren || []).concat(this._rootSeries)
+        }
+
+        return filter
+    }
+
     ngOnDestroy(): void {
+        this._seriesWatch.unsubscribe()
+
         this._query.complete()
     }
 }
