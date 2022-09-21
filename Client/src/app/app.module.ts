@@ -8,8 +8,10 @@ import { AppRoutingModule } from './app-routing.module'
 import { GenreFilterComponent } from './filters/genre/genre.component'
 import { LanguageFilterComponent } from './filters/language/language.component'
 import { SeriesFilterComponent } from './filters/series/series.component'
+import { TextFilterComponent } from './filters/text/text.component'
 import { GraphQLModule } from './graphql.module'
 import { MultiSelectComponent } from './semantic/multi/multi.component'
+import { SearchComponent } from './semantic/search/search.component'
 import { SelectComponent } from './semantic/select/select.component'
 import { ConfigService } from './services/config/config.service'
 import { ContainerService } from './services/containers/container.service'
@@ -27,8 +29,10 @@ import { ThemeService } from './services/themes/theme.service'
         GenreFilterComponent,
         LanguageFilterComponent,
         MultiSelectComponent,
+        SearchComponent,
         SelectComponent,
         SeriesFilterComponent,
+        TextFilterComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule, FormsModule],
     providers: [

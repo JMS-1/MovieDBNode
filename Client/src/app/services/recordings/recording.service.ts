@@ -139,6 +139,19 @@ export class RecordingService implements OnDestroy {
         this.reload()
     }
 
+    get fullName(): string {
+        return this._filter.fullName || ''
+    }
+
+    set fullName(fullName: string) {
+        if (fullName === this._filter.fullName) {
+            return
+        }
+
+        this._filter.fullName = fullName
+        this.reload()
+    }
+
     get series(): string {
         return this._rootSeries || ''
     }

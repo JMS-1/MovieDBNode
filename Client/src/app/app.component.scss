@@ -12,8 +12,10 @@
     row-gap: 0.5em;
     margin: 1em 0;
 
-    > .ui.button {
-        width: fit-content;
-        width: -moz-fit-content;
+    > .search {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        column-gap: 0.5em;
+        align-items: center;
     }
 }

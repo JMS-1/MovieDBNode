@@ -1,6 +1,9 @@
 <div class="page">
     <div class="filter">
-        <div class="ui negative button" (click)="clear()">Clear Filter</div>
+        <div class="search">
+            <app-text-filter></app-text-filter>
+            <div class="ui negative button" (click)="clear()">Clear Filter</div>
+        </div>
         <app-language-filter></app-language-filter>
         <app-genre-filter></app-genre-filter>
         <app-series-filter></app-series-filter>
