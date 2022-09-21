@@ -7,6 +7,7 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { GenreFilterComponent } from './filters/genre/genre.component'
 import { LanguageFilterComponent } from './filters/language/language.component'
+import { RentFilterComponent } from './filters/rent/rent.component'
 import { SeriesFilterComponent } from './filters/series/series.component'
 import { TextFilterComponent } from './filters/text/text.component'
 import { GraphQLModule } from './graphql.module'
@@ -29,6 +30,7 @@ import { ThemeService } from './services/themes/theme.service'
         GenreFilterComponent,
         LanguageFilterComponent,
         MultiSelectComponent,
+        RentFilterComponent,
         SearchComponent,
         SelectComponent,
         SeriesFilterComponent,

@@ -1,0 +1,26 @@
+import { Component } from '@angular/core'
+
+import { RecordingService } from '../../services/recordings/recording.service'
+import { ISelectItem } from '../../utils'
+
+@Component({
+    selector: 'app-rent-filter',
+    styleUrls: ['./rent.component.scss'],
+    templateUrl: './rent.component.html',
+})
+export class RentFilterComponent {
+    orderedAsItems: ISelectItem[] = [
+        { key: '1', text: 'verliehen' },
+        { key: '0', text: 'nicht verliehen' },
+    ]
+
+    constructor(private readonly _recordings: RecordingService) {}
+
+    get selected(): string {
+        return typeof this._recordings.rent === 'boolean' ? (this._recordings.rent ? '1' : '0') : ''
+    }
+
+    set selected(selected: string) {
+        this._recordings.rent = selected === '' ? undefined : selected === '1'
+    }
+}

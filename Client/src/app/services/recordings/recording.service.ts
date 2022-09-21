@@ -139,6 +139,19 @@ export class RecordingService implements OnDestroy {
         this.reload()
     }
 
+    get rent(): boolean | undefined {
+        return this._filter.rent
+    }
+
+    set rent(rent: boolean | undefined) {
+        if (rent === this._filter.rent) {
+            return
+        }
+
+        this._filter.rent = rent
+        this.reload()
+    }
+
     get fullName(): string {
         return this._filter.fullName || ''
     }
