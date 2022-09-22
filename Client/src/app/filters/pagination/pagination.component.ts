@@ -16,37 +16,41 @@ function createPages(maxPage: number, curPage: number): IPageItem[] {
 
     pages.push({ page: 1 })
 
-    if (maxPage < 2) {
-        return pages
-    }
-
-    if (curPage < 5) {
-        for (let page = 2; page <= Math.min(4, maxPage); page++) {
+    if (maxPage < 8) {
+        for (let page = 2; page <= maxPage; page++) {
             pages.push({ page })
         }
 
-        if (maxPage < 5) {
-            return pages
+        return pages
+    }
+
+    if (curPage <= 5) {
+        for (let page = 2; page <= 5; page++) {
+            pages.push({ page })
         }
-    } else {
+
         pages.push({ page: undefined })
 
-        if (curPage < maxPage - 2) {
-            pages.push({ page: curPage - 1 })
-            pages.push({ page: curPage })
-            pages.push({ page: curPage + 1 })
-        }
+        pages.push({ page: maxPage })
+
+        return pages
     }
 
-    if (maxPage > 5) {
-        if (curPage > maxPage - 3) {
-            pages.push({ page: maxPage - 3 })
-            pages.push({ page: maxPage - 2 })
-            pages.push({ page: maxPage - 1 })
-        } else {
-            pages.push({ page: undefined })
+    pages.push({ page: undefined })
+
+    if (curPage >= maxPage - 4) {
+        for (let page = maxPage - 4; page <= maxPage; page++) {
+            pages.push({ page })
         }
+
+        return pages
     }
+
+    for (let page = curPage - 1; page <= curPage + 1; page++) {
+        pages.push({ page })
+    }
+
+    pages.push({ page: undefined })
 
     pages.push({ page: maxPage })
 
