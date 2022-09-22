@@ -123,6 +123,7 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.pageSize = pageSize
+        this._filter.firstPage = 0
         this.reload()
     }
 

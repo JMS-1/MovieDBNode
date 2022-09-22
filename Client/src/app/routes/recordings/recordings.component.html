@@ -14,5 +14,7 @@
         <app-page-size-filter></app-page-size-filter>
         <app-pagination></app-pagination>
     </div>
-    <div class="ui segment">{{ recordings.view.length }}</div>
+    <div class="ui segment results">
+        <div *ngFor="let recording of recordings.view">{{ recording.fullName }}</div>
+    </div>
 </div>

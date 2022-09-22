@@ -29,7 +29,8 @@ import { GenreService } from './services/genre/genre.service'
 import { LanguageService } from './services/languages/language.service'
 import { RecordingService } from './services/recordings/recording.service'
 import { SeriesService } from './services/series/series.service'
-import { ThemeService } from './services/themes/theme.service'
+import { ThemeService } from './services/themes/theme.service';
+import { SubMenuComponent } from './semantic/menu/menu.component'
 
 @NgModule({
     bootstrap: [RootComponent],
@@ -51,6 +52,7 @@ import { ThemeService } from './services/themes/theme.service'
         SeriesRouteComponent,
         TextFilterComponent,
         PaginationFilterComponent,
+        SubMenuComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule, FormsModule],
     providers: [

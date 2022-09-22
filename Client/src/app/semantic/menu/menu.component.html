@@ -1,0 +1,9 @@
+<div class="ui dropdown item" #menu>
+    <div>{{ title }}</div>
+    <i class="dropdown icon"></i>
+    <div class="menu">
+        <a *ngFor="let item of items" [ngClass]="{ item: true, active: item.active }" (click)="select(item.route)">{{
+            item.text
+        }}</a>
+    </div>
+</div>
