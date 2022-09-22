@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+    gqlServer: 'http://localhost:29098',
     production: false,
 }
 

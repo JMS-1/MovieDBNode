@@ -126,6 +126,19 @@ export class RecordingService implements OnDestroy {
         this.reload()
     }
 
+    get page(): number {
+        return this._filter.firstPage
+    }
+
+    set page(page: number) {
+        if (page < 0 || !Number.isSafeInteger(page) || page === this._filter.firstPage) {
+            return
+        }
+
+        this._filter.firstPage = page
+        this.reload()
+    }
+
     get language(): string {
         return this._filter.language || ''
     }
@@ -136,6 +149,7 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.language = language
+        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -149,6 +163,7 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.rent = rent
+        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -162,6 +177,7 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.fullName = fullName
+        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -175,6 +191,7 @@ export class RecordingService implements OnDestroy {
         }
 
         this._rootSeries = series
+        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -188,6 +205,7 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.genres = genres
+        this._filter.firstPage = 0
         this.reload()
     }
 

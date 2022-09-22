@@ -16,7 +16,7 @@
             "runtimeArgs": ["--remote-debugging-port=29501", "--new-window"],
             "sourceMaps": true,
             "type": "chrome",
-            "url": "http://localhost:29500?gql=http://localhost:29098",
+            "url": "http://localhost:29500",
             "sourceMapPathOverrides": {
                 "webpack://*": "${workspaceFolder}/Client/*"
             },

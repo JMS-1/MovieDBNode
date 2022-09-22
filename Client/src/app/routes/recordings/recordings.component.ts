@@ -34,16 +34,4 @@ export class RecordingsRouteComponent implements OnInit {
     clear(): void {
         this._recordingService.reset()
     }
-
-    get pageSize(): number {
-        return this._recordingService.pageSize
-    }
-
-    onPrev(): void {
-        this._recordingService.pageSize -= 1
-    }
-
-    onNext(): void {
-        this._recordingService.pageSize += 1
-    }
 }

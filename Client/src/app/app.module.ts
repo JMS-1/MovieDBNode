@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module'
 import { GenreFilterComponent } from './filters/genre/genre.component'
 import { LanguageFilterComponent } from './filters/language/language.component'
 import { PageSizeFilterComponent } from './filters/pagesize/pagesize.component'
+import { PaginationFilterComponent } from './filters/pagination/pagination.component'
 import { RentFilterComponent } from './filters/rent/rent.component'
 import { SeriesFilterComponent } from './filters/series/series.component'
 import { TextFilterComponent } from './filters/text/text.component'
@@ -49,6 +50,7 @@ import { ThemeService } from './services/themes/theme.service'
         SeriesFilterComponent,
         SeriesRouteComponent,
         TextFilterComponent,
+        PaginationFilterComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule, FormsModule],
     providers: [

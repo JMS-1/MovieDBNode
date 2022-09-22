@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core'
-import { Router } from '@angular/router'
+import { environment } from 'src/environments/environment'
 
 @Injectable()
 export class ConfigService {
-    public static gqlServer = ''
-
     public readonly server: string
 
-    constructor(router: Router) {
-        this.server = ConfigService.gqlServer
+    constructor() {
+        this.server = environment.gqlServer || window.location.origin
     }
 }
