@@ -1,16 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { IRecordingQueryResult } from 'api'
 import { Subscription } from 'rxjs'
 
-import { RecordingService } from './services/recordings/recording.service'
-import { ThemeService } from './services/themes/theme.service'
+import { RecordingService } from '../../services/recordings/recording.service'
 
 @Component({
-    selector: 'app-root',
-    styleUrls: ['./app.component.scss'],
-    templateUrl: './app.component.html',
+    selector: 'app-recordings',
+    styleUrls: ['./recordings.component.scss'],
+    templateUrl: './recordings.component.html',
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class RecordingsRouteComponent implements OnInit {
     private _recordings?: Subscription
 
     recordings: IRecordingQueryResult = {
@@ -22,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
         view: [],
     }
 
-    constructor(private readonly _recordingService: RecordingService, readonly _themes: ThemeService) {}
+    constructor(private readonly _recordingService: RecordingService) {}
 
     ngOnInit(): void {
         this._recordings = this._recordingService.result.subscribe((result) => (this.recordings = result))

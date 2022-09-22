@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Injectable()
 export class ConfigService {
+    public static gqlServer = ''
+
     public readonly server: string
 
-    constructor() {
-        const { search, origin } = window.location
-
-        this.server = search.startsWith('?gql=') ? decodeURIComponent(search.substring(5)) : origin
+    constructor(router: Router) {
+        this.server = ConfigService.gqlServer
     }
 }

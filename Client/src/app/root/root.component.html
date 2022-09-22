@@ -1,0 +1,12 @@
+<div class="root">
+    <div class="ui borderless menu">
+        <a [ngClass]="{ item: true, active: isRecording }" routerLink="">Aufzeichnungen</a>
+        <a [ngClass]="{ item: true, active: isSeries }" routerLink="series">Serien</a>
+        <a [ngClass]="{ item: true, active: isContainer }" routerLink="container">Ablagen</a>
+        <a [ngClass]="{ item: true, active: isLanguage }" routerLink="language">Sprachen</a>
+        <a [ngClass]="{ item: true, active: isGenre }" routerLink="genre">Kategorien</a>
+        <div class="item">Neu</div>
+        <div class="item">Theme</div>
+    </div>
+    <router-outlet></router-outlet>
+</div>
