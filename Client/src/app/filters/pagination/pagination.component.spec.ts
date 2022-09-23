@@ -52,6 +52,31 @@ describe('Pagination Component', () => {
         fixture.detectChanges()
     }
 
+    const fullTest = (count: number, page: number, ...fields: string[]): void => {
+        mockCall({ page, pageSize: 1 }, { count })
+
+        const self = fixture.nativeElement as HTMLElement
+        const selection = self.firstElementChild!.childNodes
+
+        expect(selection.length).toBe(12)
+
+        expect(selection[2].nodeName).toBe('A')
+        expect(selection[2].textContent).toBe('1')
+        expect(selection[3].nodeName).toBe('A')
+        expect(selection[3].textContent).toBe(fields[0])
+        expect(selection[4].nodeName).toBe('A')
+        expect(selection[4].textContent).toBe(fields[1])
+        expect(selection[5].nodeName).toBe('A')
+        expect(selection[5].textContent).toBe(fields[2])
+        expect(selection[6].nodeName).toBe('A')
+        expect(selection[6].textContent).toBe(fields[3])
+        expect(selection[7].nodeName).toBe('A')
+        expect(selection[7].textContent).toBe(fields[4])
+        expect(selection[8].nodeName).toBe('A')
+        expect(selection[8].textContent).toBe(`${count}`)
+        expect(selection[9].nodeName).toBe('#comment')
+    }
+
     it('should create', () => {
         expect(component).toBeTruthy()
         expect(component.curPage).toBe(1)
@@ -211,402 +236,66 @@ describe('Pagination Component', () => {
     })
 
     it('seven pages with selection at 1', () => {
-        mockCall({ pageSize: 1 }, { count: 7 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('6')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('7')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(7, 0, '2', '3', '4', '5', '6', '7')
     })
 
     it('eight pages with selection at 1', () => {
-        mockCall({ pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 0, '2', '3', '4', '5', '...')
     })
 
     it('eight pages with selection at 2', () => {
-        mockCall({ page: 1, pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 1, '2', '3', '4', '5', '...')
     })
 
     it('eight pages with selection at 3', () => {
-        mockCall({ page: 2, pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 2, '2', '3', '4', '5', '...')
     })
 
     it('eight pages with selection at 4', () => {
-        mockCall({ page: 3, pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 3, '2', '3', '4', '5', '...')
     })
 
     it('eight pages with selection at 5', () => {
-        mockCall({ page: 4, pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 4, '2', '3', '4', '5', '...')
     })
 
     it('eight pages with selection at 6', () => {
-        mockCall({ page: 5, pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('4')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('5')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('6')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('7')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 5, '...', '4', '5', '6', '7')
     })
 
     it('eight pages with selection at 7', () => {
-        mockCall({ page: 6, pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('4')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('5')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('6')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('7')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 6, '...', '4', '5', '6', '7')
     })
 
     it('eight pages with selection at 8', () => {
-        mockCall({ page: 7, pageSize: 1 }, { count: 8 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('4')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('5')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('6')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('7')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('8')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(8, 7, '...', '4', '5', '6', '7')
     })
 
     it('100 pages with selection at 1', () => {
-        mockCall({ page: 0, pageSize: 1 }, { count: 100 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('100')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(100, 0, '2', '3', '4', '5', '...')
     })
 
     it('100 pages with selection at 5', () => {
-        mockCall({ page: 4, pageSize: 1 }, { count: 100 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('2')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('3')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('4')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('5')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('100')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(100, 4, '2', '3', '4', '5', '...')
     })
 
     it('100 pages with selection at 6', () => {
-        mockCall({ page: 5, pageSize: 1 }, { count: 100 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('5')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('6')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('7')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('100')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(100, 5, '...', '5', '6', '7', '...')
     })
 
     it('100 pages with selection at 50', () => {
-        mockCall({ page: 49, pageSize: 1 }, { count: 100 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('49')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('50')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('51')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('100')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(100, 49, '...', '49', '50', '51', '...')
     })
 
     it('100 pages with selection at 95', () => {
-        mockCall({ page: 94, pageSize: 1 }, { count: 100 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('94')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('95')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('96')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('...')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('100')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(100, 94, '...', '94', '95', '96', '...')
     })
 
     it('100 pages with selection at 96', () => {
-        mockCall({ page: 95, pageSize: 1 }, { count: 100 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('96')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('97')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('98')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('99')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('100')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(100, 95, '...', '96', '97', '98', '99')
     })
 
     it('100 pages with selection at 100', () => {
-        mockCall({ page: 99, pageSize: 1 }, { count: 100 })
-
-        const self = fixture.nativeElement as HTMLElement
-        const selection = self.firstElementChild!.childNodes
-
-        expect(selection.length).toBe(12)
-
-        expect(selection[2].nodeName).toBe('A')
-        expect(selection[2].textContent).toBe('1')
-        expect(selection[3].nodeName).toBe('A')
-        expect(selection[3].textContent).toBe('...')
-        expect(selection[4].nodeName).toBe('A')
-        expect(selection[4].textContent).toBe('96')
-        expect(selection[5].nodeName).toBe('A')
-        expect(selection[5].textContent).toBe('97')
-        expect(selection[6].nodeName).toBe('A')
-        expect(selection[6].textContent).toBe('98')
-        expect(selection[7].nodeName).toBe('A')
-        expect(selection[7].textContent).toBe('99')
-        expect(selection[8].nodeName).toBe('A')
-        expect(selection[8].textContent).toBe('100')
-        expect(selection[9].nodeName).toBe('#comment')
+        fullTest(100, 99, '...', '96', '97', '98', '99')
     })
 })
