@@ -63,6 +63,8 @@ function createPages(maxPage: number, curPage: number): IPageItem[] {
     templateUrl: './pagination.component.html',
 })
 export class PaginationFilterComponent implements OnInit, OnDestroy {
+    constructor(private readonly _recordingService: RecordingService) {}
+
     private _recordings?: Subscription
 
     private _result: IRecordingQueryResult = {
@@ -77,8 +79,6 @@ export class PaginationFilterComponent implements OnInit, OnDestroy {
     maxPage = 0
 
     pages: IPageItem[] = []
-
-    constructor(private readonly _recordingService: RecordingService) {}
 
     get curPage(): number {
         return this._recordingService.page + 1
