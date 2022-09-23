@@ -1,5 +1,5 @@
 <div class="page">
-    <div class="ui compact segment counts">{{ recordings.count }} von {{ recordings.total }}</div>
+    <div class="ui compact segment counts">{{ count }} von {{ total }}</div>
     <div class="ui segment filter">
         <div class="search">
             <app-text-filter></app-text-filter>
@@ -14,7 +14,5 @@
         <app-page-size-filter></app-page-size-filter>
         <app-pagination></app-pagination>
     </div>
-    <div class="ui segment results">
-        <div *ngFor="let recording of recordings.view">{{ recording.fullName }}</div>
-    </div>
+    <app-recording-table class="results"></app-recording-table>
 </div>

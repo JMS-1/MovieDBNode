@@ -18,7 +18,10 @@ import { GenreRouteComponent } from './routes/genre/genre.component'
 import { LanguageRouteComponent } from './routes/language/language.component'
 import { RecordingRouteComponent } from './routes/recording/recording.component'
 import { RecordingsRouteComponent } from './routes/recordings/recordings.component'
+import { RecordingRowComponent } from './routes/recordings/row.component'
+import { RecordingTableComponent } from './routes/recordings/table.component'
 import { SeriesRouteComponent } from './routes/series/series.component'
+import { SubMenuComponent } from './semantic/menu/menu.component'
 import { MultiSelectComponent } from './semantic/multi/multi.component'
 import { SearchComponent } from './semantic/search/search.component'
 import { SelectComponent } from './semantic/select/select.component'
@@ -29,8 +32,7 @@ import { GenreService } from './services/genre/genre.service'
 import { LanguageService } from './services/languages/language.service'
 import { RecordingService } from './services/recordings/recording.service'
 import { SeriesService } from './services/series/series.service'
-import { ThemeService } from './services/themes/theme.service';
-import { SubMenuComponent } from './semantic/menu/menu.component'
+import { ThemeService } from './services/themes/theme.service'
 
 @NgModule({
     bootstrap: [RootComponent],
@@ -42,17 +44,19 @@ import { SubMenuComponent } from './semantic/menu/menu.component'
         LanguageRouteComponent,
         MultiSelectComponent,
         PageSizeFilterComponent,
+        PaginationFilterComponent,
         RecordingRouteComponent,
+        RecordingRowComponent,
         RecordingsRouteComponent,
+        RecordingTableComponent,
         RentFilterComponent,
         RootComponent,
         SearchComponent,
         SelectComponent,
         SeriesFilterComponent,
         SeriesRouteComponent,
-        TextFilterComponent,
-        PaginationFilterComponent,
         SubMenuComponent,
+        TextFilterComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, GraphQLModule, HttpClientModule, FormsModule],
     providers: [

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { IRecordingQueryResult } from 'api'
 import { Subscription } from 'rxjs'
 
@@ -9,10 +9,10 @@ import { RecordingService } from '../../services/recordings/recording.service'
     styleUrls: ['./recordings.component.scss'],
     templateUrl: './recordings.component.html',
 })
-export class RecordingsRouteComponent implements OnInit {
-    private _recordings?: Subscription
+export class RecordingsRouteComponent implements OnInit, OnDestroy {
+    private _query?: Subscription
 
-    recordings: IRecordingQueryResult = {
+    private _result: IRecordingQueryResult = {
         correlationId: '',
         count: 0,
         genres: [],
@@ -21,17 +21,25 @@ export class RecordingsRouteComponent implements OnInit {
         view: [],
     }
 
-    constructor(private readonly _recordingService: RecordingService) {}
+    constructor(private readonly _service: RecordingService) {}
+
+    get total(): number {
+        return this._result.total
+    }
+
+    get count(): number {
+        return this._result.count
+    }
 
     ngOnInit(): void {
-        this._recordings = this._recordingService.result.subscribe((result) => (this.recordings = result))
+        this._query = this._service.result.subscribe((result) => (this._result = result))
     }
 
     ngOnDestroy(): void {
-        this._recordings?.unsubscribe()
+        this._query?.unsubscribe()
     }
 
     clear(): void {
-        this._recordingService.reset()
+        this._service.reset()
     }
 }
