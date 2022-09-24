@@ -21,6 +21,7 @@
         "@angular/cli": "^14.2.3",
         "@angular/compiler-cli": "^14.2.3",
         "@types/jasmine": "^4.3.0",
+        "fastest-validator": "^1.15.0",
         "fomantic-ui": "^2.8.8",
         "gulp": "^4.0.2",
         "gulp-shell": "^0.8.0",

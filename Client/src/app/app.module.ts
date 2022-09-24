@@ -33,6 +33,7 @@ import { LanguageService } from './services/languages/language.service'
 import { RecordingService } from './services/recordings/recording.service'
 import { SeriesService } from './services/series/series.service'
 import { ThemeService } from './services/themes/theme.service'
+import { ValidationService } from './services/validation/validation.service'
 
 @NgModule({
     bootstrap: [RootComponent],
@@ -68,6 +69,7 @@ import { ThemeService } from './services/themes/theme.service'
         RecordingService,
         SeriesService,
         ThemeService,
+        ValidationService,
     ],
 })
 export class AppModule {}
