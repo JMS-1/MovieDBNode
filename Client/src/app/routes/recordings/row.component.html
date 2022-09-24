@@ -1,4 +1,15 @@
-<td>{{ item.fullName }}</td>
-<td>{{ item.created | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
-<td>{{ languages }}</td>
-<td>{{ genres }}</td>
+<td>
+    <div>
+        <div>{{ item.fullName }}</div>
+        <i *ngIf="!!rent" class="ui icon user outline" [title]="rent"></i>
+    </div>
+</td>
+<td>
+    <div>{{ item.created | date: 'dd.MM.yyyy HH:mm:ss' }}</div>
+</td>
+<td>
+    <div>{{ languages }}</div>
+</td>
+<td>
+    <div>{{ genres }}</div>
+</td>

@@ -22,6 +22,10 @@ export class RecordingRowComponent implements OnInit, OnDestroy {
 
     constructor(private readonly _languages: LanguageService, private readonly _genres: GenreService) {}
 
+    get rent(): string {
+        return this.item.rentTo || ''
+    }
+
     ngOnInit(): void {
         this._genreQuery = this._genres.map.subscribe((map) => {
             this.genres =

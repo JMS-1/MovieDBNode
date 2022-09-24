@@ -1,3 +1,35 @@
 td {
-    white-space: nowrap;
+    padding: 0 0.5em;
+
+    div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &:nth-child(1) {
+        width: 40em;
+        min-width: 40em;
+        max-width: 40em;
+
+        > div {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            column-gap: 0.5em;
+            align-items: center;
+        }
+    }
+
+    &:nth-child(2) {
+        width: 12em;
+        min-width: 12em;
+        max-width: 12em;
+    }
+
+    &:nth-child(3),
+    &:nth-child(4) {
+        width: 20em;
+        min-width: 20em;
+        max-width: 20em;
+    }
 }
