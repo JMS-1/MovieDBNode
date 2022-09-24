@@ -24,17 +24,19 @@ export class RecordingRowComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this._genreQuery = this._genres.map.subscribe((map) => {
-            this.genres = (this.item.genres || [])
-                .map((l) => map[l]?.name || l)
-                .sort()
-                .join(', ')
+            this.genres =
+                (this.item.genres || [])
+                    .map((l) => map[l]?.name || l)
+                    .sort()
+                    .join(', ') || '\xa0'
         })
 
         this._languageQuery = this._languages.map.subscribe((map) => {
-            this.languages = (this.item.languages || [])
-                .map((l) => map[l]?.name || l)
-                .sort()
-                .join(', ')
+            this.languages =
+                (this.item.languages || [])
+                    .map((l) => map[l]?.name || l)
+                    .sort()
+                    .join(', ') || '\xa0'
         })
     }
 

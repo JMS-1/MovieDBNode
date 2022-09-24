@@ -1,4 +1,22 @@
-<table class="ui segment results">
+<table class="ui sortable celled table results">
+    <thead>
+        <tr>
+            <th
+                (click)="sort('fullName')"
+                [ngClass]="{ sorted: sortName, ascending: ascending, descending: !ascending }"
+            >
+                Name
+            </th>
+            <th
+                (click)="sort('created')"
+                [ngClass]="{ sorted: sortDate, ascending: ascending, descending: !ascending }"
+            >
+                Erstellt
+            </th>
+            <th><div>Sprachen</div></th>
+            <th><div>Kategorien</div></th>
+        </tr>
+    </thead>
     <tbody>
         <tr recording *ngFor="let recording of items" [item]="recording"></tr>
     </tbody>

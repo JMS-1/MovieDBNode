@@ -123,7 +123,6 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.pageSize = pageSize
-        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -136,8 +135,7 @@ export class RecordingService implements OnDestroy {
             return
         }
 
-        this._filter.firstPage = page
-        this.reload()
+        this.reload(page)
     }
 
     get language(): string {
@@ -150,7 +148,6 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.language = language
-        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -164,7 +161,6 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.rent = rent
-        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -178,7 +174,6 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.fullName = fullName
-        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -192,7 +187,6 @@ export class RecordingService implements OnDestroy {
         }
 
         this._rootSeries = series
-        this._filter.firstPage = 0
         this.reload()
     }
 
@@ -206,7 +200,25 @@ export class RecordingService implements OnDestroy {
         }
 
         this._filter.genres = genres
-        this._filter.firstPage = 0
+        this.reload()
+    }
+
+    get sortColumn(): IRecordingQueryRequest['sort'] {
+        return this._filter.sort
+    }
+
+    get sortOrder(): IRecordingQueryRequest['sortOrder'] {
+        return this._filter.sortOrder
+    }
+
+    sort(column: IRecordingQueryRequest['sort']): void {
+        if (column === this._filter.sort) {
+            this._filter.sortOrder = this._filter.sortOrder === 'Ascending' ? 'Descending' : 'Ascending'
+        } else {
+            this._filter.sort = column
+            this._filter.sortOrder = column === 'fullName' ? 'Ascending' : 'Descending'
+        }
+
         this.reload()
     }
 
@@ -217,7 +229,9 @@ export class RecordingService implements OnDestroy {
         this.reload()
     }
 
-    private reload(): void {
+    private reload(firstPage = 0): void {
+        this._filter.firstPage = firstPage
+
         const correlationId = uuid()
 
         const filter = this.filter
