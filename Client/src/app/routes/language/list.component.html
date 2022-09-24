@@ -1,0 +1,7 @@
+<div class="ui selection list">
+    <app-language-item
+        *ngFor="let item of items"
+        [ngClass]="{ item: true, active: item._id === selected }"
+        [language]="item"
+    ></app-language-item>
+</div>

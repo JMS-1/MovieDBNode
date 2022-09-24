@@ -15,7 +15,11 @@ import { GraphQLModule } from './graphql.module'
 import { RootComponent } from './root/root.component'
 import { ContainerRouteComponent } from './routes/container/container.component'
 import { GenreRouteComponent } from './routes/genre/genre.component'
+import { LanguageFormComponent } from './routes/language/form.component'
+import { LanguageItemComponent } from './routes/language/item.component'
 import { LanguageRouteComponent } from './routes/language/language.component'
+import { LanguageListComponent } from './routes/language/list.component'
+import { MasterDetailComponent } from './routes/master-detail/master-detail.component'
 import { RecordingRouteComponent } from './routes/recording/recording.component'
 import { RecordingsRouteComponent } from './routes/recordings/recordings.component'
 import { RecordingRowComponent } from './routes/recordings/row.component'
@@ -42,7 +46,11 @@ import { ValidationService } from './services/validation/validation.service'
         GenreFilterComponent,
         GenreRouteComponent,
         LanguageFilterComponent,
+        LanguageFormComponent,
+        LanguageItemComponent,
+        LanguageListComponent,
         LanguageRouteComponent,
+        MasterDetailComponent,
         MultiSelectComponent,
         PageSizeFilterComponent,
         PaginationFilterComponent,
