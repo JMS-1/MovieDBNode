@@ -1,25 +1,23 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { Injectable, OnDestroy } from '@angular/core'
-import { ValidationError } from 'apollo-server-express'
-import Validator, { ValidationSchema } from 'fastest-validator'
+import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
 import { ValidationService } from './validation/validation.service'
 
 const validator = new Validator()
 
-export interface IWorkingCopy<T extends object> {
-    readonly validationErrors: ValidationError[] | true
+export interface IWorkingCopy {
+    readonly isDirty: false
+    readonly validationErrors: Record<string, ValidationError[]> | null
 }
 
 @Injectable()
 export abstract class EditableService<T extends object> implements OnDestroy {
     protected abstract validationName: string
 
-    private readonly _edit = new BehaviorSubject<(id: string) => T & IWorkingCopy<T>>((id) =>
-        this.createWorkingCopy(id)
-    )
+    private readonly _edit = new BehaviorSubject<(id: string) => T & IWorkingCopy>((id) => this.createWorkingCopy(id))
 
     private readonly _inputValdations: Subscription
 
@@ -29,7 +27,7 @@ export abstract class EditableService<T extends object> implements OnDestroy {
 
     private _updateSchema: ValidationSchema = { $$strict: true }
 
-    get editFactory(): Observable<(id: string) => T & IWorkingCopy<T>> {
+    get editFactory(): Observable<(id: string) => T & IWorkingCopy> {
         return this._edit
     }
 
@@ -57,21 +55,48 @@ export abstract class EditableService<T extends object> implements OnDestroy {
         this._edit.next((id) => this.createWorkingCopy(id))
     }
 
-    private createWorkingCopy(id: string): T & IWorkingCopy<T> {
+    private createWorkingCopy(id: string): T & IWorkingCopy {
         const item = JSON.parse(JSON.stringify(this.getCurrentMap()[id] || this.createNew()))
 
         delete item._id
         delete item.__typename
 
+        const itemStr = JSON.parse(JSON.stringify(item))
+
         const schema = (id ? this._updateSchema : this._inputSchema) || { $$strict: true }
 
-        let validationErrors = validator.validate(item, schema)
+        const createErrorMap = (): Record<string, ValidationError[]> | null => {
+            const errors = validator.validate(item, schema) as ValidationError[] | true
+
+            if (errors === true || errors.length < 1) {
+                return null
+            }
+
+            const map: Record<string, ValidationError[]> = {}
+
+            for (const error of errors) {
+                const list = map[error.field]
+
+                if (list) {
+                    list.push(error)
+                } else {
+                    map[error.field] = [error]
+                }
+            }
+
+            return map
+        }
+
+        let validationErrors = createErrorMap()
+        let isDirty = false
 
         return new Proxy(item, {
             get(target, p) {
                 switch (p) {
                     case 'validationErrors':
                         return validationErrors
+                    case 'isDirty':
+                        return isDirty
                     default:
                         return target[p]
                 }
@@ -79,11 +104,12 @@ export abstract class EditableService<T extends object> implements OnDestroy {
             set(target, p, newValue): boolean {
                 target[p] = newValue
 
-                validationErrors = validator.validate(item, schema)
+                isDirty = JSON.parse(JSON.stringify(target)) !== itemStr
+                validationErrors = createErrorMap()
 
                 return true
             },
-        }) as unknown as T & IWorkingCopy<T>
+        }) as unknown as T & IWorkingCopy
     }
 
     ngOnDestroy(): void {

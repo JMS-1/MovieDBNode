@@ -14,6 +14,7 @@ import { TextFilterComponent } from './filters/text/text.component'
 import { GraphQLModule } from './graphql.module'
 import { RootComponent } from './root/root.component'
 import { ContainerRouteComponent } from './routes/container/container.component'
+import { ErrorsComponent } from './routes/errors/errors.component'
 import { GenreRouteComponent } from './routes/genre/genre.component'
 import { LanguageFormComponent } from './routes/language/form.component'
 import { LanguageItemComponent } from './routes/language/item.component'
@@ -26,6 +27,7 @@ import { RecordingRowComponent } from './routes/recordings/row.component'
 import { RecordingTableComponent } from './routes/recordings/table.component'
 import { SeriesRouteComponent } from './routes/series/series.component'
 import { SubMenuComponent } from './semantic/menu/menu.component'
+import { ModalComponent } from './semantic/modal/modal.component'
 import { MultiSelectComponent } from './semantic/multi/multi.component'
 import { SearchComponent } from './semantic/search/search.component'
 import { SelectComponent } from './semantic/select/select.component'
@@ -43,6 +45,7 @@ import { ValidationService } from './services/validation/validation.service'
     bootstrap: [RootComponent],
     declarations: [
         ContainerRouteComponent,
+        ErrorsComponent,
         GenreFilterComponent,
         GenreRouteComponent,
         LanguageFilterComponent,
@@ -51,6 +54,7 @@ import { ValidationService } from './services/validation/validation.service'
         LanguageListComponent,
         LanguageRouteComponent,
         MasterDetailComponent,
+        ModalComponent,
         MultiSelectComponent,
         PageSizeFilterComponent,
         PaginationFilterComponent,

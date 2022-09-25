@@ -1,6 +1,25 @@
 <div *ngIf="edit">
-    <div>{{ edit.name }}</div>
-    <div>{{ edit.validationErrors | json }}</div>
-    <button class="ui negative button" (click)="edit.name = ''">Set Empty</button>
-    <button class="ui positive button" (click)="edit.name = 'Deutsch'">Set Deutsch</button>
+    <div class="actions">
+        <div [ngClass]="{ ui: true, button: true, disabled: !edit.isDirty }" (click)="reload()">Verwerfen</div>
+        <div
+            [ngClass]="{ ui: true, button: true, disabled: !edit.isDirty || edit.validationErrors }"
+            (click)="onSave()"
+        >
+            Speichern
+        </div>
+        <div *ngIf="editId" class="ui button" (click)="onRemove()">Löschen</div>
+    </div>
+    <div [ngClass]="{ form: true, ui: true, errors: edit.validationErrors }">
+        <div [ngClass]="{ field: true, required: true, error: edit.validationErrors?.['name'] }">
+            <label>Sprache</label>
+            <div class="{ui:true, input:true}">
+                <input type="text" [(ngModel)]="name" />
+            </div>
+        </div>
+    </div>
+    <app-validation-errors [edit]="edit"></app-validation-errors>
+    <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()">
+        Das Löschen einer Sprache kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Sprache wirklich
+        endgültig entfernt werden?
+    </app-semantic-modal>
 </div>

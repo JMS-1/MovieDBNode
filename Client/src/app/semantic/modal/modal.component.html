@@ -1,0 +1,8 @@
+<div class="ui modal" #dialog>
+    <div class="header">{{ title }}</div>
+    <div class="content"><ng-content></ng-content></div>
+    <div class="actions">
+        <div class="ui button negative" (click)="onConfirm()">Ja</div>
+        <div class="ui button" (click)="onClose()">Nein</div>
+    </div>
+</div>

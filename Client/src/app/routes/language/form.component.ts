@@ -14,16 +14,44 @@ export class LanguageFormComponent implements OnChanges, OnInit, OnDestroy {
 
     @Input() language = ''
 
-    edit?: ILanguage & IWorkingCopy<ILanguage>
+    editId = ''
 
-    private _editFactory?: (id: string) => ILanguage & IWorkingCopy<ILanguage>
+    edit?: ILanguage & IWorkingCopy
 
-    private editId = ''
+    private _editFactory?: (id: string) => ILanguage & IWorkingCopy
+
+    confirm = false
 
     constructor(private readonly _service: LanguageService) {}
 
-    private reload(): void {
+    onSave(): void {
+        if (this.edit) {
+            this._service.addOrUpdate(this.editId, this.edit)
+        }
+    }
+
+    onConfirm(): void {
+        this._service.remove(this.editId)
+
+        this.confirm = false
+    }
+
+    onRemove(): void {
+        this.confirm = true
+    }
+
+    reload(): void {
         this.edit = this._editFactory?.(this.editId)
+    }
+
+    get name(): string {
+        return this.edit?.name || ''
+    }
+
+    set name(name: string) {
+        if (this.edit) {
+            this.edit.name = name
+        }
     }
 
     ngOnInit(): void {
