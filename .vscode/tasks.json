@@ -21,6 +21,16 @@
             },
             "script": "start",
             "type": "npm"
+        },
+        {
+            "group": "build",
+            "label": "deploy",
+            "problemMatcher": {
+                "owner": "typescript",
+                "pattern": "$tsc"
+            },
+            "script": "deploy",
+            "type": "npm"
         }
     ],
     "version": "2.0.0"
