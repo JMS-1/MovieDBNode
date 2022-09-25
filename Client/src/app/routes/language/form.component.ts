@@ -1,28 +1,22 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ILanguage } from 'api'
-import { Subscription } from 'rxjs'
 import { LanguageService } from 'src/app/services/languages/language.service'
-import { IWorkingCopy } from 'src/app/services/workingCopy'
+
+import { FormComponent } from '../form.component'
 
 @Component({
     selector: 'app-language-form',
     styleUrls: ['./form.component.scss'],
     templateUrl: './form.component.html',
 })
-export class LanguageFormComponent implements OnChanges, OnInit, OnDestroy {
-    private _query?: Subscription
+export class LanguageFormComponent extends FormComponent<ILanguage> implements OnInit, OnDestroy {
+    protected getEditService(): LanguageService {
+        return this._service
+    }
 
-    @Input() language = ''
-
-    editId = ''
-
-    edit?: ILanguage & IWorkingCopy
-
-    private _editFactory?: (id: string) => ILanguage & IWorkingCopy
-
-    confirm = false
-
-    constructor(private readonly _service: LanguageService) {}
+    constructor(private readonly _service: LanguageService) {
+        super()
+    }
 
     onSave(): void {
         if (this.edit) {
@@ -36,14 +30,6 @@ export class LanguageFormComponent implements OnChanges, OnInit, OnDestroy {
         this.confirm = false
     }
 
-    onRemove(): void {
-        this.confirm = true
-    }
-
-    reload(): void {
-        this.edit = this._editFactory?.(this.editId)
-    }
-
     get name(): string {
         return this.edit?.name || ''
     }
@@ -52,33 +38,5 @@ export class LanguageFormComponent implements OnChanges, OnInit, OnDestroy {
         if (this.edit) {
             this.edit.name = name
         }
-    }
-
-    ngOnInit(): void {
-        this._query = this._service.editFactory.subscribe((f) => {
-            this._editFactory = f
-
-            this.reload()
-        })
-    }
-
-    ngOnDestroy(): void {
-        this._query?.unsubscribe()
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        const language = changes['language']
-
-        if (!language) {
-            return
-        }
-
-        if (!language.firstChange && language.currentValue === language.previousValue) {
-            return
-        }
-
-        this.editId = (language.currentValue !== 'NEW' && language.currentValue) || ''
-
-        this.reload()
     }
 }
