@@ -49,12 +49,16 @@ export abstract class EditableService<T extends object> implements OnDestroy {
 
     protected abstract getCurrentMap(): Record<string, T>
 
+    protected createNew(): Partial<T> {
+        return {}
+    }
+
     protected refresh(): void {
         this._edit.next((id) => this.createWorkingCopy(id))
     }
 
     private createWorkingCopy(id: string): T & IWorkingCopy<T> {
-        const item = JSON.parse(JSON.stringify(this.getCurrentMap()[id] || {}))
+        const item = JSON.parse(JSON.stringify(this.getCurrentMap()[id] || this.createNew()))
 
         delete item._id
         delete item.__typename

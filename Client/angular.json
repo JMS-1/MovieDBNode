@@ -39,6 +39,9 @@
                     },
                     "defaultConfiguration": "production",
                     "options": {
+                        "allowedCommonJsDependencies": [
+                            "fastest-validator"
+                        ],
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"
