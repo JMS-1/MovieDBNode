@@ -1,1 +1,4 @@
-<p>form works!</p>
+<div>{{ edit && edit.name }}</div>
+<div>{{ edit && edit.validationErrors | json }}</div>
+<button (click)="edit && (edit.name = '')">Set Empty</button>
+<button (click)="edit && (edit.name = 'Deutsch')">Set Deutsch</button>

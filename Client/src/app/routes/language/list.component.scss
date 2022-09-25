@@ -11,10 +11,13 @@
     background: #ffffff;
 
     > .item {
-        background: lightgrey;
-
         + .item {
             margin-top: 0.5em;
+        }
+
+        &:not(.active):not(:hover) {
+            color: #666666;
+            background: #dddddd;
         }
     }
 }

@@ -1,10 +1,12 @@
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { ILanguage, ILanguageFindResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
 import { EmptyObject } from 'apollo-angular/types'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 import { ErrorService } from '../error/error.service'
+import { ValidationService } from '../validation/validation.service'
+import { EditableService } from '../workingCopy'
 
 const queryLanguages = gql<{ languages: { find: ILanguageFindResult } }, EmptyObject>(`
   query {
@@ -17,22 +19,34 @@ const queryLanguages = gql<{ languages: { find: ILanguageFindResult } }, EmptyOb
 `)
 
 @Injectable()
-export class LanguageService implements OnDestroy {
+export class LanguageService extends EditableService<ILanguage> {
+    protected readonly validationName = 'Language'
+
     private readonly _query = new BehaviorSubject<Record<string, ILanguage>>({})
 
     get map(): Observable<Record<string, ILanguage>> {
         return this._query
     }
 
-    constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService) {
+    protected getCurrentMap(): Record<string, ILanguage> {
+        return this._query.value
+    }
+
+    constructor(private readonly _gql: Apollo, validation: ValidationService, private readonly _errors: ErrorService) {
+        super(validation)
+
         this._errors.serverCall(this._gql.query({ query: queryLanguages }), (data) => {
-            this._query?.next(
+            this._query.next(
                 data.languages.find.items.reduce((m, l) => ((m[l._id] = l), m), {} as Record<string, ILanguage>)
             )
+
+            super.refresh()
         })
     }
 
-    ngOnDestroy(): void {
+    override ngOnDestroy(): void {
+        super.ngOnDestroy()
+
         this._query.complete()
     }
 }
