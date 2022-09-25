@@ -1,4 +1,6 @@
-<div>{{ edit && edit.name }}</div>
-<div>{{ edit && edit.validationErrors | json }}</div>
-<button (click)="edit && (edit.name = '')">Set Empty</button>
-<button (click)="edit && (edit.name = 'Deutsch')">Set Deutsch</button>
+<div *ngIf="edit">
+    <div>{{ edit.name }}</div>
+    <div>{{ edit.validationErrors | json }}</div>
+    <button class="ui negative button" (click)="edit.name = ''">Set Empty</button>
+    <button class="ui positive button" (click)="edit.name = 'Deutsch'">Set Deutsch</button>
+</div>
