@@ -1,0 +1,9 @@
+:host {
+    overflow: hidden;
+}
+
+div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

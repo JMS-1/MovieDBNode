@@ -4,7 +4,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { Subscription } from 'rxjs'
 import { EditableService, IWorkingCopy } from 'src/app/services/workingCopy'
 
-@Component({ template: '<p></p>' })
+@Component({ template: '' })
 export abstract class FormComponent<T extends object> implements OnChanges, OnDestroy, OnInit {
     private _query?: Subscription
 

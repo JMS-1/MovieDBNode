@@ -55,8 +55,6 @@ const delLanguage = gql<{ languages: { delete: ILanguage } }, EmptyObject>(`
 
 @Injectable()
 export class LanguageService extends EditableService<ILanguage> {
-    protected readonly validationName = 'Language'
-
     private readonly _query = new BehaviorSubject<Record<string, ILanguage>>({})
 
     get map(): Observable<Record<string, ILanguage>> {
@@ -73,7 +71,7 @@ export class LanguageService extends EditableService<ILanguage> {
         private readonly _router: Router,
         private readonly _errors: ErrorService
     ) {
-        super(validation)
+        super('Language', validation)
 
         this.load()
     }
@@ -109,6 +107,10 @@ export class LanguageService extends EditableService<ILanguage> {
     }
 
     remove(id: string): void {
-        this._errors.serverCall(this._gql.query({ query: delLanguage, variables: { id } }), () => this.load())
+        this._errors.serverCall(this._gql.query({ query: delLanguage, variables: { id } }), () => {
+            this._router.navigate(['language'], { replaceUrl: true })
+
+            this.load()
+        })
     }
 }

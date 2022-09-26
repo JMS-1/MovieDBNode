@@ -15,7 +15,10 @@ import { GraphQLModule } from './graphql.module'
 import { RootComponent } from './root/root.component'
 import { ContainerRouteComponent } from './routes/container/container.component'
 import { ErrorsComponent } from './routes/errors/errors.component'
+import { GenreFormComponent } from './routes/genre/form.component'
 import { GenreRouteComponent } from './routes/genre/genre.component'
+import { GenreItemComponent } from './routes/genre/item.component'
+import { GenreListComponent } from './routes/genre/list.component'
 import { LanguageFormComponent } from './routes/language/form.component'
 import { LanguageItemComponent } from './routes/language/item.component'
 import { LanguageRouteComponent } from './routes/language/language.component'
@@ -47,6 +50,9 @@ import { ValidationService } from './services/validation/validation.service'
         ContainerRouteComponent,
         ErrorsComponent,
         GenreFilterComponent,
+        GenreFormComponent,
+        GenreItemComponent,
+        GenreListComponent,
         GenreRouteComponent,
         LanguageFilterComponent,
         LanguageFormComponent,

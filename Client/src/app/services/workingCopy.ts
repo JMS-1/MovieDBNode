@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { Injectable, OnDestroy } from '@angular/core'
+import { Inject, Injectable, InjectionToken, OnDestroy } from '@angular/core'
 import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
@@ -13,10 +13,11 @@ export interface IWorkingCopy {
     readonly validationErrors: Record<string, ValidationError[]> | null
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const ValidationNameToken = new InjectionToken<string>('ValidationName')
+
 @Injectable()
 export abstract class EditableService<T extends object> implements OnDestroy {
-    protected abstract validationName: string
-
     private readonly _edit = new BehaviorSubject<(id: string) => T & IWorkingCopy>((id) => this.createWorkingCopy(id))
 
     private readonly _inputValdations: Subscription
@@ -31,15 +32,15 @@ export abstract class EditableService<T extends object> implements OnDestroy {
         return this._edit
     }
 
-    constructor(validation: ValidationService) {
+    constructor(@Inject(ValidationNameToken) private readonly _validationName: string, validation: ValidationService) {
         this._inputValdations = validation.inputValidations.subscribe((s) => {
-            this._inputSchema = s[this.validationName]
+            this._inputSchema = s[this._validationName]
 
             this.refresh()
         })
 
         this._updateValidations = validation.updateValidations.subscribe((s) => {
-            this._updateSchema = s[this.validationName]
+            this._updateSchema = s[this._validationName]
 
             this.refresh()
         })
