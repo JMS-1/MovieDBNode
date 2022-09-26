@@ -2,8 +2,15 @@
     overflow: hidden;
 }
 
-div {
+.item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+    > .content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }

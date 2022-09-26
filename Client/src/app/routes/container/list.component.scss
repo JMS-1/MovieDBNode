@@ -4,20 +4,27 @@
     overflow: auto;
 }
 
-.ui.list {
-    row-gap: 10em;
-    min-height: 100%;
-    padding: 0.5em;
-    background: #ffffff;
+.complete {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    overflow: hidden;
 
-    > .item {
-        + .item {
-            margin-top: 0.5em;
-        }
+    > .ui.list {
+        row-gap: 10em;
+        padding: 0.5em;
+        overflow: auto;
+        background: #ffffff;
 
-        &:not(.active):not(:hover) {
-            color: #666666;
-            background: #dddddd;
+        > .item {
+            + .item {
+                margin-top: 0.5em;
+            }
+
+            &:not(.active):not(:hover) {
+                color: #666666;
+                background: #dddddd;
+            }
         }
     }
 }

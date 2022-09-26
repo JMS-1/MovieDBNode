@@ -15,6 +15,7 @@ import { GraphQLModule } from './graphql.module'
 import { RootComponent } from './root/root.component'
 import { ContainerRouteComponent } from './routes/container/container.component'
 import { ContainerFormComponent } from './routes/container/form.component'
+import { ContainerIconComponent } from './routes/container/icon.component'
 import { ContainerItemComponent } from './routes/container/item.component'
 import { ContainerListComponent } from './routes/container/list.component'
 import { ErrorsComponent } from './routes/errors/errors.component'
@@ -51,6 +52,7 @@ import { ValidationService } from './services/validation/validation.service'
     bootstrap: [RootComponent],
     declarations: [
         ContainerFormComponent,
+        ContainerIconComponent,
         ContainerItemComponent,
         ContainerListComponent,
         ContainerRouteComponent,

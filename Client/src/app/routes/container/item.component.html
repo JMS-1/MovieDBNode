@@ -1,1 +1,4 @@
-<div (click)="onSelect()">{{ container.level }}: {{ container.name }}</div>
+<div class="item" (click)="onSelect()">
+    <app-container-icon [type]="container.type"></app-container-icon>
+    <div class="content">{{ container.name }}</div>
+</div>

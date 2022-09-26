@@ -1,4 +1,8 @@
 <div class="ui fluid icon input" #search>
-    <i class="search icon"></i>
     <input type="text" [placeholder]="hint" [(ngModel)]="text" (ngModelChange)="onChange($event)" />
+    <i
+        class="ui icon"
+        [ngClass]="{ search: !text || !clearable, close: clearable && text, link: clearable && text }"
+        (click)="clear()"
+    ></i>
 </div>

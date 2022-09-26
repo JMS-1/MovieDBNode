@@ -15,9 +15,17 @@ export class SearchComponent {
 
     @Input() text = ''
 
+    @Input() clearable = false
+
     @Output() textChange = new EventEmitter<string>()
 
     onChange(text: string): void {
         this.textChange.emit(text)
+    }
+
+    clear(): void {
+        if (this.clearable) {
+            this.onChange('')
+        }
     }
 }
