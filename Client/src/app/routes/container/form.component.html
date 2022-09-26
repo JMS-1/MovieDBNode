@@ -7,15 +7,46 @@
         <div *ngIf="editId" class="ui button" (click)="onRemove()">Löschen</div>
     </div>
     <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['parentId'] }">
+            <label>Übergeordnete Ablage</label>
+            <semantic-single-select
+                [items]="parentAsItems"
+                [(selected)]="parentId"
+                hint="(keine)"
+            ></semantic-single-select>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['parentId']"></app-validation-errors>
         <div class="required field" [ngClass]="{ error: edit.validationErrors?.['name'] }">
-            <label>Sprache</label>
+            <label>Name</label>
             <div class="ui input">
                 <input type="text" [(ngModel)]="name" />
             </div>
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
-        <div>{{ edit.validationErrors | json }}</div>
+        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['type'] }">
+            <label>Art der Ablage</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="type" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['type']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['description'] }">
+            <label>Beschreibung</label>
+            <div class="ui input">
+                <textarea [(ngModel)]="description" rows="5"></textarea>
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['description']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['parentLocation'] }">
+            <label>Position in der übergeordneten Ablage</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="parentLocation" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['parentLocation']"></app-validation-errors>
     </div>
+    <div>{{ contents | json }}</div>
+    <div>{{ edit.validationErrors | json }}</div>
     <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()">
         Das Löschen einer Ablage kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Ablage wirklich
         endgültig entfernt werden?

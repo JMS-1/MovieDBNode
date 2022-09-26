@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { Apollo } from 'apollo-angular'
+import { Apollo, gql } from 'apollo-angular'
+import { Observable, Subject } from 'rxjs'
 
 import * as api from '../../../api'
 import { EditableService } from '../edit.service'
@@ -10,12 +11,36 @@ import { ValidationService } from '../validation/validation.service'
 export interface IContainer extends api.IContainer {
     allChildren: Set<string>
     children: IContainer[]
+    fullName: string
     level: number
 }
 
+export interface IContainerPosition {
+    _id: string
+    containerPosition: string
+    fullName: string
+}
+
+const query = gql<{ recordings: { findByContainer: IContainerPosition[] } }, { id: string }>(`
+    query ($id: ID!) {
+        recordings {
+            findByContainer(containerId: $id) {
+                _id fullName containerPosition
+            }
+        }
+    }
+`)
+
 @Injectable()
 export class ContainerService extends EditableService<IContainer> {
-    protected override readonly ignoredFields: string[] = ['_id', '__typename', 'level', 'children', 'allChildren']
+    protected override readonly ignoredFields: string[] = [
+        '__typename',
+        '_id',
+        'allChildren',
+        'children',
+        'fullName',
+        'level',
+    ]
 
     constructor(gql: Apollo, validation: ValidationService, router: Router, errors: ErrorService) {
         super(
@@ -51,6 +76,8 @@ export class ContainerService extends EditableService<IContainer> {
                 return container.level
             }
 
+            container.fullName = container.name
+
             const parent = container.parentId && map[container.parentId]
 
             if (!parent) {
@@ -63,7 +90,11 @@ export class ContainerService extends EditableService<IContainer> {
                 parent.allChildren = new Set([container._id])
             }
 
-            return prepareAndGetLevel(parent) + 1
+            const level = prepareAndGetLevel(parent)
+
+            container.fullName = `${parent.fullName} > ${container.name}`
+
+            return level + 1
         }
 
         containers.forEach((c) => (c.level = prepareAndGetLevel(c)))
@@ -78,5 +109,15 @@ export class ContainerService extends EditableService<IContainer> {
         )
 
         return map
+    }
+
+    getContents(id: string): Observable<IContainerPosition[]> {
+        const obs = new Subject<IContainerPosition[]>()
+
+        this._errors.serverCall(this._gql.query({ query, variables: { id } }), (data) =>
+            obs.next(data.recordings.findByContainer)
+        )
+
+        return obs
     }
 }
