@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { Router } from '@angular/router'
-import { ILanguage } from 'api'
+
+import { ILanguage } from '../../../api'
 
 @Component({
     selector: 'app-language-item',

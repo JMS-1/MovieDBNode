@@ -14,6 +14,9 @@ import { TextFilterComponent } from './filters/text/text.component'
 import { GraphQLModule } from './graphql.module'
 import { RootComponent } from './root/root.component'
 import { ContainerRouteComponent } from './routes/container/container.component'
+import { ContainerFormComponent } from './routes/container/form.component'
+import { ContainerItemComponent } from './routes/container/item.component'
+import { ContainerListComponent } from './routes/container/list.component'
 import { ErrorsComponent } from './routes/errors/errors.component'
 import { GenreFormComponent } from './routes/genre/form.component'
 import { GenreRouteComponent } from './routes/genre/genre.component'
@@ -47,6 +50,9 @@ import { ValidationService } from './services/validation/validation.service'
 @NgModule({
     bootstrap: [RootComponent],
     declarations: [
+        ContainerFormComponent,
+        ContainerItemComponent,
+        ContainerListComponent,
         ContainerRouteComponent,
         ErrorsComponent,
         GenreFilterComponent,

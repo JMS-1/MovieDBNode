@@ -1,0 +1,23 @@
+<div *ngIf="edit">
+    <div class="actions">
+        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()">Verwerfen</div>
+        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }" (click)="onSave()">
+            Speichern
+        </div>
+        <div *ngIf="editId" class="ui button" (click)="onRemove()">Löschen</div>
+    </div>
+    <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['name'] }">
+            <label>Sprache</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="name" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
+        <div>{{ edit.validationErrors | json }}</div>
+    </div>
+    <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()">
+        Das Löschen einer Ablage kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Ablage wirklich
+        endgültig entfernt werden?
+    </app-semantic-modal>
+</div>

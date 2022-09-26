@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { ContainerService } from 'src/app/services/containers/container.service'
+import { ActivatedRoute } from '@angular/router'
+import { Subscription } from 'rxjs'
 
 @Component({
     selector: 'app-container',
@@ -7,7 +8,17 @@ import { ContainerService } from 'src/app/services/containers/container.service'
     templateUrl: './container.component.html',
 })
 export class ContainerRouteComponent implements OnInit {
-    constructor(c: ContainerService) {}
+    private _query?: Subscription
 
-    ngOnInit(): void {}
+    selected = ''
+
+    constructor(private readonly _route: ActivatedRoute) {}
+
+    ngOnInit(): void {
+        this._query = this._route.params.subscribe((params) => (this.selected = params['id']))
+    }
+
+    ngOnDestroy(): void {
+        this._query?.unsubscribe()
+    }
 }

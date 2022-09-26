@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core'
-import { IRecordingQueryRequest, IRecordingQueryResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 
+import { IRecordingQueryRequest, IRecordingQueryResult } from '../../../api'
 import { ErrorService } from '../error/error.service'
 import { ISeriesNode, SeriesService } from '../series/series.service'
 

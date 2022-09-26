@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { IGenre } from 'api'
 import { Subscription } from 'rxjs'
 
+import { IGenre } from '../../../api'
 import { GenreService } from '../../services/genre/genre.service'
 
 @Component({

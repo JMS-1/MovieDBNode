@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IRecordingQueryResult } from 'api'
 import { Subscription } from 'rxjs'
 
+import { IRecordingQueryResult } from '../../../api'
 import { RecordingService } from '../../services/recordings/recording.service'
 
 @Component({

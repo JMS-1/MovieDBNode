@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import * as api from 'api'
 import { Apollo } from 'apollo-angular'
 
+import * as api from '../../../api'
 import { EditableService } from '../edit.service'
 import { ErrorService } from '../error/error.service'
 import { ValidationService } from '../validation/validation.service'
 
-interface IContainer extends api.IContainer {
+export interface IContainer extends api.IContainer {
     allChildren: Set<string>
     children: IContainer[]
     level: number
@@ -15,6 +15,8 @@ interface IContainer extends api.IContainer {
 
 @Injectable()
 export class ContainerService extends EditableService<IContainer> {
+    protected override readonly ignoredFields: string[] = ['_id', '__typename', 'level', 'children', 'allChildren']
+
     constructor(gql: Apollo, validation: ValidationService, router: Router, errors: ErrorService) {
         super(
             gql,
@@ -27,6 +29,18 @@ export class ContainerService extends EditableService<IContainer> {
         )
 
         this.load()
+    }
+
+    protected override fromServer(item: Partial<IContainer>): Partial<IContainer> {
+        item.type = api.containerType[item.type || api.containerType.Undefined] as unknown as api.containerType
+
+        return item
+    }
+
+    protected override createNew(): Partial<IContainer> {
+        return {
+            type: api.containerType.Undefined,
+        }
     }
 
     protected override createMap(containers: IContainer[]): Record<string, IContainer> {

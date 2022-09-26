@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IRecordingQueryResult } from 'api'
 import { Subscription } from 'rxjs'
 import { RecordingService } from 'src/app/services/recordings/recording.service'
+
+import { IRecordingQueryResult } from '../../../api'
 
 interface IPageItem {
     page: number | undefined

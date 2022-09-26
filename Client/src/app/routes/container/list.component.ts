@@ -1,22 +1,21 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { LanguageService } from 'src/app/services/languages/language.service'
 
-import { ILanguage } from '../../../api'
+import { ContainerService, IContainer } from '../../services/containers/container.service'
 
 @Component({
-    selector: 'app-language-list',
+    selector: 'app-container-list',
     styleUrls: ['./list.component.scss'],
     templateUrl: './list.component.html',
 })
-export class LanguageListComponent implements OnInit, OnDestroy {
+export class ContainerListComponent implements OnInit, OnDestroy {
     private _query?: Subscription
 
-    constructor(private readonly _service: LanguageService) {}
+    constructor(private readonly _service: ContainerService) {}
 
     @Input() selected = ''
 
-    items: ILanguage[] = []
+    items: IContainer[] = []
 
     ngOnInit(): void {
         this._query = this._service.map.subscribe(

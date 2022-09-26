@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { IRecording } from 'api'
 import { Subscription } from 'rxjs'
 import { GenreService } from 'src/app/services/genre/genre.service'
 import { LanguageService } from 'src/app/services/languages/language.service'
+
+import { IRecording } from '../../../api'
 
 @Component({
     selector: '[recording]',

@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core'
-import { ISeries, ISeriesFindResult } from 'api'
 import { Apollo, gql } from 'apollo-angular'
 import { EmptyObject } from 'apollo-angular/types'
 import { BehaviorSubject, Observable } from 'rxjs'
 
+import { ISeries, ISeriesFindResult } from '../../../api'
 import { ErrorService } from '../error/error.service'
 
 const querySeries = gql<{ series: { find: ISeriesFindResult } }, EmptyObject>(`

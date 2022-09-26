@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ILanguage } from 'api'
 import { LanguageService } from 'src/app/services/languages/language.service'
 
+import { ILanguage } from '../../../api'
 import { FormComponent } from '../form.component'
 
 @Component({

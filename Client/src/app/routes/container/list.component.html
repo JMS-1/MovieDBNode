@@ -1,0 +1,8 @@
+<div class="ui selection list">
+    <app-container-item
+        *ngFor="let item of items"
+        class="item"
+        [ngClass]="{ active: item._id === selected }"
+        [container]="item"
+    ></app-container-item>
+</div>

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { ILanguage } from 'api'
 import { Apollo } from 'apollo-angular'
 
+import { ILanguage } from '../../../api'
 import { EditableService } from '../edit.service'
 import { ErrorService } from '../error/error.service'
 import { ValidationService } from '../validation/validation.service'

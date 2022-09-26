@@ -23,6 +23,8 @@ const validationPropertiesToken = new InjectionToken<string>('ValidationProperti
 
 @Injectable()
 export abstract class EditableService<T extends { _id: string }> implements OnDestroy {
+    protected readonly ignoredFields: string[] = ['_id', '__typename']
+
     private readonly _query = new BehaviorSubject<Record<string, T>>({})
 
     get map(): Observable<Record<string, T>> {
@@ -113,10 +115,18 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
         return items.reduce((m: Record<string, T>, i: T) => ((m[i._id] = i), m), {})
     }
 
+    protected fromServer(item: Partial<T>): Partial<T> {
+        return item
+    }
+
+    protected toServer(item: Partial<T>): Partial<T> {
+        return item
+    }
+
     protected load(): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this._errors.serverCall(this._gql.query({ query: this._itemQuery }), (data: any) => {
-            this._query.next(this.createMap(data[this._validationScope].find.items))
+            this._query.next(this.createMap(data[this._validationScope].find.items.map((i: T) => this.fromServer(i))))
 
             this.refresh()
         })
@@ -133,8 +143,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
     private createWorkingCopy(id: string): T & IWorkingCopy {
         const item = JSON.parse(JSON.stringify(this._query.value[id] || this.createNew()))
 
-        delete item._id
-        delete item.__typename
+        this.ignoredFields.forEach((f) => delete item[f])
 
         const itemStr = JSON.parse(JSON.stringify(item))
 
@@ -188,6 +197,8 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
     }
 
     addOrUpdate(id: string, data: Partial<T>): void {
+        data = this.toServer(data)
+
         if (id) {
             this._errors.serverCall(this._gql.query({ query: this._updateMutation, variables: { data, id } }), () =>
                 this.load()

@@ -1,20 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 
-import { IGenre } from '../../../api'
-import { GenreService } from '../../services/genre/genre.service'
+import { ContainerService, IContainer } from '../../services/containers/container.service'
 import { FormComponent } from '../form.component'
 
 @Component({
-    selector: 'app-genre-form',
+    selector: 'app-container-form',
     styleUrls: ['./form.component.scss'],
     templateUrl: './form.component.html',
 })
-export class GenreFormComponent extends FormComponent<IGenre> implements OnInit, OnDestroy {
-    protected getEditService(): GenreService {
+export class ContainerFormComponent extends FormComponent<IContainer> implements OnInit, OnDestroy {
+    protected getEditService(): ContainerService {
         return this._service
     }
 
-    constructor(private readonly _service: GenreService) {
+    constructor(private readonly _service: ContainerService) {
         super()
     }
 
