@@ -16,8 +16,8 @@
                 <input type="text" [(ngModel)]="name" />
             </div>
         </div>
+        <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
     </div>
-    <app-validation-errors [edit]="edit"></app-validation-errors>
     <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()">
         Das Löschen einer Kategorie kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Kategorie wirklich
         endgültig entfernt werden?

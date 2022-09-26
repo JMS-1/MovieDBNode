@@ -16,9 +16,9 @@ export class RootComponent implements OnDestroy {
     route = ''
 
     readonly newRoutes: IMenuItem[] = [
-        { route: 'recording/NEW', text: 'Aufzeichnung erstellen' },
+        { route: 'recordings/NEW', text: 'Aufzeichnung erstellen' },
         { route: 'series/NEW', text: 'Serie erstellen' },
-        { route: 'container/NEW', text: 'Ablage erstellen' },
+        { route: 'containers/NEW', text: 'Ablage erstellen' },
         { route: 'languages/NEW', text: 'Sprache hinzufügen' },
         { route: 'genres/NEW', text: 'Kategorie hinzufügen' },
     ]
@@ -58,11 +58,11 @@ export class RootComponent implements OnDestroy {
     }
 
     get isContainer(): boolean {
-        return this.route.startsWith('/container')
+        return this.route.startsWith('/containers')
     }
 
     get isRecording(): boolean {
-        return this.route === '/' || this.route.startsWith('/recording')
+        return this.route === '/' || this.route.startsWith('/recordings')
     }
 
     onNew(route: string): void {

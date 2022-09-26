@@ -1,6 +1,6 @@
-<div *ngIf="hasErrors" class="ui error message">
+<div *ngIf="list" class="ui error message">
     <div class="ui header">Bitte Eingaben kontrollieren</div>
     <ul class="list">
-        <li *ngFor="let error of errors" class="content">{{ error.message || error.field }}</li>
+        <li *ngFor="let error of list" class="content">{{ error.message || error.field }}</li>
     </ul>
 </div>

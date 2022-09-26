@@ -12,11 +12,11 @@ const routes: Routes = [
     /** Startseite. */
     { component: RecordingsRouteComponent, path: '', pathMatch: 'full' },
     /** Standardrouten. */
-    { component: RecordingRouteComponent, path: 'recording/:id' },
+    { component: RecordingRouteComponent, path: 'recordings/:id' },
     { component: SeriesRouteComponent, path: 'series', pathMatch: 'full' },
     { component: SeriesRouteComponent, path: 'series/:id' },
-    { component: ContainerRouteComponent, path: 'container', pathMatch: 'full' },
-    { component: ContainerRouteComponent, path: 'container/:id' },
+    { component: ContainerRouteComponent, path: 'containers', pathMatch: 'full' },
+    { component: ContainerRouteComponent, path: 'containers/:id' },
     { component: LanguageRouteComponent, path: 'languages', pathMatch: 'full' },
     { component: LanguageRouteComponent, path: 'languages/:id' },
     { component: GenreRouteComponent, path: 'genres', pathMatch: 'full' },
