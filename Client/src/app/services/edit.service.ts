@@ -109,12 +109,14 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
         })
     }
 
+    protected createMap(items: T[]): Record<string, T> {
+        return items.reduce((m: Record<string, T>, i: T) => ((m[i._id] = i), m), {})
+    }
+
     protected load(): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this._errors.serverCall(this._gql.query({ query: this._itemQuery }), (data: any) => {
-            this._query.next(
-                data[this._validationScope].find.items.reduce((m: Record<string, T>, i: T) => ((m[i._id] = i), m), {})
-            )
+            this._query.next(this.createMap(data[this._validationScope].find.items))
 
             this.refresh()
         })
@@ -218,5 +220,6 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
         this._updateValidations.unsubscribe()
 
         this._edit.complete()
+        this._query.complete()
     }
 }

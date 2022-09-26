@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { ContainerService } from 'src/app/services/containers/container.service'
 
 @Component({
     selector: 'app-container',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core'
     templateUrl: './container.component.html',
 })
 export class ContainerRouteComponent implements OnInit {
-    constructor() {}
+    constructor(c: ContainerService) {}
 
     ngOnInit(): void {}
 }

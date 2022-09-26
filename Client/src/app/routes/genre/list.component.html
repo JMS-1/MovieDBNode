@@ -1,7 +1,8 @@
 <div class="ui selection list">
     <app-genre-item
         *ngFor="let item of items"
-        [ngClass]="{ item: true, active: item._id === selected }"
+        class="item"
+        [ngClass]="{ active: item._id === selected }"
         [genre]="item"
     ></app-genre-item>
 </div>

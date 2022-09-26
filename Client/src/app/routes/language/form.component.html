@@ -1,16 +1,13 @@
 <div *ngIf="edit">
     <div class="actions">
-        <div [ngClass]="{ ui: true, button: true, disabled: !edit.isDirty }" (click)="reload()">Verwerfen</div>
-        <div
-            [ngClass]="{ ui: true, button: true, disabled: !edit.isDirty || edit.validationErrors }"
-            (click)="onSave()"
-        >
+        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()">Verwerfen</div>
+        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }" (click)="onSave()">
             Speichern
         </div>
         <div *ngIf="editId" class="ui button" (click)="onRemove()">Löschen</div>
     </div>
-    <div [ngClass]="{ form: true, ui: true, errors: edit.validationErrors }">
-        <div [ngClass]="{ field: true, required: true, error: edit.validationErrors?.['name'] }">
+    <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['name'] }">
             <label>Sprache</label>
             <div class="{ui:true, input:true}">
                 <input type="text" [(ngModel)]="name" />
