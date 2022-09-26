@@ -13,6 +13,6 @@ export class GenreItemComponent {
     constructor(private readonly _router: Router) {}
 
     onSelect(): void {
-        this._router.navigate(['genre', this.genre._id])
+        this._router.navigate(['genres', this.genre._id])
     }
 }

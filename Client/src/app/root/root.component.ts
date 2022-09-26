@@ -19,8 +19,8 @@ export class RootComponent implements OnDestroy {
         { route: 'recording/NEW', text: 'Aufzeichnung erstellen' },
         { route: 'series/NEW', text: 'Serie erstellen' },
         { route: 'container/NEW', text: 'Ablage erstellen' },
-        { route: 'language/NEW', text: 'Sprache hinzufügen' },
-        { route: 'genre/NEW', text: 'Kategorie hinzufügen' },
+        { route: 'languages/NEW', text: 'Sprache hinzufügen' },
+        { route: 'genres/NEW', text: 'Kategorie hinzufügen' },
     ]
 
     readonly themeRoutes: IMenuItem[] = [
@@ -50,11 +50,11 @@ export class RootComponent implements OnDestroy {
     }
 
     get isGenre(): boolean {
-        return this.route.startsWith('/genre')
+        return this.route.startsWith('/genres')
     }
 
     get isLanguage(): boolean {
-        return this.route.startsWith('/language')
+        return this.route.startsWith('/languages')
     }
 
     get isContainer(): boolean {

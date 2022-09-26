@@ -3,8 +3,8 @@
         <a [ngClass]="{ item: true, active: isRecording }" routerLink="">Aufzeichnungen</a>
         <a [ngClass]="{ item: true, active: isSeries }" routerLink="series">Serien</a>
         <a [ngClass]="{ item: true, active: isContainer }" routerLink="container">Ablagen</a>
-        <a [ngClass]="{ item: true, active: isLanguage }" routerLink="language">Sprachen</a>
-        <a [ngClass]="{ item: true, active: isGenre }" routerLink="genre">Kategorien</a>
+        <a [ngClass]="{ item: true, active: isLanguage }" routerLink="languages">Sprachen</a>
+        <a [ngClass]="{ item: true, active: isGenre }" routerLink="genres">Kategorien</a>
         <app-sub-menu title="Neu" [items]="newRoutes" (onSelect)="onNew($event)"></app-sub-menu>
         <app-sub-menu title="Theme" [items]="themeRoutes" (onSelect)="onTheme($event)"></app-sub-menu>
     </div>

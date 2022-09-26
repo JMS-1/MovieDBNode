@@ -13,6 +13,6 @@ export class LanguageItemComponent {
     constructor(private readonly _router: Router) {}
 
     onSelect(): void {
-        this._router.navigate(['language', this.language._id])
+        this._router.navigate(['languages', this.language._id])
     }
 }

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { ValidationError } from 'fastest-validator'
-import { IWorkingCopy } from 'src/app/services/workingCopy'
+
+import { IWorkingCopy } from '../../services/edit.service'
 
 @Component({
     selector: 'app-validation-errors',

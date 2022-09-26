@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { EditableService, IWorkingCopy } from 'src/app/services/workingCopy'
+
+import { EditableService, IWorkingCopy } from '../services/edit.service'
 
 @Component({ template: '' })
-export abstract class FormComponent<T extends object> implements OnChanges, OnDestroy, OnInit {
+export abstract class FormComponent<T extends { _id: string }> implements OnChanges, OnDestroy, OnInit {
     private _query?: Subscription
 
     @Input() selected = ''

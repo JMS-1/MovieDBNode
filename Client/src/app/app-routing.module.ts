@@ -17,10 +17,10 @@ const routes: Routes = [
     { component: SeriesRouteComponent, path: 'series/:id' },
     { component: ContainerRouteComponent, path: 'container', pathMatch: 'full' },
     { component: ContainerRouteComponent, path: 'container/:id' },
-    { component: LanguageRouteComponent, path: 'language', pathMatch: 'full' },
-    { component: LanguageRouteComponent, path: 'language/:id' },
-    { component: GenreRouteComponent, path: 'genre', pathMatch: 'full' },
-    { component: GenreRouteComponent, path: 'genre/:id' },
+    { component: LanguageRouteComponent, path: 'languages', pathMatch: 'full' },
+    { component: LanguageRouteComponent, path: 'languages/:id' },
+    { component: GenreRouteComponent, path: 'genres', pathMatch: 'full' },
+    { component: GenreRouteComponent, path: 'genres/:id' },
     /** Fallbackrouten. */
     { component: RecordingsRouteComponent, path: '**' },
 ]
