@@ -18,6 +18,7 @@ import { ContainerFormComponent } from './routes/container/form.component'
 import { ContainerIconComponent } from './routes/container/icon.component'
 import { ContainerItemComponent } from './routes/container/item.component'
 import { ContainerListComponent } from './routes/container/list.component'
+import { ContainerTypeComponent } from './routes/container/type.component'
 import { ErrorsComponent } from './routes/errors/errors.component'
 import { GenreFormComponent } from './routes/genre/form.component'
 import { GenreRouteComponent } from './routes/genre/genre.component'
@@ -56,6 +57,7 @@ import { ValidationService } from './services/validation/validation.service'
         ContainerItemComponent,
         ContainerListComponent,
         ContainerRouteComponent,
+        ContainerTypeComponent,
         ErrorsComponent,
         GenreFilterComponent,
         GenreFormComponent,

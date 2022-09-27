@@ -25,9 +25,7 @@
         <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
         <div class="required field" [ngClass]="{ error: edit.validationErrors?.['type'] }">
             <label>Art der Ablage</label>
-            <div class="ui input">
-                <input type="text" [(ngModel)]="type" />
-            </div>
+            <app-component-type [(selected)]="type"></app-component-type>
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['type']"></app-validation-errors>
         <div class="field" [ngClass]="{ error: edit.validationErrors?.['description'] }">
