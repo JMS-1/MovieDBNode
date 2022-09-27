@@ -1,10 +1,14 @@
 <div *ngIf="edit">
     <div class="actions">
         <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()">Verwerfen</div>
-        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }" (click)="onSave()">
+        <div
+            class="ui primary button"
+            [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
+            (click)="onSave()"
+        >
             Speichern
         </div>
-        <div *ngIf="editId" class="ui button" (click)="onRemove()">Löschen</div>
+        <div *ngIf="editId" class="ui negative button" (click)="onRemove()">Löschen</div>
     </div>
     <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
         <div class="field" [ngClass]="{ error: edit.validationErrors?.['parentId'] }">
@@ -43,8 +47,23 @@
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['parentLocation']"></app-validation-errors>
     </div>
-    <div>{{ contents | json }}</div>
-    <div>{{ edit.validationErrors | json }}</div>
+    <table
+        *ngIf="contents.length > 0"
+        class="ui celled collapsing fixed sortable striped unstackable compact table contents"
+    >
+        <thead>
+            <tr>
+                <th>Aufzeichnung</th>
+                <th>Position</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let content of contents">
+                <td>{{ content.fullName }}</td>
+                <td style="text-align: center">{{ content.containerPosition }}</td>
+            </tr>
+        </tbody>
+    </table>
     <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()">
         Das Löschen einer Ablage kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Ablage wirklich
         endgültig entfernt werden?
