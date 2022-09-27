@@ -23,7 +23,7 @@ const validationPropertiesToken = new InjectionToken<string>('ValidationProperti
 
 @Injectable()
 export abstract class EditableService<T extends { _id: string }> implements OnDestroy {
-    protected readonly ignoredFields: string[] = ['_id', '__typename']
+    protected readonly ignoredFields = new Set(['_id', '__typename'])
 
     private readonly _query = new BehaviorSubject<Record<string, T>>({})
 
@@ -141,9 +141,11 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
     }
 
     private createWorkingCopy(id: string): T & IWorkingCopy {
-        const item = JSON.parse(JSON.stringify(this._query.value[id] || this.createNew()))
-
-        this.ignoredFields.forEach((f) => delete item[f])
+        const item = JSON.parse(
+            JSON.stringify(this._query.value[id] || this.createNew(), (key, value) =>
+                this.ignoredFields.has(key) ? undefined : value
+            )
+        )
 
         const itemStr = JSON.parse(JSON.stringify(item))
 

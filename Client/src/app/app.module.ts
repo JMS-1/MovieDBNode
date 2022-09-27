@@ -33,6 +33,9 @@ import { RecordingRouteComponent } from './routes/recording/recording.component'
 import { RecordingsRouteComponent } from './routes/recordings/recordings.component'
 import { RecordingRowComponent } from './routes/recordings/row.component'
 import { RecordingTableComponent } from './routes/recordings/table.component'
+import { SeriesFormComponent } from './routes/series/form.component'
+import { SeriesItemComponent } from './routes/series/item.component'
+import { SeriesListComponent } from './routes/series/list.component'
 import { SeriesRouteComponent } from './routes/series/series.component'
 import { SubMenuComponent } from './semantic/menu/menu.component'
 import { ModalComponent } from './semantic/modal/modal.component'
@@ -83,6 +86,9 @@ import { ValidationService } from './services/validation/validation.service'
         SearchComponent,
         SelectComponent,
         SeriesFilterComponent,
+        SeriesFormComponent,
+        SeriesItemComponent,
+        SeriesListComponent,
         SeriesRouteComponent,
         SubMenuComponent,
         TextFilterComponent,

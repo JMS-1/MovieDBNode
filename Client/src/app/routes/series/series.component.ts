@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { Subscription } from 'rxjs'
 
 @Component({
     selector: 'app-series',
@@ -6,7 +8,17 @@ import { Component, OnInit } from '@angular/core'
     templateUrl: './series.component.html',
 })
 export class SeriesRouteComponent implements OnInit {
-    constructor() {}
+    private _query?: Subscription
 
-    ngOnInit(): void {}
+    selected = ''
+
+    constructor(private readonly _route: ActivatedRoute) {}
+
+    ngOnInit(): void {
+        this._query = this._route.params.subscribe((params) => (this.selected = params['id']))
+    }
+
+    ngOnDestroy(): void {
+        this._query?.unsubscribe()
+    }
 }

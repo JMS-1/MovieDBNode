@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core'
-import { Router } from '@angular/router'
 
 import { IContainer } from '../../services/containers/container.service'
 
@@ -10,10 +9,4 @@ import { IContainer } from '../../services/containers/container.service'
 })
 export class ContainerItemComponent {
     @Input() container: IContainer = undefined as unknown as IContainer
-
-    constructor(private readonly _router: Router) {}
-
-    onSelect(): void {
-        this._router.navigate(['containers', this.container._id])
-    }
 }

@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core'
-import { Router } from '@angular/router'
 
 import { IGenre } from '../../../api'
 
@@ -10,10 +9,4 @@ import { IGenre } from '../../../api'
 })
 export class GenreItemComponent {
     @Input() genre: IGenre = undefined as unknown as IGenre
-
-    constructor(private readonly _router: Router) {}
-
-    onSelect(): void {
-        this._router.navigate(['genres', this.genre._id])
-    }
 }

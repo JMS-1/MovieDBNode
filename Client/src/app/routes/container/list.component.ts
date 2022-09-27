@@ -65,7 +65,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
 
         const visible = new Set(
             this.all
-                .filter((c) => !filter || (c.name || c._id).toLocaleLowerCase().indexOf(filter) >= 0)
+                .filter((c) => !filter || (c.fullName || c.name || c._id).toLocaleLowerCase().indexOf(filter) >= 0)
                 .map((c) => c._id)
         )
 

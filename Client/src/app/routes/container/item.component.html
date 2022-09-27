@@ -1,4 +1,4 @@
-<div class="item" (click)="onSelect()">
+<div class="item" [routerLink]="['/containers', container._id]">
     <app-container-icon [type]="container.type"></app-container-icon>
     <div class="content">{{ container.name }}</div>
 </div>

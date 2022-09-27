@@ -12,7 +12,6 @@ export interface ISeriesNode extends ISeries {
     allChildren: string[]
     children: ISeriesNode[]
     level: number
-    parent?: ISeriesNode
 }
 
 function setLevel(series: ISeriesNode, level = 0, all: string[] = []): void {
@@ -27,14 +26,14 @@ function setLevel(series: ISeriesNode, level = 0, all: string[] = []): void {
 
 @Injectable()
 export class SeriesService extends EditableService<ISeriesNode> {
-    protected override readonly ignoredFields: string[] = [
+    protected override readonly ignoredFields = new Set([
         '__typename',
         '_id',
         'allChildren',
         'children',
+        'fullName',
         'level',
-        'parent',
-    ]
+    ])
 
     private readonly _roots = new BehaviorSubject<ISeriesNode[]>([])
 
@@ -59,12 +58,13 @@ export class SeriesService extends EditableService<ISeriesNode> {
 
             series.allChildren = []
             series.children = []
-            series.parent = series.parentId ? map[series.parentId] : undefined
         })
 
         series.forEach((series) => {
-            if (series.parent) {
-                series.parent.children.push(series)
+            const parent = series.parentId ? map[series.parentId] : undefined
+
+            if (parent) {
+                parent.children.push(series)
             } else {
                 roots.push(series)
             }

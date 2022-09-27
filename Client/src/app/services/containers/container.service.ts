@@ -33,14 +33,14 @@ const query = gql<{ recordings: { findByContainer: IContainerPosition[] } }, { i
 
 @Injectable()
 export class ContainerService extends EditableService<IContainer> {
-    protected override readonly ignoredFields: string[] = [
+    protected override readonly ignoredFields = new Set([
         '__typename',
         '_id',
         'allChildren',
         'children',
         'fullName',
         'level',
-    ]
+    ])
 
     constructor(gql: Apollo, validation: ValidationService, router: Router, errors: ErrorService) {
         super(
