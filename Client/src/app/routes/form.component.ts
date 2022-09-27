@@ -27,6 +27,12 @@ export abstract class FormComponent<T extends { _id: string }> implements OnChan
         this.edit = this.editId === '@' ? undefined : this._editFactory?.(this.editId)
     }
 
+    protected select(id: string): void {
+        this.editId = id ? (id !== 'NEW' && id) || '' : '@'
+
+        this.reload()
+    }
+
     ngOnInit(): void {
         this._query = this.getEditService().editFactory.subscribe((f) => {
             this._editFactory = f
@@ -46,9 +52,7 @@ export abstract class FormComponent<T extends { _id: string }> implements OnChan
             return
         }
 
-        this.editId = selected.currentValue ? (selected.currentValue !== 'NEW' && selected.currentValue) || '' : '@'
-
-        this.reload()
+        this.select(selected.currentValue)
     }
 
     ngOnDestroy(): void {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 
-import { RecordingService } from '../../services/recordings/recording.service'
+import { RecordingsService } from '../../services/recordings/recordings.service'
 import { ISelectItem } from '../../utils'
 
 @Component({
@@ -14,7 +14,7 @@ export class RentFilterComponent {
         { key: '0', text: 'nicht verliehen' },
     ]
 
-    constructor(private readonly _recordings: RecordingService) {}
+    constructor(private readonly _recordings: RecordingsService) {}
 
     get selected(): string {
         return typeof this._recordings.rent === 'boolean' ? (this._recordings.rent ? '1' : '0') : ''

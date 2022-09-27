@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 
-import { RecordingService } from '../../services/recordings/recording.service'
+import { RecordingsService } from '../../services/recordings/recordings.service'
 
 @Component({
     selector: 'app-text-filter',
@@ -8,7 +8,7 @@ import { RecordingService } from '../../services/recordings/recording.service'
     templateUrl: './text.component.html',
 })
 export class TextFilterComponent {
-    constructor(private readonly _recordings: RecordingService) {}
+    constructor(private readonly _recordings: RecordingsService) {}
 
     get filter(): string {
         return this._recordings.fullName

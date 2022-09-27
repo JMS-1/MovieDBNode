@@ -48,6 +48,7 @@ import { ErrorService } from './services/error/error.service'
 import { GenreService } from './services/genre/genre.service'
 import { LanguageService } from './services/languages/language.service'
 import { RecordingService } from './services/recordings/recording.service'
+import { RecordingsService } from './services/recordings/recordings.service'
 import { SeriesService } from './services/series/series.service'
 import { ThemeService } from './services/themes/theme.service'
 import { ValidationService } from './services/validation/validation.service'
@@ -101,6 +102,7 @@ import { ValidationService } from './services/validation/validation.service'
         GenreService,
         LanguageService,
         RecordingService,
+        RecordingsService,
         SeriesService,
         ThemeService,
         ValidationService,

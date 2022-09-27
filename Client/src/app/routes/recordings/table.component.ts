@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { IRecording, IRecordingQueryRequest, IRecordingQueryResult } from '../../../api'
-import { RecordingService } from '../../services/recordings/recording.service'
+import { RecordingsService } from '../../services/recordings/recordings.service'
 
 @Component({
     selector: 'app-recording-table',
@@ -25,7 +25,7 @@ export class RecordingTableComponent implements OnInit, OnDestroy {
         return this._result.view
     }
 
-    constructor(private readonly _service: RecordingService) {}
+    constructor(private readonly _service: RecordingsService) {}
 
     ngOnInit(): void {
         this._query = this._service.result.subscribe((result) => (this._result = result))

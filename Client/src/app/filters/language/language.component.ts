@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { LanguageService } from '../..//services/languages/language.service'
-import { RecordingService } from '../..//services/recordings/recording.service'
+import { RecordingsService } from '../../services/recordings/recordings.service'
 import { createSorted, ISelectItem } from '../../utils'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +18,7 @@ export class LanguageFilterComponent implements OnDestroy {
 
     orderedAsItems: ISelectItem[] = []
 
-    constructor(private readonly _languages: LanguageService, private readonly _recordings: RecordingService) {
+    constructor(private readonly _languages: LanguageService, private readonly _recordings: RecordingsService) {
         this._subscription = createSorted(this._languages.map, 'name').subscribe((l) => (this.orderedAsItems = l))
     }
 

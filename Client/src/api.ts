@@ -1,18 +1,23 @@
-export interface IGenre {}
-
-export interface ILanguage {}
-
 export interface ILink {
     description?: string
     name: string
     url: string
 }
 
+export enum recordingContainerType {
+    BluRay = 5,
+    DVD = 4,
+    RecordedDVD = 3,
+    SuperVideoCD = 2,
+    Undefined = 0,
+    VideoCD = 1,
+}
+
 export interface IRecording {
     _id: string
     containerId?: string
     containerPosition?: string
-    containerType: 'BluRay' | 'DVD' | 'RecordedDVD' | 'SuperVideoCD' | 'Undefined' | 'VideoCD'
+    containerType: recordingContainerType
     created: string
     description?: string
     fullName: string

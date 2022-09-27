@@ -3,11 +3,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { IRecordingQueryResult } from 'api'
 import { BehaviorSubject } from 'rxjs'
-import { RecordingService } from 'src/app/services/recordings/recording.service'
+import { RecordingsService } from 'src/app/services/recordings/recordings.service'
 
 import { PaginationFilterComponent } from './pagination.component'
 
-interface IRecordinService extends Partial<RecordingService> {
+interface IRecordinService extends Partial<RecordingsService> {
     result: BehaviorSubject<IRecordingQueryResult>
 }
 
@@ -34,7 +34,7 @@ describe('Pagination Component', () => {
 
         await TestBed.configureTestingModule({
             declarations: [PaginationFilterComponent],
-            providers: [{ provide: RecordingService, useValue: recordings }],
+            providers: [{ provide: RecordingsService, useValue: recordings }],
         }).compileComponents()
 
         fixture = TestBed.createComponent(PaginationFilterComponent)
@@ -44,7 +44,7 @@ describe('Pagination Component', () => {
         fixture.detectChanges()
     })
 
-    const mockCall = (params: Partial<RecordingService>, result: Partial<IRecordingQueryResult>): void => {
+    const mockCall = (params: Partial<RecordingsService>, result: Partial<IRecordingQueryResult>): void => {
         Object.assign(recordings, params)
 
         recordings.result.next({ ...initialResult, ...result })

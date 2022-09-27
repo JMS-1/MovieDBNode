@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { RecordingService } from 'src/app/services/recordings/recording.service'
+import { RecordingsService } from 'src/app/services/recordings/recordings.service'
 
 interface ISizeItem {
     className: Record<string, boolean>
@@ -15,7 +15,7 @@ const sizes = [15, 30, 50, 75, 100, 250]
     templateUrl: './pagesize.component.html',
 })
 export class PageSizeFilterComponent {
-    constructor(private readonly _recordingService: RecordingService) {}
+    constructor(private readonly _recordingService: RecordingsService) {}
 
     get size(): number {
         return this._recordingService.pageSize

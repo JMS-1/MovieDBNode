@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { GenreService } from '../..//services/genre/genre.service'
-import { RecordingService } from '../..//services/recordings/recording.service'
+import { RecordingsService } from '../../services/recordings/recordings.service'
 import { createSorted, ISelectItem } from '../../utils'
 
 @Component({
@@ -15,7 +15,7 @@ export class GenreFilterComponent implements OnDestroy {
 
     orderedAsItems: ISelectItem[] = []
 
-    constructor(private readonly _genres: GenreService, private readonly _recordings: RecordingService) {
+    constructor(private readonly _genres: GenreService, private readonly _recordings: RecordingsService) {
         this._subscription = createSorted(this._genres.map, 'name').subscribe((l) => (this.orderedAsItems = l))
     }
 

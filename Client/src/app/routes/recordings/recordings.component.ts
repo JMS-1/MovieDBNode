@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 import { IRecordingQueryResult } from '../../../api'
-import { RecordingService } from '../../services/recordings/recording.service'
+import { RecordingsService } from '../../services/recordings/recordings.service'
 
 @Component({
     selector: 'app-recordings',
@@ -21,7 +21,7 @@ export class RecordingsRouteComponent implements OnInit, OnDestroy {
         view: [],
     }
 
-    constructor(private readonly _service: RecordingService) {}
+    constructor(private readonly _service: RecordingsService) {}
 
     get total(): number {
         return this._result.total

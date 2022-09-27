@@ -25,7 +25,7 @@ const validationPropertiesToken = new InjectionToken<string>('ValidationProperti
 export abstract class EditableService<T extends { _id: string }> implements OnDestroy {
     protected readonly ignoredFields = new Set(['_id', '__typename'])
 
-    private readonly _query = new BehaviorSubject<Record<string, T>>({})
+    protected readonly _query = new BehaviorSubject<Record<string, T>>({})
 
     get map(): Observable<Record<string, T>> {
         return this._query

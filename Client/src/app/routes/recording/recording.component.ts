@@ -1,38 +1,44 @@
-import { Component, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { IRecording } from 'src/api'
-import { RecordingService } from 'src/app/services/recordings/recording.service'
+
+import { RecordingService } from '../../services/recordings/recording.service'
+import { FormComponent } from '../form.component'
 
 @Component({
     selector: 'app-recording',
     styleUrls: ['./recording.component.scss'],
     templateUrl: './recording.component.html',
 })
-export class RecordingRouteComponent implements OnInit {
-    private _byId?: Subscription
+export class RecordingRouteComponent extends FormComponent<IRecording> {
+    private _params?: Subscription
 
-    private _query?: Subscription
+    protected getEditService(): RecordingService {
+        return this._service
+    }
 
-    recording?: IRecording = undefined
+    constructor(
+        private readonly _service: RecordingService,
+        private readonly _route: ActivatedRoute,
+        private readonly _changes: ChangeDetectorRef
+    ) {
+        super()
+    }
 
-    selected = ''
+    override ngOnInit(): void {
+        super.ngOnInit()
 
-    constructor(private readonly _service: RecordingService, private readonly _route: ActivatedRoute) {}
+        this._params = this._route.params.subscribe((params) => {
+            this.select(params['id'])
 
-    ngOnInit(): void {
-        this._query = this._route.params.subscribe((params) => {
-            this._byId?.unsubscribe()
-
-            this.selected = params['id']
-            this.recording = undefined
-
-            this._byId = this._service.findById(this.selected).subscribe((r) => (this.recording = r))
+            this._service.id = this.editId === '@' ? '' : this.editId
         })
     }
 
-    ngOnDestroy(): void {
-        this._byId?.unsubscribe()
-        this._query?.unsubscribe()
+    override ngOnDestroy(): void {
+        super.ngOnDestroy()
+
+        this._params?.unsubscribe()
     }
 }

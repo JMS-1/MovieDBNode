@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { RecordingService } from 'src/app/services/recordings/recording.service'
+import { RecordingsService } from 'src/app/services/recordings/recordings.service'
 import { SeriesService } from 'src/app/services/series/series.service'
 
 import { createSorted, ISelectItem } from '../../utils'
@@ -15,7 +15,7 @@ export class SeriesFilterComponent implements OnDestroy {
 
     orderedAsItems: ISelectItem[] = []
 
-    constructor(private readonly _series: SeriesService, private readonly _recordings: RecordingService) {
+    constructor(private readonly _series: SeriesService, private readonly _recordings: RecordingsService) {
         this._subscription = createSorted(this._series.map, 'fullName').subscribe((l) => (this.orderedAsItems = l))
     }
 

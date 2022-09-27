@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { RecordingService } from 'src/app/services/recordings/recording.service'
+import { RecordingsService } from 'src/app/services/recordings/recordings.service'
 
 import { IRecordingQueryResult } from '../../../api'
 
@@ -64,7 +64,7 @@ function createPages(maxPage: number, curPage: number): IPageItem[] {
     templateUrl: './pagination.component.html',
 })
 export class PaginationFilterComponent implements OnInit, OnDestroy {
-    constructor(private readonly _recordingService: RecordingService) {}
+    constructor(private readonly _recordingService: RecordingsService) {}
 
     private _recordings?: Subscription
 
