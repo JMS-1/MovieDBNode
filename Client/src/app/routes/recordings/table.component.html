@@ -18,6 +18,11 @@
         </tr>
     </thead>
     <tbody>
-        <tr recording *ngFor="let recording of items" [item]="recording"></tr>
+        <tr
+            recording
+            *ngFor="let recording of items"
+            [item]="recording"
+            [routerLink]="['/recordings', recording._id]"
+        ></tr>
     </tbody>
 </table>

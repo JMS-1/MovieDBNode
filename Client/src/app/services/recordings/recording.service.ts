@@ -1,11 +1,16 @@
 import { Injectable, OnDestroy } from '@angular/core'
 import { Apollo, gql } from 'apollo-angular'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 
-import { IRecordingQueryRequest, IRecordingQueryResult } from '../../../api'
+import { IRecording, IRecordingQueryRequest, IRecordingQueryResult } from '../../../api'
 import { ErrorService } from '../error/error.service'
 import { ISeriesNode, SeriesService } from '../series/series.service'
+
+const props = `
+    _id name rentTo series containerId containerPosition containerType created description fullName genres languages
+    links { description name url }
+`
 
 const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IRecordingQueryRequest>(`
   query (
@@ -35,38 +40,22 @@ const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IR
               sort: $sort
               sortOrder: $sortOrder
           ) {
-              correlationId
-              count
-              total
-              genres {
-                  _id
-                  count
-              }
-              languages {
-                  _id
-                  count
-              }
-              view {
-                  _id
-                  name
-                  rentTo
-                  series
-                  containerId
-                  containerPosition
-                  containerType
-                  created
-                  description
-                  fullName
-                  genres
-                  languages
-                  links {
-                      description
-                      name
-                      url
-                  }
-              }
+              correlationId count total
+              genres { _id count }
+              languages { _id count }
+              view { ${props} }
           }
       }
+  }
+`)
+
+const queryRecording = gql<{ recordings: { findById: IRecording } }, { id: string }>(`
+  query ($id: ID!) {
+    recordings {
+      findById(_id: $id) {
+        ${props}
+      }
+    }
   }
 `)
 
@@ -247,6 +236,16 @@ export class RecordingService implements OnDestroy {
 
             this._query?.next(result)
         })
+    }
+
+    findById(id: string): Observable<IRecording> {
+        const recording = new Subject<IRecording>()
+
+        this._errors.serverCall(this._gql.query({ query: queryRecording, variables: { id } }), (data) => {
+            recording.next(data.recordings.findById)
+        })
+
+        return recording
     }
 
     private get filter(): IRecordingQueryRequest {

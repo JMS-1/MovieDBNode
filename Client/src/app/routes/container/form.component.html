@@ -58,7 +58,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let content of contents">
+            <tr *ngFor="let content of contents" [routerLink]="['/recordings', content._id]">
                 <td>{{ content.fullName }}</td>
                 <td style="text-align: center">{{ content.containerPosition }}</td>
             </tr>
