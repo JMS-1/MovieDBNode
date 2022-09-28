@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 
 import { ContainerRouteComponent } from './container.component'
+import { ContainerRoutingModule } from './container-routing.module'
 import { ContainerFormComponent } from './form.component'
 import { ContainerIconComponent } from './icon.component'
 import { ContainerItemComponent } from './item.component'
@@ -21,7 +22,7 @@ import { SharedModule } from '../../shared.module'
         ContainerRouteComponent,
         ContainerTypeComponent,
     ],
-    exports: [ContainerRouteComponent, CommonModule, SharedModule, RouterModule, FormsModule],
-    imports: [CommonModule, SharedModule, RouterModule, FormsModule],
+    exports: [],
+    imports: [ContainerRoutingModule, CommonModule, SharedModule, RouterModule, FormsModule],
 })
 export class ContainerModule {}

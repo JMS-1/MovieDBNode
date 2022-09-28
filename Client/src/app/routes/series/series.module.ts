@@ -7,12 +7,13 @@ import { SeriesFormComponent } from './form.component'
 import { SeriesItemComponent } from './item.component'
 import { SeriesListComponent } from './list.component'
 import { SeriesRouteComponent } from './series.component'
+import { SeriesRoutingModule } from './series-routing.module'
 
 import { SharedModule } from '../../shared.module'
 
 @NgModule({
     declarations: [SeriesFormComponent, SeriesItemComponent, SeriesListComponent, SeriesRouteComponent],
-    exports: [SeriesRouteComponent],
-    imports: [CommonModule, SharedModule, RouterModule, FormsModule],
+    exports: [],
+    imports: [CommonModule, SharedModule, RouterModule, FormsModule, SeriesRoutingModule],
 })
 export class SeriesModule {}

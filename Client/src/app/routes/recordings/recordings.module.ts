@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router'
 import { SharedModule } from 'src/app/shared.module'
 
 import { RecordingsRouteComponent } from './recordings.component'
+import { RecordingsRoutingModule } from './recordings-routing.module'
 import { RecordingRowComponent } from './row.component'
 import { RecordingTableComponent } from './table.component'
 
@@ -28,7 +29,7 @@ import { TextFilterComponent } from '../../filters/text/text.component'
         SeriesFilterComponent,
         TextFilterComponent,
     ],
-    exports: [RecordingsRouteComponent, CommonModule, RouterModule],
-    imports: [CommonModule, RouterModule, SharedModule],
+    exports: [],
+    imports: [CommonModule, RouterModule, SharedModule, RecordingsRoutingModule],
 })
 export class RecordingsModule {}

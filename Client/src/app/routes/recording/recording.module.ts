@@ -7,6 +7,7 @@ import { RecordingGenreComponent } from './genre.component'
 import { RecordingLanguageComponent } from './language.component'
 import { RecordingLinkComponent } from './link.component'
 import { RecordingRouteComponent } from './recording.component'
+import { RecordingRoutingModule } from './recording-routing.module'
 import { RecordingSeriesComponent } from './series.component'
 import { RecordingTypeComponent } from './type.component'
 
@@ -22,7 +23,7 @@ import { SharedModule } from '../../shared.module'
         RecordingSeriesComponent,
         RecordingTypeComponent,
     ],
-    exports: [RecordingRouteComponent, CommonModule, SharedModule, FormsModule],
-    imports: [CommonModule, SharedModule, FormsModule],
+    exports: [],
+    imports: [CommonModule, SharedModule, FormsModule, RecordingRoutingModule],
 })
 export class RecordingModule {}
