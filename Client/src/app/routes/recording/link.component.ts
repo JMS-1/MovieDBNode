@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input } from '@angular/core'
 
 import { ILink, IRecording } from '../../../api'
 import { IWorkingCopy } from '../../services/edit.service'
@@ -8,16 +8,12 @@ import { IWorkingCopy } from '../../services/edit.service'
     styleUrls: ['./link.component.scss'],
     templateUrl: './link.component.html',
 })
-export class RecordingLinkComponent implements OnInit {
+export class RecordingLinkComponent {
     @Input() edit?: IRecording & IWorkingCopy
 
     active?: ILink = undefined
 
     expanded = false
-
-    constructor() {}
-
-    ngOnInit(): void {}
 
     get links(): ILink[] {
         return this.edit?.links || []
