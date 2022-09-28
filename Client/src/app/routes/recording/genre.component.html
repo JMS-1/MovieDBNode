@@ -1,0 +1,5 @@
+<div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['genres'] }">
+    <label>Kategorien</label>
+    <semantic-multi-select [items]="ordered" [(selected)]="genres" hint=""></semantic-multi-select>
+</div>
+<app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['genres']"></app-validation-errors>

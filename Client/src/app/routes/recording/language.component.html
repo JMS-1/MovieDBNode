@@ -1,0 +1,5 @@
+<div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['languages'] }">
+    <label>Sprachen</label>
+    <semantic-multi-select [items]="ordered" [(selected)]="languages" hint=""></semantic-multi-select>
+</div>
+<app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['languages']"></app-validation-errors>

@@ -25,37 +25,10 @@
             </div>
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['description']"></app-validation-errors>
-        <div class="field" [ngClass]="{ error: edit.validationErrors?.['series'] }">
-            <label>Serie</label>
-            <semantic-single-select [items]="orderedSeries" [(selected)]="series" hint=""></semantic-single-select>
-        </div>
-        <app-validation-errors [list]="edit.validationErrors?.['series']"></app-validation-errors>
-        <div class="field" [ngClass]="{ error: edit.validationErrors?.['genres'] }">
-            <label>Sprachen</label>
-            <semantic-multi-select [items]="orderedGenres" [(selected)]="genres" hint=""></semantic-multi-select>
-        </div>
-        <app-validation-errors [list]="edit.validationErrors?.['genres']"></app-validation-errors>
-        <div class="field" [ngClass]="{ error: edit.validationErrors?.['languages'] }">
-            <label>Sprachen</label>
-            <semantic-multi-select [items]="orderedLanguages" [(selected)]="languages" hint=""></semantic-multi-select>
-        </div>
-        <app-validation-errors [list]="edit.validationErrors?.['languages']"></app-validation-errors>
-        <div class="field" [ngClass]="{ error: edit.validationErrors?.['containerId'] }">
-            <label>Ablage</label>
-            <semantic-single-select
-                [items]="orderedContainers"
-                [(selected)]="container"
-                hint=""
-            ></semantic-single-select>
-        </div>
-        <app-validation-errors [list]="edit.validationErrors?.['containerId']"></app-validation-errors>
-        <div class="field" [ngClass]="{ error: edit.validationErrors?.['containerPosition'] }">
-            <label>Standort</label>
-            <div class="ui input">
-                <input type="text" [(ngModel)]="position" />
-            </div>
-        </div>
-        <app-validation-errors [list]="edit.validationErrors?.['containerPosition']"></app-validation-errors>
+        <app-recording-series [edit]="edit"></app-recording-series>
+        <app-recording-genre [edit]="edit"></app-recording-genre>
+        <app-recording-language [edit]="edit"></app-recording-language>
+        <app-recording-container [edit]="edit"></app-recording-container>
         <div class="field" [ngClass]="{ error: edit.validationErrors?.['rentTo'] }">
             <label>Verliehen an</label>
             <div class="ui input">
@@ -68,7 +41,6 @@
         Das Löschen einer Aufzeichnung kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Aufzeichnung
         wirklich endgültig entfernt werden?
     </app-semantic-modal>
-    <div>{{ selected }}</div>
     <pre>{{ edit | json }}</pre>
     <pre>{{ edit.validationErrors | json }}</pre>
 </div>

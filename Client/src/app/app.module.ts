@@ -29,7 +29,11 @@ import { LanguageItemComponent } from './routes/language/item.component'
 import { LanguageRouteComponent } from './routes/language/language.component'
 import { LanguageListComponent } from './routes/language/list.component'
 import { MasterDetailComponent } from './routes/master-detail/master-detail.component'
+import { RecordingContainerComponent } from './routes/recording/container.component'
+import { RecordingGenreComponent } from './routes/recording/genre.component'
+import { RecordingLanguageComponent } from './routes/recording/language.component'
 import { RecordingRouteComponent } from './routes/recording/recording.component'
+import { RecordingSeriesComponent } from './routes/recording/series.component'
 import { RecordingsRouteComponent } from './routes/recordings/recordings.component'
 import { RecordingRowComponent } from './routes/recordings/row.component'
 import { RecordingTableComponent } from './routes/recordings/table.component'
@@ -78,8 +82,12 @@ import { ValidationService } from './services/validation/validation.service'
         MultiSelectComponent,
         PageSizeFilterComponent,
         PaginationFilterComponent,
+        RecordingContainerComponent,
+        RecordingGenreComponent,
+        RecordingLanguageComponent,
         RecordingRouteComponent,
         RecordingRowComponent,
+        RecordingSeriesComponent,
         RecordingsRouteComponent,
         RecordingTableComponent,
         RentFilterComponent,
