@@ -31,6 +31,10 @@ export class RecordingsRouteComponent implements OnInit, OnDestroy {
         return this._result.count
     }
 
+    onExport(): void {
+        this._service.openExport()
+    }
+
     ngOnInit(): void {
         this._query = this._service.result.subscribe((result) => (this._result = result))
     }

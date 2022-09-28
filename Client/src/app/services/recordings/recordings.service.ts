@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 
 import { IRecordingQueryRequest, IRecordingQueryResult } from '../../../api'
+import { ConfigService } from '../config/config.service'
 import { ErrorService } from '../error/error.service'
 import { ISeriesNode, SeriesService } from '../series/series.service'
 
@@ -80,7 +81,12 @@ export class RecordingsService implements OnDestroy {
 
     private _seriesMap: Record<string, ISeriesNode> = {}
 
-    constructor(private readonly _gql: Apollo, private readonly _errors: ErrorService, series: SeriesService) {
+    constructor(
+        private readonly _gql: Apollo,
+        private readonly _errors: ErrorService,
+        series: SeriesService,
+        private readonly _config: ConfigService
+    ) {
         this._seriesWatch = series.map.subscribe((map) => ((this._seriesMap = map), this.reload()))
 
         this.reload()
@@ -226,6 +232,26 @@ export class RecordingsService implements OnDestroy {
 
             this._query?.next(result)
         })
+    }
+
+    openExport(): void {
+        const filter = this.filter
+
+        this._errors.serverCall(
+            this._gql.query({
+                query: queryRecordings,
+                variables: {
+                    ...filter,
+                    correlationId: uuid(),
+                    firstPage: 0,
+                    forExport: true,
+                    pageSize: 100000,
+                    sort: 'fullName',
+                    sortOrder: 'Ascending',
+                },
+            }),
+            () => window.open(`${this._config.server}/export`, '_blank')
+        )
     }
 
     private get filter(): IRecordingQueryRequest {

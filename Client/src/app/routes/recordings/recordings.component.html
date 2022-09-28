@@ -1,5 +1,8 @@
 <div class="page">
-    <div class="ui compact segment counts">{{ count }} von {{ total }}</div>
+    <div class="headline">
+        <div class="ui compact segment counts">{{ count }} von {{ total }}</div>
+        <button class="ui button" (click)="onExport()">Exportieren</button>
+    </div>
     <div class="ui segment filter">
         <div class="search">
             <app-text-filter></app-text-filter>

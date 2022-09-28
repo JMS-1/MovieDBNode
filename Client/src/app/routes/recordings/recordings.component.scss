@@ -17,9 +17,11 @@
         margin: 0;
     }
 
-    > .counts {
-        width: fit-content;
-        width: -moz-fit-content;
+    > .headline {
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+        justify-content: space-between;
     }
 
     > .filter {
