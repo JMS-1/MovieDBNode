@@ -1,3 +1,74 @@
-<div>{{ selected }}</div>
-<pre>{{ edit | json }}</pre>
-<pre>{{ edit?.validationErrors | json }}</pre>
+<div *ngIf="edit">
+    <div class="actions">
+        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()">Verwerfen</div>
+        <div
+            class="ui primary button"
+            [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
+            (click)="onSave()"
+        >
+            Speichern
+        </div>
+        <div *ngIf="editId" class="ui negative button" (click)="onRemove()">Löschen</div>
+    </div>
+    <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['name'] }">
+            <label>Name</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="name" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['description'] }">
+            <label>Beschreibung</label>
+            <div class="ui input">
+                <textarea [(ngModel)]="description" rows="5"></textarea>
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['description']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['series'] }">
+            <label>Serie</label>
+            <semantic-single-select [items]="orderedSeries" [(selected)]="series" hint=""></semantic-single-select>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['series']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['genres'] }">
+            <label>Sprachen</label>
+            <semantic-multi-select [items]="orderedGenres" [(selected)]="genres" hint=""></semantic-multi-select>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['genres']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['languages'] }">
+            <label>Sprachen</label>
+            <semantic-multi-select [items]="orderedLanguages" [(selected)]="languages" hint=""></semantic-multi-select>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['languages']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['containerId'] }">
+            <label>Ablage</label>
+            <semantic-single-select
+                [items]="orderedContainers"
+                [(selected)]="container"
+                hint=""
+            ></semantic-single-select>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['containerId']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['containerPosition'] }">
+            <label>Standort</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="position" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['containerPosition']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['rentTo'] }">
+            <label>Verliehen an</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="rentTo" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['rentTo']"></app-validation-errors>
+    </div>
+    <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()">
+        Das Löschen einer Aufzeichnung kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Aufzeichnung
+        wirklich endgültig entfernt werden?
+    </app-semantic-modal>
+    <div>{{ selected }}</div>
+    <pre>{{ edit | json }}</pre>
+    <pre>{{ edit.validationErrors | json }}</pre>
+</div>
