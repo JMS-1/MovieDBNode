@@ -34,6 +34,7 @@ import { RecordingGenreComponent } from './routes/recording/genre.component'
 import { RecordingLanguageComponent } from './routes/recording/language.component'
 import { RecordingRouteComponent } from './routes/recording/recording.component'
 import { RecordingSeriesComponent } from './routes/recording/series.component'
+import { RecordingTypeComponent } from './routes/recording/type.component'
 import { RecordingsRouteComponent } from './routes/recordings/recordings.component'
 import { RecordingRowComponent } from './routes/recordings/row.component'
 import { RecordingTableComponent } from './routes/recordings/table.component'
@@ -90,6 +91,7 @@ import { ValidationService } from './services/validation/validation.service'
         RecordingSeriesComponent,
         RecordingsRouteComponent,
         RecordingTableComponent,
+        RecordingTypeComponent,
         RentFilterComponent,
         RootComponent,
         SearchComponent,

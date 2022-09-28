@@ -1,0 +1,16 @@
+<div *ngIf="edit" class="required field" [ngClass]="{ error: edit.validationErrors?.['containerType'] }">
+    <label>Art der Ablage</label>
+    <div class="ui selection fluid dropdown" #selector style="visibility: hidden">
+        <i class="dropdown icon"></i>
+        <div class="default text"></div>
+        <div class="menu">
+            <div class="item" data-value="0">(unbekannt)</div>
+            <div class="item" data-value="1">Video CD</div>
+            <div class="item" data-value="2">Super-Video CD</div>
+            <div class="item" data-value="3">Selbstaufgenommene DVD</div>
+            <div class="item" data-value="3">Gekaufte DVD</div>
+            <div class="item" data-value="5">Blu-Ray</div>
+        </div>
+    </div>
+</div>
+<app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['containerType']"></app-validation-errors>
