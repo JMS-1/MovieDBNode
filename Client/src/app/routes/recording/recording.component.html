@@ -4,10 +4,14 @@
         <div
             class="ui primary button"
             [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
-            (click)="onSave()"
+            (click)="onSave(false)"
         >
             Speichern und zurück
         </div>
+        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }" (click)="onSave(true)">
+            Speichern und neue Kopie
+        </div>
+        <div class="ui button" (click)="onClone()">Kopie erstellen</div>
         <div *ngIf="editId" class="ui negative button" (click)="onRemove()">Löschen</div>
     </div>
     <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">

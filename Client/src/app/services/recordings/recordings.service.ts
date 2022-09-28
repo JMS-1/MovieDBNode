@@ -3,11 +3,14 @@ import { Apollo, gql } from 'apollo-angular'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 
-import { recordingProps } from './recording.service'
-
 import { IRecordingQueryRequest, IRecordingQueryResult } from '../../../api'
 import { ErrorService } from '../error/error.service'
 import { ISeriesNode, SeriesService } from '../series/series.service'
+
+export const recordingProps = `
+    _id name rentTo series containerId containerPosition containerType created description fullName genres languages
+    links { description name url }
+`
 
 const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IRecordingQueryRequest>(`
   query (
@@ -205,7 +208,7 @@ export class RecordingsService implements OnDestroy {
         this.reload()
     }
 
-    private reload(firstPage = 0): void {
+    reload(firstPage = 0): void {
         this._filter.firstPage = firstPage
 
         const correlationId = uuid()

@@ -38,9 +38,15 @@ export class RecordingRouteComponent extends FormComponent<IRecording> {
         this._params?.unsubscribe()
     }
 
-    onSave(): void {
+    onSave(clone: boolean): void {
         if (this.edit) {
-            this._service.addOrUpdate(this.editId, this.edit)
+            this._service.save(this.editId, this.edit, clone)
+        }
+    }
+
+    onClone(): void {
+        if (this.edit) {
+            this._service.clone(this.edit)
         }
     }
 

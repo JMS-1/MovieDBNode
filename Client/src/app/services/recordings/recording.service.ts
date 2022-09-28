@@ -3,14 +3,11 @@ import { Router } from '@angular/router'
 import { Apollo, gql } from 'apollo-angular'
 import { IRecording, recordingContainerType } from 'src/api'
 
+import { recordingProps, RecordingsService } from './recordings.service'
+
 import { EditableService } from '../edit.service'
 import { ErrorService } from '../error/error.service'
 import { ValidationService } from '../validation/validation.service'
-
-export const recordingProps = `
-    _id name rentTo series containerId containerPosition containerType created description fullName genres languages
-    links { description name url }
-`
 
 const queryRecording = gql<{ recordings: { findById: IRecording } }, { id: string }>(`
   query ($id: ID!) {
@@ -26,6 +23,8 @@ const queryRecording = gql<{ recordings: { findById: IRecording } }, { id: strin
 export class RecordingService extends EditableService<IRecording> {
     protected override readonly ignoredFields = new Set(['__typename', '_id', 'created', 'fullName'])
 
+    private _cloneAfterAddOrSave: boolean | Partial<IRecording> = false
+
     private _id = ''
 
     get id(): string {
@@ -38,7 +37,13 @@ export class RecordingService extends EditableService<IRecording> {
         this.load()
     }
 
-    constructor(gql: Apollo, validation: ValidationService, router: Router, errors: ErrorService) {
+    constructor(
+        gql: Apollo,
+        private readonly _recodings: RecordingsService,
+        validation: ValidationService,
+        router: Router,
+        errors: ErrorService
+    ) {
         super(gql, 'Recording', 'recordings', recordingProps, validation, router, errors)
 
         this.load()
@@ -61,6 +66,14 @@ export class RecordingService extends EditableService<IRecording> {
     }
 
     protected override createNew(): Partial<IRecording> {
+        const clone = this._cloneAfterAddOrSave
+
+        if (typeof clone === 'object') {
+            this._cloneAfterAddOrSave = false
+
+            return { ...this.fromServer(clone), name: `Kopie von ${clone.name}` }
+        }
+
         return {
             containerType: recordingContainerType.Undefined,
             genres: [],
@@ -83,15 +96,45 @@ export class RecordingService extends EditableService<IRecording> {
         }
     }
 
-    protected override afterAdd(_added: IRecording): void {
-        this._router.navigateByUrl('/')
+    save(id: string, data: Partial<IRecording>, clone: boolean): void {
+        this._cloneAfterAddOrSave = clone
+
+        super.addOrUpdate(id, data)
     }
 
-    protected override afterUpdate(_updated: IRecording): void {
-        this._router.navigateByUrl('/')
+    clone(data: Partial<IRecording>): void {
+        this._cloneAfterAddOrSave = this.toServer(JSON.parse(JSON.stringify(data)))
+
+        this._router.navigate(['/recordings', 'NEW'])
+    }
+
+    protected override afterAdd(added: IRecording): void {
+        this._recodings.reload(this._recodings.page)
+
+        this._cloneAfterAddOrSave = this._cloneAfterAddOrSave && added
+
+        if (this._cloneAfterAddOrSave) {
+            this._router.navigate(['/recordings', 'NEW'])
+        } else {
+            this._router.navigateByUrl('/')
+        }
+    }
+
+    protected override afterUpdate(updated: IRecording): void {
+        this._recodings.reload(this._recodings.page)
+
+        this._cloneAfterAddOrSave = this._cloneAfterAddOrSave && updated
+
+        if (this._cloneAfterAddOrSave) {
+            this._router.navigate(['/recordings', 'NEW'])
+        } else {
+            this._router.navigateByUrl('/')
+        }
     }
 
     protected override afterDelete(_deleted: IRecording): void {
+        this._recodings.reload(this._recodings.page)
+
         this._router.navigateByUrl('/')
     }
 }
