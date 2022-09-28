@@ -1,0 +1,13 @@
+.field {
+    > label.label {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        column-gap: 0.5em;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    > .edit {
+        margin: 1em;
+    }
+}

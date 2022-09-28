@@ -1,6 +1,10 @@
 <div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['containerId'] }">
     <label>Ablage</label>
-    <semantic-single-select [items]="ordered" [(selected)]="container" hint=""></semantic-single-select>
+    <semantic-single-select
+        [items]="ordered"
+        [(selected)]="container"
+        hint="(Ablage zuordnen)"
+    ></semantic-single-select>
 </div>
 <app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['containerId']"></app-validation-errors>
 <div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['containerPosition'] }">

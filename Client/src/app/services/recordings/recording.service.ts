@@ -82,4 +82,16 @@ export class RecordingService extends EditableService<IRecording> {
             this._query.next({})
         }
     }
+
+    protected override afterAdd(_added: IRecording): void {
+        this._router.navigateByUrl('/')
+    }
+
+    protected override afterUpdate(_updated: IRecording): void {
+        this._router.navigateByUrl('/')
+    }
+
+    protected override afterDelete(_deleted: IRecording): void {
+        this._router.navigateByUrl('/')
+    }
 }

@@ -32,6 +32,7 @@ import { MasterDetailComponent } from './routes/master-detail/master-detail.comp
 import { RecordingContainerComponent } from './routes/recording/container.component'
 import { RecordingGenreComponent } from './routes/recording/genre.component'
 import { RecordingLanguageComponent } from './routes/recording/language.component'
+import { RecordingLinkComponent } from './routes/recording/link.component'
 import { RecordingRouteComponent } from './routes/recording/recording.component'
 import { RecordingSeriesComponent } from './routes/recording/series.component'
 import { RecordingTypeComponent } from './routes/recording/type.component'
@@ -86,6 +87,7 @@ import { ValidationService } from './services/validation/validation.service'
         RecordingContainerComponent,
         RecordingGenreComponent,
         RecordingLanguageComponent,
+        RecordingLinkComponent,
         RecordingRouteComponent,
         RecordingRowComponent,
         RecordingSeriesComponent,

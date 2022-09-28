@@ -1,0 +1,48 @@
+<div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['series'] }">
+    <label class="label">
+        <div>Verweise</div>
+        <i class="ui link icon" [ngClass]="{ edit: !expanded, eye: expanded }" (click)="expanded = !expanded"></i>
+        <i *ngIf="expanded" class="ui link add icon" (click)="addLink()"></i>
+    </label>
+    <div *ngIf="!expanded" class="links">
+        <a *ngFor="let link of links" [href]="link.url" [title]="link.description" target="_blank" class="ui button"
+            >&nbsp;{{ link.name }}&nbsp;</a
+        >
+    </div>
+    <div *ngIf="expanded" class="links">
+        <div
+            *ngFor="let link of links"
+            class="ui button"
+            [ngClass]="{ active: link === active }"
+            (click)="active = link"
+        >
+            &nbsp;{{ link.name }}&nbsp;
+        </div>
+    </div>
+    <div *ngIf="expanded && current >= 0" class="ui form edit">
+        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['links[' + current + '].name'] }">
+            <label>Name</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="name" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['links[' + current + '].name']"></app-validation-errors>
+        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['links[' + current + '].url'] }">
+            <label>Verweis</label>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="url" />
+            </div>
+        </div>
+        <app-validation-errors [list]="edit.validationErrors?.['links[' + current + '].url']"></app-validation-errors>
+        <div class="field" [ngClass]="{ error: edit.validationErrors?.['links[' + current + '].description'] }">
+            <label>Beschreibung</label>
+            <div class="ui input">
+                <textarea [(ngModel)]="description" row="5"></textarea>
+            </div>
+        </div>
+        <app-validation-errors
+            [list]="edit.validationErrors?.['links[' + current + '].description']"
+        ></app-validation-errors>
+        <button class="ui negative button" (click)="delLink()">Löschen</button>
+    </div>
+</div>

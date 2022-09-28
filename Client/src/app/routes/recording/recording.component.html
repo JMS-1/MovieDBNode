@@ -6,7 +6,7 @@
             [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
             (click)="onSave()"
         >
-            Speichern
+            Speichern und zurück
         </div>
         <div *ngIf="editId" class="ui negative button" (click)="onRemove()">Löschen</div>
     </div>
@@ -18,6 +18,7 @@
             </div>
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
+        <app-recording-link [edit]="edit"></app-recording-link>
         <div class="field" [ngClass]="{ error: edit.validationErrors?.['description'] }">
             <label>Beschreibung</label>
             <div class="ui input">
@@ -42,6 +43,4 @@
         Das Löschen einer Aufzeichnung kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Aufzeichnung
         wirklich endgültig entfernt werden?
     </app-semantic-modal>
-    <pre>{{ edit | json }}</pre>
-    <pre>{{ edit.validationErrors | json }}</pre>
 </div>

@@ -1,5 +1,5 @@
 <div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['series'] }">
     <label>Serie</label>
-    <semantic-single-select [items]="ordered" [(selected)]="series" hint=""></semantic-single-select>
+    <semantic-single-select [items]="ordered" [(selected)]="series" hint="(Serie zuordnen)"></semantic-single-select>
 </div>
 <app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['series']"></app-validation-errors>

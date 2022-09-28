@@ -147,7 +147,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
             )
         )
 
-        const itemStr = JSON.parse(JSON.stringify(item))
+        const itemStr = JSON.stringify(item)
 
         const schema = (id ? this._updateSchema : this._inputSchema) || { $$strict: true }
 
@@ -190,7 +190,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
             set(target, p, newValue): boolean {
                 target[p] = newValue
 
-                isDirty = JSON.parse(JSON.stringify(target)) !== itemStr
+                isDirty = JSON.stringify(target) !== itemStr
                 validationErrors = createErrorMap()
 
                 return true
@@ -198,34 +198,48 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
         }) as unknown as T & IWorkingCopy
     }
 
+    protected afterAdd(added: T): void {
+        this._router.navigate([this._validationScope, added._id], {
+            replaceUrl: true,
+        })
+
+        this.load()
+    }
+
+    protected afterUpdate(_updated: T): void {
+        this.load()
+    }
+
+    protected afterDelete(_deleted: T): void {
+        this._router.navigate([this._validationScope], { replaceUrl: true })
+
+        this.load()
+    }
+
     addOrUpdate(id: string, data: Partial<T>): void {
         data = this.toServer(data)
 
         if (id) {
-            this._errors.serverCall(this._gql.query({ query: this._updateMutation, variables: { data, id } }), () =>
-                this.load()
+            this._errors.serverCall(
+                this._gql.query({ query: this._updateMutation, variables: { data, id } }),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (res: any) => this.afterUpdate(res[this._validationScope].update)
             )
         } else {
             this._errors.serverCall(
                 this._gql.query({ query: this._addMutation, variables: { data, id } }),
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (res: any) => {
-                    this._router.navigate([this._validationScope, res[this._validationScope].add._id], {
-                        replaceUrl: true,
-                    })
-
-                    this.load()
-                }
+                (res: any) => this.afterAdd(res[this._validationScope].add)
             )
         }
     }
 
     remove(id: string): void {
-        this._errors.serverCall(this._gql.query({ query: this._removeMutation, variables: { id } }), () => {
-            this._router.navigate([this._validationScope], { replaceUrl: true })
-
-            this.load()
-        })
+        this._errors.serverCall(
+            this._gql.query({ query: this._removeMutation, variables: { id } }),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (res: any) => this.afterDelete(res[this._validationScope].delete)
+        )
     }
 
     ngOnDestroy(): void {
