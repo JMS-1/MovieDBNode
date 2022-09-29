@@ -48,7 +48,6 @@
                         ],
                         "index": "src/index.html",
                         "inlineStyleLanguage": "scss",
-                        "localize": true,
                         "main": "src/main.ts",
                         "outputPath": "build",
                         "polyfills": "src/polyfills.ts",

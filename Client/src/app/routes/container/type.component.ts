@@ -18,7 +18,7 @@ export class ContainerTypeComponent implements angular.AfterViewInit, angular.On
     @angular.Output() selectedChange = new angular.EventEmitter<containerType>()
 
     private setSelected(selected: containerType): void {
-        $(this.selector?.nativeElement)?.dropdown('set exactly', selected ? `${selected}` : [])
+        $(this.selector?.nativeElement)?.dropdown('set exactly', typeof selected === 'number' ? `${selected}` : [])
     }
 
     ngAfterViewInit(): void {

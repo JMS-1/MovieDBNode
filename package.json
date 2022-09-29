@@ -42,7 +42,6 @@
         "deploy": "npm run build && gulp deploy",
         "start": "node src/startup",
         "start:server": "node Server/src/startup",
-        "watch:client": "(cd Client && npm run start)",
         "watch:server": "(cd Server && tsc --watch)"
     },
     "stylelint": {
