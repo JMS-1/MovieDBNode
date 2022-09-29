@@ -1,0 +1,9 @@
+.ui.dropdown.item {
+    > .title {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: 2px;
+        align-items: center;
+    }
+}

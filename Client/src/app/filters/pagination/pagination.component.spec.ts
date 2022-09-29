@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { IRecordingQueryResult } from 'api'
 import { BehaviorSubject } from 'rxjs'
-import { RecordingsService } from 'src/app/services/recordings/recordings.service'
 
 import { PaginationFilterComponent } from './pagination.component'
+
+import { IRecordingQueryResult } from '../../../api'
+import { RecordingsService } from '../../services/recordings/recordings.service'
 
 interface IRecordinService extends Partial<RecordingsService> {
     result: BehaviorSubject<IRecordingQueryResult>

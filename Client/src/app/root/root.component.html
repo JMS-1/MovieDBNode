@@ -1,19 +1,42 @@
 <div class="root">
     <div class="ui borderless menu">
-        <a class="item" [ngClass]="{ active: isRecording }" routerLink="" i18n="@@menu.recordings">Aufzeichnungen</a>
-        <a class="item" [ngClass]="{ active: isSeries }" routerLink="series" i18n="@@menu.series">Serien</a>
-        <a class="item" [ngClass]="{ active: isContainer }" routerLink="containers" i18n="@@menu.containers">Ablagen</a>
-        <a class="item" [ngClass]="{ active: isLanguage }" routerLink="languages" i18n="@@menu.languages">Sprachen</a>
-        <a class="item" [ngClass]="{ active: isGenre }" routerLink="genres" i18n="@@menu.genres">Kategorien</a>
-        <app-sub-menu i18n-title="@@menu.new" title="Neu" [items]="newRoutes" (onSelect)="onNew($event)"></app-sub-menu>
+        <div class="item" [ngClass]="{ active: isRecording }" routerLink="">
+            <i class="ui icon list"></i>
+            <div i18n="@@menu.recordings">Aufzeichnungen</div>
+        </div>
+        <div class="item" [ngClass]="{ active: isSeries }" routerLink="series">
+            <i class="ui icon layer group"></i>
+            <div i18n="@@menu.series">Serien</div>
+        </div>
+        <div class="item" [ngClass]="{ active: isContainer }" routerLink="containers">
+            <i class="ui icon folder outline"></i>
+            <div i18n="@@menu.containers">Ablagen</div>
+        </div>
+        <div class="item" [ngClass]="{ active: isLanguage }" routerLink="languages">
+            <i class="ui icon language"></i>
+            <div i18n="@@menu.languages">Sprachen</div>
+        </div>
+        <div class="item" [ngClass]="{ active: isGenre }" routerLink="genres">
+            <i class="ui icon tag"></i>
+            <div i18n="@@menu.genres">Kategorien</div>
+        </div>
+        <app-sub-menu
+            icon="plus circle"
+            i18n-title="@@menu.new"
+            title="Neu"
+            [items]="newRoutes"
+            (onSelect)="onNew($event)"
+        ></app-sub-menu>
         <app-sub-menu
             i18n-title="@@menu.themes"
+            icon="font"
             title="Theme"
             [items]="themeRoutes"
             (onSelect)="onTheme($event)"
         ></app-sub-menu>
         <app-sub-menu
             i18n-title="@@menu.language"
+            icon="language"
             title="Sprache"
             [items]="languageRoutes"
             (onSelect)="onLanguage($event)"

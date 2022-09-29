@@ -19,6 +19,8 @@ export class SubMenuComponent implements AfterViewInit, OnDestroy {
 
     @Input() title = ''
 
+    @Input() icon = 'help'
+
     @Input() items: IMenuItem[] = []
 
     @Output() onSelect = new EventEmitter<string>()

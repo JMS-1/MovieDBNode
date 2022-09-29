@@ -4,4 +4,11 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+
+    > .menu > .item {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+    }
 }
