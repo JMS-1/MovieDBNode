@@ -101,6 +101,9 @@
                     }
                 }
             },
+            "i18n": {
+                "sourceLocale": "de"
+            },
             "prefix": "app",
             "projectType": "application",
             "root": "",

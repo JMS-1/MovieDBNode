@@ -11,7 +11,7 @@ declare let $: any
 export class SearchComponent {
     @ViewChild('search') search?: ElementRef<HTMLDivElement>
 
-    @Input() hint = 'Suche...'
+    @Input() hint = $localize`:@@search.hint:Suche...`
 
     @Input() text = ''
 

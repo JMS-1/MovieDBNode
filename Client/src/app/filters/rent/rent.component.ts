@@ -10,8 +10,8 @@ import { ISelectItem } from '../../utils'
 })
 export class RentFilterComponent {
     orderedAsItems: ISelectItem[] = [
-        { key: '1', text: 'verliehen' },
-        { key: '0', text: 'nicht verliehen' },
+        { key: '1', text: $localize`:@@filter.rent.yes:verliehen` },
+        { key: '0', text: $localize`:@@filter.rent.no:nicht verliehen` },
     ]
 
     constructor(private readonly _recordings: RecordingsService) {}

@@ -1,12 +1,17 @@
 <div class="root">
     <div class="ui borderless menu">
-        <a class="item" [ngClass]="{ active: isRecording }" routerLink="">Aufzeichnungen</a>
-        <a class="item" [ngClass]="{ active: isSeries }" routerLink="series">Serien</a>
-        <a class="item" [ngClass]="{ active: isContainer }" routerLink="containers">Ablagen</a>
-        <a class="item" [ngClass]="{ active: isLanguage }" routerLink="languages">Sprachen</a>
-        <a class="item" [ngClass]="{ active: isGenre }" routerLink="genres">Kategorien</a>
-        <app-sub-menu title="Neu" [items]="newRoutes" (onSelect)="onNew($event)"></app-sub-menu>
-        <app-sub-menu title="Theme" [items]="themeRoutes" (onSelect)="onTheme($event)"></app-sub-menu>
+        <a class="item" [ngClass]="{ active: isRecording }" routerLink="" i18n="@@menu.recordings">Aufzeichnungen</a>
+        <a class="item" [ngClass]="{ active: isSeries }" routerLink="series" i18n="@@menu.series">Serien</a>
+        <a class="item" [ngClass]="{ active: isContainer }" routerLink="containers" i18n="@@menu.containers">Ablagen</a>
+        <a class="item" [ngClass]="{ active: isLanguage }" routerLink="languages" i18n="@@menu.languages">Sprachen</a>
+        <a class="item" [ngClass]="{ active: isGenre }" routerLink="genres" i18n="@@menu.genres">Kategorien</a>
+        <app-sub-menu i18n-title="@@menu.new" title="Neu" [items]="newRoutes" (onSelect)="onNew($event)"></app-sub-menu>
+        <app-sub-menu
+            i18n-title="@@menu.themes"
+            title="Theme"
+            [items]="themeRoutes"
+            (onSelect)="onTheme($event)"
+        ></app-sub-menu>
     </div>
     <router-outlet></router-outlet>
 </div>

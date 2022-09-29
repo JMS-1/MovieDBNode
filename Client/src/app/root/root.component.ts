@@ -16,17 +16,17 @@ export class RootComponent implements OnDestroy {
     route = ''
 
     readonly newRoutes: IMenuItem[] = [
-        { route: 'recordings/NEW', text: 'Aufzeichnung erstellen' },
-        { route: 'series/NEW', text: 'Serie erstellen' },
-        { route: 'containers/NEW', text: 'Ablage erstellen' },
-        { route: 'languages/NEW', text: 'Sprache hinzufügen' },
-        { route: 'genres/NEW', text: 'Kategorie hinzufügen' },
+        { route: 'recordings/NEW', text: $localize`:@@menu.new.recording:Aufzeichnung erstellen` },
+        { route: 'series/NEW', text: $localize`:@@menu.new.series:Serie erstellen` },
+        { route: 'containers/NEW', text: $localize`:@@menu.new.container:Ablage erstellen` },
+        { route: 'languages/NEW', text: $localize`:@@menu.new.language:Sprache hinzufügen` },
+        { route: 'genres/NEW', text: $localize`:@@menu.new.genre:Kategorie hinzufügen` },
     ]
 
     readonly themeRoutes: IMenuItem[] = [
-        { route: 'default', text: 'Standard' },
-        { route: 'alternate.1', text: 'Alternative 1' },
-        { route: 'alternate.2', text: 'Alternative 2' },
+        { route: 'default', text: $localize`:@@menu.themes.default:Standard` },
+        { route: 'alternate.1', text: $localize`:@@menu.themes.alt1:Alternative 1` },
+        { route: 'alternate.2', text: $localize`:@@menu.themes.alt2:Alternative 2` },
     ]
 
     constructor(private readonly _router: Router, private readonly _themes: ThemeService) {

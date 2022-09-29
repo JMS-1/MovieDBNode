@@ -13,7 +13,7 @@ declare let $: any
 export class MultiSelectComponent implements angular.OnChanges, angular.AfterViewInit, angular.OnDestroy {
     @angular.ViewChild('multiSelect') dropdown?: angular.ElementRef<HTMLDivElement>
 
-    @angular.Input() hint = '(bitte auswählen)'
+    @angular.Input() hint = $localize`:@@multiselect.hint:(bitte auswählen)`
 
     @angular.Input() selected = [] as string[]
 

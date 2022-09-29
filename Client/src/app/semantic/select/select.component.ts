@@ -15,7 +15,7 @@ declare let $: any
 export class SelectComponent implements angular.AfterViewInit, angular.OnChanges, angular.OnDestroy {
     @angular.ViewChild('singleSelect') dropdown?: angular.ElementRef<HTMLDivElement>
 
-    @angular.Input() hint = '(bitte auswählen)'
+    @angular.Input() hint = $localize`:@@singleselect.hint:(bitte auswählen)`
 
     @angular.Input() selected = ''
 

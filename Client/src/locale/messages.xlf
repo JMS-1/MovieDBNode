@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="de" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="filter.genre" datatype="html">
+        <source>(alle Kategorien)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/filters/genre/genre.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="filter.language" datatype="html">
+        <source>(alle Sprachen)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/filters/language/language.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="filter.rent" datatype="html">
+        <source>(verliehen egal)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/filters/rent/rent.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="filter.rent.yes" datatype="html">
+        <source>verliehen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/filters/rent/rent.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="filter.rent.no" datatype="html">
+        <source>nicht verliehen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/filters/rent/rent.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="filter.series" datatype="html">
+        <source>(alle Serien)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/filters/series/series.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="hint.text" datatype="html">
+        <source>Suche...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/filters/text/text.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.recordings" datatype="html">
+        <source>Aufzeichnungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.series" datatype="html">
+        <source>Serien</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.containers" datatype="html">
+        <source>Ablagen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.languages" datatype="html">
+        <source>Sprachen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.genres" datatype="html">
+        <source>Kategorien</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.new" datatype="html">
+        <source>Neu</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.themes" datatype="html">
+        <source>Theme</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.new.recording" datatype="html">
+        <source>Aufzeichnung erstellen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.new.series" datatype="html">
+        <source>Serie erstellen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.new.container" datatype="html">
+        <source>Ablage erstellen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.new.language" datatype="html">
+        <source>Sprache hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.new.genre" datatype="html">
+        <source>Kategorie hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.themes.default" datatype="html">
+        <source>Standard</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.themes.alt1" datatype="html">
+        <source>Alternative 1</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.themes.alt2" datatype="html">
+        <source>Alternative 2</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/root/root.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="multiselect.hint" datatype="html">
+        <source>(bitte auswählen)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/semantic/multi/multi.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="search.hint" datatype="html">
+        <source>Suche...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/semantic/search/search.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="singleselect.hint" datatype="html">
+        <source>(bitte auswählen)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/semantic/select/select.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
