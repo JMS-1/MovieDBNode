@@ -20,7 +20,7 @@
       </trans-unit>
       <trans-unit id="filter.rent" datatype="html">
         <source>(verliehen egal)</source>
-        <target>(don't care)</target>
+        <target>(rent out or available)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/filters/rent/rent.component.html</context>
           <context context-type="linenumber">4</context>
@@ -282,6 +282,13 @@
           <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
           rückgängig gemacht werden. Soll die Ablage wirklich endgültig entfernt werden?
         </source>
+        <target>
+          Deleting a Storage can
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          not
+          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          be undone. Do you really want to delete this Storage?
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
           <context context-type="linenumber">70,73</context>
@@ -343,6 +350,13 @@
           <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
           rückgängig gemacht werden. Soll die Kategorie wirklich endgültig entfernt werden?
         </source>
+        <target>
+          Deleting a Category can
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          not
+          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          be undone. Do you really want to delete this Category?
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/genre/form.component.html</context>
           <context context-type="linenumber">25,28</context>
@@ -388,6 +402,13 @@
           <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
           rückgängig gemacht werden. Soll die Sprache wirklich endgültig entfernt werden?
         </source>
+        <target>
+          Deleting a Language can
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          not
+          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          be undone. Do you really want to delete this Language?
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/language/form.component.html</context>
           <context context-type="linenumber">25,28</context>
@@ -557,6 +578,13 @@
           <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
           rückgängig gemacht werden. Soll die Aufzeichnung wirklich endgültig entfernt werden?
         </source>
+        <target>
+          Deleting a Recording can
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          not
+          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          be undone. Do you really want to delete this Recording?
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
           <context context-type="linenumber">54,57</context>
@@ -754,6 +782,13 @@
           <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
           rückgängig gemacht werden. Soll die Serie wirklich endgültig entfernt werden?
         </source>
+        <target>
+          Deleting a Series can
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
+          not
+          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          be undone. Do you really want to delete this Series?
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
           <context context-type="linenumber">41,44</context>
@@ -837,6 +872,22 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
           <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Yes" datatype="html">
+        <source>Ja</source>
+        <target>Yes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/semantic/modal/modal.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="No" datatype="html">
+        <source>Nein</source>
+        <target>No</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/semantic/modal/modal.component.html</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
     </body>

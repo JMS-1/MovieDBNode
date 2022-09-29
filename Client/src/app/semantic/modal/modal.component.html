@@ -2,7 +2,7 @@
     <div class="header">{{ title }}</div>
     <div class="content"><ng-content></ng-content></div>
     <div class="actions">
-        <div class="ui negative button" (click)="onConfirm()">Ja</div>
-        <div class="ui primary button" (click)="onClose()">Nein</div>
+        <div class="ui negative button" (click)="onConfirm()" i18n="@@Yes">Ja</div>
+        <div class="ui primary button" (click)="onClose()" i18n="@@No">Nein</div>
     </div>
 </div>
