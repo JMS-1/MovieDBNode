@@ -48,6 +48,7 @@
                         ],
                         "index": "src/index.html",
                         "inlineStyleLanguage": "scss",
+                        "localize": true,
                         "main": "src/main.ts",
                         "outputPath": "build",
                         "polyfills": "src/polyfills.ts",
@@ -102,6 +103,11 @@
                 }
             },
             "i18n": {
+                "locales": {
+                    "en": {
+                        "translation": "src/locale/messages.en.xlf"
+                    }
+                },
                 "sourceLocale": "de"
             },
             "prefix": "app",
