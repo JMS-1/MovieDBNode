@@ -57,7 +57,7 @@ export class ContainerService extends EditableService<IContainer> {
     }
 
     protected override fromServer(item: Partial<IContainer>): Partial<IContainer> {
-        item.type = api.containerType[item.type || api.containerType.Undefined] as unknown as api.containerType
+        item.type = api.containerType[item.type ?? api.containerType.Undefined] as unknown as api.containerType
 
         return item
     }

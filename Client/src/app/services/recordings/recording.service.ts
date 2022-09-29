@@ -51,7 +51,7 @@ export class RecordingService extends EditableService<IRecording> {
 
     protected override fromServer(item: Partial<IRecording>): Partial<IRecording> {
         item.containerType = recordingContainerType[
-            item.containerType || recordingContainerType.Undefined
+            item.containerType ?? recordingContainerType.Undefined
         ] as unknown as recordingContainerType
 
         return item
