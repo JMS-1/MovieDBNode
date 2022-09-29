@@ -1,5 +1,6 @@
 {
     "db": "mongodb://localhost:27017/movie-db",
+    "defaultRoute": true,
     "gqlPassword": "",
     "gqlUser": "",
     "password": "",

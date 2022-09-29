@@ -20,6 +20,22 @@ async function startup(): Promise<void> {
     const app = express()
 
     // eslint-disable-next-line import/no-named-as-default-member
+    app.use((req, res, next) => {
+        const { originalUrl } = req
+
+        const hasLanguage = originalUrl.startsWith('/de/') || originalUrl.startsWith('/en/')
+
+        if (!Config.defaultRoute) {
+            next()
+        } else if (originalUrl.startsWith('/graphql')) {
+            next()
+        } else if (hasLanguage) {
+            next()
+        } else {
+            res.redirect(`/de/${originalUrl}`)
+        }
+    })
+
     app.use(express.static(join(__dirname, '../dist')))
     app.use(json())
 

@@ -20,6 +20,22 @@ const utils_1 = require("./utils");
 const utfBom = Buffer.from([0xef, 0xbb, 0xbf]);
 async function startup() {
     const app = (0, express_1.default)();
+    app.use((req, res, next) => {
+        const { originalUrl } = req;
+        const hasLanguage = originalUrl.startsWith('/de/') || originalUrl.startsWith('/en/');
+        if (!config_1.Config.defaultRoute) {
+            next();
+        }
+        else if (originalUrl.startsWith('/graphql')) {
+            next();
+        }
+        else if (hasLanguage) {
+            next();
+        }
+        else {
+            res.redirect(`/de/${originalUrl}`);
+        }
+    });
     app.use(express_1.default.static((0, path_1.join)(__dirname, '../dist')));
     app.use((0, body_parser_1.json)());
     app.get('/export', (_request, response) => {

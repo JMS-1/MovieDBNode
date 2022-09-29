@@ -3,6 +3,7 @@ import { join } from 'path'
 
 export interface IConfiguration {
     db: string
+    defaultRoute: boolean
     gqlPassword: string
     gqlUser: string
     password: string
