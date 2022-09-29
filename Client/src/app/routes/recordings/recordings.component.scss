@@ -7,10 +7,10 @@
 .page {
     display: grid;
     grid-template-rows: auto auto auto 1fr;
-    row-gap: 1em;
+    row-gap: 0.5em;
     width: 100%;
     height: 100%;
-    padding: 1em;
+    padding: 0 1em 1em;
     overflow: hidden;
 
     > .ui.segment {
@@ -22,6 +22,10 @@
         grid-template-columns: auto auto;
         align-items: center;
         justify-content: space-between;
+
+        > .ui.segment {
+            margin: 0;
+        }
     }
 
     > .filter {
