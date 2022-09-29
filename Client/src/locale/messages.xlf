@@ -191,53 +191,60 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="container.parent.hint" datatype="html">
+        <source>(keine)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="container.name" datatype="html">
         <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.type" datatype="html">
         <source>Art der Ablage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.description" datatype="html">
         <source>Beschreibung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.position" datatype="html">
         <source>Position in der übergeordneten Ablage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.recording" datatype="html">
         <source>Aufzeichnung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.recordingPosition" datatype="html">
         <source>Position</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.confirm" datatype="html">
         <source> Das Löschen einer Ablage kann <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rückgängig gemacht werden. Soll die Ablage wirklich endgültig entfernt werden? </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">70,73</context>
+          <context context-type="linenumber">68,71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.search" datatype="html">
@@ -245,6 +252,48 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/list.component.html</context>
           <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.unknown" datatype="html">
+        <source>(unbekannt)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.small" datatype="html">
+        <source>Kleine DVD Box</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.large" datatype="html">
+        <source>Große DVD Box</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.shelf" datatype="html">
+        <source>Regal(fach)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.folder" datatype="html">
+        <source>Dateiverzeichnis</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.disk" datatype="html">
+        <source>(Externe) Festplatte</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="errors.header" datatype="html">
@@ -602,31 +651,38 @@
         </context-group>
       </trans-unit>
       <trans-unit id="series.parent" datatype="html">
-        <source>Übergeordnete Ablage</source>
+        <source>Übergeordnete Serie</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="series.parent.hint" datatype="html">
+        <source>(keine)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.name" datatype="html">
         <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.description" datatype="html">
         <source>Beschreibung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.confirm" datatype="html">
         <source> Das Löschen einer Serie kann <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rückgängig gemacht werden. Soll die Serie wirklich endgültig entfernt werden? </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">41,44</context>
+          <context context-type="linenumber">42,45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.search" datatype="html">

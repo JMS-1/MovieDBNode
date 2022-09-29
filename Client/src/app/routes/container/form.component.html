@@ -20,6 +20,7 @@
                 [items]="parentAsItems"
                 [(selected)]="parentId"
                 hint="(keine)"
+                i18n-hint="@@container.parent.hint"
             ></semantic-single-select>
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['parentId']"></app-validation-errors>
@@ -50,10 +51,7 @@
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['parentLocation']"></app-validation-errors>
     </div>
-    <table
-        *ngIf="contents.length > 0"
-        class="ui celled collapsing fixed sortable striped unstackable compact table contents"
-    >
+    <table *ngIf="contents.length > 0" class="ui celled collapsing fixed striped unstackable compact table contents">
         <thead>
             <tr>
                 <th i18n="@@container.recording">Aufzeichnung</th>

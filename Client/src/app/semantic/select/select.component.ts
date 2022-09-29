@@ -59,6 +59,10 @@ export class SelectComponent implements angular.AfterViewInit, angular.OnChanges
         if (selected) {
             this.setSelected(selected.firstChange ? selected.previousValue : selected.currentValue)
         }
+
+        if (changes['items']) {
+            setTimeout(() => this.setSelected(this.selected), 100)
+        }
     }
 
     ngOnDestroy(): void {

@@ -15,11 +15,12 @@
     </div>
     <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
         <div class="field" [ngClass]="{ error: edit.validationErrors?.['parentId'] }">
-            <label i18n="@@series.parent">Übergeordnete Ablage</label>
+            <label i18n="@@series.parent">Übergeordnete Serie</label>
             <semantic-single-select
                 [items]="parentAsItems"
                 [(selected)]="parentId"
                 hint="(keine)"
+                i18n-hint="@@series.parent.hint"
             ></semantic-single-select>
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['parentId']"></app-validation-errors>

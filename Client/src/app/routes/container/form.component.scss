@@ -4,3 +4,7 @@
     padding-right: 0.5em;
     overflow: auto;
 }
+
+table > tbody > tr > td {
+    cursor: pointer;
+}

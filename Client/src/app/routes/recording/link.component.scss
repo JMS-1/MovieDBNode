@@ -1,4 +1,6 @@
 .field {
+    padding-bottom: 1em;
+
     > label.label {
         display: grid;
         grid-template-columns: auto auto auto;
@@ -8,6 +10,6 @@
     }
 
     > .edit {
-        margin: 1em;
+        margin: 1em 1em 0;
     }
 }

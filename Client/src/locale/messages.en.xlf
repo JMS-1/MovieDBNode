@@ -212,10 +212,18 @@
       </trans-unit>
       <trans-unit id="container.parent" datatype="html">
         <source>Übergeordnete Ablage</source>
-        <target>Übergeordnete Ablage</target>
+        <target>Parent Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.parent.hint" datatype="html">
+        <source>(keine)</source>
+        <target>(none)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.name" datatype="html">
@@ -228,7 +236,7 @@
       </trans-unit>
       <trans-unit id="container.type" datatype="html">
         <source>Art der Ablage</source>
-        <target>Art der Ablage</target>
+        <target>Type of Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
           <context context-type="linenumber">34</context>
@@ -236,7 +244,7 @@
       </trans-unit>
       <trans-unit id="container.description" datatype="html">
         <source>Beschreibung</source>
-        <target>Beschreibung</target>
+        <target>Description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
           <context context-type="linenumber">39</context>
@@ -244,7 +252,7 @@
       </trans-unit>
       <trans-unit id="container.position" datatype="html">
         <source>Position in der übergeordneten Ablage</source>
-        <target>Position in der übergeordneten Ablage</target>
+        <target>Location in Parent Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
           <context context-type="linenumber">46</context>
@@ -252,7 +260,7 @@
       </trans-unit>
       <trans-unit id="container.recording" datatype="html">
         <source>Aufzeichnung</source>
-        <target>Aufzeichnung</target>
+        <target>Recording</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
           <context context-type="linenumber">59</context>
@@ -281,7 +289,7 @@
       </trans-unit>
       <trans-unit id="container.search" datatype="html">
         <source>Suche...</source>
-        <target>Suche...</target>
+        <target>Search...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -289,7 +297,7 @@
       </trans-unit>
       <trans-unit id="errors.header" datatype="html">
         <source>Bitte Eingaben kontrollieren</source>
-        <target>Bitte Eingaben kontrollieren</target>
+        <target>Please Check your Data</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/errors/errors.component.html</context>
           <context context-type="linenumber">2</context>
@@ -321,7 +329,7 @@
       </trans-unit>
       <trans-unit id="genre.name" datatype="html">
         <source>Sprache</source>
-        <target>Sprache</target>
+        <target>Language</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/genre/form.component.html</context>
           <context context-type="linenumber">18</context>
@@ -366,7 +374,7 @@
       </trans-unit>
       <trans-unit id="language.name" datatype="html">
         <source>Sprache</source>
-        <target>Sprache</target>
+        <target>Language</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/language/form.component.html</context>
           <context context-type="linenumber">18</context>
@@ -387,7 +395,7 @@
       </trans-unit>
       <trans-unit id="recording.container" datatype="html">
         <source>Ablage</source>
-        <target>Ablage</target>
+        <target>Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/container.component.html</context>
           <context context-type="linenumber">2</context>
@@ -395,7 +403,7 @@
       </trans-unit>
       <trans-unit id="recording.container.hint" datatype="html">
         <source>(Ablage zuordnen)</source>
-        <target>(Ablage zuordnen)</target>
+        <target>(assign Storage)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/container.component.html</context>
           <context context-type="linenumber">6</context>
@@ -403,7 +411,7 @@
       </trans-unit>
       <trans-unit id="recording.position" datatype="html">
         <source>Standort</source>
-        <target>Standort</target>
+        <target>Location</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/container.component.html</context>
           <context context-type="linenumber">12</context>
@@ -411,7 +419,7 @@
       </trans-unit>
       <trans-unit id="recording.genre" datatype="html">
         <source>Kategorien</source>
-        <target>Kategorien</target>
+        <target>Categories</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/genre.component.html</context>
           <context context-type="linenumber">2</context>
@@ -419,7 +427,7 @@
       </trans-unit>
       <trans-unit id="recording.genre.hint" datatype="html">
         <source>(Kategorien zuordnen)</source>
-        <target>(Kategorien zuordnen)</target>
+        <target>(assign Categories)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/genre.component.html</context>
           <context context-type="linenumber">6</context>
@@ -427,7 +435,7 @@
       </trans-unit>
       <trans-unit id="recording.language" datatype="html">
         <source>Sprachen</source>
-        <target>Sprachen</target>
+        <target>Languages</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/language.component.html</context>
           <context context-type="linenumber">2</context>
@@ -435,7 +443,7 @@
       </trans-unit>
       <trans-unit id="recording.language.hint" datatype="html">
         <source>(Sprachen zuordnen)</source>
-        <target>(Sprachen zuordnen)</target>
+        <target>(assign Languages)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/language.component.html</context>
           <context context-type="linenumber">6</context>
@@ -443,7 +451,7 @@
       </trans-unit>
       <trans-unit id="recording.links" datatype="html">
         <source>Verweise</source>
-        <target>Verweise</target>
+        <target>Links</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/link.component.html</context>
           <context context-type="linenumber">3</context>
@@ -459,7 +467,7 @@
       </trans-unit>
       <trans-unit id="recording.url" datatype="html">
         <source>Verweis</source>
-        <target>Verweis</target>
+        <target>URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/link.component.html</context>
           <context context-type="linenumber">31</context>
@@ -467,7 +475,7 @@
       </trans-unit>
       <trans-unit id="recording.description" datatype="html">
         <source>Beschreibung</source>
-        <target>Beschreibung</target>
+        <target>Description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/link.component.html</context>
           <context context-type="linenumber">38</context>
@@ -495,7 +503,7 @@
       </trans-unit>
       <trans-unit id="recording.save" datatype="html">
         <source> Speichern und zurück </source>
-        <target> Speichern und zurück </target>
+        <target>Save and exit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -503,7 +511,7 @@
       </trans-unit>
       <trans-unit id="recording.saveAndClone" datatype="html">
         <source> Speichern und neue Kopie </source>
-        <target> Speichern und neue Kopie </target>
+        <target>Save and Clone</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
           <context context-type="linenumber">19,21</context>
@@ -511,7 +519,7 @@
       </trans-unit>
       <trans-unit id="recording.clone" datatype="html">
         <source>Kopie erstellen</source>
-        <target>Kopie erstellen</target>
+        <target>Clone</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
           <context context-type="linenumber">22</context>
@@ -535,7 +543,7 @@
       </trans-unit>
       <trans-unit id="recording.rent" datatype="html">
         <source>Verliehen an</source>
-        <target>Verliehen an</target>
+        <target>Rent to</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
           <context context-type="linenumber">47</context>
@@ -556,7 +564,7 @@
       </trans-unit>
       <trans-unit id="recording.series" datatype="html">
         <source>Serie</source>
-        <target>Serie</target>
+        <target>Series</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/series.component.html</context>
           <context context-type="linenumber">2</context>
@@ -564,7 +572,7 @@
       </trans-unit>
       <trans-unit id="recording.series.hint" datatype="html">
         <source>(Serie zuordnen)</source>
-        <target>(Serie zuordnen)</target>
+        <target>(assign Series)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/series.component.html</context>
           <context context-type="linenumber">6</context>
@@ -572,7 +580,7 @@
       </trans-unit>
       <trans-unit id="recording.type" datatype="html">
         <source>Art der Ablage</source>
-        <target>Art der Ablage</target>
+        <target>Type of Media</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
           <context context-type="linenumber">2</context>
@@ -580,7 +588,7 @@
       </trans-unit>
       <trans-unit id="recording.unknown" datatype="html">
         <source>(unbekannt)</source>
-        <target>(unbekannt)</target>
+        <target>(unknown)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
           <context context-type="linenumber">7</context>
@@ -604,7 +612,7 @@
       </trans-unit>
       <trans-unit id="recording.burnedDvd" datatype="html">
         <source>Selbstaufgenommene DVD</source>
-        <target>Selbstaufgenommene DVD</target>
+        <target>DVD (burned)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
           <context context-type="linenumber">10</context>
@@ -612,7 +620,7 @@
       </trans-unit>
       <trans-unit id="recording.dvd" datatype="html">
         <source>Gekaufte DVD</source>
-        <target>Gekaufte DVD</target>
+        <target>DVD (baught)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
           <context context-type="linenumber">11</context>
@@ -628,7 +636,7 @@
       </trans-unit>
       <trans-unit id="recordings.export" datatype="html">
         <source>Exportieren</source>
-        <target>Exportieren</target>
+        <target>Export</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/recordings.component.html</context>
           <context context-type="linenumber">4</context>
@@ -636,7 +644,7 @@
       </trans-unit>
       <trans-unit id="recordings.new" datatype="html">
         <source>Neue Suche</source>
-        <target>Neue Suche</target>
+        <target>New Filter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/recordings.component.html</context>
           <context context-type="linenumber">9</context>
@@ -644,7 +652,7 @@
       </trans-unit>
       <trans-unit id="recordings.count" datatype="html">
         <source> von </source>
-        <target> von </target>
+        <target> of </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/recordings.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -652,7 +660,7 @@
       </trans-unit>
       <trans-unit id="recordings.name" datatype="html">
         <source> Name </source>
-        <target> Name </target>
+        <target>Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/table.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -660,7 +668,7 @@
       </trans-unit>
       <trans-unit id="recordings.created" datatype="html">
         <source> Erstellt </source>
-        <target> Erstellt </target>
+        <target>Created</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/table.component.html</context>
           <context context-type="linenumber">15,17</context>
@@ -668,7 +676,7 @@
       </trans-unit>
       <trans-unit id="recordings.languge" datatype="html">
         <source>Sprachen</source>
-        <target>Sprachen</target>
+        <target>Languages</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/table.component.html</context>
           <context context-type="linenumber">18</context>
@@ -676,7 +684,7 @@
       </trans-unit>
       <trans-unit id="recordings.genres" datatype="html">
         <source>Kategorien</source>
-        <target>Kategorien</target>
+        <target>Categories</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/table.component.html</context>
           <context context-type="linenumber">19</context>
@@ -707,11 +715,19 @@
         </context-group>
       </trans-unit>
       <trans-unit id="series.parent" datatype="html">
-        <source>Übergeordnete Ablage</source>
-        <target>Übergeordnete Ablage</target>
+        <source>Übergeordnete Serie</source>
+        <target>Parent Series</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="series.parent.hint" datatype="html">
+        <source>(keine)</source>
+        <target>(none)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.name" datatype="html">
@@ -724,7 +740,7 @@
       </trans-unit>
       <trans-unit id="series.description" datatype="html">
         <source>Beschreibung</source>
-        <target>Beschreibung</target>
+        <target>Description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
           <context context-type="linenumber">34</context>
@@ -745,7 +761,7 @@
       </trans-unit>
       <trans-unit id="series.search" datatype="html">
         <source>Suche...</source>
-        <target>Suche...</target>
+        <target>Search...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/list.component.html</context>
           <context context-type="linenumber">2</context>
@@ -753,7 +769,7 @@
       </trans-unit>
       <trans-unit id="multiselect.hint" datatype="html">
         <source>(bitte auswählen)</source>
-        <target>(bitte auswählen)</target>
+        <target>(please choose)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/multi/multi.component.ts</context>
           <context context-type="linenumber">16</context>
@@ -761,7 +777,7 @@
       </trans-unit>
       <trans-unit id="search.hint" datatype="html">
         <source>Suche...</source>
-        <target>Suche...</target>
+        <target>Search...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/search/search.component.ts</context>
           <context context-type="linenumber">14</context>
@@ -769,10 +785,58 @@
       </trans-unit>
       <trans-unit id="singleselect.hint" datatype="html">
         <source>(bitte auswählen)</source>
-        <target>(bitte auswählen)</target>
+        <target>(please choose)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/select/select.component.ts</context>
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.unknown" datatype="html">
+        <source>(unbekannt)</source>
+        <target>(unknown)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.small" datatype="html">
+        <source>Kleine DVD Box</source>
+        <target>Small Box</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.large" datatype="html">
+        <source>Große DVD Box</source>
+        <target>Large Box</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.shelf" datatype="html">
+        <source>Regal(fach)</source>
+        <target>Shelf</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.folder" datatype="html">
+        <source>Dateiverzeichnis</source>
+        <target>Folder</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="container.type.disk" datatype="html">
+        <source>(Externe) Festplatte</source>
+        <target>(External) Harddisk</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/container/type.component.html</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
     </body>

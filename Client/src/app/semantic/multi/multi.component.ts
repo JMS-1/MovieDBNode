@@ -64,6 +64,10 @@ export class MultiSelectComponent implements angular.OnChanges, angular.AfterVie
         if (selected) {
             this.setSelected(selected.firstChange ? selected.previousValue : selected.currentValue)
         }
+
+        if (changes['items']) {
+            setTimeout(() => this.setSelected(this.selected), 100)
+        }
     }
 
     ngOnDestroy(): void {

@@ -3,22 +3,25 @@
     <div class="default text"></div>
     <div class="menu">
         <div class="item" data-value="0">
-            <app-container-icon [type]="0" i18n="@@container.type.unknown"></app-container-icon>(unbekannt)
+            <app-container-icon [type]="0"></app-container-icon><span i18n="@@container.type.unknown">(unbekannt)</span>
         </div>
         <div class="item" data-value="1">
-            <app-container-icon [type]="1" i18n="@@container.type.small"></app-container-icon>Kleine DVD Box
+            <app-container-icon [type]="1"></app-container-icon
+            ><span i18n="@@container.type.small">Kleine DVD Box</span>
         </div>
         <div class="item" data-value="2">
-            <app-container-icon [type]="2" i18n="@@container.type.large"></app-container-icon>Große DVD Box
+            <app-container-icon [type]="2"></app-container-icon><span i18n="@@container.type.large">Große DVD Box</span>
         </div>
         <div class="item" data-value="3">
-            <app-container-icon [type]="3" i18n="@@container.type.shelf"></app-container-icon>Regal(fach)
+            <app-container-icon [type]="3"></app-container-icon><span i18n="@@container.type.shelf">Regal(fach)</span>
         </div>
         <div class="item" data-value="5">
-            <app-container-icon [type]="5" i18n="@@container.type.folder"></app-container-icon>Dateiverzeichnis
+            <app-container-icon [type]="5"></app-container-icon
+            ><span i18n="@@container.type.folder">Dateiverzeichnis</span>
         </div>
         <div class="item" data-value="4">
-            <app-container-icon [type]="4" i18n="@@container.type.disk"></app-container-icon>(Externe) Festplatte
+            <app-container-icon [type]="4"></app-container-icon
+            ><span i18n="@@container.type.disk">(Externe) Festplatte</span>
         </div>
     </div>
 </div>
