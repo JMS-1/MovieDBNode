@@ -1,12 +1,12 @@
 <div class="page">
     <div class="headline">
-        <div class="ui compact segment counts">{{ count }} von {{ total }}</div>
-        <button class="ui button" (click)="onExport()">Exportieren</button>
+        <div class="ui compact segment counts">{{ count }}{{ of }}{{ total }}</div>
+        <button class="ui button" (click)="onExport()" i18n="@@recordings.export">Exportieren</button>
     </div>
     <div class="ui segment filter">
         <div class="search">
             <app-text-filter></app-text-filter>
-            <div class="ui button" (click)="clear()">Neue Suche</div>
+            <div class="ui button" (click)="clear()" i18n="@@recordings.new">Neue Suche</div>
         </div>
         <app-language-filter></app-language-filter>
         <app-genre-filter></app-genre-filter>

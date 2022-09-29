@@ -1,5 +1,10 @@
 <div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['series'] }">
-    <label>Serie</label>
-    <semantic-single-select [items]="ordered" [(selected)]="series" hint="(Serie zuordnen)"></semantic-single-select>
+    <label i18n="@@recording.series">Serie</label>
+    <semantic-single-select
+        [items]="ordered"
+        [(selected)]="series"
+        hint="(Serie zuordnen)"
+        i18n-hint="@@recording.series.hint"
+    ></semantic-single-select>
 </div>
 <app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['series']"></app-validation-errors>

@@ -1,5 +1,10 @@
 <div class="complete">
-    <semantic-search hint="Suche..." [(text)]="filter" [clearable]="true"></semantic-search>
+    <semantic-search
+        hint="Suche..."
+        [(text)]="filter"
+        [clearable]="true"
+        i18n-hint="@@container.search"
+    ></semantic-search>
     <div class="ui selection list">
         <app-container-item
             *ngFor="let item of items"

@@ -4,17 +4,19 @@
             <th
                 (click)="sort('fullName')"
                 [ngClass]="{ sorted: sortName, ascending: ascending, descending: !ascending }"
+                i18n="@@recordings.name"
             >
                 Name
             </th>
             <th
                 (click)="sort('created')"
                 [ngClass]="{ sorted: sortDate, ascending: ascending, descending: !ascending }"
+                i18n="@@recordings.created"
             >
                 Erstellt
             </th>
-            <th><div>Sprachen</div></th>
-            <th><div>Kategorien</div></th>
+            <th><div i18n="@@recordings.languge">Sprachen</div></th>
+            <th><div i18n="@@recordings.genres">Kategorien</div></th>
         </tr>
     </thead>
     <tbody>

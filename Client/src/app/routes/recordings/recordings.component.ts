@@ -21,6 +21,8 @@ export class RecordingsRouteComponent implements OnInit, OnDestroy {
         view: [],
     }
 
+    readonly of = $localize`:@@recordings.count: von `
+
     constructor(private readonly _service: RecordingsService) {}
 
     get total(): number {

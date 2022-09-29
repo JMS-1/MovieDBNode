@@ -1,14 +1,15 @@
 <div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['containerId'] }">
-    <label>Ablage</label>
+    <label i18n="@@recording.container">Ablage</label>
     <semantic-single-select
         [items]="ordered"
         [(selected)]="container"
         hint="(Ablage zuordnen)"
+        i18n-hint="@@recording.container.hint"
     ></semantic-single-select>
 </div>
 <app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['containerId']"></app-validation-errors>
 <div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['containerPosition'] }">
-    <label>Standort</label>
+    <label i18n="@@recording.position">Standort</label>
     <div class="ui input">
         <input type="text" [(ngModel)]="position" />
     </div>

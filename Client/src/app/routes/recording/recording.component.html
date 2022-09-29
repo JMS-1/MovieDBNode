@@ -1,22 +1,30 @@
 <div *ngIf="edit">
     <div class="actions">
-        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()">Verwerfen</div>
+        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()" i18n="@@recording.cancel">
+            Verwerfen
+        </div>
         <div
             class="ui primary button"
             [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
             (click)="onSave(false)"
+            i18n="@@recording.save"
         >
             Speichern und zurück
         </div>
-        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }" (click)="onSave(true)">
+        <div
+            class="ui button"
+            [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
+            (click)="onSave(true)"
+            i18n="@@recording.saveAndClone"
+        >
             Speichern und neue Kopie
         </div>
-        <div class="ui button" (click)="onClone()">Kopie erstellen</div>
-        <div *ngIf="editId" class="ui negative button" (click)="onRemove()">Löschen</div>
+        <div class="ui button" (click)="onClone()" i18n="@@recording.clone">Kopie erstellen</div>
+        <div *ngIf="editId" class="ui negative button" (click)="onRemove()" i18n="@@recording.delete">Löschen</div>
     </div>
     <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
         <div class="required field" [ngClass]="{ error: edit.validationErrors?.['name'] }">
-            <label>Name</label>
+            <label i18n="@@recording.name">Name</label>
             <div class="ui input">
                 <input type="text" [(ngModel)]="name" />
             </div>
@@ -24,7 +32,7 @@
         <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
         <app-recording-link [edit]="edit"></app-recording-link>
         <div class="field" [ngClass]="{ error: edit.validationErrors?.['description'] }">
-            <label>Beschreibung</label>
+            <label i18n="@@recording.description">Beschreibung</label>
             <div class="ui input">
                 <textarea [(ngModel)]="description" rows="5"></textarea>
             </div>
@@ -36,14 +44,14 @@
         <app-recording-language [edit]="edit"></app-recording-language>
         <app-recording-container [edit]="edit"></app-recording-container>
         <div class="field" [ngClass]="{ error: edit.validationErrors?.['rentTo'] }">
-            <label>Verliehen an</label>
+            <label i18n="@@recording.rent">Verliehen an</label>
             <div class="ui input">
                 <input type="text" [(ngModel)]="rentTo" />
             </div>
         </div>
         <app-validation-errors [list]="edit.validationErrors?.['rentTo']"></app-validation-errors>
     </div>
-    <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()">
+    <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()" i18n="@@recording.confirm">
         Das Löschen einer Aufzeichnung kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Aufzeichnung
         wirklich endgültig entfernt werden?
     </app-semantic-modal>
