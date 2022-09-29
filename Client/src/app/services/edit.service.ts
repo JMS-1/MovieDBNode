@@ -217,7 +217,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
     }
 
     addOrUpdate(id: string, data: Partial<T>): void {
-        data = this.toServer(data)
+        data = this.toServer(JSON.parse(JSON.stringify(data)))
 
         if (id) {
             this._errors.serverCall(
