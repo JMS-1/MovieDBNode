@@ -16,17 +16,22 @@ export class RootComponent implements OnDestroy {
     route = ''
 
     readonly newRoutes: IMenuItem[] = [
-        { route: 'recordings/NEW', text: $localize`:@@menu.new.recording:Aufzeichnung erstellen` },
-        { route: 'series/NEW', text: $localize`:@@menu.new.series:Serie erstellen` },
-        { route: 'containers/NEW', text: $localize`:@@menu.new.container:Ablage erstellen` },
-        { route: 'languages/NEW', text: $localize`:@@menu.new.language:Sprache hinzufügen` },
-        { route: 'genres/NEW', text: $localize`:@@menu.new.genre:Kategorie hinzufügen` },
+        { route: '/recordings/NEW', text: $localize`:@@menu.new.recording:Aufzeichnung erstellen` },
+        { route: '/series/NEW', text: $localize`:@@menu.new.series:Serie erstellen` },
+        { route: '/containers/NEW', text: $localize`:@@menu.new.container:Ablage erstellen` },
+        { route: '/languages/NEW', text: $localize`:@@menu.new.language:Sprache hinzufügen` },
+        { route: '/genres/NEW', text: $localize`:@@menu.new.genre:Kategorie hinzufügen` },
     ]
 
     readonly themeRoutes: IMenuItem[] = [
         { route: 'default', text: $localize`:@@menu.themes.default:Standard` },
         { route: 'alternate.1', text: $localize`:@@menu.themes.alt1:Alternative 1` },
         { route: 'alternate.2', text: $localize`:@@menu.themes.alt2:Alternative 2` },
+    ]
+
+    readonly languageRoutes: IMenuItem[] = [
+        { route: '/de', text: 'Deutsch' },
+        { route: '/en', text: 'English' },
     ]
 
     constructor(private readonly _router: Router, private readonly _themes: ThemeService) {
@@ -67,6 +72,10 @@ export class RootComponent implements OnDestroy {
 
     onNew(route: string): void {
         this._router.navigateByUrl(route)
+    }
+
+    onLanguage(route: string): void {
+        window.location.href = route
     }
 
     onTheme(theme: string): void {
