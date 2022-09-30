@@ -23,7 +23,11 @@ async function startup(): Promise<void> {
     app.use((req, res, next) => {
         const { originalUrl } = req
 
-        const hasLanguage = originalUrl.startsWith('/de/') || originalUrl.startsWith('/en/')
+        const hasLanguage =
+            originalUrl === '/de' ||
+            originalUrl.startsWith('/de/') ||
+            originalUrl === '/en' ||
+            originalUrl.startsWith('/en/')
 
         if (!Config.defaultRoute) {
             next()
