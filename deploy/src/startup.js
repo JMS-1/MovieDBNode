@@ -33,7 +33,7 @@ async function startup() {
             next();
         }
         else {
-            res.redirect(`/de/${originalUrl}`);
+            res.redirect(`/de${originalUrl}`);
         }
     });
     app.use(express_1.default.static((0, path_1.join)(__dirname, '../dist')));

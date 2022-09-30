@@ -32,7 +32,7 @@ async function startup(): Promise<void> {
         } else if (hasLanguage) {
             next()
         } else {
-            res.redirect(`/de/${originalUrl}`)
+            res.redirect(`/de${originalUrl}`)
         }
     })
 
