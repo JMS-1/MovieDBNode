@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { Apollo, gql } from 'apollo-angular'
 import { IRecording, recordingContainerType } from 'src/api'
 
 import { recordingProps, RecordingsService } from './recordings.service'
 
 import { EditableService } from '../edit.service'
-import { ErrorService } from '../error/error.service'
+import { GraphQLService } from '../graphql/graphql.service'
 import { ValidationService } from '../validation/validation.service'
 
-const queryRecording = gql<{ recordings: { findById: IRecording } }, { id: string }>(`
+const queryRecording = `
   query ($id: ID!) {
     recordings {
       findById(_id: $id) {
@@ -17,7 +16,7 @@ const queryRecording = gql<{ recordings: { findById: IRecording } }, { id: strin
       }
     }
   }
-`)
+`
 
 @Injectable()
 export class RecordingService extends EditableService<IRecording> {
@@ -38,13 +37,12 @@ export class RecordingService extends EditableService<IRecording> {
     }
 
     constructor(
-        gql: Apollo,
+        gql: GraphQLService,
         private readonly _recodings: RecordingsService,
         validation: ValidationService,
-        router: Router,
-        errors: ErrorService
+        router: Router
     ) {
-        super(gql, 'Recording', 'recordings', recordingProps, validation, router, errors)
+        super(gql, 'Recording', 'recordings', recordingProps, validation, router)
 
         this.load()
     }
@@ -84,7 +82,7 @@ export class RecordingService extends EditableService<IRecording> {
 
     protected override load(): void {
         if (this._id) {
-            this._errors.serverCall(this._gql.query({ query: queryRecording, variables: { id: this._id } }), (data) => {
+            this._gql.call(queryRecording, { id: this._id }, (data) => {
                 const recording = data.recordings.findById
 
                 this._query.next({ [recording._id]: this.fromServer(recording) as IRecording })

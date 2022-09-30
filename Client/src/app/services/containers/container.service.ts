@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { Apollo, gql } from 'apollo-angular'
 import { Observable, Subject } from 'rxjs'
 
 import * as api from '../../../api'
 import { EditableService } from '../edit.service'
-import { ErrorService } from '../error/error.service'
+import { GraphQLService } from '../graphql/graphql.service'
 import { ValidationService } from '../validation/validation.service'
 
 export interface IContainer extends api.IContainer {
@@ -21,7 +20,7 @@ export interface IContainerPosition {
     fullName: string
 }
 
-const query = gql<{ recordings: { findByContainer: IContainerPosition[] } }, { id: string }>(`
+const query = `
     query ($id: ID!) {
         recordings {
             findByContainer(containerId: $id) {
@@ -29,7 +28,7 @@ const query = gql<{ recordings: { findByContainer: IContainerPosition[] } }, { i
             }
         }
     }
-`)
+`
 
 @Injectable()
 export class ContainerService extends EditableService<IContainer> {
@@ -42,16 +41,8 @@ export class ContainerService extends EditableService<IContainer> {
         'level',
     ])
 
-    constructor(gql: Apollo, validation: ValidationService, router: Router, errors: ErrorService) {
-        super(
-            gql,
-            'Container',
-            'containers',
-            '_id name description parentId parentLocation type',
-            validation,
-            router,
-            errors
-        )
+    constructor(gql: GraphQLService, validation: ValidationService, router: Router) {
+        super(gql, 'Container', 'containers', '_id name description parentId parentLocation type', validation, router)
 
         this.load()
     }
@@ -120,9 +111,7 @@ export class ContainerService extends EditableService<IContainer> {
     getContents(id: string): Observable<IContainerPosition[]> {
         const obs = new Subject<IContainerPosition[]>()
 
-        this._errors.serverCall(this._gql.query({ query, variables: { id } }), (data) =>
-            obs.next(data.recordings.findByContainer)
-        )
+        this._gql.call(query, { id }, (data) => obs.next(data.recordings.findByContainer))
 
         return obs
     }

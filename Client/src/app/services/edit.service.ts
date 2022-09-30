@@ -1,11 +1,9 @@
 import { Inject, Injectable, InjectionToken, OnDestroy } from '@angular/core'
 import { Router } from '@angular/router'
-import { Apollo, gql } from 'apollo-angular'
 import Validator, { ValidationError, ValidationSchema } from 'fastest-validator'
-import { DocumentNode } from 'graphql'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
-import { ErrorService } from './error/error.service'
+import { GraphQLService } from './graphql/graphql.service'
 import { ValidationService } from './validation/validation.service'
 
 const validator = new Validator()
@@ -45,24 +43,23 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
         return this._edit
     }
 
-    protected readonly _itemQuery: DocumentNode
+    protected readonly _itemQuery: string
 
-    private readonly _addMutation: DocumentNode
+    private readonly _addMutation: string
 
-    private readonly _updateMutation: DocumentNode
+    private readonly _updateMutation: string
 
-    private readonly _removeMutation: DocumentNode
+    private readonly _removeMutation: string
 
     constructor(
-        protected readonly _gql: Apollo,
+        protected readonly _gql: GraphQLService,
         @Inject(validationNameToken) validationName: string,
         @Inject(validationScopeToken) private readonly _validationScope: string,
         @Inject(validationPropertiesToken) validationProps: string,
         validation: ValidationService,
-        protected readonly _router: Router,
-        protected readonly _errors: ErrorService
+        protected readonly _router: Router
     ) {
-        this._itemQuery = gql`
+        this._itemQuery = `
           query {
             ${_validationScope} {
                 find(page: 1, pageSize: 1000) {
@@ -71,7 +68,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
               }
             }`
 
-        this._removeMutation = gql`
+        this._removeMutation = `
           mutation ($id: ID!){
             ${_validationScope} {
               delete(_id: $id) {
@@ -80,7 +77,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
             }
           }`
 
-        this._addMutation = gql`
+        this._addMutation = `
           mutation ($data: ${validationName}Input!) {
             ${_validationScope} {
               add(data: $data) {
@@ -89,7 +86,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
             }
           }`
 
-        this._updateMutation = gql`
+        this._updateMutation = `
           mutation ($id: ID!, $data: ${validationName}Update!) {
             ${_validationScope} {
               update(_id: $id, data: $data) {
@@ -124,8 +121,7 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
     }
 
     protected load(): void {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this._errors.serverCall(this._gql.query({ query: this._itemQuery }), (data: any) => {
+        this._gql.call(this._itemQuery, {}, (data) => {
             this._query.next(this.createMap(data[this._validationScope].find.items.map((i: T) => this.fromServer(i))))
 
             this.refresh()
@@ -220,26 +216,16 @@ export abstract class EditableService<T extends { _id: string }> implements OnDe
         data = this.toServer(JSON.parse(JSON.stringify(data)))
 
         if (id) {
-            this._errors.serverCall(
-                this._gql.query({ query: this._updateMutation, variables: { data, id } }),
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (res: any) => this.afterUpdate(res[this._validationScope].update)
+            this._gql.call(this._updateMutation, { data, id }, (res) =>
+                this.afterUpdate(res[this._validationScope].update)
             )
         } else {
-            this._errors.serverCall(
-                this._gql.query({ query: this._addMutation, variables: { data, id } }),
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (res: any) => this.afterAdd(res[this._validationScope].add)
-            )
+            this._gql.call(this._addMutation, { data, id }, (res) => this.afterAdd(res[this._validationScope].add))
         }
     }
 
     remove(id: string): void {
-        this._errors.serverCall(
-            this._gql.query({ query: this._removeMutation, variables: { id } }),
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (res: any) => this.afterDelete(res[this._validationScope].delete)
-        )
+        this._gql.call(this._removeMutation, { id }, (res) => this.afterDelete(res[this._validationScope].delete))
     }
 
     ngOnDestroy(): void {

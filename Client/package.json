@@ -8,8 +8,6 @@
         "@angular/platform-browser": "^14.2.4",
         "@angular/platform-browser-dynamic": "^14.2.4",
         "@angular/router": "^14.2.4",
-        "@apollo/client": "^3.6.9",
-        "apollo-angular": "^4.0.1",
         "fastest-validator": "^1.15.0",
         "graphql": "^16.6.0",
         "jquery": "^3.6.1",

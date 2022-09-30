@@ -9,7 +9,7 @@
             <div i18n="@@menu.series">Serien</div>
         </div>
         <div class="item" [ngClass]="{ active: isContainer }" routerLink="containers">
-            <i class="ui icon folder outline"></i>
+            <i class="ui icon folder"></i>
             <div i18n="@@menu.containers">Ablagen</div>
         </div>
         <div class="item" [ngClass]="{ active: isLanguage }" routerLink="languages">
@@ -34,13 +34,15 @@
             [items]="themeRoutes"
             (onSelect)="onTheme($event)"
         ></app-sub-menu>
-        <app-sub-menu
-            i18n-title="@@menu.language"
-            icon="language"
-            title="Sprache"
-            [items]="languageRoutes"
-            (onSelect)="onLanguage($event)"
-        ></app-sub-menu>
+        <div class="right menu">
+            <app-sub-menu
+                i18n-title="@@menu.language"
+                icon="language"
+                title="Sprache"
+                [items]="languageRoutes"
+                (onSelect)="onLanguage($event)"
+            ></app-sub-menu>
+        </div>
     </div>
     <router-outlet></router-outlet>
 </div>

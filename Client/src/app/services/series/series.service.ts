@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { Apollo } from 'apollo-angular'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 import { ISeries } from '../../../api'
 import { EditableService } from '../edit.service'
-import { ErrorService } from '../error/error.service'
+import { GraphQLService } from '../graphql/graphql.service'
 import { ValidationService } from '../validation/validation.service'
 
 export interface ISeriesNode extends ISeries {
@@ -41,8 +40,8 @@ export class SeriesService extends EditableService<ISeriesNode> {
         return this._roots
     }
 
-    constructor(gql: Apollo, validation: ValidationService, router: Router, errors: ErrorService) {
-        super(gql, 'Series', 'series', '_id name description parentId fullName', validation, router, errors)
+    constructor(gql: GraphQLService, validation: ValidationService, router: Router) {
+        super(gql, 'Series', 'series', '_id name description parentId fullName', validation, router)
 
         this.load()
     }

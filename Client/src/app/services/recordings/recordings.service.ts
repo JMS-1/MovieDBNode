@@ -1,11 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core'
-import { Apollo, gql } from 'apollo-angular'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 
 import { IRecordingQueryRequest, IRecordingQueryResult } from '../../../api'
 import { ConfigService } from '../config/config.service'
-import { ErrorService } from '../error/error.service'
+import { GraphQLService } from '../graphql/graphql.service'
 import { ISeriesNode, SeriesService } from '../series/series.service'
 
 export const recordingProps = `
@@ -13,7 +12,7 @@ export const recordingProps = `
     links { description name url }
 `
 
-const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IRecordingQueryRequest>(`
+const queryRecordings = `
   query (
       $correlationId: ID
       $firstPage: Int!
@@ -48,7 +47,7 @@ const queryRecordings = gql<{ recordings: { query: IRecordingQueryResult } }, IR
           }
       }
   }
-`)
+`
 
 const initialFilter: IRecordingQueryRequest = {
     correlationId: '',
@@ -81,12 +80,7 @@ export class RecordingsService implements OnDestroy {
 
     private _seriesMap: Record<string, ISeriesNode> = {}
 
-    constructor(
-        private readonly _gql: Apollo,
-        private readonly _errors: ErrorService,
-        series: SeriesService,
-        private readonly _config: ConfigService
-    ) {
+    constructor(private readonly _gql: GraphQLService, series: SeriesService, private readonly _config: ConfigService) {
         this._seriesWatch = series.map.subscribe((map) => ((this._seriesMap = map), this.reload()))
 
         this.reload()
@@ -223,7 +217,7 @@ export class RecordingsService implements OnDestroy {
 
         filter.correlationId = correlationId
 
-        this._errors.serverCall(this._gql.query({ query: queryRecordings, variables: filter }), (data) => {
+        this._gql.call(queryRecordings, filter, (data) => {
             const result = data.recordings.query
 
             if (result.correlationId !== filter.correlationId) {
@@ -237,19 +231,17 @@ export class RecordingsService implements OnDestroy {
     openExport(): void {
         const filter = this.filter
 
-        this._errors.serverCall(
-            this._gql.query({
-                query: queryRecordings,
-                variables: {
-                    ...filter,
-                    correlationId: uuid(),
-                    firstPage: 0,
-                    forExport: true,
-                    pageSize: 100000,
-                    sort: 'fullName',
-                    sortOrder: 'Ascending',
-                },
-            }),
+        this._gql.call(
+            queryRecordings,
+            {
+                ...filter,
+                correlationId: uuid(),
+                firstPage: 0,
+                forExport: true,
+                pageSize: 100000,
+                sort: 'fullName',
+                sortOrder: 'Ascending',
+            },
             () => window.open(`${this._config.server}/export`, '_blank')
         )
     }
