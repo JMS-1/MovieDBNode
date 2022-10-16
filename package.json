@@ -1,11 +1,11 @@
 {
     "dependencies": {
         "@jms-1/mongodb-graphql": "^2.1.0",
-        "apollo-server-express": "^3.10.2",
-        "apollo-server-plugin-base": "^3.6.2",
-        "body-parser": "^1.20.0",
+        "apollo-server-express": "^3.10.3",
+        "apollo-server-plugin-base": "^3.6.3",
+        "body-parser": "^1.20.1",
         "debug": "^4.3.4",
-        "express": "^4.18.1",
+        "express": "^4.18.2",
         "mongodb": "^4.10.0",
         "uuid": "^9.0.0"
     },
@@ -16,15 +16,15 @@
         "@types/body-parser": "^1.19.2",
         "@types/debug": "^4.1.7",
         "@types/express": "^4.17.14",
-        "@types/node": "^18.7.23",
+        "@types/node": "^18.11.0",
         "@types/uuid": "^8.3.4",
         "del": "^6.1.1",
-        "eslint": "^8.24.0",
+        "eslint": "^8.25.0",
         "gulp": "^4.0.2",
         "gulp-shell": "^0.8.0",
         "prettier": "^2.7.1",
         "sass": "^1.55.0",
-        "stylelint": "^14.13.0",
+        "stylelint": "^14.14.0",
         "typescript": "^4.8.4"
     },
     "eslintConfig": {
@@ -54,5 +54,5 @@
             "value-no-vendor-prefix": null
         }
     },
-    "version": "2.2.0"
+    "version": "2.3.0"
 }

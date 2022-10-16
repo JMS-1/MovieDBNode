@@ -1,22 +1,22 @@
 {
+    "autoInstall": false,
     "base": "src/semantic",
     "paths": {
+        "clean": "../assets/alternate.1/",
+        "output": {
+            "compressed": "../assets/alternate.1/components/",
+            "packaged": "../assets/alternate.1/",
+            "themes": "../assets/alternate.1/themes/",
+            "uncompressed": "../assets/alternate.1/components/"
+        },
         "source": {
             "config": "src/theme.alternate.1.config",
             "definitions": "src/definitions/",
             "site": "src/site/",
             "themes": "src/themes/"
-        },
-        "output": {
-            "packaged": "../assets/alternate.1/",
-            "uncompressed": "../assets/alternate.1/components/",
-            "compressed": "../assets/alternate.1/components/",
-            "themes": "../assets/alternate.1/themes/"
-        },
-        "clean": "../assets/alternate.1/"
+        }
     },
     "permission": false,
-    "autoInstall": false,
     "rtl": false,
     "components": [
         "accordion",
@@ -71,5 +71,5 @@
         "transition",
         "visibility"
     ],
-    "version": "2.8.8"
+    "version": "2.9.0"
 }

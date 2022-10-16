@@ -1,5 +1,5 @@
 /*!
- * # Fomantic-UI 2.8.8 - Segment
+ * # Fomantic-UI 2.9.0 - Segment
  * http://github.com/fomantic/Fomantic-UI/
  *
  *
@@ -38,10 +38,10 @@
   border-radius: 0;
   box-shadow: none;
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+  border-top: 1px solid rgba(0, 0, 0, 0.13);
 }
-.ui.vertical.segment:last-child {
-  border-bottom: none;
+.ui.vertical.segment:first-child {
+  border-top: none;
 }
 
 /*-------------------
@@ -180,10 +180,10 @@
 .ui.piled.segment:last-child {
   margin-bottom: 0;
 }
-.ui.piled.segments:after,
-.ui.piled.segments:before,
-.ui.piled.segment:after,
-.ui.piled.segment:before {
+.ui.piled.segments::after,
+.ui.piled.segments::before,
+.ui.piled.segment::after,
+.ui.piled.segment::before {
   background-color: #FFFFFF;
   visibility: visible;
   content: '';
@@ -195,14 +195,14 @@
   border: 1px solid #D8DEE2;
   box-shadow: '';
 }
-.ui.piled.segments:before,
-.ui.piled.segment:before {
+.ui.piled.segments::before,
+.ui.piled.segment::before {
   transform: rotate(-1.2deg);
   top: 0;
   z-index: -2;
 }
-.ui.piled.segments:after,
-.ui.piled.segment:after {
+.ui.piled.segments::after,
+.ui.piled.segment::after {
   transform: rotate(1.2deg);
   top: 0;
   z-index: -1;
@@ -231,10 +231,10 @@
 .ui.stacked.segment {
   padding-bottom: 20.4px;
 }
-.ui.stacked.segments:before,
-.ui.stacked.segments:after,
-.ui.stacked.segment:before,
-.ui.stacked.segment:after {
+.ui.stacked.segments::before,
+.ui.stacked.segments::after,
+.ui.stacked.segment::before,
+.ui.stacked.segment::after {
   content: '';
   position: absolute;
   bottom: -3px;
@@ -245,23 +245,23 @@
   height: 6px;
   visibility: visible;
 }
-.ui.stacked.segments:before,
-.ui.stacked.segment:before {
+.ui.stacked.segments::before,
+.ui.stacked.segment::before {
   display: none;
 }
 
 /* Add additional page */
-.ui.tall.stacked.segments:before,
-.ui.tall.stacked.segment:before {
+.ui.tall.stacked.segments::before,
+.ui.tall.stacked.segment::before {
   display: block;
   bottom: 0;
 }
 
 /* Inverted */
-.ui.stacked.inverted.segments:before,
-.ui.stacked.inverted.segments:after,
-.ui.stacked.inverted.segment:before,
-.ui.stacked.inverted.segment:after {
+.ui.stacked.inverted.segments::before,
+.ui.stacked.inverted.segments::after,
+.ui.stacked.inverted.segment::before,
+.ui.stacked.inverted.segment::after {
   background-color: rgba(0, 0, 0, 0.03);
   border-top: 1px solid #51A7E8;
 }
@@ -484,8 +484,8 @@
           user-select: none;
   transition: all 0s linear;
 }
-.ui.loading.segments:before,
-.ui.loading.segment:before {
+.ui.loading.segments::before,
+.ui.loading.segment::before {
   position: absolute;
   content: '';
   top: 0;
@@ -496,8 +496,8 @@
   border-radius: 4px;
   z-index: 100;
 }
-.ui.loading.segments:after,
-.ui.loading.segment:after {
+.ui.loading.segments::after,
+.ui.loading.segment::after {
   position: absolute;
   content: '';
   top: 50%;
@@ -536,7 +536,7 @@
          Clearing
   --------------------*/
 
-.ui.clearing.segment:after {
+.ui.clearing.segment::after {
   content: "";
   display: block;
   clear: both;
@@ -692,7 +692,7 @@
 }
 
 /* Attached */
-.ui.inverted.attached.segment {
+.ui.ui.inverted.attached.segment {
   border-color: #555555;
 }
 
@@ -701,8 +701,8 @@
 .ui.inverted.loading.segment {
   color: #FFFFFF;
 }
-.ui.inverted.loading.segments:before,
-.ui.inverted.loading.segment:before {
+.ui.inverted.loading.segments::before,
+.ui.inverted.loading.segment::before {
   background: rgba(0, 0, 0, 0.85);
 }
 
@@ -745,14 +745,16 @@
   width: calc(100% + 2px);
   max-width: calc(100% + 2px);
   box-shadow: none;
+}
+.ui.attached.segment:not(.basic) {
   border: 1px solid #DDDDDD;
 }
-.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
+.ui.attached:not(.message):not(.text) + .ui.attached.segment:not(.top) {
   border-top: none;
 }
 
 /* Top */
-.ui[class*="top attached"].segment {
+.ui.segment[class*="top attached"] {
   bottom: 0;
   margin-bottom: 0;
   top: 0;
@@ -761,6 +763,9 @@
 }
 .ui.segment[class*="top attached"]:first-child {
   margin-top: 0;
+}
+.ui.tab.segment[class*="top attached"]:first-child {
+  margin-top: 1rem;
 }
 
 /* Bottom */
@@ -773,6 +778,9 @@
   border-radius: 0 0 4px 4px;
 }
 .ui.segment[class*="bottom attached"]:last-child {
+  margin-bottom: 0;
+}
+.ui.tab.segment[class*="bottom attached"]:last-child {
   margin-bottom: 1rem;
 }
 
@@ -787,6 +795,82 @@
 .ui.fitted.segment:not(.vertically) {
   padding-left: 0;
   padding-right: 0;
+}
+
+/*--------------
+    Scrolling
+  ---------------*/
+
+.ui.scrolling.segment {
+  overflow: auto;
+}
+@media only screen and (max-width: 1048.98px) {
+  .ui.scrolling.segment.short {
+    max-height: 11.25em;
+  }
+  .ui.scrolling.segment[class*="very short"] {
+    max-height: 7.5em;
+  }
+  .ui.scrolling.segment {
+    max-height: 15em;
+  }
+  .ui.scrolling.segment.long {
+    max-height: 30em;
+  }
+  .ui.scrolling.segment[class*="very long"] {
+    max-height: 45em;
+  }
+}
+@media only screen and (min-width: 1049px) {
+  .ui.scrolling.segment.short {
+    max-height: 13.5em;
+  }
+  .ui.scrolling.segment[class*="very short"] {
+    max-height: 9em;
+  }
+  .ui.scrolling.segment {
+    max-height: 18em;
+  }
+  .ui.scrolling.segment.long {
+    max-height: 36em;
+  }
+  .ui.scrolling.segment[class*="very long"] {
+    max-height: 54em;
+  }
+}
+@media only screen and (min-width: 1049px) {
+  .ui.scrolling.segment.short {
+    max-height: 18em;
+  }
+  .ui.scrolling.segment[class*="very short"] {
+    max-height: 12em;
+  }
+  .ui.scrolling.segment {
+    max-height: 24em;
+  }
+  .ui.scrolling.segment.long {
+    max-height: 48em;
+  }
+  .ui.scrolling.segment[class*="very long"] {
+    max-height: 72em;
+  }
+}
+@media only screen and (min-width: 1920px) {
+  .ui.scrolling.segment.short {
+    max-height: 22.5em;
+  }
+  .ui.scrolling.segment[class*="very short"] {
+    max-height: 15em;
+  }
+  .ui.scrolling.segment {
+    max-height: 30em;
+  }
+  .ui.scrolling.segment.long {
+    max-height: 60em;
+  }
+  .ui.scrolling.segment[class*="very long"] {
+    max-height: 90em;
+  }
 }
 
 /*-------------------

@@ -1,5 +1,5 @@
 /*!
- * # Fomantic-UI 2.8.8 - List
+ * # Fomantic-UI 2.9.0 - List
  * http://github.com/fomantic/Fomantic-UI/
  *
  *
@@ -51,10 +51,10 @@ ol.ui.list li,
   padding: 0.23076923em 0;
   line-height: 1.15384615em;
 }
-ul.ui.list > li:first-child:after,
-ol.ui.list > li:first-child:after,
-.ui.list > .list > .item:after,
-.ui.list > .item:after {
+ul.ui.list > li:first-child::after,
+ol.ui.list > li:first-child::after,
+.ui.list > .list > .item::after,
+.ui.list > .item::after {
   content: '';
   display: block;
   height: 0;
@@ -251,8 +251,8 @@ ol.ui.list ol li,
   padding: 0.23076923em 0;
   line-height: 1.15384615em;
 }
-.ui.menu .ui.list .list > .item:before,
-.ui.menu .ui.list > .item:before {
+.ui.menu .ui.list .list > .item::before,
+.ui.menu .ui.list > .item::before {
   border: none;
   background: none;
 }
@@ -563,9 +563,9 @@ ul.ui.list li,
 .ui.bulleted.list > .item {
   position: relative;
 }
-ul.ui.list li:before,
-.ui.bulleted.list .list > .item:before,
-.ui.bulleted.list > .item:before {
+ul.ui.list li::before,
+.ui.bulleted.list .list > .item::before,
+.ui.bulleted.list > .item::before {
   -webkit-user-select: none;
           user-select: none;
   pointer-events: none;
@@ -579,9 +579,9 @@ ul.ui.list li:before,
   color: inherit;
   vertical-align: top;
 }
-ul.ui.list li:before,
-.ui.bulleted.list .list > a.item:before,
-.ui.bulleted.list > a.item:before {
+ul.ui.list li::before,
+.ui.bulleted.list .list > a.item::before,
+.ui.bulleted.list > a.item::before {
   color: rgba(0, 0, 0, 0.87);
 }
 ul.ui.list ul,
@@ -629,9 +629,9 @@ ol.ui.list li,
   list-style-type: none;
   position: relative;
 }
-ol.ui.list li:before,
-.ui.ordered.list .list > .item:before,
-.ui.ordered.list > .item:before {
+ol.ui.list li::before,
+.ui.ordered.list .list > .item::before,
+.ui.ordered.list > .item::before {
   position: absolute;
   top: auto;
   left: auto;
@@ -646,18 +646,18 @@ ol.ui.list li:before,
   vertical-align: middle;
   opacity: 0.8;
 }
-ol.ui.inverted.list li:before,
-.ui.ordered.inverted.list .list > .item:before,
-.ui.ordered.inverted.list > .item:before {
+ol.ui.inverted.list li::before,
+.ui.ordered.inverted.list .list > .item::before,
+.ui.ordered.inverted.list > .item::before {
   color: rgba(255, 255, 255, 0.7);
 }
 
 /* Value */
-.ui.ordered.list .list > .item[data-value]:before,
-.ui.ordered.list > .item[data-value]:before {
+.ui.ordered.list .list > .item[data-value]::before,
+.ui.ordered.list > .item[data-value]::before {
   content: attr(data-value);
 }
-ol.ui.list li[value]:before {
+ol.ui.list li[value]::before {
   content: attr(value);
 }
 
@@ -666,8 +666,8 @@ ol.ui.list ol,
 .ui.ordered.list .list:not(.icon) {
   margin-left: 1em;
 }
-ol.ui.list ol li:before,
-.ui.ordered.list .list > .item:before {
+ol.ui.list ol li::before,
+.ui.ordered.list .list > .item::before {
   margin-left: -2em;
 }
 
@@ -676,17 +676,17 @@ ol.ui.horizontal.list,
 .ui.ordered.horizontal.list {
   margin-left: 0;
 }
-ol.ui.horizontal.list li:before,
-.ui.ordered.horizontal.list .list > .item:before,
-.ui.ordered.horizontal.list > .item:before {
+ol.ui.horizontal.list li::before,
+.ui.ordered.horizontal.list .list > .item::before,
+.ui.ordered.horizontal.list > .item::before {
   position: static;
   margin: 0 0.5em 0 0;
 }
 
 /* Suffixed Ordered */
-ol.ui.suffixed.list li:before,
-.ui.suffixed.ordered.list .list > .item:before,
-.ui.suffixed.ordered.list > .item:before {
+ol.ui.suffixed.list li::before,
+.ui.suffixed.ordered.list .list > .item::before,
+.ui.suffixed.ordered.list > .item::before {
   content: counters(ordered, ".") ".";
 }
 

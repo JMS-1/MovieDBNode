@@ -1,5 +1,5 @@
 /*!
- * # Fomantic-UI 2.8.8 - Message
+ * # Fomantic-UI 2.9.0 - Message
  * http://github.com/fomantic/Fomantic-UI/
  *
  *
@@ -85,7 +85,7 @@
   margin: 0 0 0.3em 1em;
   padding: 0;
 }
-.ui.message .list:not(.ui) li:before {
+.ui.message .list:not(.ui) li::before {
   position: absolute;
   content: '•';
   left: -1em;
@@ -304,42 +304,6 @@
 .ui.inverted.negative.message .header {
   color: #E0B4B4;
 }
-.ui.info.message {
-  background-color: #E6F1F6;
-  color: #264C72;
-}
-.ui.info.message,
-.ui.attached.info.message {
-  box-shadow: 0 0 0 1px #97C1DA inset, 0 0 0 0 rgba(0, 0, 0, 0);
-}
-.ui.floating.info.message {
-  box-shadow: 0 0 0 1px #97C1DA inset, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
-}
-.ui.info.message .header {
-  color: #0E566C;
-}
-.ui.inverted.info.message,
-.ui.inverted.info.message .header {
-  color: #b5d3e5;
-}
-.ui.warning.message {
-  background-color: #FFFAF3;
-  color: #613A00;
-}
-.ui.warning.message,
-.ui.attached.warning.message {
-  box-shadow: 0 0 0 1px #DCA874 inset, 0 0 0 0 rgba(0, 0, 0, 0);
-}
-.ui.floating.warning.message {
-  box-shadow: 0 0 0 1px #DCA874 inset, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
-}
-.ui.warning.message .header {
-  color: #794B02;
-}
-.ui.inverted.warning.message,
-.ui.inverted.warning.message .header {
-  color: #e4bc95;
-}
 .ui.error.message {
   background-color: #FFF6F6;
   color: #991111;
@@ -358,6 +322,24 @@
 .ui.inverted.error.message .header {
   color: #ecd1d1;
 }
+.ui.info.message {
+  background-color: #E6F1F6;
+  color: #264C72;
+}
+.ui.info.message,
+.ui.attached.info.message {
+  box-shadow: 0 0 0 1px #97C1DA inset, 0 0 0 0 rgba(0, 0, 0, 0);
+}
+.ui.floating.info.message {
+  box-shadow: 0 0 0 1px #97C1DA inset, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
+}
+.ui.info.message .header {
+  color: #0E566C;
+}
+.ui.inverted.info.message,
+.ui.inverted.info.message .header {
+  color: #b5d3e5;
+}
 .ui.success.message {
   background-color: #FCFFF5;
   color: #2C662D;
@@ -375,6 +357,24 @@
 .ui.inverted.success.message,
 .ui.inverted.success.message .header {
   color: #b9d1ad;
+}
+.ui.warning.message {
+  background-color: #FFFAF3;
+  color: #613A00;
+}
+.ui.warning.message,
+.ui.attached.warning.message {
+  box-shadow: 0 0 0 1px #DCA874 inset, 0 0 0 0 rgba(0, 0, 0, 0);
+}
+.ui.floating.warning.message {
+  box-shadow: 0 0 0 1px #DCA874 inset, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
+}
+.ui.warning.message .header {
+  color: #794B02;
+}
+.ui.inverted.warning.message,
+.ui.inverted.warning.message .header {
+  color: #e4bc95;
 }
 .ui.primary.message {
   background-color: #DFF0FF;
