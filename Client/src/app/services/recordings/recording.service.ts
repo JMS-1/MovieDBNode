@@ -103,7 +103,7 @@ export class RecordingService extends EditableService<IRecording> {
     clone(data: Partial<IRecording>): void {
         this._cloneAfterAddOrSave = this.toServer(JSON.parse(JSON.stringify(data)))
 
-        this._router.navigate(['/recordings', 'NEW'])
+        this._router.navigate(['/recordings', 'NEW', 'NEW'])
     }
 
     protected override afterAdd(added: IRecording): void {
@@ -112,7 +112,7 @@ export class RecordingService extends EditableService<IRecording> {
         this._cloneAfterAddOrSave = this._cloneAfterAddOrSave && added
 
         if (this._cloneAfterAddOrSave) {
-            this._router.navigate(['/recordings', 'NEW'])
+            this._router.navigate(['/recordings', 'NEW', added._id])
         } else {
             this._router.navigateByUrl('/')
         }
@@ -124,7 +124,7 @@ export class RecordingService extends EditableService<IRecording> {
         this._cloneAfterAddOrSave = this._cloneAfterAddOrSave && updated
 
         if (this._cloneAfterAddOrSave) {
-            this._router.navigate(['/recordings', 'NEW'])
+            this._router.navigate(['/recordings', 'NEW', updated._id])
         } else {
             this._router.navigateByUrl('/')
         }

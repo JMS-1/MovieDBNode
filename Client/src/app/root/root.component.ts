@@ -16,7 +16,7 @@ export class RootComponent implements OnDestroy {
     route = ''
 
     readonly newRoutes: IMenuItem[] = [
-        { route: '/recordings/NEW', text: $localize`:@@menu.new.recording:Aufzeichnung erstellen` },
+        { route: '/recordings/NEW/NEW', text: $localize`:@@menu.new.recording:Aufzeichnung erstellen` },
         { route: '/series/NEW', text: $localize`:@@menu.new.series:Serie erstellen` },
         { route: '/containers/NEW', text: $localize`:@@menu.new.container:Ablage erstellen` },
         { route: '/languages/NEW', text: $localize`:@@menu.new.language:Sprache hinzufügen` },

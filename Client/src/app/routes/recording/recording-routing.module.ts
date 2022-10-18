@@ -6,7 +6,7 @@ import { RecordingRouteComponent } from './recording.component'
 const routes: Routes = [
     {
         component: RecordingRouteComponent,
-        path: ':id',
+        path: ':id/:reload',
     },
 ]
 

@@ -24,7 +24,7 @@
             recording
             *ngFor="let recording of items"
             [item]="recording"
-            [routerLink]="['/recordings', recording._id]"
+            [routerLink]="['/recordings', recording._id, 'EDIT']"
         ></tr>
     </tbody>
 </table>
