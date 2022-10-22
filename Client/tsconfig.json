@@ -14,8 +14,8 @@
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
-        "lib": ["es2020", "dom", "esnext.asynciterable"],
-        "module": "es2020",
+        "lib": ["es2019", "dom", "esnext.asynciterable"],
+        "module": "ES2020",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
         "noImplicitOverride": true,
@@ -24,6 +24,6 @@
         "outDir": "./dist/out-tsc",
         "sourceMap": true,
         "strict": true,
-        "target": "es2020"
+        "target": "es2019"
     }
 }
