@@ -11,7 +11,15 @@ gulp.task('deploy:client', () =>
 
 gulp.task('deploy:config', () =>
     gulp
-        .src(['.dockerignore', 'docker-compose.yml', 'Dockerfile', 'install', 'package.json', 'Server/config.json'])
+        .src([
+            '.dockerignore',
+            'default.conf',
+            'docker-compose.yml',
+            'Dockerfile',
+            'install',
+            'package.json',
+            'Server/config.json',
+        ])
         .pipe(gulp.dest('deploy'))
 )
 
