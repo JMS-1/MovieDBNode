@@ -17,3 +17,5 @@ deploy/node_modules
 deploy/src/daemon
 
 deploy/dist/assets/*/components
+deploy/passwd
+deploy/host.*
