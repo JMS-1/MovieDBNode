@@ -1,10 +1,10 @@
 /*!
  * # Fomantic-UI 2.9.0 - Site
- * http://github.com/fomantic/Fomantic-UI/
+ * https://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
- * http://opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  *
  */
 
@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/LatoLatin-Regular.woff2") format('woff2') , url("./../themes/default/assets/fonts/LatoLatin-Regular.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/LatoLatin-Regular.woff2") format("woff2") , url("./../themes/default/assets/fonts/LatoLatin-Regular.woff") format("woff");
   font-style: normal;
   font-weight: normal;
   font-display: swap;
@@ -24,7 +24,7 @@
 }
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/LatoLatin-Bold.woff2") format('woff2') , url("./../themes/default/assets/fonts/LatoLatin-Bold.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/LatoLatin-Bold.woff2") format("woff2") , url("./../themes/default/assets/fonts/LatoLatin-Bold.woff") format("woff");
   font-style: normal;
   font-weight: bold;
   font-display: swap;
@@ -33,7 +33,7 @@
 }
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/LatoLatin-Italic.woff2") format('woff2') , url("./../themes/default/assets/fonts/LatoLatin-Italic.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/LatoLatin-Italic.woff2") format("woff2") , url("./../themes/default/assets/fonts/LatoLatin-Italic.woff") format("woff");
   font-style: italic;
   font-weight: normal;
   font-display: swap;
@@ -42,7 +42,7 @@
 }
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/LatoLatin-BoldItalic.woff2") format('woff2') , url("./../themes/default/assets/fonts/LatoLatin-BoldItalic.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/LatoLatin-BoldItalic.woff2") format("woff2") , url("./../themes/default/assets/fonts/LatoLatin-BoldItalic.woff") format("woff");
   font-style: italic;
   font-weight: bold;
   font-display: swap;
@@ -51,7 +51,7 @@
 }
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/Lato-Regular.woff2") format('woff2') , url("./../themes/default/assets/fonts/Lato-Regular.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/Lato-Regular.woff2") format("woff2") , url("./../themes/default/assets/fonts/Lato-Regular.woff") format("woff");
   font-style: normal;
   font-weight: normal;
   font-display: swap;
@@ -60,7 +60,7 @@
 }
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/Lato-Bold.woff2") format('woff2') , url("./../themes/default/assets/fonts/Lato-Bold.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/Lato-Bold.woff2") format("woff2") , url("./../themes/default/assets/fonts/Lato-Bold.woff") format("woff");
   font-style: normal;
   font-weight: bold;
   font-display: swap;
@@ -69,7 +69,7 @@
 }
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/Lato-Italic.woff2") format('woff2') , url("./../themes/default/assets/fonts/Lato-Italic.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/Lato-Italic.woff2") format("woff2") , url("./../themes/default/assets/fonts/Lato-Italic.woff") format("woff");
   font-style: italic;
   font-weight: normal;
   font-display: swap;
@@ -78,7 +78,7 @@
 }
 @font-face {
   font-family: 'Arial';
-  src: url("./../themes/default/assets/fonts/Lato-BoldItalic.woff2") format('woff2') , url("./../themes/default/assets/fonts/Lato-BoldItalic.woff") format('woff');
+  src: url("./../themes/default/assets/fonts/Lato-BoldItalic.woff2") format("woff2") , url("./../themes/default/assets/fonts/Lato-BoldItalic.woff") format("woff");
   font-style: italic;
   font-weight: bold;
   font-display: swap;
@@ -167,10 +167,9 @@ p:last-child {
   margin-bottom: 0;
 }
 
-/*-------------------
+/* -------------------
         Links
---------------------*/
-
+-------------------- */
 a {
   color: #4078C0;
   text-decoration: none;
@@ -216,11 +215,16 @@ body .ui {
   scrollbar-shadow-color: #bfbfbf;
   scrollbar-track-color: #e6e6e6;
   scrollbar-arrow-color: #e6e6e6;
-  
-/* firefox : first color thumb, second track*/
-  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
-  scrollbar-width: thin;
 }
+@supports (-moz-appearance: none) {
+  body .ui {
+    
+/* firefox: first color thumb, second track */
+    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+    scrollbar-width: thin;
+  }
+}
+
 /* Inverted UI */
 body .ui.inverted:not(.dimmer)::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
@@ -241,9 +245,13 @@ body .ui.inverted:not(.dimmer) {
   scrollbar-shadow-color: #656565;
   scrollbar-track-color: #323232;
   scrollbar-arrow-color: #323232;
-  
-/* firefox : first color thumb, second track */
-  scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.1);
+}
+@supports (-moz-appearance: none) {
+  body .ui.inverted:not(.dimmer) {
+    
+/* firefox: first color thumb, second track */
+    scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.1);
+  }
 }
 
 
@@ -253,34 +261,12 @@ body .ui.inverted:not(.dimmer) {
 
 
 /* Site */
-::-webkit-selection {
-  background-color: #CCE2FF;
-  color: rgba(0, 0, 0, 0.87);
-}
-::-moz-selection {
-  background-color: #CCE2FF;
-  color: rgba(0, 0, 0, 0.87);
-}
 ::selection {
-  background-color: #CCE2FF;
+  background-color: #cce2ff;
   color: rgba(0, 0, 0, 0.87);
 }
 
 /* Form */
-textarea::-webkit-selection,
-input::-webkit-selection {
-  background-color: rgba(100, 100, 100, 0.4);
-  color: rgba(0, 0, 0, 0.87);
-}
-textarea::-moz-selection,
-input::-moz-selection {
-  background-color: rgba(100, 100, 100, 0.4);
-  color: rgba(0, 0, 0, 0.87);
-}
-textarea::-moz-selection, input::-moz-selection {
-  background-color: rgba(100, 100, 100, 0.4);
-  color: rgba(0, 0, 0, 0.87);
-}
 textarea::selection,
 input::selection {
   background-color: rgba(100, 100, 100, 0.4);
@@ -299,7 +285,7 @@ input::selection {
 *******************************/
 
 :root {
-  --semantic-error-color: #9F3A38;
+  --semantic-error-color: #9f3a38;
   --semantic-text-color: rgba(0, 0, 0, 0.87);
 }
 body {
