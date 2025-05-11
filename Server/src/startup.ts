@@ -19,7 +19,6 @@ const utfBom = Buffer.from([0xef, 0xbb, 0xbf])
 async function startup(): Promise<void> {
     const app = express()
 
-    // eslint-disable-next-line import/no-named-as-default-member
     app.use((req, res, next) => {
         const { originalUrl } = req
 
