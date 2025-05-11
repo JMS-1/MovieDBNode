@@ -1,7 +1,7 @@
 import { TSortDirection } from '@jms-1/mongodb-graphql'
 import { Collection } from '@jms-1/mongodb-graphql/lib/collection'
 import * as types from '@jms-1/mongodb-graphql/lib/types'
-import { Filter } from 'mongodb'
+import { Filter, ObjectId } from 'mongodb'
 
 import { collectionNames } from './collections'
 import { MongoConnection } from './connection'
@@ -64,7 +64,7 @@ export const RecordingCollection = MongoConnection.createCollection(
 
             const test = Array.from(new Set(ids))
             const keys = await this.connection.getCollection(collectionName)
-            const existing = await keys.countDocuments({ _id: { $in: test } })
+            const existing = await keys.countDocuments({ _id: { $in: test as unknown as ObjectId[] } })
 
             if (existing !== test.length) {
                 throw new Error(`${scope} nicht gefunden.`)
