@@ -20,7 +20,8 @@
   background: #FFFFFF;
   margin: 1em 0;
   border: 1px solid rgba(0, 0, 0, 0.13);
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   border-radius: 0.30769em;
   text-align: left;
   vertical-align: middle;
@@ -49,6 +50,7 @@
 /* Table Content */
 .ui.table th,
 .ui.table td {
+  -webkit-transition: background 0.1s ease, color 0.1s ease;
   transition: background 0.1s ease, color 0.1s ease;
 }
 
@@ -60,7 +62,8 @@
 
 /* Headers */
 .ui.table > thead {
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .ui.table > thead > tr > th {
   cursor: auto;
@@ -90,7 +93,8 @@
 
 /* Footer */
 .ui.table > tfoot {
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .ui.table > tfoot > tr > th,
 .ui.table > tfoot > tr > td {
@@ -198,7 +202,8 @@
   .ui.ui.ui.ui.table:not(.unstackable) > tfoot > tr {
     padding-top: 1em;
     padding-bottom: 1em;
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) > tr > th,
   .ui.ui.ui.ui.table:not(.unstackable) > thead > tr > th,
@@ -210,7 +215,8 @@
     background: none;
     border: none;
     padding: 0.25em 0.75em;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   .ui.table:not(.unstackable) > tr > th:first-child,
   .ui.table:not(.unstackable) > thead > tr > th:first-child,
@@ -224,187 +230,248 @@
   
 /* Definition Table */
   .ui.definition.table:not(.unstackable) > thead > tr > th:first-child {
-    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="primary marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="primary marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="primary marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="primary marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="secondary marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="secondary marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="secondary marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="secondary marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="red marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DB2828 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DB2828 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DB2828 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="red marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DB2828 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DB2828 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DB2828 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="red marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF695E inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF695E inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF695E inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="red marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF695E inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF695E inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF695E inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="orange marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D26911 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D26911 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D26911 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="orange marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D26911 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D26911 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D26911 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="orange marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF851B inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF851B inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF851B inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="orange marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF851B inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF851B inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF851B inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="yellow marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FBBD08 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FBBD08 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FBBD08 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="yellow marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FBBD08 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FBBD08 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FBBD08 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="yellow marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FFE21F inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FFE21F inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FFE21F inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="yellow marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FFE21F inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FFE21F inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FFE21F inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="olive marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #B5CC18 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #B5CC18 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #B5CC18 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="olive marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #B5CC18 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #B5CC18 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #B5CC18 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="olive marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D9E778 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D9E778 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D9E778 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="olive marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D9E778 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D9E778 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D9E778 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="green marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #60B044 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #60B044 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #60B044 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="green marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #60B044 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #60B044 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #60B044 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="green marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #2ECC40 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #2ECC40 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #2ECC40 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="green marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #2ECC40 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #2ECC40 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #2ECC40 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="teal marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #00B5AD inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #00B5AD inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #00B5AD inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="teal marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #00B5AD inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #00B5AD inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #00B5AD inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="teal marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6DFFFF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6DFFFF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6DFFFF inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="teal marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6DFFFF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6DFFFF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6DFFFF inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="blue marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="blue marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="blue marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="blue marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="violet marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6435C9 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6435C9 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6435C9 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="violet marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6435C9 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6435C9 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6435C9 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="violet marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A291FB inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A291FB inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A291FB inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="violet marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A291FB inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A291FB inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A291FB inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="purple marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A333C8 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A333C8 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A333C8 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="purple marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A333C8 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A333C8 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A333C8 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="purple marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DC73FF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DC73FF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DC73FF inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="purple marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DC73FF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DC73FF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DC73FF inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="pink marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #E03997 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #E03997 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #E03997 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="pink marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #E03997 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #E03997 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #E03997 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="pink marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF8EDF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF8EDF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF8EDF inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="pink marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF8EDF inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF8EDF inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF8EDF inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="brown marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A5673F inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A5673F inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A5673F inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="brown marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A5673F inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A5673F inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A5673F inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="brown marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D67C1C inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D67C1C inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D67C1C inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="brown marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D67C1C inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D67C1C inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D67C1C inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="grey marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #767676 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #767676 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #767676 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="grey marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #767676 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #767676 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #767676 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="grey marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DCDDDE inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DCDDDE inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DCDDDE inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="grey marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DCDDDE inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DCDDDE inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DCDDDE inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="black marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
   }
   .ui.ui.ui.ui.table:not(.unstackable) tr[class*="black marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="black marked"].left {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
   }
   .ui.ui.ui.ui.inverted.table:not(.unstackable) tr[class*="black marked"].right {
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
   }
   .ui.scrolling.table.short > tbody {
     max-height: 6.67566346em;
@@ -704,7 +771,8 @@
   background: #FFFFFF;
   font-weight: normal;
   color: rgba(0, 0, 0, 0.4);
-  box-shadow: -0.1em -0.2em 0 0.1em #FFFFFF;
+  -webkit-box-shadow: -0.1em -0.2em 0 0.1em #FFFFFF;
+          box-shadow: -0.1em -0.2em 0 0.1em #FFFFFF;
   -moz-transform: scale(1);
 }
 .ui.definition.table > thead:not(.full-width) > tr > th:first-child:not(:empty) {
@@ -715,7 +783,8 @@
   background: #FFFFFF;
   font-weight: normal;
   color: rgba(0, 0, 0, 0.4);
-  box-shadow: -0.1em 0.2em 0 0.1em #FFFFFF;
+  -webkit-box-shadow: -0.1em 0.2em 0 0.1em #FFFFFF;
+          box-shadow: -0.1em 0.2em 0 0.1em #FFFFFF;
   -moz-transform: scale(1);
 }
 
@@ -728,7 +797,8 @@
   font-weight: bold;
   color: rgba(0, 0, 0, 0.95);
   text-transform: '';
-  box-shadow: '';
+  -webkit-box-shadow: '';
+          box-shadow: '';
   text-align: '';
   font-size: 1em;
   padding-left: '';
@@ -760,7 +830,8 @@
 
 .ui.ui.ui.ui.table tr.positive,
 .ui.ui.table td.positive {
-  box-shadow: 0 0 0 #A3C293 inset;
+  -webkit-box-shadow: 0 0 0 #A3C293 inset;
+          box-shadow: 0 0 0 #A3C293 inset;
   background: #FCFFF5;
   color: #2C662D;
 }
@@ -776,7 +847,8 @@
 
 .ui.ui.ui.ui.table tr.negative,
 .ui.ui.table td.negative {
-  box-shadow: 0 0 0 #E0B4B4 inset;
+  -webkit-box-shadow: 0 0 0 #E0B4B4 inset;
+          box-shadow: 0 0 0 #E0B4B4 inset;
   background: #FFF6F6;
   color: #9F3A38;
 }
@@ -792,7 +864,8 @@
 
 .ui.ui.ui.ui.table tr.error,
 .ui.ui.table td.error {
-  box-shadow: 0 0 0 #E0B4B4 inset;
+  -webkit-box-shadow: 0 0 0 #E0B4B4 inset;
+          box-shadow: 0 0 0 #E0B4B4 inset;
   background: #FFF6F6;
   color: #9F3A38;
 }
@@ -808,7 +881,8 @@
 
 .ui.ui.ui.ui.table tr.warning,
 .ui.ui.table td.warning {
-  box-shadow: 0 0 0 #C9BA9B inset;
+  -webkit-box-shadow: 0 0 0 #C9BA9B inset;
+          box-shadow: 0 0 0 #C9BA9B inset;
   background: #FFFAF3;
   color: #573A08;
 }
@@ -824,7 +898,8 @@
 
 .ui.ui.ui.ui.table tr.active,
 .ui.ui.table td.active {
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.87) inset;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.87) inset;
+          box-shadow: 0 0 0 rgba(0, 0, 0, 0.87) inset;
   background: #E0E0E0;
   color: rgba(0, 0, 0, 0.87);
 }
@@ -890,7 +965,8 @@
   .ui.ui.ui.ui[class*="tablet stackable"].table > tr {
     padding-top: 1em;
     padding-bottom: 1em;
-    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+    -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
   }
   .ui[class*="tablet stackable"].table > thead > tr > th,
   .ui[class*="tablet stackable"].table > tbody > tr > th,
@@ -902,193 +978,255 @@
     background: none;
     border: none !important;
     padding: 0.25em 0.75em;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   
 /* Definition Table */
   .ui.definition[class*="tablet stackable"].table > thead > tr > th:first-child {
-    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
   }
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="primary marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="primary marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="primary marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="primary marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="secondary marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="secondary marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="secondary marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="secondary marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="red marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DB2828 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DB2828 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DB2828 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="red marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DB2828 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DB2828 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DB2828 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="red marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF695E inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF695E inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF695E inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="red marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF695E inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF695E inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF695E inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="orange marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D26911 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D26911 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D26911 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="orange marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D26911 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D26911 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D26911 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="orange marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF851B inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF851B inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF851B inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="orange marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF851B inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF851B inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF851B inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="yellow marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FBBD08 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FBBD08 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FBBD08 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="yellow marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FBBD08 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FBBD08 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FBBD08 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="yellow marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FFE21F inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FFE21F inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FFE21F inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="yellow marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FFE21F inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FFE21F inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FFE21F inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="olive marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #B5CC18 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #B5CC18 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #B5CC18 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="olive marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #B5CC18 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #B5CC18 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #B5CC18 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="olive marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D9E778 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D9E778 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D9E778 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="olive marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D9E778 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D9E778 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D9E778 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="green marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #60B044 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #60B044 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #60B044 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="green marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #60B044 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #60B044 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #60B044 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="green marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #2ECC40 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #2ECC40 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #2ECC40 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="green marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #2ECC40 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #2ECC40 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #2ECC40 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="teal marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #00B5AD inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #00B5AD inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #00B5AD inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="teal marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #00B5AD inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #00B5AD inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #00B5AD inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="teal marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6DFFFF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6DFFFF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6DFFFF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="teal marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6DFFFF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6DFFFF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6DFFFF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="blue marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #80A6CD inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="blue marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #80A6CD inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="blue marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #54C8FF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="blue marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #54C8FF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="violet marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6435C9 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6435C9 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #6435C9 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="violet marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6435C9 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6435C9 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #6435C9 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="violet marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A291FB inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A291FB inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A291FB inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="violet marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A291FB inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A291FB inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A291FB inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="purple marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A333C8 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A333C8 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A333C8 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="purple marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A333C8 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A333C8 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A333C8 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="purple marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DC73FF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DC73FF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DC73FF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="purple marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DC73FF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DC73FF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DC73FF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="pink marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #E03997 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #E03997 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #E03997 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="pink marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #E03997 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #E03997 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #E03997 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="pink marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF8EDF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF8EDF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #FF8EDF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="pink marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF8EDF inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF8EDF inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #FF8EDF inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="brown marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A5673F inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A5673F inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #A5673F inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="brown marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A5673F inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A5673F inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #A5673F inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="brown marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D67C1C inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D67C1C inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #D67C1C inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="brown marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D67C1C inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D67C1C inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #D67C1C inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="grey marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #767676 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #767676 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #767676 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="grey marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #767676 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #767676 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #767676 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="grey marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DCDDDE inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DCDDDE inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #DCDDDE inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="grey marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DCDDDE inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DCDDDE inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #DCDDDE inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="black marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #444C55 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].table tr[class*="black marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #444C55 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="black marked"].left {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, 0.2em 0 0 0 #545454 inset;
 }
 .ui.ui.ui.ui[class*="tablet stackable"].inverted.table tr[class*="black marked"].right {
-  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
+          box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset, -0.2em 0 0 0 #545454 inset;
 }
 
 /*--------------
@@ -1226,7 +1364,8 @@
   margin: 0 -1px;
   width: calc(100% + 2px);
   max-width: calc(100% + 2px);
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   border: 1px solid #DDDDDD;
 }
 .ui.attached + .ui.attached.table:not(.top) {
@@ -1251,7 +1390,8 @@
   margin-top: 0;
   top: 0;
   margin-bottom: 1em;
-  box-shadow: none, none;
+  -webkit-box-shadow: none, none;
+          box-shadow: none, none;
   border-radius: 0 0 0.30769em 0.30769em;
 }
 .ui[class*="bottom attached"].table:last-child {
@@ -1383,19 +1523,23 @@
 }
 .ui.table td[class*="primary marked"].left,
 .ui.table tr[class*="primary marked"].left {
-  box-shadow: 0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #80A6CD inset;
+          box-shadow: 0.2em 0 0 0 #80A6CD inset;
 }
 .ui.table td[class*="primary marked"].right,
 .ui.table tr[class*="primary marked"].right {
-  box-shadow: -0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #80A6CD inset;
+          box-shadow: -0.2em 0 0 0 #80A6CD inset;
 }
 .ui.inverted.table td[class*="primary marked"].left,
 .ui.inverted.table tr[class*="primary marked"].left {
-  box-shadow: 0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #54C8FF inset;
+          box-shadow: 0.2em 0 0 0 #54C8FF inset;
 }
 .ui.inverted.table td[class*="primary marked"].right,
 .ui.inverted.table tr[class*="primary marked"].right {
-  box-shadow: -0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #54C8FF inset;
+          box-shadow: -0.2em 0 0 0 #54C8FF inset;
 }
 .ui.secondary.table {
   border-top: 0.2em solid #444C55;
@@ -1486,19 +1630,23 @@
 }
 .ui.table td[class*="secondary marked"].left,
 .ui.table tr[class*="secondary marked"].left {
-  box-shadow: 0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #444C55 inset;
+          box-shadow: 0.2em 0 0 0 #444C55 inset;
 }
 .ui.table td[class*="secondary marked"].right,
 .ui.table tr[class*="secondary marked"].right {
-  box-shadow: -0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #444C55 inset;
+          box-shadow: -0.2em 0 0 0 #444C55 inset;
 }
 .ui.inverted.table td[class*="secondary marked"].left,
 .ui.inverted.table tr[class*="secondary marked"].left {
-  box-shadow: 0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #545454 inset;
+          box-shadow: 0.2em 0 0 0 #545454 inset;
 }
 .ui.inverted.table td[class*="secondary marked"].right,
 .ui.inverted.table tr[class*="secondary marked"].right {
-  box-shadow: -0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #545454 inset;
+          box-shadow: -0.2em 0 0 0 #545454 inset;
 }
 .ui.red.table {
   border-top: 0.2em solid #DB2828;
@@ -1589,19 +1737,23 @@
 }
 .ui.table td[class*="red marked"].left,
 .ui.table tr[class*="red marked"].left {
-  box-shadow: 0.2em 0 0 0 #DB2828 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #DB2828 inset;
+          box-shadow: 0.2em 0 0 0 #DB2828 inset;
 }
 .ui.table td[class*="red marked"].right,
 .ui.table tr[class*="red marked"].right {
-  box-shadow: -0.2em 0 0 0 #DB2828 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #DB2828 inset;
+          box-shadow: -0.2em 0 0 0 #DB2828 inset;
 }
 .ui.inverted.table td[class*="red marked"].left,
 .ui.inverted.table tr[class*="red marked"].left {
-  box-shadow: 0.2em 0 0 0 #FF695E inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #FF695E inset;
+          box-shadow: 0.2em 0 0 0 #FF695E inset;
 }
 .ui.inverted.table td[class*="red marked"].right,
 .ui.inverted.table tr[class*="red marked"].right {
-  box-shadow: -0.2em 0 0 0 #FF695E inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #FF695E inset;
+          box-shadow: -0.2em 0 0 0 #FF695E inset;
 }
 .ui.orange.table {
   border-top: 0.2em solid #D26911;
@@ -1692,19 +1844,23 @@
 }
 .ui.table td[class*="orange marked"].left,
 .ui.table tr[class*="orange marked"].left {
-  box-shadow: 0.2em 0 0 0 #D26911 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #D26911 inset;
+          box-shadow: 0.2em 0 0 0 #D26911 inset;
 }
 .ui.table td[class*="orange marked"].right,
 .ui.table tr[class*="orange marked"].right {
-  box-shadow: -0.2em 0 0 0 #D26911 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #D26911 inset;
+          box-shadow: -0.2em 0 0 0 #D26911 inset;
 }
 .ui.inverted.table td[class*="orange marked"].left,
 .ui.inverted.table tr[class*="orange marked"].left {
-  box-shadow: 0.2em 0 0 0 #FF851B inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #FF851B inset;
+          box-shadow: 0.2em 0 0 0 #FF851B inset;
 }
 .ui.inverted.table td[class*="orange marked"].right,
 .ui.inverted.table tr[class*="orange marked"].right {
-  box-shadow: -0.2em 0 0 0 #FF851B inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #FF851B inset;
+          box-shadow: -0.2em 0 0 0 #FF851B inset;
 }
 .ui.yellow.table {
   border-top: 0.2em solid #FBBD08;
@@ -1795,19 +1951,23 @@
 }
 .ui.table td[class*="yellow marked"].left,
 .ui.table tr[class*="yellow marked"].left {
-  box-shadow: 0.2em 0 0 0 #FBBD08 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #FBBD08 inset;
+          box-shadow: 0.2em 0 0 0 #FBBD08 inset;
 }
 .ui.table td[class*="yellow marked"].right,
 .ui.table tr[class*="yellow marked"].right {
-  box-shadow: -0.2em 0 0 0 #FBBD08 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #FBBD08 inset;
+          box-shadow: -0.2em 0 0 0 #FBBD08 inset;
 }
 .ui.inverted.table td[class*="yellow marked"].left,
 .ui.inverted.table tr[class*="yellow marked"].left {
-  box-shadow: 0.2em 0 0 0 #FFE21F inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #FFE21F inset;
+          box-shadow: 0.2em 0 0 0 #FFE21F inset;
 }
 .ui.inverted.table td[class*="yellow marked"].right,
 .ui.inverted.table tr[class*="yellow marked"].right {
-  box-shadow: -0.2em 0 0 0 #FFE21F inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #FFE21F inset;
+          box-shadow: -0.2em 0 0 0 #FFE21F inset;
 }
 .ui.olive.table {
   border-top: 0.2em solid #B5CC18;
@@ -1898,19 +2058,23 @@
 }
 .ui.table td[class*="olive marked"].left,
 .ui.table tr[class*="olive marked"].left {
-  box-shadow: 0.2em 0 0 0 #B5CC18 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #B5CC18 inset;
+          box-shadow: 0.2em 0 0 0 #B5CC18 inset;
 }
 .ui.table td[class*="olive marked"].right,
 .ui.table tr[class*="olive marked"].right {
-  box-shadow: -0.2em 0 0 0 #B5CC18 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #B5CC18 inset;
+          box-shadow: -0.2em 0 0 0 #B5CC18 inset;
 }
 .ui.inverted.table td[class*="olive marked"].left,
 .ui.inverted.table tr[class*="olive marked"].left {
-  box-shadow: 0.2em 0 0 0 #D9E778 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #D9E778 inset;
+          box-shadow: 0.2em 0 0 0 #D9E778 inset;
 }
 .ui.inverted.table td[class*="olive marked"].right,
 .ui.inverted.table tr[class*="olive marked"].right {
-  box-shadow: -0.2em 0 0 0 #D9E778 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #D9E778 inset;
+          box-shadow: -0.2em 0 0 0 #D9E778 inset;
 }
 .ui.green.table {
   border-top: 0.2em solid #60B044;
@@ -2001,19 +2165,23 @@
 }
 .ui.table td[class*="green marked"].left,
 .ui.table tr[class*="green marked"].left {
-  box-shadow: 0.2em 0 0 0 #60B044 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #60B044 inset;
+          box-shadow: 0.2em 0 0 0 #60B044 inset;
 }
 .ui.table td[class*="green marked"].right,
 .ui.table tr[class*="green marked"].right {
-  box-shadow: -0.2em 0 0 0 #60B044 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #60B044 inset;
+          box-shadow: -0.2em 0 0 0 #60B044 inset;
 }
 .ui.inverted.table td[class*="green marked"].left,
 .ui.inverted.table tr[class*="green marked"].left {
-  box-shadow: 0.2em 0 0 0 #2ECC40 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #2ECC40 inset;
+          box-shadow: 0.2em 0 0 0 #2ECC40 inset;
 }
 .ui.inverted.table td[class*="green marked"].right,
 .ui.inverted.table tr[class*="green marked"].right {
-  box-shadow: -0.2em 0 0 0 #2ECC40 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #2ECC40 inset;
+          box-shadow: -0.2em 0 0 0 #2ECC40 inset;
 }
 .ui.teal.table {
   border-top: 0.2em solid #00B5AD;
@@ -2104,19 +2272,23 @@
 }
 .ui.table td[class*="teal marked"].left,
 .ui.table tr[class*="teal marked"].left {
-  box-shadow: 0.2em 0 0 0 #00B5AD inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #00B5AD inset;
+          box-shadow: 0.2em 0 0 0 #00B5AD inset;
 }
 .ui.table td[class*="teal marked"].right,
 .ui.table tr[class*="teal marked"].right {
-  box-shadow: -0.2em 0 0 0 #00B5AD inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #00B5AD inset;
+          box-shadow: -0.2em 0 0 0 #00B5AD inset;
 }
 .ui.inverted.table td[class*="teal marked"].left,
 .ui.inverted.table tr[class*="teal marked"].left {
-  box-shadow: 0.2em 0 0 0 #6DFFFF inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #6DFFFF inset;
+          box-shadow: 0.2em 0 0 0 #6DFFFF inset;
 }
 .ui.inverted.table td[class*="teal marked"].right,
 .ui.inverted.table tr[class*="teal marked"].right {
-  box-shadow: -0.2em 0 0 0 #6DFFFF inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #6DFFFF inset;
+          box-shadow: -0.2em 0 0 0 #6DFFFF inset;
 }
 .ui.blue.table {
   border-top: 0.2em solid #80A6CD;
@@ -2207,19 +2379,23 @@
 }
 .ui.table td[class*="blue marked"].left,
 .ui.table tr[class*="blue marked"].left {
-  box-shadow: 0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #80A6CD inset;
+          box-shadow: 0.2em 0 0 0 #80A6CD inset;
 }
 .ui.table td[class*="blue marked"].right,
 .ui.table tr[class*="blue marked"].right {
-  box-shadow: -0.2em 0 0 0 #80A6CD inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #80A6CD inset;
+          box-shadow: -0.2em 0 0 0 #80A6CD inset;
 }
 .ui.inverted.table td[class*="blue marked"].left,
 .ui.inverted.table tr[class*="blue marked"].left {
-  box-shadow: 0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #54C8FF inset;
+          box-shadow: 0.2em 0 0 0 #54C8FF inset;
 }
 .ui.inverted.table td[class*="blue marked"].right,
 .ui.inverted.table tr[class*="blue marked"].right {
-  box-shadow: -0.2em 0 0 0 #54C8FF inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #54C8FF inset;
+          box-shadow: -0.2em 0 0 0 #54C8FF inset;
 }
 .ui.violet.table {
   border-top: 0.2em solid #6435C9;
@@ -2310,19 +2486,23 @@
 }
 .ui.table td[class*="violet marked"].left,
 .ui.table tr[class*="violet marked"].left {
-  box-shadow: 0.2em 0 0 0 #6435C9 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #6435C9 inset;
+          box-shadow: 0.2em 0 0 0 #6435C9 inset;
 }
 .ui.table td[class*="violet marked"].right,
 .ui.table tr[class*="violet marked"].right {
-  box-shadow: -0.2em 0 0 0 #6435C9 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #6435C9 inset;
+          box-shadow: -0.2em 0 0 0 #6435C9 inset;
 }
 .ui.inverted.table td[class*="violet marked"].left,
 .ui.inverted.table tr[class*="violet marked"].left {
-  box-shadow: 0.2em 0 0 0 #A291FB inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #A291FB inset;
+          box-shadow: 0.2em 0 0 0 #A291FB inset;
 }
 .ui.inverted.table td[class*="violet marked"].right,
 .ui.inverted.table tr[class*="violet marked"].right {
-  box-shadow: -0.2em 0 0 0 #A291FB inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #A291FB inset;
+          box-shadow: -0.2em 0 0 0 #A291FB inset;
 }
 .ui.purple.table {
   border-top: 0.2em solid #A333C8;
@@ -2413,19 +2593,23 @@
 }
 .ui.table td[class*="purple marked"].left,
 .ui.table tr[class*="purple marked"].left {
-  box-shadow: 0.2em 0 0 0 #A333C8 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #A333C8 inset;
+          box-shadow: 0.2em 0 0 0 #A333C8 inset;
 }
 .ui.table td[class*="purple marked"].right,
 .ui.table tr[class*="purple marked"].right {
-  box-shadow: -0.2em 0 0 0 #A333C8 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #A333C8 inset;
+          box-shadow: -0.2em 0 0 0 #A333C8 inset;
 }
 .ui.inverted.table td[class*="purple marked"].left,
 .ui.inverted.table tr[class*="purple marked"].left {
-  box-shadow: 0.2em 0 0 0 #DC73FF inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #DC73FF inset;
+          box-shadow: 0.2em 0 0 0 #DC73FF inset;
 }
 .ui.inverted.table td[class*="purple marked"].right,
 .ui.inverted.table tr[class*="purple marked"].right {
-  box-shadow: -0.2em 0 0 0 #DC73FF inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #DC73FF inset;
+          box-shadow: -0.2em 0 0 0 #DC73FF inset;
 }
 .ui.pink.table {
   border-top: 0.2em solid #E03997;
@@ -2516,19 +2700,23 @@
 }
 .ui.table td[class*="pink marked"].left,
 .ui.table tr[class*="pink marked"].left {
-  box-shadow: 0.2em 0 0 0 #E03997 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #E03997 inset;
+          box-shadow: 0.2em 0 0 0 #E03997 inset;
 }
 .ui.table td[class*="pink marked"].right,
 .ui.table tr[class*="pink marked"].right {
-  box-shadow: -0.2em 0 0 0 #E03997 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #E03997 inset;
+          box-shadow: -0.2em 0 0 0 #E03997 inset;
 }
 .ui.inverted.table td[class*="pink marked"].left,
 .ui.inverted.table tr[class*="pink marked"].left {
-  box-shadow: 0.2em 0 0 0 #FF8EDF inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #FF8EDF inset;
+          box-shadow: 0.2em 0 0 0 #FF8EDF inset;
 }
 .ui.inverted.table td[class*="pink marked"].right,
 .ui.inverted.table tr[class*="pink marked"].right {
-  box-shadow: -0.2em 0 0 0 #FF8EDF inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #FF8EDF inset;
+          box-shadow: -0.2em 0 0 0 #FF8EDF inset;
 }
 .ui.brown.table {
   border-top: 0.2em solid #A5673F;
@@ -2619,19 +2807,23 @@
 }
 .ui.table td[class*="brown marked"].left,
 .ui.table tr[class*="brown marked"].left {
-  box-shadow: 0.2em 0 0 0 #A5673F inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #A5673F inset;
+          box-shadow: 0.2em 0 0 0 #A5673F inset;
 }
 .ui.table td[class*="brown marked"].right,
 .ui.table tr[class*="brown marked"].right {
-  box-shadow: -0.2em 0 0 0 #A5673F inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #A5673F inset;
+          box-shadow: -0.2em 0 0 0 #A5673F inset;
 }
 .ui.inverted.table td[class*="brown marked"].left,
 .ui.inverted.table tr[class*="brown marked"].left {
-  box-shadow: 0.2em 0 0 0 #D67C1C inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #D67C1C inset;
+          box-shadow: 0.2em 0 0 0 #D67C1C inset;
 }
 .ui.inverted.table td[class*="brown marked"].right,
 .ui.inverted.table tr[class*="brown marked"].right {
-  box-shadow: -0.2em 0 0 0 #D67C1C inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #D67C1C inset;
+          box-shadow: -0.2em 0 0 0 #D67C1C inset;
 }
 .ui.grey.table {
   border-top: 0.2em solid #767676;
@@ -2722,19 +2914,23 @@
 }
 .ui.table td[class*="grey marked"].left,
 .ui.table tr[class*="grey marked"].left {
-  box-shadow: 0.2em 0 0 0 #767676 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #767676 inset;
+          box-shadow: 0.2em 0 0 0 #767676 inset;
 }
 .ui.table td[class*="grey marked"].right,
 .ui.table tr[class*="grey marked"].right {
-  box-shadow: -0.2em 0 0 0 #767676 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #767676 inset;
+          box-shadow: -0.2em 0 0 0 #767676 inset;
 }
 .ui.inverted.table td[class*="grey marked"].left,
 .ui.inverted.table tr[class*="grey marked"].left {
-  box-shadow: 0.2em 0 0 0 #DCDDDE inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #DCDDDE inset;
+          box-shadow: 0.2em 0 0 0 #DCDDDE inset;
 }
 .ui.inverted.table td[class*="grey marked"].right,
 .ui.inverted.table tr[class*="grey marked"].right {
-  box-shadow: -0.2em 0 0 0 #DCDDDE inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #DCDDDE inset;
+          box-shadow: -0.2em 0 0 0 #DCDDDE inset;
 }
 .ui.black.table {
   border-top: 0.2em solid #444C55;
@@ -2825,19 +3021,23 @@
 }
 .ui.table td[class*="black marked"].left,
 .ui.table tr[class*="black marked"].left {
-  box-shadow: 0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #444C55 inset;
+          box-shadow: 0.2em 0 0 0 #444C55 inset;
 }
 .ui.table td[class*="black marked"].right,
 .ui.table tr[class*="black marked"].right {
-  box-shadow: -0.2em 0 0 0 #444C55 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #444C55 inset;
+          box-shadow: -0.2em 0 0 0 #444C55 inset;
 }
 .ui.inverted.table td[class*="black marked"].left,
 .ui.inverted.table tr[class*="black marked"].left {
-  box-shadow: 0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: 0.2em 0 0 0 #545454 inset;
+          box-shadow: 0.2em 0 0 0 #545454 inset;
 }
 .ui.inverted.table td[class*="black marked"].right,
 .ui.inverted.table tr[class*="black marked"].right {
-  box-shadow: -0.2em 0 0 0 #545454 inset;
+  -webkit-box-shadow: -0.2em 0 0 0 #545454 inset;
+          box-shadow: -0.2em 0 0 0 #545454 inset;
 }
 
 /*--------------
@@ -2976,6 +3176,8 @@
 .ui.sortable.table thead th.sorted,
 .ui.sortable.table thead th.sorted:hover {
   -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
           user-select: none;
 }
 .ui.sortable.table > thead > tr > th::after {
@@ -3033,12 +3235,16 @@
   color: #ffffff;
 }
 .ui.inverted.sortable.table:not(.basic) thead th.sorted {
+  background: rgba(255, 255, 255, 0.15) -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.05)));
+  background: rgba(255, 255, 255, 0.15) -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
   background: rgba(255, 255, 255, 0.15) linear-gradient(transparent, rgba(0, 0, 0, 0.05));
 }
 .ui.inverted.sortable.table > thead > tr > th:hover {
   color: #ffffff;
 }
 .ui.inverted.sortable.table:not(.basic) > thead > tr > th:hover {
+  background: rgba(255, 255, 255, 0.08) -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.05)));
+  background: rgba(255, 255, 255, 0.08) -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
   background: rgba(255, 255, 255, 0.08) linear-gradient(transparent, rgba(0, 0, 0, 0.05));
 }
 .ui.inverted.sortable.table:not(.basic) > thead > tr > th {
@@ -3116,11 +3322,13 @@
 .ui.basic.table {
   background: transparent;
   border: 1px solid rgba(0, 0, 0, 0.13);
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .ui.basic.table > thead,
 .ui.basic.table > tfoot {
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .ui.basic.table > thead > tr > th,
 .ui.basic.table > tbody > tr > th,

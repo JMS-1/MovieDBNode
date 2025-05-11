@@ -144,8 +144,8 @@
 }
 .ui.justified.container {
   text-align: justify;
-  -webkit-hyphens: auto;
-          hyphens: auto;
+  -ms-hyphens: auto;
+      hyphens: auto;
 }
 
 /*--------------

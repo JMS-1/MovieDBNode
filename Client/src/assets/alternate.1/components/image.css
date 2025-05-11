@@ -94,15 +94,18 @@ img.ui.image {
 }
 .ui.top.aligned.images .image,
 .ui.images .ui.top.aligned.image {
-  align-self: flex-start;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
 }
 .ui.middle.aligned.images .image,
 .ui.images .ui.middle.aligned.image {
-  align-self: center;
+  -ms-flex-item-align: center;
+      align-self: center;
 }
 .ui.bottom.aligned.images .image,
 .ui.images .ui.bottom.aligned.image {
-  align-self: flex-end;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
 }
 
 /*--------------
@@ -221,11 +224,21 @@ img.ui.bordered.image {
   margin-right: auto;
 }
 .ui.centered.images {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 /*--------------

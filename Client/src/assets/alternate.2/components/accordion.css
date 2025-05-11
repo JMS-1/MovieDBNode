@@ -57,15 +57,20 @@
   margin: 0 0.25rem 0 0;
   padding: 0;
   font-size: 1em;
+  -webkit-transition: opacity 0.1s ease, -webkit-transform 0.1s ease;
+  transition: opacity 0.1s ease, -webkit-transform 0.1s ease;
   transition: transform 0.1s ease, opacity 0.1s ease;
+  transition: transform 0.1s ease, opacity 0.1s ease, -webkit-transform 0.1s ease;
   vertical-align: baseline;
-  transform: none;
+  -webkit-transform: none;
+          transform: none;
 }
 .ui.accordion .ui.header > .dropdown.icon.right,
 .ui.accordion .title > .dropdown.icon.right,
 .ui.accordion .accordion .title > .dropdown.icon.right {
   float: right;
-  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
 }
 
 /*--------------
@@ -81,7 +86,8 @@
 .ui.accordion.menu .item .title > .dropdown.icon {
   float: right;
   margin: 0 0.25rem 0 0;
-  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
 }
 
 /* Header */
@@ -99,10 +105,12 @@
 .ui.accordion .accordion[open] > .title > .dropdown.icon,
 .ui.accordion .active.title > .dropdown.icon,
 .ui.accordion .accordion .active.title > .dropdown.icon {
-  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
 }
 .ui.accordion.menu .item .active.title > .dropdown.icon {
-  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
 }
 
 
@@ -122,7 +130,8 @@
 .ui.styled.accordion .accordion {
   border-radius: 0.2307em;
   background: #FFFFFF;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13), 0 0 0 1px rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13), 0 0 0 1px rgba(0, 0, 0, 0.13);
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13), 0 0 0 1px rgba(0, 0, 0, 0.13);
 }
 .ui.styled.accordion > .title,
 .ui.styled.accordion .accordion > .title {
@@ -131,6 +140,7 @@
   color: rgba(0, 0, 0, 0.4);
   font-weight: bold;
   border-top: 1px solid rgba(0, 0, 0, 0.13);
+  -webkit-transition: background 0.1s ease, color 0.1s ease;
   transition: background 0.1s ease, color 0.1s ease;
 }
 .ui.styled.accordion > .title:first-child,
@@ -258,7 +268,8 @@
 .ui.inverted.styled.accordion,
 .ui.inverted.styled.accordion .accordion {
   background: #333333;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13), 0 0 0 1px rgba(255, 255, 255, 0.1);
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 .ui.inverted.styled.accordion > .title,
 .ui.inverted.styled.accordion .accordion > .title {
@@ -290,7 +301,8 @@
 .ui.basic.styled.accordion,
 .ui.basic.styled.accordion .accordion {
   background: transparent;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .ui.basic.styled.accordion > .title,
 .ui.basic.styled.accordion .accordion > .title {

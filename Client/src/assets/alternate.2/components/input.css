@@ -22,13 +22,17 @@
   position: relative;
   font-weight: normal;
   font-style: normal;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
   color: rgba(0, 0, 0, 0.87);
 }
 .ui.input > input {
   margin: 0;
   max-width: 100%;
-  flex: 1 0 auto;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
   outline: none;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   text-align: left;
@@ -38,8 +42,12 @@
   border: 1px solid #CCCCCC;
   color: rgba(0, 0, 0, 0.87);
   border-radius: 0.2307em;
+  -webkit-transition: border-color 0.1s ease, -webkit-box-shadow 0.1s ease;
+  transition: border-color 0.1s ease, -webkit-box-shadow 0.1s ease;
   transition: box-shadow 0.1s ease, border-color 0.1s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset;
+  transition: box-shadow 0.1s ease, border-color 0.1s ease, -webkit-box-shadow 0.1s ease;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset;
 }
 .ui.input > input:not([type="color"]) {
   padding: 0.43131868em 0.61538462em;
@@ -97,7 +105,8 @@
   border-color: rgba(0, 0, 0, 0.3);
   background: #FAFAFA;
   color: rgba(0, 0, 0, 0.87);
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 /*--------------------
@@ -123,10 +132,12 @@
   margin: -0.65384615em 0 0 -0.65384615em;
   width: 1.30769231em;
   height: 1.30769231em;
-  animation: loader 0.6s infinite linear;
+  -webkit-animation: loader 0.6s infinite linear;
+          animation: loader 0.6s infinite linear;
   border: 0.2em solid #767676;
   border-radius: 500rem;
-  box-shadow: 0 0 0 1px transparent;
+  -webkit-box-shadow: 0 0 0 1px transparent;
+          box-shadow: 0 0 0 1px transparent;
 }
 
 /*--------------------
@@ -138,7 +149,8 @@
   border-color: #51A7E8;
   background: #FFFFFF;
   color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(81, 167, 232, 0.5);
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(81, 167, 232, 0.5);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(81, 167, 232, 0.5);
 }
 .ui.input.focus > input::-webkit-input-placeholder,
 .ui.input > input:focus::-webkit-input-placeholder {
@@ -161,13 +173,27 @@
   background-color: #FFF6F6;
   border-color: #E0B4B4;
   color: #9F3A38;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.ui.input > input:not(:-moz-placeholder):invalid {
+  background-color: #FFF6F6;
+  border-color: #E0B4B4;
+  color: #9F3A38;
+  box-shadow: none;
+}
+.ui.input > input:not(:-ms-input-placeholder):invalid {
+  background-color: #FFF6F6;
+  border-color: #E0B4B4;
+  color: #9F3A38;
   box-shadow: none;
 }
 .ui.input > input:not(:placeholder-shown):invalid {
   background-color: #FFF6F6;
   border-color: #E0B4B4;
   color: #9F3A38;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .ui.input > input:not(:-ms-input-placeholder):invalid {
   background-color: #FFF6F6;
@@ -201,7 +227,8 @@
   background-color: #E6F1F6;
   border-color: #A9D5DE;
   color: #4E575B;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 /* Placeholder */
@@ -229,7 +256,8 @@
   background-color: #FCFFF5;
   border-color: #A3C293;
   color: #2C662D;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 /* Placeholder */
@@ -257,7 +285,8 @@
   background-color: #FFFAF3;
   border-color: #C9BA9B;
   color: #613A00;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 /* Placeholder */
@@ -297,7 +326,8 @@
   border-color: transparent !important;
   background-color: transparent !important;
   padding: 0;
-  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
   border-radius: 0 !important;
 }
 .field .ui.transparent.input > textarea {
@@ -351,6 +381,7 @@
   width: 2.17692308em;
   opacity: 0.5;
   border-radius: 0 0.2307em 0.2307em 0;
+  -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease;
 }
 .ui.icon.input > i.icon:not(.link) {
@@ -410,7 +441,9 @@
 
 /* Adjacent Label */
 .ui.labeled.input > .label {
-  flex: 0 0 auto;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
   margin: 0;
   font-size: 1em;
 }
@@ -655,9 +688,15 @@
 
 .ui.action.input > .button,
 .ui.action.input > .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  flex: 0 0 auto;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
 }
 .ui.action.input > .button,
 .ui.action.input > .buttons > .button {
@@ -718,6 +757,8 @@
   ---------------------*/
 
 .ui.fluid.input {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .ui.fluid.input > input {
@@ -784,8 +825,20 @@
     padding: 0 !important;
   }
 }
+.ui.action.file.input input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
 .ui.action.file.input input[type="file"]::file-selector-button {
   display: none;
+}
+.ui.form .field input[type="file"]::-webkit-file-upload-button, .ui.file.input input[type="file"]::-webkit-file-upload-button {
+  border: none;
+  cursor: pointer;
+  padding: 0.43131868em 0.61538462em;
+  margin-right: 1em;
+  background: #e0e1e2;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.6);
 }
 .ui.form .field input[type="file"]::file-selector-button,
 .ui.file.input input[type="file"]::file-selector-button {
@@ -795,6 +848,10 @@
   margin-right: 1em;
   background: #e0e1e2;
   font-weight: bold;
+  color: rgba(0, 0, 0, 0.6);
+}
+.ui.form .field input[type="file"]::-webkit-file-upload-button:hover, .ui.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #cacbcd;
   color: rgba(0, 0, 0, 0.6);
 }
 .ui.form .field input[type="file"]::file-selector-button:hover,
@@ -977,10 +1034,17 @@ input[type="file"].ui.primary.file.input::-ms-browse:hover,
 .ui.primary.file.input input[type="file"]::-ms-browse:hover {
   background: #65cb41;
 }
+input[type="file"].ui.primary.file.input::-webkit-file-upload-button, .ui.primary.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #78CB5B;
+  color: #FFFFFF;
+}
 input[type="file"].ui.primary.file.input::file-selector-button,
 .ui.primary.file.input input[type="file"]::file-selector-button {
   background: #78CB5B;
   color: #FFFFFF;
+}
+input[type="file"].ui.primary.file.input::-webkit-file-upload-button:hover, .ui.primary.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #65cb41;
 }
 input[type="file"].ui.primary.file.input::file-selector-button:hover,
 .ui.primary.file.input input[type="file"]::file-selector-button:hover {
@@ -1004,10 +1068,17 @@ input[type="file"].ui.secondary.file.input::-ms-browse:hover,
 .ui.secondary.file.input input[type="file"]::-ms-browse:hover {
   background: #404040;
 }
+input[type="file"].ui.secondary.file.input::-webkit-file-upload-button, .ui.secondary.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #333333;
+  color: #FFFFFF;
+}
 input[type="file"].ui.secondary.file.input::file-selector-button,
 .ui.secondary.file.input input[type="file"]::file-selector-button {
   background: #333333;
   color: #FFFFFF;
+}
+input[type="file"].ui.secondary.file.input::-webkit-file-upload-button:hover, .ui.secondary.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #404040;
 }
 input[type="file"].ui.secondary.file.input::file-selector-button:hover,
 .ui.secondary.file.input input[type="file"]::file-selector-button:hover {
@@ -1031,10 +1102,17 @@ input[type="file"].ui.red.file.input::-ms-browse:hover,
 .ui.red.file.input input[type="file"]::-ms-browse:hover {
   background: #d01919;
 }
+input[type="file"].ui.red.file.input::-webkit-file-upload-button, .ui.red.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #DB2828;
+  color: #FFFFFF;
+}
 input[type="file"].ui.red.file.input::file-selector-button,
 .ui.red.file.input input[type="file"]::file-selector-button {
   background: #DB2828;
   color: #FFFFFF;
+}
+input[type="file"].ui.red.file.input::-webkit-file-upload-button:hover, .ui.red.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #d01919;
 }
 input[type="file"].ui.red.file.input::file-selector-button:hover,
 .ui.red.file.input input[type="file"]::file-selector-button:hover {
@@ -1058,10 +1136,17 @@ input[type="file"].ui.orange.file.input::-ms-browse:hover,
 .ui.orange.file.input input[type="file"]::-ms-browse:hover {
   background: #c35c07;
 }
+input[type="file"].ui.orange.file.input::-webkit-file-upload-button, .ui.orange.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #D26911;
+  color: #FFFFFF;
+}
 input[type="file"].ui.orange.file.input::file-selector-button,
 .ui.orange.file.input input[type="file"]::file-selector-button {
   background: #D26911;
   color: #FFFFFF;
+}
+input[type="file"].ui.orange.file.input::-webkit-file-upload-button:hover, .ui.orange.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #c35c07;
 }
 input[type="file"].ui.orange.file.input::file-selector-button:hover,
 .ui.orange.file.input input[type="file"]::file-selector-button:hover {
@@ -1085,10 +1170,17 @@ input[type="file"].ui.yellow.file.input::-ms-browse:hover,
 .ui.yellow.file.input input[type="file"]::-ms-browse:hover {
   background: #eaae00;
 }
+input[type="file"].ui.yellow.file.input::-webkit-file-upload-button, .ui.yellow.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #FBBD08;
+  color: #FFFFFF;
+}
 input[type="file"].ui.yellow.file.input::file-selector-button,
 .ui.yellow.file.input input[type="file"]::file-selector-button {
   background: #FBBD08;
   color: #FFFFFF;
+}
+input[type="file"].ui.yellow.file.input::-webkit-file-upload-button:hover, .ui.yellow.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #eaae00;
 }
 input[type="file"].ui.yellow.file.input::file-selector-button:hover,
 .ui.yellow.file.input input[type="file"]::file-selector-button:hover {
@@ -1112,10 +1204,17 @@ input[type="file"].ui.olive.file.input::-ms-browse:hover,
 .ui.olive.file.input input[type="file"]::-ms-browse:hover {
   background: #a7bd0d;
 }
+input[type="file"].ui.olive.file.input::-webkit-file-upload-button, .ui.olive.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #B5CC18;
+  color: #FFFFFF;
+}
 input[type="file"].ui.olive.file.input::file-selector-button,
 .ui.olive.file.input input[type="file"]::file-selector-button {
   background: #B5CC18;
   color: #FFFFFF;
+}
+input[type="file"].ui.olive.file.input::-webkit-file-upload-button:hover, .ui.olive.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #a7bd0d;
 }
 input[type="file"].ui.olive.file.input::file-selector-button:hover,
 .ui.olive.file.input input[type="file"]::file-selector-button:hover {
@@ -1139,10 +1238,17 @@ input[type="file"].ui.green.file.input::-ms-browse:hover,
 .ui.green.file.input input[type="file"]::-ms-browse:hover {
   background: #65cb41;
 }
+input[type="file"].ui.green.file.input::-webkit-file-upload-button, .ui.green.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #78CB5B;
+  color: #FFFFFF;
+}
 input[type="file"].ui.green.file.input::file-selector-button,
 .ui.green.file.input input[type="file"]::file-selector-button {
   background: #78CB5B;
   color: #FFFFFF;
+}
+input[type="file"].ui.green.file.input::-webkit-file-upload-button:hover, .ui.green.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #65cb41;
 }
 input[type="file"].ui.green.file.input::file-selector-button:hover,
 .ui.green.file.input input[type="file"]::file-selector-button:hover {
@@ -1166,10 +1272,17 @@ input[type="file"].ui.teal.file.input::-ms-browse:hover,
 .ui.teal.file.input input[type="file"]::-ms-browse:hover {
   background: #009c95;
 }
+input[type="file"].ui.teal.file.input::-webkit-file-upload-button, .ui.teal.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #00B5AD;
+  color: #FFFFFF;
+}
 input[type="file"].ui.teal.file.input::file-selector-button,
 .ui.teal.file.input input[type="file"]::file-selector-button {
   background: #00B5AD;
   color: #FFFFFF;
+}
+input[type="file"].ui.teal.file.input::-webkit-file-upload-button:hover, .ui.teal.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #009c95;
 }
 input[type="file"].ui.teal.file.input::file-selector-button:hover,
 .ui.teal.file.input input[type="file"]::file-selector-button:hover {
@@ -1193,10 +1306,17 @@ input[type="file"].ui.blue.file.input::-ms-browse:hover,
 .ui.blue.file.input input[type="file"]::-ms-browse:hover {
   background: #6999ca;
 }
+input[type="file"].ui.blue.file.input::-webkit-file-upload-button, .ui.blue.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #80A6CD;
+  color: #FFFFFF;
+}
 input[type="file"].ui.blue.file.input::file-selector-button,
 .ui.blue.file.input input[type="file"]::file-selector-button {
   background: #80A6CD;
   color: #FFFFFF;
+}
+input[type="file"].ui.blue.file.input::-webkit-file-upload-button:hover, .ui.blue.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #6999ca;
 }
 input[type="file"].ui.blue.file.input::file-selector-button:hover,
 .ui.blue.file.input input[type="file"]::file-selector-button:hover {
@@ -1220,10 +1340,17 @@ input[type="file"].ui.violet.file.input::-ms-browse:hover,
 .ui.violet.file.input input[type="file"]::-ms-browse:hover {
   background: #5829bb;
 }
+input[type="file"].ui.violet.file.input::-webkit-file-upload-button, .ui.violet.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #6435C9;
+  color: #FFFFFF;
+}
 input[type="file"].ui.violet.file.input::file-selector-button,
 .ui.violet.file.input input[type="file"]::file-selector-button {
   background: #6435C9;
   color: #FFFFFF;
+}
+input[type="file"].ui.violet.file.input::-webkit-file-upload-button:hover, .ui.violet.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #5829bb;
 }
 input[type="file"].ui.violet.file.input::file-selector-button:hover,
 .ui.violet.file.input input[type="file"]::file-selector-button:hover {
@@ -1247,10 +1374,17 @@ input[type="file"].ui.purple.file.input::-ms-browse:hover,
 .ui.purple.file.input input[type="file"]::-ms-browse:hover {
   background: #9627ba;
 }
+input[type="file"].ui.purple.file.input::-webkit-file-upload-button, .ui.purple.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #A333C8;
+  color: #FFFFFF;
+}
 input[type="file"].ui.purple.file.input::file-selector-button,
 .ui.purple.file.input input[type="file"]::file-selector-button {
   background: #A333C8;
   color: #FFFFFF;
+}
+input[type="file"].ui.purple.file.input::-webkit-file-upload-button:hover, .ui.purple.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #9627ba;
 }
 input[type="file"].ui.purple.file.input::file-selector-button:hover,
 .ui.purple.file.input input[type="file"]::file-selector-button:hover {
@@ -1274,10 +1408,17 @@ input[type="file"].ui.pink.file.input::-ms-browse:hover,
 .ui.pink.file.input input[type="file"]::-ms-browse:hover {
   background: #e61a8d;
 }
+input[type="file"].ui.pink.file.input::-webkit-file-upload-button, .ui.pink.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #E03997;
+  color: #FFFFFF;
+}
 input[type="file"].ui.pink.file.input::file-selector-button,
 .ui.pink.file.input input[type="file"]::file-selector-button {
   background: #E03997;
   color: #FFFFFF;
+}
+input[type="file"].ui.pink.file.input::-webkit-file-upload-button:hover, .ui.pink.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #e61a8d;
 }
 input[type="file"].ui.pink.file.input::file-selector-button:hover,
 .ui.pink.file.input input[type="file"]::file-selector-button:hover {
@@ -1301,10 +1442,17 @@ input[type="file"].ui.brown.file.input::-ms-browse:hover,
 .ui.brown.file.input input[type="file"]::-ms-browse:hover {
   background: #975b33;
 }
+input[type="file"].ui.brown.file.input::-webkit-file-upload-button, .ui.brown.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #A5673F;
+  color: #FFFFFF;
+}
 input[type="file"].ui.brown.file.input::file-selector-button,
 .ui.brown.file.input input[type="file"]::file-selector-button {
   background: #A5673F;
   color: #FFFFFF;
+}
+input[type="file"].ui.brown.file.input::-webkit-file-upload-button:hover, .ui.brown.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #975b33;
 }
 input[type="file"].ui.brown.file.input::file-selector-button:hover,
 .ui.brown.file.input input[type="file"]::file-selector-button:hover {
@@ -1328,10 +1476,17 @@ input[type="file"].ui.grey.file.input::-ms-browse:hover,
 .ui.grey.file.input input[type="file"]::-ms-browse:hover {
   background: #838383;
 }
+input[type="file"].ui.grey.file.input::-webkit-file-upload-button, .ui.grey.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #767676;
+  color: #FFFFFF;
+}
 input[type="file"].ui.grey.file.input::file-selector-button,
 .ui.grey.file.input input[type="file"]::file-selector-button {
   background: #767676;
   color: #FFFFFF;
+}
+input[type="file"].ui.grey.file.input::-webkit-file-upload-button:hover, .ui.grey.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #838383;
 }
 input[type="file"].ui.grey.file.input::file-selector-button:hover,
 .ui.grey.file.input input[type="file"]::file-selector-button:hover {
@@ -1355,10 +1510,17 @@ input[type="file"].ui.black.file.input::-ms-browse:hover,
 .ui.black.file.input input[type="file"]::-ms-browse:hover {
   background: #404040;
 }
+input[type="file"].ui.black.file.input::-webkit-file-upload-button, .ui.black.file.input input[type="file"]::-webkit-file-upload-button {
+  background: #333333;
+  color: #FFFFFF;
+}
 input[type="file"].ui.black.file.input::file-selector-button,
 .ui.black.file.input input[type="file"]::file-selector-button {
   background: #333333;
   color: #FFFFFF;
+}
+input[type="file"].ui.black.file.input::-webkit-file-upload-button:hover, .ui.black.file.input input[type="file"]::-webkit-file-upload-button:hover {
+  background: #404040;
 }
 input[type="file"].ui.black.file.input::file-selector-button:hover,
 .ui.black.file.input input[type="file"]::file-selector-button:hover {
@@ -1413,12 +1575,14 @@ input[type="file"].ui.black.file.input::file-selector-button:hover,
   border-radius: 0.2307em !important;
 }
 .ui.labeled.input input {
-  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
   border: none !important;
 }
 .ui.labeled.input .label {
   font-weight: normal;
-  align-self: center;
+  -ms-flex-item-align: center;
+      align-self: center;
   font-size: 12px;
   margin: 0.15384615rem;
   border-radius: 0.2307em !important;
@@ -1428,7 +1592,8 @@ input[type="file"].ui.black.file.input::file-selector-button:hover,
 /* GitHub Uses Focus Group with class name added */
 .ui.labeled.input.focused {
   border-color: #51A7E8;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(81, 167, 232, 0.5);
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(81, 167, 232, 0.5);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(81, 167, 232, 0.5);
 }
 .ui.labeled.input.focused .label {
   background-color: #E1EAF5;

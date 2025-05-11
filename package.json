@@ -1,44 +1,49 @@
 {
-    "dependencies": {
-        "@jms-1/mongodb-graphql": "^3.0.0",
-        "apollo-server-express": "^3.13.0",
-        "apollo-server-plugin-base": "^3.7.2",
-        "body-parser": "^2.2.0",
-        "debug": "^4.4.0",
-        "express": "^5.1.0",
-        "mongodb": "^6.16.0",
-        "uuid": "^11.1.0"
-    },
-    "devDependencies": {
-        "@types/body-parser": "^1.19.5",
-        "@types/debug": "^4.1.12",
-        "@types/express": "^5.0.1",
-        "@types/node": "^22.15.17",
-        "@types/uuid": "^10.0.0",
-        "del": "^6.1.1",
-        "eslint": "^9.26.0",
-        "gulp": "^4.0.2",
-        "gulp-shell": "^0.8.0",
-        "prettier": "^3.5.3",
-        "sass": "^1.88.0",
-        "stylelint": "^16.19.1",
-        "typescript": "~5.8.3"
-    },
-    "license": "MIT",
-    "main": "Server/build/startup.ts",
-    "name": "movie-db-neu",
-    "scripts": {
-        "build": "npm run build:server && npm run build:client",
-        "build:client": "(cd Client && npm run build)",
-        "build:server": "(cd Server && tsc)",
-        "debug:server": "node Server/src/startup",
-        "deploy": "npm run build && gulp deploy",
-        "start": "node src/startup",
-        "start:server": "node Server/src/startup",
-        "watch:server": "(cd Server && tsc --watch)"
-    },
-    "resolutions": {
-        "body-parser": "^2.2.0"
-    },
-    "version": "3.1.0"
+  "dependencies": {
+    "@jms-1/mongodb-graphql": "^3.0.0",
+    "apollo-server-express": "^3.13.0",
+    "apollo-server-plugin-base": "^3.7.2",
+    "body-parser": "^2.2.0",
+    "debug": "^4.4.0",
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/debug": "^4.1.12",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.17",
+    "@types/uuid": "^10.0.0",
+    "better-console": "^1.0.1",
+    "del": "^8.0.0",
+    "eslint": "^9.26.0",
+    "gulp": "^5.0.0",
+    "gulp-concat-css": "^3.1.0",
+    "gulp-dedupe": "^0.0.2",
+    "gulp-header": "^2.0.9",
+    "gulp-plumber": "^1.2.1",
+    "gulp-shell": "^0.8.0",
+    "prettier": "^3.5.3",
+    "sass": "^1.88.0",
+    "stylelint": "^16.19.1",
+    "typescript": "~5.8.3"
+  },
+  "license": "MIT",
+  "main": "Server/build/startup.ts",
+  "name": "movie-db-neu",
+  "scripts": {
+    "build": "npm run build:server && npm run build:client",
+    "build:client": "(cd Client && npm run build)",
+    "build:server": "(cd Server && tsc)",
+    "debug:server": "node Server/src/startup",
+    "deploy": "npm run build && gulp deploy",
+    "start": "node src/startup",
+    "start:server": "node Server/src/startup",
+    "watch:server": "(cd Server && tsc --watch)"
+  },
+  "resolutions": {
+    "body-parser": "^2.2.0"
+  },
+  "version": "3.1.0"
 }
