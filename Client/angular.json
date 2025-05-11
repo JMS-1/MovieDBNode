@@ -64,17 +64,17 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "client:build"
+                      "buildTarget": "client:build"
                     }
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "development": {
-                            "browserTarget": "client:build:development"
+                          "buildTarget": "client:build:development"
                         },
                         "production": {
-                            "browserTarget": "client:build:production"
+                          "buildTarget": "client:build:production"
                         }
                     },
                     "defaultConfiguration": "development"
