@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs'
     selector: 'app-language',
     styleUrls: ['./language.component.scss'],
     templateUrl: './language.component.html',
+    standalone: false
 })
 export class LanguageRouteComponent implements OnInit, OnDestroy {
     private _query?: Subscription

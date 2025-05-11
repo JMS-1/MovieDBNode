@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs'
     selector: 'app-series',
     styleUrls: ['./series.component.scss'],
     templateUrl: './series.component.html',
+    standalone: false
 })
 export class SeriesRouteComponent implements OnInit {
     private _query?: Subscription

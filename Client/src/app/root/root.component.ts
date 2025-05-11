@@ -9,6 +9,7 @@ import { ThemeService, TThemes } from '../services/themes/theme.service'
     selector: 'app-root',
     styleUrls: ['./root.component.scss'],
     templateUrl: './root.component.html',
+    standalone: false
 })
 export class RootComponent implements OnDestroy {
     private readonly _routeWatch: Subscription

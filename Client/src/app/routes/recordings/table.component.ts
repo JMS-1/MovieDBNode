@@ -8,6 +8,7 @@ import { RecordingsService } from '../../services/recordings/recordings.service'
     selector: 'app-recording-table',
     styleUrls: ['./table.component.scss'],
     templateUrl: './table.component.html',
+    standalone: false
 })
 export class RecordingTableComponent implements OnInit, OnDestroy {
     private _query?: Subscription

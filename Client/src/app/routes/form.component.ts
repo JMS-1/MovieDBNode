@@ -3,7 +3,10 @@ import { Subscription } from 'rxjs'
 
 import { EditableService, IWorkingCopy } from '../services/edit.service'
 
-@Component({ template: '' })
+@Component({
+    template: '',
+    standalone: false
+})
 export abstract class FormComponent<T extends { _id: string }> implements OnChanges, OnDestroy, OnInit {
     private _query?: Subscription
 

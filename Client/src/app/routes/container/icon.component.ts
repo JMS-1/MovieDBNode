@@ -14,6 +14,7 @@ const typeMap: Record<containerType, string> = {
     selector: 'app-container-icon',
     styleUrls: ['./icon.component.scss'],
     templateUrl: './icon.component.html',
+    standalone: false
 })
 export class ContainerIconComponent {
     @Input() type: containerType = containerType.Undefined

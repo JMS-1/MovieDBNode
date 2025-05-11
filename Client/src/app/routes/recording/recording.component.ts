@@ -10,6 +10,7 @@ import { FormComponent } from '../form.component'
     selector: 'app-recording',
     styleUrls: ['./recording.component.scss'],
     templateUrl: './recording.component.html',
+    standalone: false
 })
 export class RecordingRouteComponent extends FormComponent<IRecording> {
     private _params?: Subscription

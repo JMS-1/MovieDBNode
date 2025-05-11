@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs'
     selector: 'app-genre',
     styleUrls: ['./genre.component.scss'],
     templateUrl: './genre.component.html',
+    standalone: false
 })
 export class GenreRouteComponent implements OnInit, OnDestroy {
     private _query?: Subscription

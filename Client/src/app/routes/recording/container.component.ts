@@ -10,6 +10,7 @@ import { ISelectItem } from '../../utils'
     selector: 'app-recording-container',
     styleUrls: ['./container.component.scss'],
     templateUrl: './container.component.html',
+    standalone: false
 })
 export class RecordingContainerComponent implements OnInit, OnDestroy {
     private _container?: Subscription

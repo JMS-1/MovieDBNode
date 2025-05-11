@@ -13,6 +13,7 @@ export interface IMenuItem {
     selector: 'app-sub-menu',
     styleUrls: ['./menu.component.scss'],
     templateUrl: './menu.component.html',
+    standalone: false
 })
 export class SubMenuComponent implements AfterViewInit, OnDestroy {
     @ViewChild('menu') menu?: ElementRef<HTMLDivElement>

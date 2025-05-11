@@ -12,6 +12,7 @@ declare let $: any
     selector: 'app-language-filter',
     styleUrls: ['./language.component.scss'],
     templateUrl: './language.component.html',
+    standalone: false
 })
 export class LanguageFilterComponent implements OnDestroy {
     private readonly _subscription: Subscription

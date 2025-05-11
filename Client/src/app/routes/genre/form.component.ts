@@ -8,6 +8,7 @@ import { FormComponent } from '../form.component'
     selector: 'app-genre-form',
     styleUrls: ['./form.component.scss'],
     templateUrl: './form.component.html',
+    standalone: false
 })
 export class GenreFormComponent extends FormComponent<IGenre> implements OnInit, OnDestroy {
     protected getEditService(): GenreService {

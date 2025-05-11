@@ -10,6 +10,7 @@ import { FormComponent } from '../form.component'
     selector: 'app-container-form',
     styleUrls: ['./form.component.scss'],
     templateUrl: './form.component.html',
+    standalone: false
 })
 export class ContainerFormComponent extends FormComponent<IContainer> {
     private _contents?: Subscription

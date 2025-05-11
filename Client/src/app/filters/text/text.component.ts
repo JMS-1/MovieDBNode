@@ -6,6 +6,7 @@ import { RecordingsService } from '../../services/recordings/recordings.service'
     selector: 'app-text-filter',
     styleUrls: ['./text.component.scss'],
     templateUrl: './text.component.html',
+    standalone: false
 })
 export class TextFilterComponent {
     constructor(private readonly _recordings: RecordingsService) {}

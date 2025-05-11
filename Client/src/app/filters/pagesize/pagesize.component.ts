@@ -13,6 +13,7 @@ const sizes = [15, 30, 50, 75, 100, 250]
     selector: 'app-page-size-filter',
     styleUrls: ['./pagesize.component.scss'],
     templateUrl: './pagesize.component.html',
+    standalone: false
 })
 export class PageSizeFilterComponent {
     constructor(private readonly _recordingService: RecordingsService) {}

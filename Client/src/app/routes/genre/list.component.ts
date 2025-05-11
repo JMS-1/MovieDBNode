@@ -8,6 +8,7 @@ import { GenreService } from '../../services/genre/genre.service'
     selector: 'app-genre-list',
     styleUrls: ['./list.component.scss'],
     templateUrl: './list.component.html',
+    standalone: false
 })
 export class GenreListComponent implements OnInit, OnDestroy {
     private _query?: Subscription

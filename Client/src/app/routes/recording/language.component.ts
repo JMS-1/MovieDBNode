@@ -10,6 +10,7 @@ import { ISelectItem } from '../../utils'
     selector: 'app-recording-language',
     styleUrls: ['./language.component.scss'],
     templateUrl: './language.component.html',
+    standalone: false
 })
 export class RecordingLanguageComponent implements OnInit, OnDestroy {
     private _query?: Subscription

@@ -62,6 +62,7 @@ function createPages(maxPage: number, curPage: number): IPageItem[] {
     selector: 'app-pagination',
     styleUrls: ['./pagination.component.scss'],
     templateUrl: './pagination.component.html',
+    standalone: false
 })
 export class PaginationFilterComponent implements OnInit, OnDestroy {
     constructor(private readonly _recordingService: RecordingsService) {}

@@ -8,6 +8,7 @@ import { RecordingsService } from '../../services/recordings/recordings.service'
     selector: 'app-recordings',
     styleUrls: ['./recordings.component.scss'],
     templateUrl: './recordings.component.html',
+    standalone: false
 })
 export class RecordingsRouteComponent implements OnInit, OnDestroy {
     private _query?: Subscription

@@ -6,6 +6,7 @@ import { ILanguage } from '../../../api'
     selector: 'app-language-item',
     styleUrls: ['./item.component.scss'],
     templateUrl: './item.component.html',
+    standalone: false
 })
 export class LanguageItemComponent {
     @Input() language: ILanguage = undefined as unknown as ILanguage

@@ -7,6 +7,7 @@ declare let $: any
     selector: 'semantic-search',
     styleUrls: ['./search.component.scss'],
     templateUrl: './search.component.html',
+    standalone: false
 })
 export class SearchComponent {
     @ViewChild('search') search?: ElementRef<HTMLDivElement>

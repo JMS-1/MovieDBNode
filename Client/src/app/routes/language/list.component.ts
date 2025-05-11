@@ -8,6 +8,7 @@ import { ILanguage } from '../../../api'
     selector: 'app-language-list',
     styleUrls: ['./list.component.scss'],
     templateUrl: './list.component.html',
+    standalone: false
 })
 export class LanguageListComponent implements OnInit, OnDestroy {
     private _query?: Subscription

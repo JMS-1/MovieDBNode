@@ -9,6 +9,7 @@ import { IRecording } from '../../../api'
     selector: '[recording]',
     styleUrls: ['./row.component.scss'],
     templateUrl: './row.component.html',
+    standalone: false
 })
 export class RecordingRowComponent implements OnInit, OnDestroy {
     private _languageQuery?: Subscription

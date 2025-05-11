@@ -8,6 +8,7 @@ import { FormComponent } from '../form.component'
     selector: 'app-language-form',
     styleUrls: ['./form.component.scss'],
     templateUrl: './form.component.html',
+    standalone: false
 })
 export class LanguageFormComponent extends FormComponent<ILanguage> implements OnInit, OnDestroy {
     protected getEditService(): LanguageService {

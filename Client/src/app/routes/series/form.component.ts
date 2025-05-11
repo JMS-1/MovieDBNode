@@ -9,6 +9,7 @@ import { FormComponent } from '../form.component'
     selector: 'app-series-form',
     styleUrls: ['./form.component.scss'],
     templateUrl: './form.component.html',
+    standalone: false
 })
 export class SeriesFormComponent extends FormComponent<ISeriesNode> {
     private _all?: Subscription

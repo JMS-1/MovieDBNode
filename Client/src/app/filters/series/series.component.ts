@@ -9,6 +9,7 @@ import { createSorted, ISelectItem } from '../../utils'
     selector: 'app-series-filter',
     styleUrls: ['./series.component.scss'],
     templateUrl: './series.component.html',
+    standalone: false
 })
 export class SeriesFilterComponent implements OnDestroy {
     private readonly _subscription: Subscription

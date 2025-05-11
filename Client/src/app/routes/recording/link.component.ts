@@ -7,6 +7,7 @@ import { IWorkingCopy } from '../../services/edit.service'
     selector: 'app-recording-link',
     styleUrls: ['./link.component.scss'],
     templateUrl: './link.component.html',
+    standalone: false
 })
 export class RecordingLinkComponent {
     @Input() edit?: IRecording & IWorkingCopy

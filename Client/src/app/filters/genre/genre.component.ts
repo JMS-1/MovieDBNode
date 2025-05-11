@@ -9,6 +9,7 @@ import { createSorted, ISelectItem } from '../../utils'
     selector: 'app-genre-filter',
     styleUrls: ['./genre.component.scss'],
     templateUrl: './genre.component.html',
+    standalone: false
 })
 export class GenreFilterComponent implements OnDestroy {
     private readonly _subscription: Subscription

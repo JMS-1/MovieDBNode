@@ -6,6 +6,7 @@ import { IContainer } from '../../services/containers/container.service'
     selector: 'app-container-item',
     styleUrls: ['./item.component.scss'],
     templateUrl: './item.component.html',
+    standalone: false
 })
 export class ContainerItemComponent {
     @Input() container: IContainer = undefined as unknown as IContainer

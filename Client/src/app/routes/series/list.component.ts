@@ -6,6 +6,7 @@ import { ISeriesNode, SeriesService } from 'src/app/services/series/series.servi
     selector: 'app-series-list',
     styleUrls: ['./list.component.scss'],
     templateUrl: './list.component.html',
+    standalone: false
 })
 export class SeriesListComponent implements OnInit, OnDestroy {
     private _query?: Subscription

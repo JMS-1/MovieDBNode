@@ -7,6 +7,7 @@ import { ISelectItem } from '../../utils'
     selector: 'app-rent-filter',
     styleUrls: ['./rent.component.scss'],
     templateUrl: './rent.component.html',
+    standalone: false
 })
 export class RentFilterComponent {
     orderedAsItems: ISelectItem[] = [

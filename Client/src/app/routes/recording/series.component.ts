@@ -10,6 +10,7 @@ import { ISelectItem } from '../../utils'
     selector: 'app-recording-series',
     styleUrls: ['./series.component.scss'],
     templateUrl: './series.component.html',
+    standalone: false
 })
 export class RecordingSeriesComponent implements OnInit, OnDestroy {
     private _series?: Subscription

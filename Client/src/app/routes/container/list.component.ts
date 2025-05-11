@@ -7,6 +7,7 @@ import { ContainerService, IContainer } from '../../services/containers/containe
     selector: 'app-container-list',
     styleUrls: ['./list.component.scss'],
     templateUrl: './list.component.html',
+    standalone: false
 })
 export class ContainerListComponent implements OnInit, OnDestroy {
     private _query?: Subscription

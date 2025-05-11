@@ -10,6 +10,7 @@ import { ISelectItem } from '../../utils'
     selector: 'app-recording-genre',
     styleUrls: ['./genre.component.scss'],
     templateUrl: './genre.component.html',
+    standalone: false
 })
 export class RecordingGenreComponent implements OnInit, OnDestroy {
     private _query?: Subscription

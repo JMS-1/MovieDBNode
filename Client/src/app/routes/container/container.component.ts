@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs'
     selector: 'app-container',
     styleUrls: ['./container.component.scss'],
     templateUrl: './container.component.html',
+    standalone: false
 })
 export class ContainerRouteComponent implements OnInit {
     private _query?: Subscription
