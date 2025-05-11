@@ -111,7 +111,7 @@ async function startup(): Promise<void> {
 
     await server.start()
 
-    server.applyMiddleware({ app })
+    server.applyMiddleware({ app: app as any })
 
     app.listen(Config.port)
 }
