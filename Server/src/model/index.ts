@@ -1,115 +1,285 @@
-import { TCollection, TGetFilterArgs, TGetMethodArgs, TGetMethodResult, TGqlType } from '@jms-1/mongodb-graphql'
+import * as mongodbGraphql from "@jms-1/mongodb-graphql";
 
-import * as entities from './entities'
+import * as entities from "./entities";
 
-import { ContainerCollection } from '../collections/container'
-import { GenreCollection } from '../collections/genre'
-import { LanguageCollection } from '../collections/language'
-import { RecordingCollection } from '../collections/recording'
-import { SeriesCollection } from '../collections/series'
+import { ContainerCollection } from "../collections/container";
+import { GenreCollection } from "../collections/genre";
+import { LanguageCollection } from "../collections/language";
+import { RecordingCollection } from "../collections/recording";
+import { SeriesCollection } from "../collections/series";
 
-export * from './enum'
+export * from "./enum";
 
-export type ILanguage = TGqlType<typeof entities.Language>
+export type ILanguage = mongodbGraphql.TGqlType<typeof entities.Language>;
 
-type TLanguageCollection = TCollection<typeof LanguageCollection>
+type TLanguageCollection = mongodbGraphql.TCollection<
+  typeof LanguageCollection
+>;
 
-export type ILanguageFindArgs = TGetFilterArgs<TLanguageCollection, 'find'>
-export type ILanguageFindResult = TGetMethodResult<TLanguageCollection, 'find'>
+export type ILanguageFindArgs = mongodbGraphql.TGetFilterArgs<
+  TLanguageCollection,
+  "find"
+>;
+export type ILanguageFindResult = mongodbGraphql.TGetMethodResult<
+  TLanguageCollection,
+  "find"
+>;
 
-export type ILanguageFindOneArgs = TGetMethodArgs<TLanguageCollection, 'findOne'>
-export type ILanguageFindOneResult = TGetMethodResult<TLanguageCollection, 'findOne'>
+export type ILanguageFindOneArgs = mongodbGraphql.TGetMethodArgs<
+  TLanguageCollection,
+  "findOne"
+>;
+export type ILanguageFindOneResult = mongodbGraphql.TGetMethodResult<
+  TLanguageCollection,
+  "findOne"
+>;
 
-export type ILanguageAddArgs = TGetMethodArgs<TLanguageCollection, 'add'>
-export type ILanguageAddResult = TGetMethodResult<TLanguageCollection, 'add'>
+export type ILanguageAddArgs = mongodbGraphql.TGetMethodArgs<
+  TLanguageCollection,
+  "add"
+>;
+export type ILanguageAddResult = mongodbGraphql.TGetMethodResult<
+  TLanguageCollection,
+  "add"
+>;
 
-export type ILanguageUpdateArgs = TGetMethodArgs<TLanguageCollection, 'update'>
-export type ILanguageUpdateResult = TGetMethodResult<TLanguageCollection, 'update'>
+export type ILanguageUpdateArgs = mongodbGraphql.TGetMethodArgs<
+  TLanguageCollection,
+  "update"
+>;
+export type ILanguageUpdateResult = mongodbGraphql.TGetMethodResult<
+  TLanguageCollection,
+  "update"
+>;
 
-export type ILanguageRemoveArgs = TGetMethodArgs<TLanguageCollection, 'remove'>
-export type ILanguageRemoveResult = TGetMethodResult<TLanguageCollection, 'remove'>
+export type ILanguageRemoveArgs = mongodbGraphql.TGetMethodArgs<
+  TLanguageCollection,
+  "remove"
+>;
+export type ILanguageRemoveResult = mongodbGraphql.TGetMethodResult<
+  TLanguageCollection,
+  "remove"
+>;
 
-export type IGenre = TGqlType<typeof entities.Genre>
+export type IGenre = mongodbGraphql.TGqlType<typeof entities.Genre>;
 
-type TGenreCollection = TCollection<typeof GenreCollection>
+type TGenreCollection = mongodbGraphql.TCollection<typeof GenreCollection>;
 
-export type IGenreFindArgs = TGetFilterArgs<TGenreCollection, 'find'>
-export type IGenreFindResult = TGetMethodResult<TGenreCollection, 'find'>
+export type IGenreFindArgs = mongodbGraphql.TGetFilterArgs<
+  TGenreCollection,
+  "find"
+>;
+export type IGenreFindResult = mongodbGraphql.TGetMethodResult<
+  TGenreCollection,
+  "find"
+>;
 
-export type IGenreFindOneArgs = TGetMethodArgs<TGenreCollection, 'findOne'>
-export type IGenreFindOneResult = TGetMethodResult<TGenreCollection, 'findOne'>
+export type IGenreFindOneArgs = mongodbGraphql.TGetMethodArgs<
+  TGenreCollection,
+  "findOne"
+>;
+export type IGenreFindOneResult = mongodbGraphql.TGetMethodResult<
+  TGenreCollection,
+  "findOne"
+>;
 
-export type IGenreAddArgs = TGetMethodArgs<TGenreCollection, 'add'>
-export type IGenreAddResult = TGetMethodResult<TGenreCollection, 'add'>
+export type IGenreAddArgs = mongodbGraphql.TGetMethodArgs<
+  TGenreCollection,
+  "add"
+>;
+export type IGenreAddResult = mongodbGraphql.TGetMethodResult<
+  TGenreCollection,
+  "add"
+>;
 
-export type IGenreUpdateArgs = TGetMethodArgs<TGenreCollection, 'update'>
-export type IGenreUpdateResult = TGetMethodResult<TGenreCollection, 'update'>
+export type IGenreUpdateArgs = mongodbGraphql.TGetMethodArgs<
+  TGenreCollection,
+  "update"
+>;
+export type IGenreUpdateResult = mongodbGraphql.TGetMethodResult<
+  TGenreCollection,
+  "update"
+>;
 
-export type IGenreRemoveArgs = TGetMethodArgs<TGenreCollection, 'remove'>
-export type IGenreRemoveResult = TGetMethodResult<TGenreCollection, 'remove'>
+export type IGenreRemoveArgs = mongodbGraphql.TGetMethodArgs<
+  TGenreCollection,
+  "remove"
+>;
+export type IGenreRemoveResult = mongodbGraphql.TGetMethodResult<
+  TGenreCollection,
+  "remove"
+>;
 
-export type IContainer = TGqlType<typeof entities.Container>
+export type IContainer = mongodbGraphql.TGqlType<typeof entities.Container>;
 
-type TContainerCollection = TCollection<typeof ContainerCollection>
+type TContainerCollection = mongodbGraphql.TCollection<
+  typeof ContainerCollection
+>;
 
-export type IContainerFindArgs = TGetFilterArgs<TContainerCollection, 'find'>
-export type IContainerFindResult = TGetMethodResult<TContainerCollection, 'find'>
+export type IContainerFindArgs = mongodbGraphql.TGetFilterArgs<
+  TContainerCollection,
+  "find"
+>;
+export type IContainerFindResult = mongodbGraphql.TGetMethodResult<
+  TContainerCollection,
+  "find"
+>;
 
-export type IContainerFindOneArgs = TGetMethodArgs<TContainerCollection, 'findOne'>
-export type IContainerFindOneResult = TGetMethodResult<TContainerCollection, 'findOne'>
+export type IContainerFindOneArgs = mongodbGraphql.TGetMethodArgs<
+  TContainerCollection,
+  "findOne"
+>;
+export type IContainerFindOneResult = mongodbGraphql.TGetMethodResult<
+  TContainerCollection,
+  "findOne"
+>;
 
-export type IContainerAddArgs = TGetMethodArgs<TContainerCollection, 'add'>
-export type IContainerAddResult = TGetMethodResult<TContainerCollection, 'add'>
+export type IContainerAddArgs = mongodbGraphql.TGetMethodArgs<
+  TContainerCollection,
+  "add"
+>;
+export type IContainerAddResult = mongodbGraphql.TGetMethodResult<
+  TContainerCollection,
+  "add"
+>;
 
-export type IContainerUpdateArgs = TGetMethodArgs<TContainerCollection, 'update'>
-export type IContainerUpdateResult = TGetMethodResult<TContainerCollection, 'update'>
+export type IContainerUpdateArgs = mongodbGraphql.TGetMethodArgs<
+  TContainerCollection,
+  "update"
+>;
+export type IContainerUpdateResult = mongodbGraphql.TGetMethodResult<
+  TContainerCollection,
+  "update"
+>;
 
-export type IContainerRemoveArgs = TGetMethodArgs<TContainerCollection, 'remove'>
-export type IContainerRemoveResult = TGetMethodResult<TContainerCollection, 'remove'>
+export type IContainerRemoveArgs = mongodbGraphql.TGetMethodArgs<
+  TContainerCollection,
+  "remove"
+>;
+export type IContainerRemoveResult = mongodbGraphql.TGetMethodResult<
+  TContainerCollection,
+  "remove"
+>;
 
-export type ISeries = TGqlType<typeof entities.Series>
+export type ISeries = mongodbGraphql.TGqlType<typeof entities.Series>;
 
-type TSeriesCollection = TCollection<typeof SeriesCollection>
+type TSeriesCollection = mongodbGraphql.TCollection<typeof SeriesCollection>;
 
-export type ISeriesFindArgs = TGetFilterArgs<TSeriesCollection, 'find'>
-export type ISeriesFindResult = TGetMethodResult<TSeriesCollection, 'find'>
+export type ISeriesFindArgs = mongodbGraphql.TGetFilterArgs<
+  TSeriesCollection,
+  "find"
+>;
+export type ISeriesFindResult = mongodbGraphql.TGetMethodResult<
+  TSeriesCollection,
+  "find"
+>;
 
-export type ISeriesFindOneArgs = TGetMethodArgs<TSeriesCollection, 'findOne'>
-export type ISeriesFindOneResult = TGetMethodResult<TSeriesCollection, 'findOne'>
+export type ISeriesFindOneArgs = mongodbGraphql.TGetMethodArgs<
+  TSeriesCollection,
+  "findOne"
+>;
+export type ISeriesFindOneResult = mongodbGraphql.TGetMethodResult<
+  TSeriesCollection,
+  "findOne"
+>;
 
-export type ISeriesAddArgs = TGetMethodArgs<TSeriesCollection, 'add'>
-export type ISeriesAddResult = TGetMethodResult<TSeriesCollection, 'add'>
+export type ISeriesAddArgs = mongodbGraphql.TGetMethodArgs<
+  TSeriesCollection,
+  "add"
+>;
+export type ISeriesAddResult = mongodbGraphql.TGetMethodResult<
+  TSeriesCollection,
+  "add"
+>;
 
-export type ISeriesUpdateArgs = TGetMethodArgs<TSeriesCollection, 'update'>
-export type ISeriesUpdateResult = TGetMethodResult<TSeriesCollection, 'update'>
+export type ISeriesUpdateArgs = mongodbGraphql.TGetMethodArgs<
+  TSeriesCollection,
+  "update"
+>;
+export type ISeriesUpdateResult = mongodbGraphql.TGetMethodResult<
+  TSeriesCollection,
+  "update"
+>;
 
-export type ISeriesRemoveArgs = TGetMethodArgs<TSeriesCollection, 'remove'>
-export type ISeriesRemoveResult = TGetMethodResult<TSeriesCollection, 'remove'>
+export type ISeriesRemoveArgs = mongodbGraphql.TGetMethodArgs<
+  TSeriesCollection,
+  "remove"
+>;
+export type ISeriesRemoveResult = mongodbGraphql.TGetMethodResult<
+  TSeriesCollection,
+  "remove"
+>;
 
-export type ILink = TGqlType<typeof entities.Link>
-export type IRecording = TGqlType<typeof entities.Recording>
+export type ILink = mongodbGraphql.TGqlType<typeof entities.Link>;
+export type IRecording = mongodbGraphql.TGqlType<typeof entities.Recording>;
 
-type TRecordingCollection = TCollection<typeof RecordingCollection>
+type TRecordingCollection = mongodbGraphql.TCollection<
+  typeof RecordingCollection
+>;
 
-export type IRecordingFindArgs = TGetFilterArgs<TRecordingCollection, 'find'>
-export type IRecordingFindResult = TGetMethodResult<TRecordingCollection, 'find'>
+export type IRecordingFindArgs = mongodbGraphql.TGetFilterArgs<
+  TRecordingCollection,
+  "find"
+>;
+export type IRecordingFindResult = mongodbGraphql.TGetMethodResult<
+  TRecordingCollection,
+  "find"
+>;
 
-export type IRecordingFindOneArgs = TGetMethodArgs<TRecordingCollection, 'findOne'>
-export type IRecordingFindOneResult = TGetMethodResult<TRecordingCollection, 'findOne'>
+export type IRecordingFindOneArgs = mongodbGraphql.TGetMethodArgs<
+  TRecordingCollection,
+  "findOne"
+>;
+export type IRecordingFindOneResult = mongodbGraphql.TGetMethodResult<
+  TRecordingCollection,
+  "findOne"
+>;
 
-export type IRecordingAddArgs = TGetMethodArgs<TRecordingCollection, 'add'>
-export type IRecordingAddResult = TGetMethodResult<TRecordingCollection, 'add'>
+export type IRecordingAddArgs = mongodbGraphql.TGetMethodArgs<
+  TRecordingCollection,
+  "add"
+>;
+export type IRecordingAddResult = mongodbGraphql.TGetMethodResult<
+  TRecordingCollection,
+  "add"
+>;
 
-export type IRecordingUpdateArgs = TGetMethodArgs<TRecordingCollection, 'update'>
-export type IRecordingUpdateResult = TGetMethodResult<TRecordingCollection, 'update'>
+export type IRecordingUpdateArgs = mongodbGraphql.TGetMethodArgs<
+  TRecordingCollection,
+  "update"
+>;
+export type IRecordingUpdateResult = mongodbGraphql.TGetMethodResult<
+  TRecordingCollection,
+  "update"
+>;
 
-export type IRecordingRemoveArgs = TGetMethodArgs<TRecordingCollection, 'remove'>
-export type IRecordingRemoveResult = TGetMethodResult<TRecordingCollection, 'remove'>
+export type IRecordingRemoveArgs = mongodbGraphql.TGetMethodArgs<
+  TRecordingCollection,
+  "remove"
+>;
+export type IRecordingRemoveResult = mongodbGraphql.TGetMethodResult<
+  TRecordingCollection,
+  "remove"
+>;
 
-export type IRecordingFindByContainerArgs = TGetMethodArgs<TRecordingCollection, 'findByContainer'>
-export type IRecordingFindByContainerResult = TGetMethodResult<TRecordingCollection, 'findByContainer'>
+export type IRecordingFindByContainerArgs = mongodbGraphql.TGetMethodArgs<
+  TRecordingCollection,
+  "findByContainer"
+>;
+export type IRecordingFindByContainerResult = mongodbGraphql.TGetMethodResult<
+  TRecordingCollection,
+  "findByContainer"
+>;
 
-export type IQueryCountInfo = TGqlType<typeof entities.QueryCountInfo>
+export type IQueryCountInfo = mongodbGraphql.TGqlType<
+  typeof entities.QueryCountInfo
+>;
 
-export type IRecordingQueryArgs = TGetMethodArgs<TRecordingCollection, 'query'>
-export type IRecordingQueryResult = TGetMethodResult<TRecordingCollection, 'query'>
+export type IRecordingQueryArgs = mongodbGraphql.TGetMethodArgs<
+  TRecordingCollection,
+  "query"
+>;
+export type IRecordingQueryResult = mongodbGraphql.TGetMethodResult<
+  TRecordingCollection,
+  "query"
+>;

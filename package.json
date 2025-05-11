@@ -10,16 +10,13 @@
         "uuid": "^11.1.0"
     },
     "devDependencies": {
-        "@insynergie/eslint-config": "^3.0.0",
-        "@insynergie/prettier-config": "^2.0.0",
-        "@insynergie/stylelint-config": "^3.2.0",
         "@types/body-parser": "^1.19.5",
         "@types/debug": "^4.1.12",
         "@types/express": "^5.0.1",
         "@types/node": "^22.15.17",
         "@types/uuid": "^10.0.0",
         "del": "^6.1.1",
-        "eslint": "^8.57.1",
+        "eslint": "^9.26.0",
         "gulp": "^4.0.2",
         "gulp-shell": "^0.8.0",
         "prettier": "^3.5.3",
@@ -27,13 +24,9 @@
         "stylelint": "^16.19.1",
         "typescript": "~5.8.3"
     },
-    "eslintConfig": {
-        "extends": "@insynergie"
-    },
     "license": "MIT",
     "main": "Server/build/startup.ts",
     "name": "movie-db-neu",
-    "prettier": "@insynergie/prettier-config",
     "scripts": {
         "build": "npm run build:server && npm run build:client",
         "build:client": "(cd Client && npm run build)",
@@ -43,16 +36,6 @@
         "start": "node src/startup",
         "start:server": "node Server/src/startup",
         "watch:server": "(cd Server && tsc --watch)"
-    },
-    "stylelint": {
-        "extends": "@insynergie/stylelint-config",
-        "ignoreFiles": [
-            "**/*.min.css"
-        ],
-        "rules": {
-            "property-no-vendor-prefix": null,
-            "value-no-vendor-prefix": null
-        }
     },
     "resolutions": {
         "body-parser": "^2.2.0"
