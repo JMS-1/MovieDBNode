@@ -8,4 +8,4 @@ git pull && \
 docker build . -t movie-db && \
 echo "wait 15 seconds for stack to shut down" && \
 sleep 15 && \
-docker stack deploy -d -c docker-compose.yml movie-db
+docker stack deploy -c docker-compose.yml movie-db
