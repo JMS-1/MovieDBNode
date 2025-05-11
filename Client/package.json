@@ -1,43 +1,43 @@
 {
-    "dependencies": {
-        "@angular/animations": "^14.2.6",
-        "@angular/common": "^14.2.6",
-        "@angular/compiler": "^14.2.6",
-        "@angular/core": "^14.2.6",
-        "@angular/forms": "^14.2.6",
-        "@angular/platform-browser": "^14.2.6",
-        "@angular/platform-browser-dynamic": "^14.2.6",
-        "@angular/router": "^14.2.6",
-        "fastest-validator": "^1.15.0",
-        "graphql": "^16.6.0",
-        "jquery": "^3.6.1",
-        "rxjs": "^7.5.7",
-        "tslib": "^2.4.0",
-        "zone.js": "^0.11.8"
-    },
-    "devDependencies": {
-        "@angular-devkit/build-angular": "^14.2.6",
-        "@angular/cli": "^14.2.6",
-        "@angular/compiler-cli": "^14.2.6",
-        "@angular/localize": "^14.2.6",
-        "@types/jasmine": "^4.3.0",
-        "fomantic-ui": "^2.9.0",
-        "jasmine-core": "^4.4.0",
-        "karma": "^6.4.1",
-        "karma-chrome-launcher": "^3.1.1",
-        "karma-coverage": "^2.2.0",
-        "karma-jasmine": "^5.1.0",
-        "karma-jasmine-html-reporter": "^2.0.0",
-        "typescript": "~4.8.4"
-    },
-    "name": "client",
-    "private": true,
-    "scripts": {
-        "build": "ng build --localize",
-        "start": "ng serve --port 29500",
-        "test": "ng test",
-        "themes": "gulp theme --theme=alternate.1 && gulp theme --theme=alternate.2 && gulp theme --theme=default",
-        "watch": "ng build --watch --configuration development"
-    },
-    "version": "0.0.0"
+  "dependencies": {
+    "@angular/animations": "^15.2.10",
+    "@angular/common": "^15.2.10",
+    "@angular/compiler": "^15.2.10",
+    "@angular/core": "^15.2.10",
+    "@angular/forms": "^15.2.10",
+    "@angular/platform-browser": "^15.2.10",
+    "@angular/platform-browser-dynamic": "^15.2.10",
+    "@angular/router": "^15.2.10",
+    "fastest-validator": "^1.15.0",
+    "graphql": "^16.6.0",
+    "jquery": "^3.6.1",
+    "rxjs": "^7.5.7",
+    "tslib": "^2.4.0",
+    "zone.js": "^0.11.8"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.11",
+    "@angular/cli": "^15.2.11",
+    "@angular/compiler-cli": "^15.2.10",
+    "@angular/localize": "^15.2.10",
+    "@types/jasmine": "^4.3.0",
+    "fomantic-ui": "^2.9.0",
+    "jasmine-core": "^4.4.0",
+    "karma": "^6.4.1",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-coverage": "^2.2.0",
+    "karma-jasmine": "^5.1.0",
+    "karma-jasmine-html-reporter": "^2.0.0",
+    "typescript": "~4.8.4"
+  },
+  "name": "client",
+  "private": true,
+  "scripts": {
+    "build": "ng build --localize",
+    "start": "ng serve --port 29500",
+    "test": "ng test",
+    "themes": "gulp theme --theme=alternate.1 && gulp theme --theme=alternate.2 && gulp theme --theme=default",
+    "watch": "ng build --watch --configuration development"
+  },
+  "version": "0.0.0"
 }
