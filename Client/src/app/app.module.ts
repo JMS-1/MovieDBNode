@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
@@ -18,11 +18,8 @@ import { ThemeService } from './services/themes/theme.service'
 import { ValidationService } from './services/validation/validation.service'
 import { SharedModule } from './shared.module'
 
-@NgModule({
-    bootstrap: [RootComponent],
-    declarations: [RootComponent, SubMenuComponent],
-    imports: [AppRoutingModule, BrowserModule, FormsModule, HttpClientModule, SharedModule],
-    providers: [
+@NgModule({ bootstrap: [RootComponent],
+    declarations: [RootComponent, SubMenuComponent], imports: [AppRoutingModule, BrowserModule, FormsModule, SharedModule], providers: [
         ConfigService,
         ContainerService,
         GenreService,
@@ -33,6 +30,6 @@ import { SharedModule } from './shared.module'
         SeriesService,
         ThemeService,
         ValidationService,
-    ],
-})
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
