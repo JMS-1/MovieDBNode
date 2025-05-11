@@ -1,40 +1,37 @@
 {
-    "compounds": [
-        {
-            "configurations": ["Client", "Server"],
-            "name": "All"
-        }
-    ],
-    "configurations": [
-        {
-            "linux": {
-                "runtimeExecutable": "/snap/bin/chromium"
-            },
-            "name": "Client",
-            "port": 29501,
-            "request": "launch",
-            "runtimeArgs": ["--remote-debugging-port=29501", "--new-window"],
-            "sourceMaps": true,
-            "type": "chrome",
-            "url": "http://localhost:29500",
-            "sourceMapPathOverrides": {
-                "webpack://*": "${workspaceFolder}/Client/*"
-            },
-            "userDataDir": "${workspaceFolder}/.vscode/chrome",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-            "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.env",
-            "name": "Server",
-            "request": "launch",
-            "resolveSourceMapLocations": null,
-            "runtimeArgs": ["run-script", "debug:server"],
-            "runtimeExecutable": "npm",
-            "smartStep": true,
-            "sourceMaps": true,
-            "type": "node"
-        }
-    ],
-    "version": "0.2.0"
+  "compounds": [
+    {
+      "configurations": ["Client", "Server"],
+      "name": "All"
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Client",
+      "port": 29501,
+      "request": "launch",
+      "runtimeArgs": ["--remote-debugging-port=29501", "--new-window"],
+      "sourceMaps": true,
+      "type": "chrome",
+      "url": "http://localhost:29500",
+      "sourceMapPathOverrides": {
+        "webpack://*": "${workspaceFolder}/Client/*"
+      },
+      "userDataDir": "${workspaceFolder}/.vscode/chrome",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/.vscode/.env",
+      "name": "Server",
+      "request": "launch",
+      "resolveSourceMapLocations": null,
+      "runtimeArgs": ["run-script", "debug:server"],
+      "runtimeExecutable": "npm",
+      "smartStep": true,
+      "sourceMaps": true,
+      "type": "node"
+    }
+  ],
+  "version": "0.2.0"
 }
