@@ -85,10 +85,7 @@ async function startup(): Promise<void> {
               const http = requestContext.response?.http;
 
               if (http?.headers?.set) {
-                http.headers.set(
-                  "WWW-Authenticate",
-                  'Basic realm="neuroomNet CMS"'
-                );
+                http.headers.set("WWW-Authenticate", 'Basic realm="MovieDB"');
               }
             }
           },
