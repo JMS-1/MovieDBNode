@@ -20,7 +20,7 @@ function loadConfig(name: string): IConfiguration {
 
   const raw = readFileSync(defPath).toString();
 
-  return JSON.parse(raw.substr(raw.indexOf("{")));
+  return JSON.parse(raw.substring(raw.indexOf("{")));
 }
 
 export const Config = { ...loadConfig(""), ...loadConfig(".custom") };

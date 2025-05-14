@@ -1,19 +1,20 @@
 {
   "dependencies": {
     "@jms-1/mongodb-graphql": "^3.0.0",
-    "apollo-server-express": "^3.13.0",
-    "apollo-server-plugin-base": "^3.7.2",
+    "@apollo/server": "^4.12.1",
     "body-parser": "^2.2.0",
-    "debug": "^4.4.0",
+    "cors": "^2.8.5",
+    "debug": "^4.4.1",
     "express": "^5.1.0",
     "mongodb": "^6.16.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
+    "@types/cors": "^2.8.18",
     "@types/debug": "^4.1.12",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.15.17",
+    "@types/node": "^22.15.18",
     "@types/uuid": "^10.0.0",
     "better-console": "^1.0.1",
     "del": "^8.0.0",
