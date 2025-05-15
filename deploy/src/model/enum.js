@@ -9,7 +9,7 @@ var TContainerType;
     TContainerType[TContainerType["Folder"] = 5] = "Folder";
     TContainerType[TContainerType["Shelf"] = 3] = "Shelf";
     TContainerType[TContainerType["Undefined"] = 0] = "Undefined";
-})(TContainerType = exports.TContainerType || (exports.TContainerType = {}));
+})(TContainerType || (exports.TContainerType = TContainerType = {}));
 var TRecordingContainerType;
 (function (TRecordingContainerType) {
     TRecordingContainerType[TRecordingContainerType["BluRay"] = 5] = "BluRay";
@@ -18,10 +18,10 @@ var TRecordingContainerType;
     TRecordingContainerType[TRecordingContainerType["SuperVideoCD"] = 2] = "SuperVideoCD";
     TRecordingContainerType[TRecordingContainerType["Undefined"] = 0] = "Undefined";
     TRecordingContainerType[TRecordingContainerType["VideoCD"] = 1] = "VideoCD";
-})(TRecordingContainerType = exports.TRecordingContainerType || (exports.TRecordingContainerType = {}));
+})(TRecordingContainerType || (exports.TRecordingContainerType = TRecordingContainerType = {}));
 var TRecordingSort;
 (function (TRecordingSort) {
     TRecordingSort[TRecordingSort["created"] = 1] = "created";
     TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
-})(TRecordingSort = exports.TRecordingSort || (exports.TRecordingSort = {}));
+})(TRecordingSort || (exports.TRecordingSort = TRecordingSort = {}));
 //# sourceMappingURL=enum.js.map

@@ -9,8 +9,8 @@ class ContainerHierarchicalCollection extends hierarchical_1.HierarchicalCollect
     constructor() {
         super(...arguments);
         this.collectionName = collections_1.collectionNames.containers;
-        this.entityName = 'Ablage';
-        this.parentProp = 'containerId';
+        this.entityName = "Ablage";
+        this.parentProp = "containerId";
     }
 }
 exports.ContainerCollection = connection_1.MongoConnection.createCollection(entities_1.Container, ContainerHierarchicalCollection);

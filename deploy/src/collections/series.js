@@ -10,15 +10,15 @@ class SeriesHierarchicalCollection extends hierarchical_1.HierarchicalCollection
     constructor() {
         super(...arguments);
         this.collectionName = collections_1.collectionNames.series;
-        this.entityName = 'Serie';
-        this.parentProp = 'series';
+        this.entityName = "Serie";
+        this.parentProp = "series";
     }
     async initialize() {
         await super.initialize();
         const self = await this.collection;
-        await self.createIndex({ fullName: 1 }, { name: 'series_full' });
-        await self.createIndex({ name: 1 }, { name: 'series_name' });
-        await self.createIndex({ parentId: 1 }, { name: 'series_tree' });
+        await self.createIndex({ fullName: 1 }, { name: "series_full" });
+        await self.createIndex({ name: 1 }, { name: "series_name" });
+        await self.createIndex({ parentId: 1 }, { name: "series_tree" });
     }
     async afterInsert(series) {
         await this.refreshFullNames(series);
@@ -31,7 +31,7 @@ class SeriesHierarchicalCollection extends hierarchical_1.HierarchicalCollection
         const self = await this.collection;
         const children = await self.find({ parentId: series._id }).toArray();
         await super.afterRemove(series);
-        const seriesIds = await this.updateFullNameByChildren(children, '', self, new Set());
+        const seriesIds = await this.updateFullNameByChildren(children, "", self, new Set());
         await (0, utils_1.refreshRecordingNames)({ series: { $in: Array.from(seriesIds) } }, await this.connection.getCollection(collections_1.collectionNames.recordings));
     }
     async updateFullName(series, parent, self, updated) {

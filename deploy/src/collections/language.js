@@ -9,8 +9,8 @@ exports.LanguageCollection = connection_1.MongoConnection.createCollection(entit
     constructor() {
         super(...arguments);
         this.collectionName = collections_1.collectionNames.languages;
-        this.entityName = 'Sprache';
-        this.parentProp = 'languages';
+        this.entityName = "Sprache";
+        this.parentProp = "languages";
     }
 });
 //# sourceMappingURL=language.js.map

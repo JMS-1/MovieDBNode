@@ -23,14 +23,16 @@ class HierarchicalCollection extends foreignKey_1.ForeignKeyCollection {
             return;
         }
         const self = await this.collection;
-        const all = await self.find({}, { projection: { _id: 1, parentId: 1 } }).toArray();
+        const all = await self
+            .find({}, { projection: { _id: 1, parentId: 1 } })
+            .toArray();
         const parentMap = {};
-        all.forEach((c) => (parentMap[c._id] = c.parentId || ''));
-        parentMap[id] = hitem.parentId || '';
+        all.forEach((c) => (parentMap[c._id] = c.parentId || ""));
+        parentMap[id] = hitem.parentId || "";
         const cycleTest = new Set();
         for (; id; id = parentMap[id]) {
             if (cycleTest.has(id)) {
-                throw new Error('Zyklische Definition nicht zulässig');
+                throw new Error("Zyklische Definition nicht zulässig");
             }
             cycleTest.add(id);
         }

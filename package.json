@@ -2,6 +2,7 @@
   "dependencies": {
     "@jms-1/mongodb-graphql": "^3.0.0",
     "@apollo/server": "^4.12.1",
+    "@as-integrations/express5": "^1.0.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "debug": "^4.4.1",

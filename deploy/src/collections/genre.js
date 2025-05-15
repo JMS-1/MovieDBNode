@@ -9,8 +9,8 @@ exports.GenreCollection = connection_1.MongoConnection.createCollection(entities
     constructor() {
         super(...arguments);
         this.collectionName = collections_1.collectionNames.genres;
-        this.entityName = 'Kategorie';
-        this.parentProp = 'genres';
+        this.entityName = "Kategorie";
+        this.parentProp = "genres";
     }
 });
 //# sourceMappingURL=genre.js.map

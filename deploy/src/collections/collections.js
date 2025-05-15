@@ -8,5 +8,5 @@ var collectionNames;
     collectionNames["languages"] = "languages";
     collectionNames["recordings"] = "recordings";
     collectionNames["series"] = "series";
-})(collectionNames = exports.collectionNames || (exports.collectionNames = {}));
+})(collectionNames || (exports.collectionNames = collectionNames = {}));
 //# sourceMappingURL=collections.js.map

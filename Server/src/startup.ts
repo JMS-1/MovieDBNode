@@ -4,8 +4,9 @@ import express from "express";
 import { GraphQLSchema } from "graphql";
 import { join } from "path";
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
+import { expressMiddleware } from "@as-integrations/express5";
+import { createServer } from "http";
 
 import { ContainerCollection } from "./collections/container";
 import { GenreCollection } from "./collections/genre";
@@ -14,16 +15,8 @@ import { csvData, RecordingCollection } from "./collections/recording";
 import { SeriesCollection } from "./collections/series";
 import { Config } from "./config";
 import { getMessage } from "./utils";
-import { createServer, IncomingMessage, ServerResponse } from "http";
 
 const utfBom = Buffer.from([0xef, 0xbb, 0xbf]);
-
-interface IContext {
-  isAdmin: boolean;
-  isAuth: boolean;
-  requireAuth: boolean;
-  res: ServerResponse<IncomingMessage>;
-}
 
 async function startup(): Promise<void> {
   const app = express();
@@ -49,7 +42,7 @@ async function startup(): Promise<void> {
     }
   });
 
-  app.use(express.static(join(__dirname, "../dist")));
+  app.use(express.static(join(__dirname, "../dist/browser")));
 
   app.get("/export", (_request, response) => {
     response.setHeader(
@@ -63,35 +56,7 @@ async function startup(): Promise<void> {
     response.end();
   });
 
-  const server = new ApolloServer<IContext>({
-    plugins: [
-      {
-        requestDidStart: async () => ({
-          didEncounterErrors: async (requestContext) => {
-            if (requestContext?.contextValue?.requireAuth === false) {
-              const gqlErrors = requestContext.errors || [];
-
-              if (gqlErrors.some((e) => e.originalError instanceof Error)) {
-                requestContext.contextValue.requireAuth = true;
-              }
-            }
-          },
-          willSendResponse: async (requestContext) => {
-            const context = requestContext?.contextValue;
-
-            if (context?.requireAuth && context.res) {
-              context.res.statusCode = 401;
-
-              const http = requestContext.response?.http;
-
-              if (http?.headers?.set) {
-                http.headers.set("WWW-Authenticate", 'Basic realm="MovieDB"');
-              }
-            }
-          },
-        }),
-      },
-    ],
+  const server = new ApolloServer({
     schema: new GraphQLSchema(
       await createSchemaConfiguration({
         containers: ContainerCollection,
@@ -109,34 +74,7 @@ async function startup(): Promise<void> {
     "/graphql",
     cors<cors.CorsRequest>(),
     express.json(),
-    expressMiddleware(server, {
-      context: async ({ req, res }) => {
-        const context = {
-          isAdmin: false,
-          isAuth: false,
-          requireAuth: false,
-          res,
-        };
-
-        if (req?.headers) {
-          const auth = /^Basic (.+)$/.exec(req.headers.authorization || "");
-
-          if (auth) {
-            const user = /^([^:]*):([^:]*)$/.exec(
-              Buffer.from(auth[1], "base64").toString()
-            );
-
-            if (user) {
-              context.isAuth = true;
-              context.isAdmin =
-                user[1] === Config.gqlUser && user[2] === Config.gqlPassword;
-            }
-          }
-        }
-
-        return context;
-      },
-    }) as any
+    expressMiddleware(server)
   );
 
   await new Promise<void>((resolve) =>

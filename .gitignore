@@ -16,6 +16,6 @@ deploy/config.custom.json
 deploy/node_modules
 deploy/src/daemon
 
-deploy/dist/assets/*/components
+deploy/dist/browser/*/assets/components
 deploy/passwd
 deploy/host.*
