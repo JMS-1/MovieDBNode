@@ -72,6 +72,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
         });
         this.query = this.queries.register("query", {
             correlationId: types.GqlNullable(types.GqlId({ description: "Eindeutige Kennung für diesen Aufruf." })),
+            deleteType: types.GqlNullable(entities_1.RecordingDeleteType),
             firstPage: types.GqlInt({
                 description: "0-basierte Nummer der Ergebnisseite.",
                 validation: { min: 0, type: "number" },
@@ -97,6 +98,9 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                 description: "Die Größe einer Ergebnisseite.",
                 validation: { min: 1, type: "number" },
             }),
+            rating: types.GqlNullable(types.GqlInt({
+                description: "Optionale Bewertung auf iMDb.",
+            })),
             rent: types.GqlNullable(types.GqlBoolean({
                 description: "Optional gesetzt um nur verliehene Aufzeichnungen zu erhalten.",
             })),

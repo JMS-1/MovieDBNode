@@ -33,13 +33,16 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecordingQueryResponse = exports.QueryCountInfo = exports.RecordingSort = exports.Recording = exports.Link = exports.RecordingContainerType = void 0;
+exports.RecordingQueryResponse = exports.QueryCountInfo = exports.RecordingSort = exports.Recording = exports.Link = exports.RecordingDeleteType = exports.RecordingContainerType = void 0;
 const types = __importStar(require("@jms-1/mongodb-graphql/lib/types"));
-const enum_1 = require("./enum");
+const _enum = __importStar(require("./enum"));
 const utils_1 = require("./utils");
-exports.RecordingContainerType = types.GqlEnum("RecordingContainerType", enum_1.TRecordingContainerType, {
+exports.RecordingContainerType = types.GqlEnum("RecordingContainerType", _enum.TRecordingContainerType, {
     description: "Ablageart einer Aufzeichnung.",
     sortable: true,
+});
+exports.RecordingDeleteType = types.GqlEnum("RecordingDeleteType", _enum.TRecordingDeleteType, {
+    description: "Sichtbarkeit einer Aufzeichnung.",
 });
 exports.Link = types.GqlObject("Link", {
     description: types.GqlNullable(types.GqlString({
@@ -94,6 +97,7 @@ exports.Recording = types.GqlObject("Recording", {
             type: "string",
         },
     }),
+    deleteType: types.GqlNullable(exports.RecordingDeleteType),
     description: types.GqlNullable(types.GqlString({
         description: "Optional eine Beschreibung für die Aufzeichnung.",
         validation: {
@@ -130,6 +134,16 @@ exports.Recording = types.GqlObject("Recording", {
             type: "string",
         },
     }),
+    rating: types.GqlNullable(types.GqlInt({
+        description: "Optionale Bewertung auf iMDb.",
+        sortable: true,
+        validation: {
+            min: 1,
+            max: 10,
+            integer: true,
+            type: "number",
+        },
+    })),
     rentTo: types.GqlNullable(types.GqlString({
         description: "Optional an wen die Aufzeichnung verliehen ist.",
         sortable: true,
@@ -146,7 +160,7 @@ exports.Recording = types.GqlObject("Recording", {
         },
     })),
 }, { description: "Beschreibt eine Aufzeichnung." });
-exports.RecordingSort = types.GqlEnum("RecordingSort", enum_1.TRecordingSort, {
+exports.RecordingSort = types.GqlEnum("RecordingSort", _enum.TRecordingSort, {
     description: "Eigenschaften, nach denen die Aufzeichnungen sortiert werden können.",
 });
 exports.QueryCountInfo = types.GqlObject("QueryCountInfo", {

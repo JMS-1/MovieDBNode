@@ -1,15 +1,24 @@
 import * as types from "@jms-1/mongodb-graphql/lib/types";
 
-import { TRecordingContainerType, TRecordingSort } from "./enum";
+import * as _enum from "./enum";
 import { uniqueIdPattern } from "./utils";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const RecordingContainerType = types.GqlEnum(
   "RecordingContainerType",
-  TRecordingContainerType,
+  _enum.TRecordingContainerType,
   {
     description: "Ablageart einer Aufzeichnung.",
     sortable: true,
+  }
+);
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const RecordingDeleteType = types.GqlEnum(
+  "RecordingDeleteType",
+  _enum.TRecordingDeleteType,
+  {
+    description: "Sichtbarkeit einer Aufzeichnung.",
   }
 );
 
@@ -84,6 +93,7 @@ export const Recording = types.GqlObject(
         type: "string",
       },
     }),
+    deleteType: types.GqlNullable(RecordingDeleteType),
     description: types.GqlNullable(
       types.GqlString({
         description: "Optional eine Beschreibung für die Aufzeichnung.",
@@ -126,6 +136,18 @@ export const Recording = types.GqlObject(
         type: "string",
       },
     }),
+    rating: types.GqlNullable(
+      types.GqlInt({
+        description: "Optionale Bewertung auf iMDb.",
+        sortable: true,
+        validation: {
+          min: 1,
+          max: 10,
+          integer: true,
+          type: "number",
+        },
+      })
+    ),
     rentTo: types.GqlNullable(
       types.GqlString({
         description: "Optional an wen die Aufzeichnung verliehen ist.",
@@ -150,10 +172,14 @@ export const Recording = types.GqlObject(
 );
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export const RecordingSort = types.GqlEnum("RecordingSort", TRecordingSort, {
-  description:
-    "Eigenschaften, nach denen die Aufzeichnungen sortiert werden können.",
-});
+export const RecordingSort = types.GqlEnum(
+  "RecordingSort",
+  _enum.TRecordingSort,
+  {
+    description:
+      "Eigenschaften, nach denen die Aufzeichnungen sortiert werden können.",
+  }
+);
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const QueryCountInfo = types.GqlObject(

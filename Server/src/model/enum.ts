@@ -20,3 +20,9 @@ export enum TRecordingSort {
   created = 1,
   fullName = 0,
 }
+
+export enum TRecordingDeleteType {
+  deletable = 2,
+  deleted = 1,
+  none = 0,
+}

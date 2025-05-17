@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TRecordingSort = exports.TRecordingContainerType = exports.TContainerType = void 0;
+exports.TRecordingDeleteType = exports.TRecordingSort = exports.TRecordingContainerType = exports.TContainerType = void 0;
 var TContainerType;
 (function (TContainerType) {
     TContainerType[TContainerType["Box"] = 2] = "Box";
@@ -24,4 +24,10 @@ var TRecordingSort;
     TRecordingSort[TRecordingSort["created"] = 1] = "created";
     TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
 })(TRecordingSort || (exports.TRecordingSort = TRecordingSort = {}));
+var TRecordingDeleteType;
+(function (TRecordingDeleteType) {
+    TRecordingDeleteType[TRecordingDeleteType["deletable"] = 2] = "deletable";
+    TRecordingDeleteType[TRecordingDeleteType["deleted"] = 1] = "deleted";
+    TRecordingDeleteType[TRecordingDeleteType["none"] = 0] = "none";
+})(TRecordingDeleteType || (exports.TRecordingDeleteType = TRecordingDeleteType = {}));
 //# sourceMappingURL=enum.js.map

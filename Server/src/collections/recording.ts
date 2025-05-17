@@ -16,6 +16,7 @@ import {
 } from "../model";
 import {
   Recording,
+  RecordingDeleteType,
   RecordingQueryResponse,
   RecordingSort,
 } from "../model/entities";
@@ -174,6 +175,7 @@ export const RecordingCollection = MongoConnection.createCollection(
         correlationId: types.GqlNullable(
           types.GqlId({ description: "Eindeutige Kennung für diesen Aufruf." })
         ),
+        deleteType: types.GqlNullable(RecordingDeleteType),
         firstPage: types.GqlInt({
           description: "0-basierte Nummer der Ergebnisseite.",
           validation: { min: 0, type: "number" },
@@ -213,6 +215,11 @@ export const RecordingCollection = MongoConnection.createCollection(
           description: "Die Größe einer Ergebnisseite.",
           validation: { min: 1, type: "number" },
         }),
+        rating: types.GqlNullable(
+          types.GqlInt({
+            description: "Optionale Bewertung auf iMDb.",
+          })
+        ),
         rent: types.GqlNullable(
           types.GqlBoolean({
             description:
