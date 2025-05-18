@@ -26,8 +26,8 @@ var TRecordingSort;
 })(TRecordingSort || (exports.TRecordingSort = TRecordingSort = {}));
 var TRecordingDeleteType;
 (function (TRecordingDeleteType) {
-    TRecordingDeleteType[TRecordingDeleteType["deletable"] = 2] = "deletable";
-    TRecordingDeleteType[TRecordingDeleteType["deleted"] = 1] = "deleted";
-    TRecordingDeleteType[TRecordingDeleteType["none"] = 0] = "none";
+    TRecordingDeleteType[TRecordingDeleteType["Deletable"] = 2] = "Deletable";
+    TRecordingDeleteType[TRecordingDeleteType["Deleted"] = 1] = "Deleted";
+    TRecordingDeleteType[TRecordingDeleteType["None"] = 0] = "None";
 })(TRecordingDeleteType || (exports.TRecordingDeleteType = TRecordingDeleteType = {}));
 //# sourceMappingURL=enum.js.map

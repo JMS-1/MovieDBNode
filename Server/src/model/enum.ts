@@ -22,7 +22,7 @@ export enum TRecordingSort {
 }
 
 export enum TRecordingDeleteType {
-  deletable = 2,
-  deleted = 1,
-  none = 0,
+  Deletable = 2,
+  Deleted = 1,
+  None = 0,
 }

@@ -14,11 +14,8 @@
       "sourceMaps": true,
       "type": "chrome",
       "url": "http://localhost:29500",
-      "sourceMapPathOverrides": {
-        "webpack://*": "${workspaceFolder}/Client/*"
-      },
       "userDataDir": "${workspaceFolder}/.vscode/chrome",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}/Client"
     },
     {
       "console": "integratedTerminal",

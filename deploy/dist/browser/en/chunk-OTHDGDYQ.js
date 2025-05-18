@@ -1,0 +1,10 @@
+import{b as d,c as _}from"./chunk-YRIJ4CPT.js";import{a as n,b as s}from"./chunk-KDYSHZA5.js";import{a,b as c,f as l,h as t,ha as f,qa as p,ra as h,sa as g}from"./chunk-WC7MP575.js";var v=`
+  query ($id: ID!) {
+    recordings {
+      findById(_id: $id) {
+        ${d}
+      }
+    }
+  }
+`,U=(()=>{class i extends g{get id(){return this._id}set id(e){this._id=e,this.load()}constructor(e,r,o,y){super(e,"Recording","recordings",d,o,y),this._recodings=r,this.ignoredFields=new Set(["__typename","_id","created","fullName"]),this._cloneAfterAddOrSave=!1,this._id="",this.load()}fromServer(e){return e.containerType=n[e.containerType??n.Undefined],e.deleteType=e.deleteType==null?void 0:s[e.deleteType],e}toServer(e){return e.containerType=n[e.containerType],e.deleteType=e.deleteType==null?void 0:s[e.deleteType],e}createNew(){let e=this._cloneAfterAddOrSave;return typeof e=="object"?(this._cloneAfterAddOrSave=!1,c(a({},this.fromServer(e)),{name:`Kopie von ${e.name}`})):{containerType:n.Undefined,genres:[],languages:[],links:[]}}load(){this._id?this._gql.call(v,{id:this._id},e=>{let r=e.recordings.findById;this._query.next({[r._id]:this.fromServer(r)}),this.refresh()}):this._query.next({})}save(e,r,o){this._cloneAfterAddOrSave=o,super.addOrUpdate(e,r)}clone(e){this._cloneAfterAddOrSave=this.toServer(JSON.parse(JSON.stringify(e))),this._router.navigate(["/recordings","NEW","NEW"])}afterAdd(e){this._recodings.reload(this._recodings.page),this._cloneAfterAddOrSave=this._cloneAfterAddOrSave&&e,this._cloneAfterAddOrSave?this._router.navigate(["/recordings","NEW",e._id]):this._router.navigateByUrl("/")}afterUpdate(e){this._recodings.reload(this._recodings.page),this._cloneAfterAddOrSave=this._cloneAfterAddOrSave&&e,this._cloneAfterAddOrSave?this._router.navigate(["/recordings","NEW",e._id]):this._router.navigateByUrl("/")}afterDelete(e){this._recodings.reload(this._recodings.page),this._router.navigateByUrl("/")}static{this.\u0275fac=function(r){return new(r||i)(t(p),t(_),t(h),t(f))}}static{this.\u0275prov=l({token:i,factory:i.\u0275fac})}}return i})();export{U as a};
+/**i18n:89832ca10e07b9b22f7f6c4347886c9b71cd69873c1434137d79347a92194613*/
