@@ -1,17 +1,27 @@
-<div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['containerId'] }">
-    <label i18n="@@recording.container">Ablage</label>
-    <semantic-single-select
-        [items]="ordered"
-        [(selected)]="container"
-        hint="(Ablage zuordnen)"
-        i18n-hint="@@recording.container.hint"
-    ></semantic-single-select>
+<div
+  class="field"
+  [ngClass]="{ error: edit.validationErrors?.['containerId'] }"
+>
+  <label i18n="@@recording.container">Ablage</label>
+  <semantic-single-select
+    [items]="ordered"
+    [(selected)]="container"
+    hint="(Ablage zuordnen)"
+    i18n-hint="@@recording.container.hint"
+  ></semantic-single-select>
 </div>
-<app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['containerId']"></app-validation-errors>
-<div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['containerPosition'] }">
-    <label i18n="@@recording.position">Standort</label>
-    <div class="ui input">
-        <input type="text" [(ngModel)]="position" />
-    </div>
+<app-validation-errors
+  [list]="edit.validationErrors?.['containerId']"
+></app-validation-errors>
+<div
+  class="field"
+  [ngClass]="{ error: edit.validationErrors?.['containerPosition'] }"
+>
+  <label i18n="@@recording.position">Standort</label>
+  <div class="ui input">
+    <input type="text" [(ngModel)]="position" />
+  </div>
 </div>
-<app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['containerPosition']"></app-validation-errors>
+<app-validation-errors
+  [list]="edit.validationErrors?.['containerPosition']"
+></app-validation-errors>

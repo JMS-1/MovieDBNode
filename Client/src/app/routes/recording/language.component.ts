@@ -18,7 +18,7 @@ import { ErrorsComponent } from '../errors/errors.component';
 export class RecordingLanguageComponent implements OnInit, OnDestroy {
   private _query?: Subscription;
 
-  @Input() edit?: IRecording & IWorkingCopy;
+  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
 
   ordered: ISelectItem[] = [];
 
@@ -42,12 +42,10 @@ export class RecordingLanguageComponent implements OnInit, OnDestroy {
   }
 
   get languages(): string[] {
-    return this.edit?.languages || [];
+    return this.edit.languages || [];
   }
 
   set languages(languages: string[]) {
-    if (this.edit) {
-      this.edit.languages = languages;
-    }
+    this.edit.languages = languages;
   }
 }

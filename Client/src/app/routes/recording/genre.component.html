@@ -1,10 +1,12 @@
-<div *ngIf="edit" class="field" [ngClass]="{ error: edit.validationErrors?.['genres'] }">
-    <label i18n="@@recording.genre">Kategorien</label>
-    <semantic-multi-select
-        [items]="ordered"
-        [(selected)]="genres"
-        hint="(Kategorien zuordnen)"
-        i18n-hint="@@recording.genre.hint"
-    ></semantic-multi-select>
+<div class="field" [ngClass]="{ error: edit.validationErrors?.['genres'] }">
+  <label i18n="@@recording.genre">Kategorien</label>
+  <semantic-multi-select
+    [items]="ordered"
+    [(selected)]="genres"
+    hint="(Kategorien zuordnen)"
+    i18n-hint="@@recording.genre.hint"
+  ></semantic-multi-select>
 </div>
-<app-validation-errors *ngIf="edit" [list]="edit.validationErrors?.['genres']"></app-validation-errors>
+<app-validation-errors
+  [list]="edit.validationErrors?.['genres']"
+></app-validation-errors>

@@ -13,47 +13,41 @@ import { ErrorsComponent } from '../errors/errors.component';
   imports: [CommonModule, FormsModule, ErrorsComponent],
 })
 export class RecordingLinkComponent {
-  @Input() edit?: IRecording & IWorkingCopy;
+  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
 
   active?: ILink = undefined;
 
   expanded = false;
 
   get links(): ILink[] {
-    return this.edit?.links || [];
+    return this.edit.links || [];
   }
 
   addLink(): void {
-    if (this.edit) {
-      const added: ILink = { name: '', url: '' };
+    const added: ILink = { name: '', url: '' };
 
-      this.edit.links = [...(this.edit.links || []), added];
+    this.edit.links = [...(this.edit.links || []), added];
 
-      this.active = added;
-    }
+    this.active = added;
   }
 
   delLink(): void {
-    if (this.edit) {
-      const links = this.edit.links || [];
-      const index = links.findIndex((l) => l === this.active);
+    const links = this.edit.links || [];
+    const index = links.findIndex((l) => l === this.active);
 
-      if (index >= 0) {
-        links.splice(index, 1);
+    if (index >= 0) {
+      links.splice(index, 1);
 
-        this.edit.links = links;
-      }
+      this.edit.links = links;
     }
   }
 
   get current(): number {
-    return this.edit?.links?.findIndex((l) => l === this.active) ?? -1;
+    return this.edit.links?.findIndex((l) => l === this.active) ?? -1;
   }
 
   private validate(): void {
-    if (this.edit) {
-      this.edit.links = this.edit.links || [];
-    }
+    this.edit.links = this.edit.links || [];
   }
 
   get name(): string {

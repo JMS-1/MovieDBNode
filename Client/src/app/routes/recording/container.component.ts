@@ -19,7 +19,7 @@ import { SelectComponent } from 'src/app/semantic/select/select.component';
 export class RecordingContainerComponent implements OnInit, OnDestroy {
   private _container?: Subscription;
 
-  @Input() edit?: IRecording & IWorkingCopy;
+  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
 
   ordered: ISelectItem[] = [];
 
@@ -43,22 +43,18 @@ export class RecordingContainerComponent implements OnInit, OnDestroy {
   }
 
   get container(): string {
-    return this.edit?.containerId || '';
+    return this.edit.containerId || '';
   }
 
   set container(containerId: string) {
-    if (this.edit) {
-      this.edit.containerId = containerId || undefined;
-    }
+    this.edit.containerId = containerId || undefined;
   }
 
   get position(): string {
-    return this.edit?.containerPosition || '';
+    return this.edit.containerPosition || '';
   }
 
   set position(containerPosition: string) {
-    if (this.edit) {
-      this.edit.containerPosition = containerPosition;
-    }
+    this.edit.containerPosition = containerPosition;
   }
 }

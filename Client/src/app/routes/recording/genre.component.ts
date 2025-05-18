@@ -18,7 +18,7 @@ import { ErrorsComponent } from '../errors/errors.component';
 export class RecordingGenreComponent implements OnInit, OnDestroy {
   private _query?: Subscription;
 
-  @Input() edit?: IRecording & IWorkingCopy;
+  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
 
   ordered: ISelectItem[] = [];
 
@@ -42,12 +42,10 @@ export class RecordingGenreComponent implements OnInit, OnDestroy {
   }
 
   get genres(): string[] {
-    return this.edit?.genres || [];
+    return this.edit.genres || [];
   }
 
   set genres(genres: string[]) {
-    if (this.edit) {
-      this.edit.genres = genres;
-    }
+    this.edit.genres = genres;
   }
 }

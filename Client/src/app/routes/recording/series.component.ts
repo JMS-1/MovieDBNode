@@ -18,7 +18,7 @@ import { ErrorsComponent } from '../errors/errors.component';
 export class RecordingSeriesComponent implements OnInit, OnDestroy {
   private _series?: Subscription;
 
-  @Input() edit?: IRecording & IWorkingCopy;
+  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
 
   ordered: ISelectItem[] = [];
 
@@ -42,12 +42,10 @@ export class RecordingSeriesComponent implements OnInit, OnDestroy {
   }
 
   get series(): string {
-    return this.edit?.series || '';
+    return this.edit.series || '';
   }
 
   set series(series: string) {
-    if (this.edit) {
-      this.edit.series = series || undefined;
-    }
+    this.edit.series = series || undefined;
   }
 }

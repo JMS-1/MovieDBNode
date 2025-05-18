@@ -19,21 +19,20 @@ export class RecordingTypeComponent
 {
   @angular.ViewChild('selector') selector?: angular.ElementRef<HTMLDivElement>;
 
-  @angular.Input() edit?: IRecording & IWorkingCopy;
+  @angular.Input({ required: true }) edit!: IRecording & IWorkingCopy;
 
   ngAfterViewInit(): void {
     const elem = $(this.selector?.nativeElement);
 
     elem.dropdown({
       forceSelection: false,
-      onChange: (s: string) =>
-        this.edit && (this.edit.containerType = parseInt(s, 10)),
+      onChange: (s: string) => (this.edit.containerType = parseInt(s, 10)),
     });
 
     setTimeout(() => {
       elem.dropdown(
         'set exactly',
-        `${this.edit?.containerType || recordingContainerType.Undefined}`,
+        `${this.edit.containerType ?? recordingContainerType.Undefined}`,
       );
 
       elem.css('visibility', '');

@@ -15,6 +15,8 @@ import { RecordingGenreComponent } from './genre.component';
 import { RecordingLanguageComponent } from './language.component';
 import { RecordingContainerComponent } from './container.component';
 import { ModalComponent } from 'src/app/semantic/modal/modal.component';
+import { RecordingDeleteComponent } from './recording-delete.component';
+import { RecordingRatingComponent } from './recording-rating.component';
 
 @Component({
   selector: 'app-recording',
@@ -26,9 +28,11 @@ import { ModalComponent } from 'src/app/semantic/modal/modal.component';
     FormsModule,
     ModalComponent,
     RecordingContainerComponent,
+    RecordingDeleteComponent,
     RecordingGenreComponent,
     RecordingLanguageComponent,
     RecordingLinkComponent,
+    RecordingRatingComponent,
     RecordingSeriesComponent,
     RecordingTypeComponent,
   ],
