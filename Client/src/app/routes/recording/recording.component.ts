@@ -1,89 +1,113 @@
-import { Component } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { Subscription } from 'rxjs'
-import { IRecording } from 'src/api'
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { IRecording } from 'src/api';
 
-import { RecordingService } from '../../services/recordings/recording.service'
-import { FormComponent } from '../form.component'
+import { RecordingService } from '../../services/recordings/recording.service';
+import { FormComponent } from '../form.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ErrorsComponent } from '../errors/errors.component';
+import { RecordingLinkComponent } from './link.component';
+import { RecordingSeriesComponent } from './series.component';
+import { RecordingTypeComponent } from './type.component';
+import { RecordingGenreComponent } from './genre.component';
+import { RecordingLanguageComponent } from './language.component';
+import { RecordingContainerComponent } from './container.component';
+import { ModalComponent } from 'src/app/semantic/modal/modal.component';
 
 @Component({
-    selector: 'app-recording',
-    styleUrls: ['./recording.component.scss'],
-    templateUrl: './recording.component.html',
-    standalone: false
+  selector: 'app-recording',
+  styleUrls: ['./recording.component.scss'],
+  templateUrl: './recording.component.html',
+  imports: [
+    CommonModule,
+    ErrorsComponent,
+    FormsModule,
+    ModalComponent,
+    RecordingContainerComponent,
+    RecordingGenreComponent,
+    RecordingLanguageComponent,
+    RecordingLinkComponent,
+    RecordingSeriesComponent,
+    RecordingTypeComponent,
+  ],
 })
 export class RecordingRouteComponent extends FormComponent<IRecording> {
-    private _params?: Subscription
+  private _params?: Subscription;
 
-    protected getEditService(): RecordingService {
-        return this._service
+  protected getEditService(): RecordingService {
+    return this._service;
+  }
+
+  constructor(
+    private readonly _service: RecordingService,
+    private readonly _route: ActivatedRoute,
+  ) {
+    super();
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+
+    this._params = this._route.params.subscribe((params) => {
+      this.select(params['id']);
+
+      this._service.id = this.editId === '@' ? '' : this.editId;
+    });
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this._params?.unsubscribe();
+  }
+
+  onSave(clone: boolean): void {
+    if (this.edit) {
+      this._service.save(this.editId, this.edit, clone);
     }
+  }
 
-    constructor(private readonly _service: RecordingService, private readonly _route: ActivatedRoute) {
-        super()
+  onClone(): void {
+    if (this.edit) {
+      this._service.clone(this.edit);
     }
+  }
 
-    override ngOnInit(): void {
-        super.ngOnInit()
+  onConfirm(): void {
+    this._service.remove(this.editId);
 
-        this._params = this._route.params.subscribe((params) => {
-            this.select(params['id'])
+    this.confirm = false;
+  }
 
-            this._service.id = this.editId === '@' ? '' : this.editId
-        })
+  get name(): string {
+    return this.edit?.name || '';
+  }
+
+  set name(name: string) {
+    if (this.edit) {
+      this.edit.name = name;
     }
+  }
 
-    override ngOnDestroy(): void {
-        super.ngOnDestroy()
+  get description(): string {
+    return this.edit?.description || '';
+  }
 
-        this._params?.unsubscribe()
+  set description(description: string) {
+    if (this.edit) {
+      this.edit.description = description;
     }
+  }
 
-    onSave(clone: boolean): void {
-        if (this.edit) {
-            this._service.save(this.editId, this.edit, clone)
-        }
+  get rentTo(): string {
+    return this.edit?.rentTo || '';
+  }
+
+  set rentTo(rentTo: string) {
+    if (this.edit) {
+      this.edit.rentTo = rentTo;
     }
-
-    onClone(): void {
-        if (this.edit) {
-            this._service.clone(this.edit)
-        }
-    }
-
-    onConfirm(): void {
-        this._service.remove(this.editId)
-
-        this.confirm = false
-    }
-
-    get name(): string {
-        return this.edit?.name || ''
-    }
-
-    set name(name: string) {
-        if (this.edit) {
-            this.edit.name = name
-        }
-    }
-
-    get description(): string {
-        return this.edit?.description || ''
-    }
-
-    set description(description: string) {
-        if (this.edit) {
-            this.edit.description = description
-        }
-    }
-
-    get rentTo(): string {
-        return this.edit?.rentTo || ''
-    }
-
-    set rentTo(rentTo: string) {
-        if (this.edit) {
-            this.edit.rentTo = rentTo
-        }
-    }
+  }
 }

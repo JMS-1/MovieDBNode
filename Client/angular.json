@@ -102,8 +102,7 @@
       "root": "",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
-          "standalone": false
+          "style": "scss"
         }
       },
       "sourceRoot": "src"

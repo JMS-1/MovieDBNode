@@ -7,7 +7,7 @@ declare let $: any;
   selector: 'app-semantic-modal',
   styleUrls: ['./modal.component.scss'],
   templateUrl: './modal.component.html',
-  standalone: false,
+  imports: [],
 })
 export class ModalComponent
   implements angular.OnChanges, angular.AfterViewInit, angular.OnDestroy

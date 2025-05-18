@@ -2,6 +2,8 @@ import * as angular from '@angular/core';
 
 import { IRecording, recordingContainerType } from '../../../api';
 import { IWorkingCopy } from '../../services/edit.service';
+import { CommonModule } from '@angular/common';
+import { ErrorsComponent } from '../errors/errors.component';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any;
@@ -10,7 +12,7 @@ declare let $: any;
   selector: 'app-recording-type',
   styleUrls: ['./type.component.scss'],
   templateUrl: './type.component.html',
-  standalone: false,
+  imports: [CommonModule, ErrorsComponent],
 })
 export class RecordingTypeComponent
   implements angular.AfterViewInit, angular.OnDestroy

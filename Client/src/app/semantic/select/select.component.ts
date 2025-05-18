@@ -3,6 +3,7 @@
 import * as angular from '@angular/core';
 
 import { ISelectItem } from '../../utils';
+import { CommonModule } from '@angular/common';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any;
@@ -11,7 +12,7 @@ declare let $: any;
   selector: 'semantic-single-select',
   styleUrls: ['./select.component.scss'],
   templateUrl: './select.component.html',
-  standalone: false,
+  imports: [CommonModule],
 })
 export class SelectComponent
   implements angular.AfterViewInit, angular.OnChanges, angular.OnDestroy

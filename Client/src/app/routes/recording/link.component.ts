@@ -1,91 +1,94 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input } from '@angular/core';
 
-import { ILink, IRecording } from '../../../api'
-import { IWorkingCopy } from '../../services/edit.service'
+import { ILink, IRecording } from '../../../api';
+import { IWorkingCopy } from '../../services/edit.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ErrorsComponent } from '../errors/errors.component';
 
 @Component({
-    selector: 'app-recording-link',
-    styleUrls: ['./link.component.scss'],
-    templateUrl: './link.component.html',
-    standalone: false
+  selector: 'app-recording-link',
+  styleUrls: ['./link.component.scss'],
+  templateUrl: './link.component.html',
+  imports: [CommonModule, FormsModule, ErrorsComponent],
 })
 export class RecordingLinkComponent {
-    @Input() edit?: IRecording & IWorkingCopy
+  @Input() edit?: IRecording & IWorkingCopy;
 
-    active?: ILink = undefined
+  active?: ILink = undefined;
 
-    expanded = false
+  expanded = false;
 
-    get links(): ILink[] {
-        return this.edit?.links || []
+  get links(): ILink[] {
+    return this.edit?.links || [];
+  }
+
+  addLink(): void {
+    if (this.edit) {
+      const added: ILink = { name: '', url: '' };
+
+      this.edit.links = [...(this.edit.links || []), added];
+
+      this.active = added;
     }
+  }
 
-    addLink(): void {
-        if (this.edit) {
-            const added: ILink = { name: '', url: '' }
+  delLink(): void {
+    if (this.edit) {
+      const links = this.edit.links || [];
+      const index = links.findIndex((l) => l === this.active);
 
-            this.edit.links = [...(this.edit.links || []), added]
+      if (index >= 0) {
+        links.splice(index, 1);
 
-            this.active = added
-        }
+        this.edit.links = links;
+      }
     }
+  }
 
-    delLink(): void {
-        if (this.edit) {
-            const links = this.edit.links || []
-            const index = links.findIndex((l) => l === this.active)
+  get current(): number {
+    return this.edit?.links?.findIndex((l) => l === this.active) ?? -1;
+  }
 
-            if (index >= 0) {
-                links.splice(index, 1)
-
-                this.edit.links = links
-            }
-        }
+  private validate(): void {
+    if (this.edit) {
+      this.edit.links = this.edit.links || [];
     }
+  }
 
-    get current(): number {
-        return this.edit?.links?.findIndex((l) => l === this.active) ?? -1
+  get name(): string {
+    return this.active?.name || '';
+  }
+
+  set name(name: string) {
+    if (this.active) {
+      this.active.name = name;
+
+      this.validate();
     }
+  }
 
-    private validate(): void {
-        if (this.edit) {
-            this.edit.links = this.edit.links || []
-        }
+  get url(): string {
+    return this.active?.url || '';
+  }
+
+  set url(url: string) {
+    if (this.active) {
+      this.active.url = url;
+
+      this.validate();
     }
+  }
 
-    get name(): string {
-        return this.active?.name || ''
+  get description(): string {
+    return this.active?.description || '';
+  }
+
+  set description(description: string) {
+    if (this.active) {
+      this.active.description = description;
+
+      this.validate();
     }
-
-    set name(name: string) {
-        if (this.active) {
-            this.active.name = name
-
-            this.validate()
-        }
-    }
-
-    get url(): string {
-        return this.active?.url || ''
-    }
-
-    set url(url: string) {
-        if (this.active) {
-            this.active.url = url
-
-            this.validate()
-        }
-    }
-
-    get description(): string {
-        return this.active?.description || ''
-    }
-
-    set description(description: string) {
-        if (this.active) {
-            this.active.description = description
-
-            this.validate()
-        }
-    }
+  }
 }
