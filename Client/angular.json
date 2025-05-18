@@ -39,6 +39,7 @@
           "options": {
             "allowedCommonJsDependencies": ["fastest-validator"],
             "assets": ["src/favicon.ico", "src/assets"],
+            "browser": "src/main.ts",
             "index": "src/index.html",
             "inlineStyleLanguage": "scss",
             "outputPath": {
@@ -50,14 +51,18 @@
               "src/assets/default/semantic.js"
             ],
             "styles": ["src/styles.scss"],
-            "tsConfig": "tsconfig.app.json",
-            "browser": "src/main.ts"
+            "tsConfig": "tsconfig.app.json"
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
-            "buildTarget": "client:build"
+            "buildTarget": "client:build",
+            "includeContext": true,
+            "outputPath": "src/locale",
+            "prettyNestedTags": false,
+            "targetFiles": ["messages.en.xlf"],
+            "trim": true
           }
         },
         "serve": {

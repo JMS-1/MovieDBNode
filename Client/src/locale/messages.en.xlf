@@ -31,7 +31,7 @@
         <target>rent out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/filters/rent/rent.component.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="filter.rent.no" datatype="html">
@@ -39,7 +39,7 @@
         <target>available</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/filters/rent/rent.component.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="filter.series" datatype="html">
@@ -63,7 +63,7 @@
         <target>Recordings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.series" datatype="html">
@@ -71,7 +71,7 @@
         <target>Series</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.containers" datatype="html">
@@ -79,7 +79,7 @@
         <target>Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.languages" datatype="html">
@@ -87,7 +87,7 @@
         <target>Languages</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.genres" datatype="html">
@@ -95,7 +95,7 @@
         <target>Categories</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.new" datatype="html">
@@ -103,7 +103,7 @@
         <target>New</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.themes" datatype="html">
@@ -111,7 +111,7 @@
         <target>Theme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.language" datatype="html">
@@ -119,7 +119,7 @@
         <target>Language</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.new.recording" datatype="html">
@@ -127,7 +127,7 @@
         <target>Create Recording</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.new.series" datatype="html">
@@ -135,7 +135,7 @@
         <target>Create Series</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.new.container" datatype="html">
@@ -143,7 +143,7 @@
         <target>Create Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.new.language" datatype="html">
@@ -151,7 +151,7 @@
         <target>Add Language</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.new.genre" datatype="html">
@@ -159,7 +159,7 @@
         <target>Add Category</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.themes.default" datatype="html">
@@ -167,7 +167,7 @@
         <target>Default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.themes.alt1" datatype="html">
@@ -175,7 +175,7 @@
         <target>Variant 1</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menu.themes.alt2" datatype="html">
@@ -183,23 +183,23 @@
         <target>Variant 2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/root/root.component.ts</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.cancel" datatype="html">
-        <source> Verwerfen </source>
+        <source>Verwerfen</source>
         <target>Cancel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">3,5</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.save" datatype="html">
-        <source> Speichern </source>
+        <source>Speichern</source>
         <target>Save</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">11,13</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.delete" datatype="html">
@@ -223,7 +223,7 @@
         <target>(none)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.name" datatype="html">
@@ -231,7 +231,7 @@
         <target>Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.type" datatype="html">
@@ -239,7 +239,7 @@
         <target>Type of Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.description" datatype="html">
@@ -247,7 +247,7 @@
         <target>Description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.position" datatype="html">
@@ -255,7 +255,7 @@
         <target>Location in Parent Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.recording" datatype="html">
@@ -263,7 +263,7 @@
         <target>Recording</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.recordingPosition" datatype="html">
@@ -271,27 +271,15 @@
         <target>Position</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.confirm" datatype="html">
-        <source>
-          Das Löschen einer Ablage kann
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          nicht
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          rückgängig gemacht werden. Soll die Ablage wirklich endgültig entfernt werden?
-        </source>
-        <target>
-          Deleting a Storage can
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          not
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          be undone. Do you really want to delete this Storage?
-        </target>
+        <source>Das Löschen einer Ablage kann <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rückgängig gemacht werden. Soll die Ablage wirklich endgültig entfernt werden?</source>
+        <target state="new">Deleting a Storage can <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> not <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be undone. Do you really want to delete this Storage?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/container/form.component.html</context>
-          <context context-type="linenumber">70,73</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.search" datatype="html">
@@ -311,19 +299,19 @@
         </context-group>
       </trans-unit>
       <trans-unit id="genre.cancel" datatype="html">
-        <source> Verwerfen </source>
+        <source>Verwerfen</source>
         <target>Cancel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/genre/form.component.html</context>
-          <context context-type="linenumber">3,5</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="genre.save" datatype="html">
-        <source> Speichern </source>
+        <source>Speichern</source>
         <target>Save</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/genre/form.component.html</context>
-          <context context-type="linenumber">11,13</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="genre.delete" datatype="html">
@@ -343,39 +331,27 @@
         </context-group>
       </trans-unit>
       <trans-unit id="genre.confirm" datatype="html">
-        <source>
-          Das Löschen einer Kategorie kann
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          nicht
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          rückgängig gemacht werden. Soll die Kategorie wirklich endgültig entfernt werden?
-        </source>
-        <target>
-          Deleting a Category can
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          not
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          be undone. Do you really want to delete this Category?
-        </target>
+        <source>Das Löschen einer Kategorie kann <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rückgängig gemacht werden. Soll die Kategorie wirklich endgültig entfernt werden?</source>
+        <target state="new">Deleting a Category can <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> not <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be undone. Do you really want to delete this Category?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/genre/form.component.html</context>
-          <context context-type="linenumber">25,28</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="language.cancel" datatype="html">
-        <source> Verwerfen </source>
+        <source>Verwerfen</source>
         <target>Cancel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/language/form.component.html</context>
-          <context context-type="linenumber">3,5</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="language.save" datatype="html">
-        <source> Speichern </source>
+        <source>Speichern</source>
         <target>Save</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/language/form.component.html</context>
-          <context context-type="linenumber">11,13</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="language.delete" datatype="html">
@@ -395,23 +371,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="language.confirm" datatype="html">
-        <source>
-          Das Löschen einer Sprache kann
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          nicht
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          rückgängig gemacht werden. Soll die Sprache wirklich endgültig entfernt werden?
-        </source>
-        <target>
-          Deleting a Language can
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          not
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          be undone. Do you really want to delete this Language?
-        </target>
+        <source>Das Löschen einer Sprache kann <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rückgängig gemacht werden. Soll die Sprache wirklich endgültig entfernt werden?</source>
+        <target state="new">Deleting a Language can <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> not <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be undone. Do you really want to delete this Language?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/language/form.component.html</context>
-          <context context-type="linenumber">25,28</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.container" datatype="html">
@@ -419,7 +383,7 @@
         <target>Storage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/container.component.html</context>
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.container.hint" datatype="html">
@@ -427,7 +391,7 @@
         <target>(assign Storage)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/container.component.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.position" datatype="html">
@@ -435,7 +399,7 @@
         <target>Location</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/container.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.genre" datatype="html">
@@ -483,7 +447,7 @@
         <target>Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/link.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.url" datatype="html">
@@ -491,7 +455,7 @@
         <target>URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/link.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.description" datatype="html">
@@ -499,11 +463,11 @@
         <target>Description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/link.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.links.delete" datatype="html">
@@ -511,31 +475,31 @@
         <target>Delete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/link.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.cancel" datatype="html">
-        <source> Verwerfen </source>
+        <source>Verwerfen</source>
         <target>Cancel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">3,5</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.save" datatype="html">
-        <source> Speichern und zurück </source>
+        <source>Speichern und zurück</source>
         <target>Save and exit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">11,13</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.saveAndClone" datatype="html">
-        <source> Speichern und neue Kopie </source>
+        <source>Speichern und neue Kopie</source>
         <target>Save and Clone</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">19,21</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.clone" datatype="html">
@@ -543,7 +507,7 @@
         <target>Clone</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.delete" datatype="html">
@@ -551,7 +515,7 @@
         <target>Delete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.name" datatype="html">
@@ -559,7 +523,7 @@
         <target>Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.rent" datatype="html">
@@ -567,27 +531,15 @@
         <target>Rent to</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.confirm" datatype="html">
-        <source>
-          Das Löschen einer Aufzeichnung kann
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          nicht
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          rückgängig gemacht werden. Soll die Aufzeichnung wirklich endgültig entfernt werden?
-        </source>
-        <target>
-          Deleting a Recording can
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          not
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          be undone. Do you really want to delete this Recording?
-        </target>
+        <source>Das Löschen einer Aufzeichnung kann <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rückgängig gemacht werden. Soll die Aufzeichnung wirklich endgültig entfernt werden?</source>
+        <target state="new">Deleting a Recording can <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> not <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be undone. Do you really want to delete this Recording?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/recording.component.html</context>
-          <context context-type="linenumber">54,57</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.series" datatype="html">
@@ -611,7 +563,7 @@
         <target>Type of Media</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.unknown" datatype="html">
@@ -619,7 +571,7 @@
         <target>(unknown)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.vcd" datatype="html">
@@ -627,7 +579,7 @@
         <target>Video CD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.svcd" datatype="html">
@@ -635,7 +587,7 @@
         <target>Super-Video CD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.burnedDvd" datatype="html">
@@ -643,7 +595,7 @@
         <target>DVD (burned)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.dvd" datatype="html">
@@ -651,7 +603,7 @@
         <target>DVD (bought)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recording.blueray" datatype="html">
@@ -659,7 +611,7 @@
         <target>Blu-Ray</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recording/type.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recordings.export" datatype="html">
@@ -679,27 +631,27 @@
         </context-group>
       </trans-unit>
       <trans-unit id="recordings.count" datatype="html">
-        <source> von </source>
-        <target> of </target>
+        <source>von</source>
+        <target>of</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/recordings.component.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recordings.name" datatype="html">
-        <source> Name </source>
+        <source>Name</source>
         <target>Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/table.component.html</context>
-          <context context-type="linenumber">8,10</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recordings.created" datatype="html">
-        <source> Erstellt </source>
+        <source>Erstellt</source>
         <target>Created</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/recordings/table.component.html</context>
-          <context context-type="linenumber">15,17</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="recordings.languge" datatype="html">
@@ -719,19 +671,19 @@
         </context-group>
       </trans-unit>
       <trans-unit id="series.cancel" datatype="html">
-        <source> Verwerfen </source>
+        <source>Verwerfen</source>
         <target>Cancel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">3,5</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.save" datatype="html">
-        <source> Speichern </source>
+        <source>Speichern</source>
         <target>Save</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">11,13</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.delete" datatype="html">
@@ -755,7 +707,7 @@
         <target>(none)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.name" datatype="html">
@@ -763,7 +715,7 @@
         <target>Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.description" datatype="html">
@@ -771,27 +723,15 @@
         <target>Description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.confirm" datatype="html">
-        <source>
-          Das Löschen einer Serie kann
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          nicht
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          rückgängig gemacht werden. Soll die Serie wirklich endgültig entfernt werden?
-        </source>
-        <target>
-          Deleting a Series can
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;" />
-          not
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
-          be undone. Do you really want to delete this Series?
-        </target>
+        <source>Das Löschen einer Serie kann <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rückgängig gemacht werden. Soll die Serie wirklich endgültig entfernt werden?</source>
+        <target state="new">Deleting a Series can <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> not <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> be undone. Do you really want to delete this Series?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/routes/series/form.component.html</context>
-          <context context-type="linenumber">41,44</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="series.search" datatype="html">
@@ -807,7 +747,7 @@
         <target>(please choose)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/multi/multi.component.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="search.hint" datatype="html">
@@ -815,7 +755,7 @@
         <target>Search...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/search/search.component.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="singleselect.hint" datatype="html">
@@ -823,7 +763,7 @@
         <target>(please choose)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/select/select.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="container.type.unknown" datatype="html">
@@ -879,7 +819,7 @@
         <target>Yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/modal/modal.component.html</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="No" datatype="html">
@@ -888,6 +828,38 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/semantic/modal/modal.component.html</context>
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="recording.deleteType" datatype="html">
+        <source>Sichtbarkeit</source>
+        <target state="new">Visibility</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/recording/recording-delete.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="recording.regular" datatype="html">
+        <source>Normal</source>
+        <target state="new">Normal</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/recording/recording-delete.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="recording.deletable" datatype="html">
+        <source>Kann gelöscht werden</source>
+        <target state="new">Can be deleted</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/recording/recording-delete.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="recording.deleted" datatype="html">
+        <source>Gelöscht</source>
+        <target state="new">Deleted</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/routes/recording/recording-delete.component.html</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
     </body>
