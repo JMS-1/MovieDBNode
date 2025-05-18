@@ -58,9 +58,11 @@
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
             "buildTarget": "client:build",
+            "format": "xlf2",
             "includeContext": true,
             "outputPath": "src/locale",
             "prettyNestedTags": false,
+            "sort": "idAsc",
             "targetFiles": ["messages.en.xlf"],
             "trim": true
           }
