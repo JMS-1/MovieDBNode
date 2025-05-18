@@ -1,29 +1,51 @@
 <div *ngIf="edit">
-    <div class="actions">
-        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()" i18n="@@language.cancel">
-            Verwerfen
-        </div>
-        <div
-            class="ui primary button"
-            [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
-            (click)="onSave()"
-            i18n="@@language.save"
-        >
-            Speichern
-        </div>
-        <div *ngIf="editId" class="ui negative button" (click)="onRemove()" i18n="@@language.delete">Löschen</div>
+  <div class="actions">
+    <div
+      class="ui button"
+      [ngClass]="{ disabled: !edit.isDirty }"
+      (click)="reload()"
+      i18n="@@language.cancel"
+    >
+      Verwerfen
     </div>
-    <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
-        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['name'] }">
-            <label i18n="@@language.name">Sprache</label>
-            <div class="{ui:true, input:true}">
-                <input type="text" [(ngModel)]="name" />
-            </div>
-        </div>
-        <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
+    <div
+      class="ui primary button"
+      [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
+      (click)="onSave()"
+      i18n="@@language.save"
+    >
+      Speichern
     </div>
-    <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()" i18n="@@language.confirm">
-        Das Löschen einer Sprache kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Sprache wirklich
-        endgültig entfernt werden?
-    </app-semantic-modal>
+    <div
+      *ngIf="editId"
+      class="ui negative button"
+      (click)="onRemove()"
+      i18n="@@language.delete"
+    >
+      Löschen
+    </div>
+  </div>
+  <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+    <div
+      class="required field"
+      [ngClass]="{ error: edit.validationErrors?.['name'] }"
+    >
+      <label i18n="@@language.name">Sprache</label>
+      <div class="{ui:true, input:true}">
+        <input type="text" [(ngModel)]="name" />
+      </div>
+    </div>
+    <app-validation-errors
+      [list]="edit.validationErrors?.['name']"
+    ></app-validation-errors>
+  </div>
+  <app-semantic-modal
+    [show]="confirm"
+    (closed)="confirm = false"
+    (confirm)="onConfirm()"
+    i18n="@@language.confirm"
+  >
+    Das Löschen einer Sprache kann nicht rückgängig gemacht werden. Soll die
+    Sprache wirklich endgültig entfernt werden?
+  </app-semantic-modal>
 </div>

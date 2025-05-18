@@ -3,7 +3,7 @@
   <file id="ngi18n" original="ng.template">
     <unit id="container.cancel">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:4,6</note>
+        <note category="location">src/app/routes/container/form.component.html:9,12</note>
       </notes>
       <segment>
         <source>Verwerfen</source>
@@ -11,15 +11,15 @@
     </unit>
     <unit id="container.confirm">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:69,71</note>
+        <note category="location">src/app/routes/container/form.component.html:119,122</note>
       </notes>
       <segment>
-        <source>Das Löschen einer Ablage kann <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">nicht</pc> rückgängig gemacht werden. Soll die Ablage wirklich endgültig entfernt werden?</source>
+        <source>Das Löschen einer Ablage kann nicht rückgängig gemacht werden. Soll die Ablage wirklich endgültig entfernt werden?</source>
       </segment>
     </unit>
     <unit id="container.delete">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:14,16</note>
+        <note category="location">src/app/routes/container/form.component.html:25,28</note>
       </notes>
       <segment>
         <source>Löschen</source>
@@ -27,7 +27,7 @@
     </unit>
     <unit id="container.description">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:40,41</note>
+        <note category="location">src/app/routes/container/form.component.html:70,71</note>
       </notes>
       <segment>
         <source>Beschreibung</source>
@@ -35,7 +35,7 @@
     </unit>
     <unit id="container.name">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:28,29</note>
+        <note category="location">src/app/routes/container/form.component.html:48,49</note>
       </notes>
       <segment>
         <source>Name</source>
@@ -43,7 +43,7 @@
     </unit>
     <unit id="container.parent">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:18,19</note>
+        <note category="location">src/app/routes/container/form.component.html:33,34</note>
       </notes>
       <segment>
         <source>Übergeordnete Ablage</source>
@@ -51,7 +51,7 @@
     </unit>
     <unit id="container.parent.hint">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:23</note>
+        <note category="location">src/app/routes/container/form.component.html:38</note>
       </notes>
       <segment>
         <source>(keine)</source>
@@ -59,7 +59,7 @@
     </unit>
     <unit id="container.position">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:47,48</note>
+        <note category="location">src/app/routes/container/form.component.html:83,85</note>
       </notes>
       <segment>
         <source>Position in der übergeordneten Ablage</source>
@@ -67,7 +67,7 @@
     </unit>
     <unit id="container.recording">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:57,58</note>
+        <note category="location">src/app/routes/container/form.component.html:99,100</note>
       </notes>
       <segment>
         <source>Aufzeichnung</source>
@@ -75,7 +75,7 @@
     </unit>
     <unit id="container.recordingPosition">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:58,61</note>
+        <note category="location">src/app/routes/container/form.component.html:100,103</note>
       </notes>
       <segment>
         <source>Position</source>
@@ -83,7 +83,7 @@
     </unit>
     <unit id="container.save">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:12,14</note>
+        <note category="location">src/app/routes/container/form.component.html:17,20</note>
       </notes>
       <segment>
         <source>Speichern</source>
@@ -99,7 +99,7 @@
     </unit>
     <unit id="container.type">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:35,36</note>
+        <note category="location">src/app/routes/container/form.component.html:60,61</note>
       </notes>
       <segment>
         <source>Art der Ablage</source>
@@ -211,7 +211,7 @@
     </unit>
     <unit id="genre.cancel">
       <notes>
-        <note category="location">src/app/routes/genre/form.component.html:4,6</note>
+        <note category="location">src/app/routes/genre/form.component.html:9,12</note>
       </notes>
       <segment>
         <source>Verwerfen</source>
@@ -219,15 +219,15 @@
     </unit>
     <unit id="genre.confirm">
       <notes>
-        <note category="location">src/app/routes/genre/form.component.html:26,28</note>
+        <note category="location">src/app/routes/genre/form.component.html:48,50</note>
       </notes>
       <segment>
-        <source>Das Löschen einer Kategorie kann <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">nicht</pc> rückgängig gemacht werden. Soll die Kategorie wirklich endgültig entfernt werden?</source>
+        <source>Das Löschen einer Kategorie kann nicht rückgängig gemacht werden. Soll die Kategorie wirklich endgültig entfernt werden?</source>
       </segment>
     </unit>
     <unit id="genre.delete">
       <notes>
-        <note category="location">src/app/routes/genre/form.component.html:14,16</note>
+        <note category="location">src/app/routes/genre/form.component.html:25,28</note>
       </notes>
       <segment>
         <source>Löschen</source>
@@ -235,7 +235,7 @@
     </unit>
     <unit id="genre.name">
       <notes>
-        <note category="location">src/app/routes/genre/form.component.html:18,19</note>
+        <note category="location">src/app/routes/genre/form.component.html:33,34</note>
       </notes>
       <segment>
         <source>Sprache</source>
@@ -243,7 +243,7 @@
     </unit>
     <unit id="genre.save">
       <notes>
-        <note category="location">src/app/routes/genre/form.component.html:12,13</note>
+        <note category="location">src/app/routes/genre/form.component.html:17,19</note>
       </notes>
       <segment>
         <source>Speichern</source>
@@ -259,7 +259,7 @@
     </unit>
     <unit id="language.cancel">
       <notes>
-        <note category="location">src/app/routes/language/form.component.html:4,6</note>
+        <note category="location">src/app/routes/language/form.component.html:9,12</note>
       </notes>
       <segment>
         <source>Verwerfen</source>
@@ -267,15 +267,15 @@
     </unit>
     <unit id="language.confirm">
       <notes>
-        <note category="location">src/app/routes/language/form.component.html:26,28</note>
+        <note category="location">src/app/routes/language/form.component.html:48,50</note>
       </notes>
       <segment>
-        <source>Das Löschen einer Sprache kann <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">nicht</pc> rückgängig gemacht werden. Soll die Sprache wirklich endgültig entfernt werden?</source>
+        <source>Das Löschen einer Sprache kann nicht rückgängig gemacht werden. Soll die Sprache wirklich endgültig entfernt werden?</source>
       </segment>
     </unit>
     <unit id="language.delete">
       <notes>
-        <note category="location">src/app/routes/language/form.component.html:14,16</note>
+        <note category="location">src/app/routes/language/form.component.html:25,28</note>
       </notes>
       <segment>
         <source>Löschen</source>
@@ -283,7 +283,7 @@
     </unit>
     <unit id="language.name">
       <notes>
-        <note category="location">src/app/routes/language/form.component.html:18,19</note>
+        <note category="location">src/app/routes/language/form.component.html:33,34</note>
       </notes>
       <segment>
         <source>Sprache</source>
@@ -291,7 +291,7 @@
     </unit>
     <unit id="language.save">
       <notes>
-        <note category="location">src/app/routes/language/form.component.html:12,14</note>
+        <note category="location">src/app/routes/language/form.component.html:17,20</note>
       </notes>
       <segment>
         <source>Speichern</source>
@@ -475,10 +475,10 @@
     </unit>
     <unit id="recording.confirm">
       <notes>
-        <note category="location">src/app/routes/recording/recording.component.html:88,90</note>
+        <note category="location">src/app/routes/recording/recording.component.html:88,91</note>
       </notes>
       <segment>
-        <source>Das Löschen einer Aufzeichnung kann <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">nicht</pc> rückgängig gemacht werden. Soll die Aufzeichnung wirklich endgültig entfernt werden?</source>
+        <source>Das Löschen einer Aufzeichnung kann nicht rückgängig gemacht werden. Soll die Aufzeichnung wirklich endgültig entfernt werden?</source>
       </segment>
     </unit>
     <unit id="recording.container">
@@ -783,7 +783,7 @@
         <note category="location">src/app/routes/series/form.component.html:75,77</note>
       </notes>
       <segment>
-        <source>Das Löschen einer Serie kann <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">nicht</pc> rückgängig gemacht werden. Soll die Serie wirklich endgültig entfernt werden?</source>
+        <source>Das Löschen einer Serie kann nicht rückgängig gemacht werden. Soll die Serie wirklich endgültig entfernt werden?</source>
       </segment>
     </unit>
     <unit id="series.delete">

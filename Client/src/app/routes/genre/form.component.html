@@ -1,29 +1,51 @@
 <div *ngIf="edit">
-    <div class="actions">
-        <div class="ui button" [ngClass]="{ disabled: !edit.isDirty }" (click)="reload()" i18n="@@genre.cancel">
-            Verwerfen
-        </div>
-        <div
-            class="ui primary button"
-            [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
-            (click)="onSave()"
-            i18n="@@genre.save"
-        >
-            Speichern
-        </div>
-        <div *ngIf="editId" class="ui negative button" (click)="onRemove()" i18n="@@genre.delete">Löschen</div>
+  <div class="actions">
+    <div
+      class="ui button"
+      [ngClass]="{ disabled: !edit.isDirty }"
+      (click)="reload()"
+      i18n="@@genre.cancel"
+    >
+      Verwerfen
     </div>
-    <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
-        <div class="required field" [ngClass]="{ error: edit.validationErrors?.['name'] }">
-            <label i18n="@@genre.name">Sprache</label>
-            <div class="ui input">
-                <input type="text" [(ngModel)]="name" />
-            </div>
-        </div>
-        <app-validation-errors [list]="edit.validationErrors?.['name']"></app-validation-errors>
+    <div
+      class="ui primary button"
+      [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
+      (click)="onSave()"
+      i18n="@@genre.save"
+    >
+      Speichern
     </div>
-    <app-semantic-modal [show]="confirm" (closed)="confirm = false" (confirm)="onConfirm()" i18n="@@genre.confirm">
-        Das Löschen einer Kategorie kann <strong>nicht</strong> rückgängig gemacht werden. Soll die Kategorie wirklich
-        endgültig entfernt werden?
-    </app-semantic-modal>
+    <div
+      *ngIf="editId"
+      class="ui negative button"
+      (click)="onRemove()"
+      i18n="@@genre.delete"
+    >
+      Löschen
+    </div>
+  </div>
+  <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+    <div
+      class="required field"
+      [ngClass]="{ error: edit.validationErrors?.['name'] }"
+    >
+      <label i18n="@@genre.name">Sprache</label>
+      <div class="ui input">
+        <input type="text" [(ngModel)]="name" />
+      </div>
+    </div>
+    <app-validation-errors
+      [list]="edit.validationErrors?.['name']"
+    ></app-validation-errors>
+  </div>
+  <app-semantic-modal
+    [show]="confirm"
+    (closed)="confirm = false"
+    (confirm)="onConfirm()"
+    i18n="@@genre.confirm"
+  >
+    Das Löschen einer Kategorie kann nicht rückgängig gemacht werden. Soll die
+    Kategorie wirklich endgültig entfernt werden?
+  </app-semantic-modal>
 </div>
