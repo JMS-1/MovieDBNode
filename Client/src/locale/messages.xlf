@@ -618,6 +618,14 @@
         <source>Standort</source>
       </segment>
     </unit>
+    <unit id="recording.rating">
+      <notes>
+        <note category="location">src/app/routes/recording/recording-rating.component.html:2,4</note>
+      </notes>
+      <segment>
+        <source>Bewertung</source>
+      </segment>
+    </unit>
     <unit id="recording.regular">
       <notes>
         <note category="location">src/app/routes/recording/recording-delete.component.html:7,8</note>

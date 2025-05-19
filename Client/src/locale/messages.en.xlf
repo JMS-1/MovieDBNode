@@ -694,6 +694,15 @@
         <target>Location</target>
       </segment>
     </unit>
+    <unit id="recording.rating">
+      <notes>
+        <note category="location">src/app/routes/recording/recording-rating.component.html:2,4</note>
+      </notes>
+      <segment state="final">
+        <source>Bewertung</source>
+        <target>Rating</target>
+      </segment>
+    </unit>
     <unit id="recording.regular" datatype="html">
       <notes>
         <note category="location">src/app/routes/recording/recording-delete.component.html:7,8</note>

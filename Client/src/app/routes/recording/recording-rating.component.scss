@@ -1,0 +1,26 @@
+.stars {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  height: 1em;
+
+  > .rating {
+    visibility: hidden;
+    pointer-events: none;
+    position: relative;
+
+    &.visible {
+      visibility: unset;
+      pointer-events: unset;
+    }
+
+    > .trash {
+      position: relative;
+      top: 1px;
+      display: inline-block;
+      margin-left: 4px;
+    }
+  }
+}
