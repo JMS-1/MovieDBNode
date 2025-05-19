@@ -10,7 +10,7 @@ import { SearchComponent } from './semantic/search/search.component';
 import { SelectComponent } from './semantic/select/select.component';
 
 @NgModule({
-  declarations: [MasterDetailComponent, SearchComponent],
+  declarations: [MasterDetailComponent],
   exports: [
     CommonModule,
     ErrorsComponent,
@@ -27,6 +27,7 @@ import { SelectComponent } from './semantic/select/select.component';
     FormsModule,
     ModalComponent,
     MultiSelectComponent,
+    SearchComponent,
     SelectComponent,
   ],
 })

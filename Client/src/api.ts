@@ -54,7 +54,7 @@ export interface IRecordingQueryRequest {
   rating?: number;
   rent?: boolean;
   series?: string[];
-  sort: 'created' | 'fullName';
+  sort: 'created' | 'fullName' | 'rating';
   sortOrder: 'Ascending' | 'Descending';
 }
 

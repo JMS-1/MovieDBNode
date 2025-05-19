@@ -1,15 +1,28 @@
 <td>
-    <div>
-        <div>{{ item.fullName }}</div>
-        <i *ngIf="!!rent" class="ui icon user outline" [title]="rent"></i>
+  <div>
+    <div>{{ item.fullName }}</div>
+    <i *ngIf="!!rent" class="ui icon user outline" [title]="rent"></i>
+  </div>
+</td>
+<td>
+  @if (item.rating) {
+    <div class="rating">
+      <i
+        *ngFor="let star of stars"
+        class="ui icon star"
+        [ngClass]="{ visible: item.rating >= star, half: item.rating == star }"
+      ></i>
     </div>
+  } @else {
+    &nbsp;
+  }
 </td>
 <td>
-    <div>{{ item.created | date: 'dd.MM.yyyy HH:mm:ss' }}</div>
+  <div>{{ item.created | date: "dd.MM.yyyy HH:mm:ss" }}</div>
 </td>
 <td>
-    <div>{{ languages }}</div>
+  <div>{{ languages }}</div>
 </td>
 <td>
-    <div>{{ genres }}</div>
+  <div>{{ genres }}</div>
 </td>

@@ -1,36 +1,54 @@
 td {
-    padding: 0 0.5em;
-    cursor: pointer;
+  padding: 0 0.5em;
+  cursor: pointer;
 
-    div {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+  div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:nth-child(1) {
+    width: 40em;
+    min-width: 40em;
+    max-width: 40em;
+
+    > div {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 0.5em;
+      align-items: center;
     }
+  }
 
-    &:nth-child(1) {
-        width: 40em;
-        min-width: 40em;
-        max-width: 40em;
+  &:nth-child(2) {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 10em;
+    min-width: 10em;
+    max-width: 10em;
 
-        > div {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            column-gap: 0.5em;
-            align-items: center;
-        }
+    i {
+      visibility: hidden;
+
+      &.visible {
+        visibility: unset;
+      }
     }
+  }
 
-    &:nth-child(2) {
-        width: 12em;
-        min-width: 12em;
-        max-width: 12em;
-    }
+  &:nth-child(3) {
+    width: 12em;
+    min-width: 12em;
+    max-width: 12em;
+  }
 
-    &:nth-child(3),
-    &:nth-child(4) {
-        width: 20em;
-        min-width: 20em;
-        max-width: 20em;
-    }
+  &:nth-child(4),
+  &:nth-child(5) {
+    width: 20em;
+    min-width: 20em;
+    max-width: 20em;
+  }
 }

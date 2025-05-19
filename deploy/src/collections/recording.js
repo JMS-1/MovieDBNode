@@ -41,8 +41,8 @@ const types = __importStar(require("@jms-1/mongodb-graphql/lib/types"));
 const collections_1 = require("./collections");
 const connection_1 = require("./connection");
 const utils_1 = require("./utils");
-const model_1 = require("../model");
-const entities_1 = require("../model/entities");
+const model = __importStar(require("../model"));
+const entities = __importStar(require("../model/entities"));
 const utils_2 = require("../model/utils");
 exports.csvData = "";
 function escape(str) {
@@ -50,7 +50,7 @@ function escape(str) {
 }
 const escapeReg = /[.*+?^${}()|[\]\\]/g;
 const collation = { locale: "en", strength: 2 };
-exports.RecordingCollection = connection_1.MongoConnection.createCollection(entities_1.Recording, class extends collection_1.Collection {
+exports.RecordingCollection = connection_1.MongoConnection.createCollection(entities.Recording, class extends collection_1.Collection {
     constructor() {
         super(...arguments);
         this.collectionName = collections_1.collectionNames.recordings;
@@ -72,7 +72,7 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
         });
         this.query = this.queries.register("query", {
             correlationId: types.GqlNullable(types.GqlId({ description: "Eindeutige Kennung für diesen Aufruf." })),
-            deleteType: types.GqlNullable(entities_1.RecordingDeleteType),
+            deleteType: types.GqlNullable(entities.RecordingDeleteType),
             firstPage: types.GqlInt({
                 description: "0-basierte Nummer der Ergebnisseite.",
                 validation: { min: 0, type: "number" },
@@ -112,9 +112,9 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
             }), {
                 description: "Optional eine Liste von Serien, von denen eine Aufzeichnung eine haben muss.",
             })),
-            sort: entities_1.RecordingSort,
+            sort: entities.RecordingSort,
             sortOrder: types.SortDirection,
-        }, entities_1.RecordingQueryResponse, "Freie Suche über Aufzeichnungen.", async (args) => {
+        }, entities.RecordingQueryResponse, "Freie Suche über Aufzeichnungen.", async (args) => {
             var _a;
             const filter = {};
             if (args.language) {
@@ -152,9 +152,11 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                     view: [
                         {
                             $sort: {
-                                [args.sort === model_1.TRecordingSort.created
+                                [args.sort === model.TRecordingSort.created
                                     ? "created"
-                                    : "fullName"]: args.sortOrder === mongodb_graphql_1.TSortDirection.Ascending ? +1 : -1,
+                                    : args.sort === model.TRecordingSort.fullName
+                                        ? "fullName"
+                                        : "rating"]: args.sortOrder === mongodb_graphql_1.TSortDirection.Ascending ? +1 : -1,
                             },
                         },
                         { $skip: args.firstPage * args.pageSize },

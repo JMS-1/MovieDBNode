@@ -7,19 +7,8 @@ import { collectionNames } from "./collections";
 import { MongoConnection } from "./connection";
 import { refreshRecordingNames } from "./utils";
 
-import {
-  IGenre,
-  ILanguage,
-  IQueryCountInfo,
-  IRecording,
-  TRecordingSort,
-} from "../model";
-import {
-  Recording,
-  RecordingDeleteType,
-  RecordingQueryResponse,
-  RecordingSort,
-} from "../model/entities";
+import * as model from "../model";
+import * as entities from "../model/entities";
 import { uniqueIdPattern } from "../model/utils";
 
 export let csvData = "";
@@ -38,14 +27,14 @@ interface IAggregateCount {
 
 interface IAggregationResult {
   count: IAggregateCount[];
-  genres: IQueryCountInfo[];
-  view: IRecording[];
+  genres: model.IQueryCountInfo[];
+  view: model.IRecording[];
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const RecordingCollection = MongoConnection.createCollection(
-  Recording,
-  class extends Collection<typeof Recording> {
+  entities.Recording,
+  class extends Collection<typeof entities.Recording> {
     readonly collectionName = collectionNames.recordings;
 
     async initialize(): Promise<void> {
@@ -91,7 +80,7 @@ export const RecordingCollection = MongoConnection.createCollection(
       }
     }
 
-    async demandForeignKeys(item: IRecording): Promise<void> {
+    async demandForeignKeys(item: model.IRecording): Promise<void> {
       await this.validateForeignKeys(
         collectionNames.containers,
         "Ablage",
@@ -114,7 +103,7 @@ export const RecordingCollection = MongoConnection.createCollection(
       );
     }
 
-    async setFullName(item: IRecording): Promise<void> {
+    async setFullName(item: model.IRecording): Promise<void> {
       const names = await refreshRecordingNames(
         { _id: item._id },
         await this.collection
@@ -125,21 +114,21 @@ export const RecordingCollection = MongoConnection.createCollection(
       }
     }
 
-    beforeInsert(item: IRecording): Promise<void> {
+    beforeInsert(item: model.IRecording): Promise<void> {
       item.created = new Date().toISOString();
 
       return this.demandForeignKeys(item);
     }
 
-    afterInsert(item: IRecording): Promise<void> {
+    afterInsert(item: model.IRecording): Promise<void> {
       return this.setFullName(item);
     }
 
-    beforeUpdate(item: IRecording): Promise<void> {
+    beforeUpdate(item: model.IRecording): Promise<void> {
       return this.demandForeignKeys(item);
     }
 
-    afterUpdate(item: IRecording): Promise<void> {
+    afterUpdate(item: model.IRecording): Promise<void> {
       return this.setFullName(item);
     }
 
@@ -175,7 +164,7 @@ export const RecordingCollection = MongoConnection.createCollection(
         correlationId: types.GqlNullable(
           types.GqlId({ description: "Eindeutige Kennung für diesen Aufruf." })
         ),
-        deleteType: types.GqlNullable(RecordingDeleteType),
+        deleteType: types.GqlNullable(entities.RecordingDeleteType),
         firstPage: types.GqlInt({
           description: "0-basierte Nummer der Ergebnisseite.",
           validation: { min: 0, type: "number" },
@@ -240,13 +229,13 @@ export const RecordingCollection = MongoConnection.createCollection(
             }
           )
         ),
-        sort: RecordingSort,
+        sort: entities.RecordingSort,
         sortOrder: types.SortDirection,
       },
-      RecordingQueryResponse,
+      entities.RecordingQueryResponse,
       "Freie Suche über Aufzeichnungen.",
       async (args) => {
-        const filter: Filter<IRecording> = {};
+        const filter: Filter<model.IRecording> = {};
 
         if (args.language) {
           filter.languages = args.language;
@@ -291,9 +280,11 @@ export const RecordingCollection = MongoConnection.createCollection(
             view: [
               {
                 $sort: {
-                  [args.sort === TRecordingSort.created
+                  [args.sort === model.TRecordingSort.created
                     ? "created"
-                    : "fullName"]:
+                    : args.sort === model.TRecordingSort.fullName
+                      ? "fullName"
+                      : "rating"]:
                     args.sortOrder === TSortDirection.Ascending ? +1 : -1,
                 },
               },
@@ -315,7 +306,7 @@ export const RecordingCollection = MongoConnection.createCollection(
         delete filter.languages;
 
         const languageInfo = await self
-          .aggregate<IQueryCountInfo>(
+          .aggregate<model.IQueryCountInfo>(
             [
               ...baseQuery,
               { $unwind: "$languages" },
@@ -342,7 +333,7 @@ export const RecordingCollection = MongoConnection.createCollection(
           collectionNames.languages
         );
         const languages = await languageCollection
-          .find<ILanguage>({})
+          .find<model.ILanguage>({})
           .toArray();
 
         const languageMap: { [id: string]: string } = {};
@@ -351,7 +342,7 @@ export const RecordingCollection = MongoConnection.createCollection(
         const genreCollection = await this.connection.getCollection(
           collectionNames.genres
         );
-        const genres = await genreCollection.find<IGenre>({}).toArray();
+        const genres = await genreCollection.find<model.IGenre>({}).toArray();
 
         const genreMap: { [id: string]: string } = {};
         genres.forEach((g) => (genreMap[g._id] = g.name));

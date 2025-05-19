@@ -1,32 +1,34 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core'
+import { CommonModule } from '@angular/common';
+import * as core from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare let $: any
+declare let $: any;
 
-@Component({
-    selector: 'semantic-search',
-    styleUrls: ['./search.component.scss'],
-    templateUrl: './search.component.html',
-    standalone: false
+@core.Component({
+  selector: 'semantic-search',
+  styleUrls: ['./search.component.scss'],
+  templateUrl: './search.component.html',
+  imports: [CommonModule, FormsModule],
 })
 export class SearchComponent {
-    @ViewChild('search') search?: ElementRef<HTMLDivElement>
+  @core.ViewChild('search') search?: core.ElementRef<HTMLDivElement>;
 
-    @Input() hint = $localize`:@@search.hint:Suche...`
+  @core.Input() hint = $localize`:@@search.hint:Suche...`;
 
-    @Input() text = ''
+  @core.Input() text = '';
 
-    @Input() clearable = false
+  @core.Input() clearable = false;
 
-    @Output() textChange = new EventEmitter<string>()
+  @core.Output() textChange = new core.EventEmitter<string>();
 
-    onChange(text: string): void {
-        this.textChange.emit(text)
+  onChange(text: string): void {
+    this.textChange.emit(text);
+  }
+
+  clear(): void {
+    if (this.clearable) {
+      this.onChange('');
     }
-
-    clear(): void {
-        if (this.clearable) {
-            this.onChange('')
-        }
-    }
+  }
 }

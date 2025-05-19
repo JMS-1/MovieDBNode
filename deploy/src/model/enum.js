@@ -23,6 +23,7 @@ var TRecordingSort;
 (function (TRecordingSort) {
     TRecordingSort[TRecordingSort["created"] = 1] = "created";
     TRecordingSort[TRecordingSort["fullName"] = 0] = "fullName";
+    TRecordingSort[TRecordingSort["rating"] = 2] = "rating";
 })(TRecordingSort || (exports.TRecordingSort = TRecordingSort = {}));
 var TRecordingDeleteType;
 (function (TRecordingDeleteType) {

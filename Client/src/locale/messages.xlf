@@ -187,7 +187,7 @@
     </unit>
     <unit id="filter.rent.no">
       <notes>
-        <note category="location">src/app/filters/rent/rent.component.ts:15</note>
+        <note category="location">src/app/filters/rent/rent.component.ts:16</note>
       </notes>
       <segment>
         <source>nicht verliehen</source>
@@ -195,7 +195,7 @@
     </unit>
     <unit id="filter.rent.yes">
       <notes>
-        <note category="location">src/app/filters/rent/rent.component.ts:14</note>
+        <note category="location">src/app/filters/rent/rent.component.ts:15</note>
       </notes>
       <segment>
         <source>verliehen</source>
@@ -251,7 +251,7 @@
     </unit>
     <unit id="hint.text">
       <notes>
-        <note category="location">src/app/filters/text/text.component.html:1</note>
+        <note category="location">src/app/filters/text/text.component.html:2,3</note>
       </notes>
       <segment>
         <source>Suche...</source>
@@ -716,7 +716,7 @@
     </unit>
     <unit id="recordings.count">
       <notes>
-        <note category="location">src/app/routes/recordings/recordings.component.ts:25</note>
+        <note category="location">src/app/routes/recordings/recordings.component.ts:42</note>
       </notes>
       <segment>
         <source>von</source>
@@ -724,7 +724,7 @@
     </unit>
     <unit id="recordings.created">
       <notes>
-        <note category="location">src/app/routes/recordings/table.component.html:16,17</note>
+        <note category="location">src/app/routes/recordings/table.component.html:37,39</note>
       </notes>
       <segment>
         <source>Erstellt</source>
@@ -740,15 +740,15 @@
     </unit>
     <unit id="recordings.genres">
       <notes>
-        <note category="location">src/app/routes/recordings/table.component.html:19,21</note>
+        <note category="location">src/app/routes/recordings/table.component.html:40,42</note>
       </notes>
       <segment>
         <source>Kategorien</source>
       </segment>
     </unit>
-    <unit id="recordings.languge">
+    <unit id="recordings.language">
       <notes>
-        <note category="location">src/app/routes/recordings/table.component.html:18,19</note>
+        <note category="location">src/app/routes/recordings/table.component.html:39,40</note>
       </notes>
       <segment>
         <source>Sprachen</source>
@@ -756,7 +756,7 @@
     </unit>
     <unit id="recordings.name">
       <notes>
-        <note category="location">src/app/routes/recordings/table.component.html:9,10</note>
+        <note category="location">src/app/routes/recordings/table.component.html:15,18</note>
       </notes>
       <segment>
         <source>Name</source>
@@ -770,9 +770,17 @@
         <source>Neue Suche</source>
       </segment>
     </unit>
+    <unit id="recordings.rating">
+      <notes>
+        <note category="location">src/app/routes/recordings/table.component.html:26,29</note>
+      </notes>
+      <segment>
+        <source>Bewertung</source>
+      </segment>
+    </unit>
     <unit id="search.hint">
       <notes>
-        <note category="location">src/app/semantic/search/search.component.ts:15</note>
+        <note category="location">src/app/semantic/search/search.component.ts:17</note>
       </notes>
       <segment>
         <source>Suche...</source>

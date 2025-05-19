@@ -19,6 +19,7 @@ export enum TRecordingContainerType {
 export enum TRecordingSort {
   created = 1,
   fullName = 0,
+  rating = 2,
 }
 
 export enum TRecordingDeleteType {
