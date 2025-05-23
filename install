@@ -2,10 +2,10 @@
 
 export THISHOST=`hostname`
 
-docker stack rm movie-db
+docker compose down
 
 git pull && \
 docker build . -t movie-db && \
 echo "wait 15 seconds for stack to shut down" && \
 sleep 15 && \
-docker stack deploy -c docker-compose.yml movie-db
+docker compose up -d
