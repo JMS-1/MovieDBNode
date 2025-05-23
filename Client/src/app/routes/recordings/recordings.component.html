@@ -1,21 +1,27 @@
 <div class="page">
-    <div class="headline">
-        <div class="ui compact segment counts">{{ count }}{{ of }}{{ total }}</div>
-        <button class="ui button" (click)="onExport()" i18n="@@recordings.export">Exportieren</button>
+  <div class="headline">
+    <div class="ui compact segment counts">{{ count }}{{ of }}{{ total }}</div>
+    <button class="ui button" (click)="onExport()" i18n="@@recordings.export">
+      Exportieren
+    </button>
+  </div>
+  <div class="ui segment filter">
+    <div class="search">
+      <app-text-filter></app-text-filter>
+      <div class="ui button" (click)="clear()" i18n="@@recordings.new">
+        Neue Suche
+      </div>
     </div>
-    <div class="ui segment filter">
-        <div class="search">
-            <app-text-filter></app-text-filter>
-            <div class="ui button" (click)="clear()" i18n="@@recordings.new">Neue Suche</div>
-        </div>
-        <app-language-filter></app-language-filter>
-        <app-genre-filter></app-genre-filter>
-        <app-series-filter></app-series-filter>
-        <app-rent-filter></app-rent-filter>
+    <app-language-filter></app-language-filter>
+    <app-genre-filter></app-genre-filter>
+    <app-series-filter></app-series-filter>
+    <div class="group">
+      <app-rent-filter></app-rent-filter>
     </div>
-    <div class="sizer">
-        <app-page-size-filter></app-page-size-filter>
-        <app-pagination></app-pagination>
-    </div>
-    <app-recording-table class="results"></app-recording-table>
+  </div>
+  <div class="sizer">
+    <app-page-size-filter></app-page-size-filter>
+    <app-pagination></app-pagination>
+  </div>
+  <app-recording-table class="results"></app-recording-table>
 </div>
