@@ -9,7 +9,7 @@ gulp.task("deploy:server", () =>
 
 gulp.task("deploy:client", () =>
   gulp
-    .src(["Client/build/**/*", "!Client/build/**/*.map"])
+    .src(["Client/build/**/*", "!Client/build/**/*.map"], { encoding: false })
     .pipe(gulp.dest("deploy/dist"))
 );
 
