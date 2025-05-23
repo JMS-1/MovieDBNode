@@ -17,7 +17,7 @@
     "@types/cors": "^2.8.18",
     "@types/debug": "^4.1.12",
     "@types/express": "^5.0.2",
-    "@types/node": "^22.15.18",
+    "@types/node": "^22.15.21",
     "@types/uuid": "^10.0.0",
     "better-console": "^1.0.1",
     "del": "^8.0.0",
@@ -31,7 +31,7 @@
     "prettier": "^3.5.3",
     "sass": "^1.89.0",
     "stylelint": "^16.19.1",
-    "typescript": "~5.8.3"
+    "typescript": "^5.8.3"
   },
   "license": "MIT",
   "main": "Server/build/startup.ts",
