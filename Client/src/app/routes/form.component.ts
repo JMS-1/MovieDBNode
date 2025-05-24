@@ -1,64 +1,70 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
-import { Subscription } from 'rxjs'
+import * as core from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { EditableService, IWorkingCopy } from '../services/edit.service'
+import { EditableService, IWorkingCopy } from '../services/edit.service';
 
-@Component({
-    template: '',
-    standalone: false
+@core.Component({
+  template: '',
+  imports: [],
 })
-export abstract class FormComponent<T extends { _id: string }> implements OnChanges, OnDestroy, OnInit {
-    private _query?: Subscription
+export abstract class FormComponent<T extends { _id: string }>
+  implements core.OnChanges, core.OnDestroy, core.OnInit
+{
+  private _query?: Subscription;
 
-    @Input() selected = ''
+  @core.Input() selected = '';
 
-    editId = ''
+  editId = '';
 
-    edit?: T & IWorkingCopy
+  edit?: T & IWorkingCopy;
 
-    protected _editFactory?: (id: string) => T & IWorkingCopy
+  protected _editFactory?: (id: string) => T & IWorkingCopy;
 
-    confirm = false
+  confirm = false;
 
-    protected abstract getEditService(): EditableService<T>
+  protected abstract getEditService(): EditableService<T>;
 
-    onRemove(): void {
-        this.confirm = true
+  onRemove(): void {
+    this.confirm = true;
+  }
+
+  reload(): void {
+    this.edit =
+      this.editId === '@' ? undefined : this._editFactory?.(this.editId);
+  }
+
+  protected select(id: string): void {
+    this.editId = id ? (id !== 'NEW' && id) || '' : '@';
+
+    this.reload();
+  }
+
+  ngOnInit(): void {
+    this._query = this.getEditService().editFactory.subscribe((f) => {
+      this._editFactory = f;
+
+      this.reload();
+    });
+  }
+
+  ngOnChanges(changes: core.SimpleChanges): void {
+    const selected = changes['selected'];
+
+    if (!selected) {
+      return;
     }
 
-    reload(): void {
-        this.edit = this.editId === '@' ? undefined : this._editFactory?.(this.editId)
+    if (
+      !selected.firstChange &&
+      selected.currentValue === selected.previousValue
+    ) {
+      return;
     }
 
-    protected select(id: string): void {
-        this.editId = id ? (id !== 'NEW' && id) || '' : '@'
+    this.select(selected.currentValue);
+  }
 
-        this.reload()
-    }
-
-    ngOnInit(): void {
-        this._query = this.getEditService().editFactory.subscribe((f) => {
-            this._editFactory = f
-
-            this.reload()
-        })
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        const selected = changes['selected']
-
-        if (!selected) {
-            return
-        }
-
-        if (!selected.firstChange && selected.currentValue === selected.previousValue) {
-            return
-        }
-
-        this.select(selected.currentValue)
-    }
-
-    ngOnDestroy(): void {
-        this._query?.unsubscribe()
-    }
+  ngOnDestroy(): void {
+    this._query?.unsubscribe();
+  }
 }

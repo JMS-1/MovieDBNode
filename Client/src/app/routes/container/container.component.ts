@@ -1,25 +1,34 @@
-import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { Subscription } from 'rxjs'
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MasterDetailComponent } from '../master-detail/master-detail.component';
+import { ContainerListComponent } from './list.component';
+import { ContainerFormComponent } from './form.component';
 
 @Component({
-    selector: 'app-container',
-    styleUrls: ['./container.component.scss'],
-    templateUrl: './container.component.html',
-    standalone: false
+  selector: 'app-container',
+  styleUrls: ['./container.component.scss'],
+  templateUrl: './container.component.html',
+  imports: [
+    ContainerFormComponent,
+    ContainerListComponent,
+    MasterDetailComponent,
+  ],
 })
 export class ContainerRouteComponent implements OnInit {
-    private _query?: Subscription
+  private _query?: Subscription;
 
-    selected = ''
+  selected = '';
 
-    constructor(private readonly _route: ActivatedRoute) {}
+  constructor(private readonly _route: ActivatedRoute) {}
 
-    ngOnInit(): void {
-        this._query = this._route.params.subscribe((params) => (this.selected = params['id']))
-    }
+  ngOnInit(): void {
+    this._query = this._route.params.subscribe(
+      (params) => (this.selected = params['id']),
+    );
+  }
 
-    ngOnDestroy(): void {
-        this._query?.unsubscribe()
-    }
+  ngOnDestroy(): void {
+    this._query?.unsubscribe();
+  }
 }

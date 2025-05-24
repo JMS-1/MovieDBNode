@@ -1,9 +1,9 @@
-import { Component } from '@angular/core'
+import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-master-detail',
-    styleUrls: ['./master-detail.component.scss'],
-    templateUrl: './master-detail.component.html',
-    standalone: false
+  selector: 'app-master-detail',
+  styleUrls: ['./master-detail.component.scss'],
+  templateUrl: './master-detail.component.html',
+  imports: [],
 })
 export class MasterDetailComponent {}

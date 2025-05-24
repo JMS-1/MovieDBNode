@@ -515,7 +515,7 @@
     </unit>
     <unit id="menu.new.container" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:22</note>
+        <note category="location">src/app/root/root.component.ts:36</note>
       </notes>
       <segment>
         <source>Ablage erstellen</source>
@@ -524,7 +524,7 @@
     </unit>
     <unit id="menu.new.genre" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:24</note>
+        <note category="location">src/app/root/root.component.ts:44</note>
       </notes>
       <segment>
         <source>Kategorie hinzufügen</source>
@@ -533,7 +533,7 @@
     </unit>
     <unit id="menu.new.language" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:23</note>
+        <note category="location">src/app/root/root.component.ts:40</note>
       </notes>
       <segment>
         <source>Sprache hinzufügen</source>
@@ -542,7 +542,7 @@
     </unit>
     <unit id="menu.new.recording" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:20</note>
+        <note category="location">src/app/root/root.component.ts:28</note>
       </notes>
       <segment>
         <source>Aufzeichnung erstellen</source>
@@ -551,7 +551,7 @@
     </unit>
     <unit id="menu.new.series" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:21</note>
+        <note category="location">src/app/root/root.component.ts:32</note>
       </notes>
       <segment>
         <source>Serie erstellen</source>
@@ -587,7 +587,7 @@
     </unit>
     <unit id="menu.themes.alt1" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:29</note>
+        <note category="location">src/app/root/root.component.ts:52</note>
       </notes>
       <segment>
         <source>Alternative 1</source>
@@ -596,7 +596,7 @@
     </unit>
     <unit id="menu.themes.alt2" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:30</note>
+        <note category="location">src/app/root/root.component.ts:56</note>
       </notes>
       <segment>
         <source>Alternative 2</source>
@@ -605,7 +605,7 @@
     </unit>
     <unit id="menu.themes.default" datatype="html">
       <notes>
-        <note category="location">src/app/root/root.component.ts:28</note>
+        <note category="location">src/app/root/root.component.ts:49</note>
       </notes>
       <segment>
         <source>Standard</source>
@@ -1092,7 +1092,7 @@
     </unit>
     <unit id="series.search" datatype="html">
       <notes>
-        <note category="location">src/app/routes/series/list.component.html:2</note>
+        <note category="location">src/app/routes/series/list.component.html:3,5</note>
       </notes>
       <segment>
         <source>Suche...</source>

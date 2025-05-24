@@ -1,44 +1,45 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core'
+import { CommonModule } from '@angular/common';
+import * as core from '@angular/core';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare let $: any
+declare let $: any;
 
 export interface IMenuItem {
-    active?: boolean
-    route: string
-    text: string
+  active?: boolean;
+  route: string;
+  text: string;
 }
 
-@Component({
-    selector: 'app-sub-menu',
-    styleUrls: ['./menu.component.scss'],
-    templateUrl: './menu.component.html',
-    standalone: false
+@core.Component({
+  selector: 'app-sub-menu',
+  styleUrls: ['./menu.component.scss'],
+  templateUrl: './menu.component.html',
+  imports: [CommonModule],
 })
-export class SubMenuComponent implements AfterViewInit, OnDestroy {
-    @ViewChild('menu') menu?: ElementRef<HTMLDivElement>
+export class SubMenuComponent implements core.AfterViewInit, core.OnDestroy {
+  @core.ViewChild('menu') menu?: core.ElementRef<HTMLDivElement>;
 
-    @Input() title = ''
+  @core.Input() title = '';
 
-    @Input() icon = 'help'
+  @core.Input() icon = 'help';
 
-    @Input() items: IMenuItem[] = []
+  @core.Input() items: IMenuItem[] = [];
 
-    @Output() onSelect = new EventEmitter<string>()
+  @core.Output() onSelect = new core.EventEmitter<string>();
 
-    select(route: string): void {
-        this.onSelect.emit(route)
-    }
+  select(route: string): void {
+    this.onSelect.emit(route);
+  }
 
-    ngAfterViewInit(): void {
-        const elem = $(this.menu?.nativeElement)
+  ngAfterViewInit(): void {
+    const elem = $(this.menu?.nativeElement);
 
-        elem.dropdown()
+    elem.dropdown();
 
-        setTimeout(() => elem.css('visibility', ''), 100)
-    }
+    setTimeout(() => elem.css('visibility', ''), 100);
+  }
 
-    ngOnDestroy(): void {
-        $(this.menu?.nativeElement)?.dropdown('destroy')
-    }
+  ngOnDestroy(): void {
+    $(this.menu?.nativeElement)?.dropdown('destroy');
+  }
 }

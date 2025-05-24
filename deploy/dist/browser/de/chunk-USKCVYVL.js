@@ -1,2 +1,0 @@
-import{f as a,h as t,ja as c,sa as n,ta as s,ua as m}from"./chunk-CJ2PPRXS.js";var h=(()=>{let i=class i extends m{constructor(o,e,f){super(o,"Genre","genres","_id name",e,f),this.load()}};i.\u0275fac=function(e){return new(e||i)(t(n),t(s),t(c))},i.\u0275prov=a({token:i,factory:i.\u0275fac});let r=i;return r})();export{h as a};
-/**i18n:08c1d4d8c08a2162d727ca9e0c346dc3cd29b4127d277ac11485a3d27068df66*/

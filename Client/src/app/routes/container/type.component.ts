@@ -1,6 +1,7 @@
 import * as angular from '@angular/core';
 
 import { containerType } from '../../../api';
+import { ContainerIconComponent } from './icon.component';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let $: any;
@@ -9,7 +10,7 @@ declare let $: any;
   selector: 'app-component-type',
   styleUrls: ['./type.component.scss'],
   templateUrl: './type.component.html',
-  standalone: false,
+  imports: [ContainerIconComponent],
 })
 export class ContainerTypeComponent
   implements angular.AfterViewInit, angular.OnChanges, angular.OnDestroy
