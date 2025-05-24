@@ -11,16 +11,20 @@ import { SeriesFilterComponent } from 'src/app/filters/series/series.component';
 import { RentFilterComponent } from 'src/app/filters/rent/rent.component';
 import { PageSizeFilterComponent } from 'src/app/filters/pagesize/pagesize.component';
 import { PaginationFilterComponent } from 'src/app/filters/pagination/pagination.component';
+import { RatingFilterComponent } from 'src/app/filters/rating/rating-filter.component';
+import { DeleteFilterComponent } from 'src/app/filters/delete/delete-filter.component';
 
 @Component({
   selector: 'app-recordings',
   styleUrls: ['./recordings.component.scss'],
   templateUrl: './recordings.component.html',
   imports: [
+    DeleteFilterComponent,
     GenreFilterComponent,
     LanguageFilterComponent,
     PageSizeFilterComponent,
     PaginationFilterComponent,
+    RatingFilterComponent,
     RecordingTableComponent,
     RentFilterComponent,
     SeriesFilterComponent,

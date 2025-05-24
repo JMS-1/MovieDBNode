@@ -198,11 +198,110 @@
         <target>(all Languages)</target>
       </segment>
     </unit>
+    <unit id="filter.rating">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.html:4,5</note>
+      </notes>
+      <segment state="final">
+        <source>(Bewertung egal)</source>
+        <target>(rated or unrated)</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.1">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:23</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 1 Punkt</source>
+        <target>at least 1 Point</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.10">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:14</note>
+      </notes>
+      <segment state="final">
+        <source>10 Punkte</source>
+        <target>10 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.2">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:22</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 2 Punkte</source>
+        <target>at least 2 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.3">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:21</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 3 Punkte</source>
+        <target>at least 3 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.4">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:20</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 4 Punkte</source>
+        <target>at least 4 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.5">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:19</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 5 Punkte</source>
+        <target>at least 5 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.6">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:18</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 6 Punkte</source>
+        <target>at least 6 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.7">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:17</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 7 Punkte</source>
+        <target>at least 7 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.8">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:16</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 8 Punkte</source>
+        <target>at least 8 Points</target>
+      </segment>
+    </unit>
+    <unit id="filter.rating.9">
+      <notes>
+        <note category="location">src/app/filters/rating/rating-filter.component.ts:15</note>
+      </notes>
+      <segment state="final">
+        <source>mindestens 9 Punkte</source>
+        <target>at least 9 Points</target>
+      </segment>
+    </unit>
     <unit id="filter.rent" datatype="html">
       <notes>
         <note category="location">src/app/filters/rent/rent.component.html:4,5</note>
       </notes>
-      <segment>
+      <segment state="final">
         <source>(verliehen egal)</source>
         <target>(rent out or available)</target>
       </segment>
@@ -804,7 +903,7 @@
     </unit>
     <unit id="recordings.count" datatype="html">
       <notes>
-        <note category="location">src/app/routes/recordings/recordings.component.ts:42</note>
+        <note category="location">src/app/routes/recordings/recordings.component.ts:46</note>
       </notes>
       <segment>
         <source>von</source>
@@ -822,7 +921,7 @@
     </unit>
     <unit id="recordings.export" datatype="html">
       <notes>
-        <note category="location">src/app/routes/recordings/recordings.component.html:4,6</note>
+        <note category="location">src/app/routes/recordings/recordings.component.html:5,8</note>
       </notes>
       <segment>
         <source>Exportieren</source>
@@ -858,7 +957,7 @@
     </unit>
     <unit id="recordings.new" datatype="html">
       <notes>
-        <note category="location">src/app/routes/recordings/recordings.component.html:9,11</note>
+        <note category="location">src/app/routes/recordings/recordings.component.html:12,14</note>
       </notes>
       <segment>
         <source>Neue Suche</source>

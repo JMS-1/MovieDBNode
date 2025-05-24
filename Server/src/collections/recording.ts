@@ -237,17 +237,13 @@ export const RecordingCollection = MongoConnection.createCollection(
       async (args) => {
         const filter: Filter<model.IRecording> = {};
 
-        if (args.language) {
-          filter.languages = args.language;
-        }
+        if (args.language) filter.languages = args.language;
 
-        if (args.genres && args.genres.length > 0) {
+        if (args.genres && args.genres.length > 0)
           filter.genres = { $all: args.genres };
-        }
 
-        if (args.series && args.series.length > 0) {
+        if (args.series && args.series.length > 0)
           filter.series = { $in: args.series };
-        }
 
         switch (args.rent) {
           case true:
@@ -258,12 +254,15 @@ export const RecordingCollection = MongoConnection.createCollection(
             break;
         }
 
-        if (args.fullName) {
+        if (args.fullName)
           filter.fullName = {
             $options: "i",
             $regex: args.fullName.replace(escapeReg, "\\$&"),
           };
-        }
+
+        if (args.rating != null) filter.rating = { $gte: args.rating };
+
+        if (args.deleteType != null) filter.deleteType = args.deleteType;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const query: any[] = [{ $match: filter }];
