@@ -270,6 +270,22 @@ export const RecordingCollection = MongoConnection.createCollection(
         const baseQuery = [...query];
 
         // Für die eigentliche Ergebnisermittlung sind alle Filter aktiv.
+        let sortAttr: unknown = `$${
+          args.sort === model.TRecordingSort.created
+            ? "created"
+            : args.sort === model.TRecordingSort.fullName
+              ? "fullName"
+              : "rating"
+        }`;
+
+        if (args.sort === model.TRecordingSort.rating)
+          sortAttr = {
+            $ifNull: [
+              sortAttr,
+              args.sortOrder === TSortDirection.Ascending ? 11 : 0,
+            ],
+          };
+
         query.push({
           $facet: {
             count: [{ $count: "total" }],
@@ -278,14 +294,10 @@ export const RecordingCollection = MongoConnection.createCollection(
               { $group: { _id: "$genres", count: { $sum: 1 } } },
             ],
             view: [
+              { $set: { _sort_: sortAttr } },
               {
                 $sort: {
-                  [args.sort === model.TRecordingSort.created
-                    ? "created"
-                    : args.sort === model.TRecordingSort.fullName
-                      ? "fullName"
-                      : "rating"]:
-                    args.sortOrder === TSortDirection.Ascending ? +1 : -1,
+                  _sort_: args.sortOrder === TSortDirection.Ascending ? +1 : -1,
                 },
               },
               { $skip: args.firstPage * args.pageSize },
@@ -293,6 +305,8 @@ export const RecordingCollection = MongoConnection.createCollection(
             ],
           },
         });
+
+        console.log(JSON.stringify(query));
 
         const self = await this.collection;
         const result = await self
