@@ -41,7 +41,7 @@ export class RecordingRowComponent implements OnInit, OnDestroy {
   }
 
   get deleteColor() {
-    return this.item.deleteType === deleted ? 'red' : 'green';
+    return this.item.deleteType === deleted ? '#ff0000' : '#ff8000';
   }
 
   ngOnInit(): void {

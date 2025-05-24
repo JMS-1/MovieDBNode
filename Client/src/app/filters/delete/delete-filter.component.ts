@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { recordingDeleteType } from 'src/api';
 import { SelectComponent } from 'src/app/semantic/select/select.component';
 import { RecordingsService } from 'src/app/services/recordings/recordings.service';
 import { ISelectItem } from 'src/app/utils';
@@ -12,6 +11,7 @@ import { ISelectItem } from 'src/app/utils';
 })
 export class DeleteFilterComponent {
   orderedAsItems: ISelectItem[] = [
+    { key: '0', text: $localize`:@@filter.delete.none:nicht gelöscht` },
     { key: '1', text: $localize`:@@filter.delete.deleted:gelöscht` },
     {
       key: '2',
@@ -22,7 +22,9 @@ export class DeleteFilterComponent {
   constructor(private readonly _recordings: RecordingsService) {}
 
   get selected(): string {
-    return this._recordings.deleteType ? `${this._recordings.deleteType}` : '';
+    return this._recordings.deleteType != null
+      ? `${this._recordings.deleteType}`
+      : '';
   }
 
   set selected(selected: string) {

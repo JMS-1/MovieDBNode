@@ -207,6 +207,15 @@
         <target>deleted</target>
       </segment>
     </unit>
+    <unit id="filter.delete.none">
+      <notes>
+        <note category="location">src/app/filters/delete/delete-filter.component.ts:14</note>
+      </notes>
+      <segment state="final">
+        <source>nicht gelöscht</source>
+        <target>not deleted</target>
+      </segment>
+    </unit>
     <unit id="filter.genre" datatype="html">
       <notes>
         <note category="location">src/app/filters/genre/genre.component.html:4,5</note>

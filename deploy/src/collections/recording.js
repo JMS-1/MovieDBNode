@@ -117,15 +117,12 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
         }, entities.RecordingQueryResponse, "Freie Suche über Aufzeichnungen.", async (args) => {
             var _a;
             const filter = {};
-            if (args.language) {
+            if (args.language)
                 filter.languages = args.language;
-            }
-            if (args.genres && args.genres.length > 0) {
+            if (args.genres && args.genres.length > 0)
                 filter.genres = { $all: args.genres };
-            }
-            if (args.series && args.series.length > 0) {
+            if (args.series && args.series.length > 0)
                 filter.series = { $in: args.series };
-            }
             switch (args.rent) {
                 case true:
                     filter.rentTo = { $nin: ["", null] };
@@ -134,14 +131,31 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                     filter.rentTo = { $in: ["", null] };
                     break;
             }
-            if (args.fullName) {
+            if (args.fullName)
                 filter.fullName = {
                     $options: "i",
                     $regex: args.fullName.replace(escapeReg, "\\$&"),
                 };
-            }
+            if (args.rating != null)
+                filter.rating = { $gte: args.rating };
+            if (args.deleteType != null)
+                filter.deleteType = args.deleteType
+                    ? args.deleteType
+                    : { $in: [0, null] };
             const query = [{ $match: filter }];
             const baseQuery = [...query];
+            let sortAttr = `$${args.sort === model.TRecordingSort.created
+                ? "created"
+                : args.sort === model.TRecordingSort.fullName
+                    ? "fullName"
+                    : "rating"}`;
+            if (args.sort === model.TRecordingSort.rating)
+                sortAttr = {
+                    $ifNull: [
+                        sortAttr,
+                        args.sortOrder === mongodb_graphql_1.TSortDirection.Ascending ? 11 : 0,
+                    ],
+                };
             query.push({
                 $facet: {
                     count: [{ $count: "total" }],
@@ -150,13 +164,10 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                         { $group: { _id: "$genres", count: { $sum: 1 } } },
                     ],
                     view: [
+                        { $set: { _sort_: sortAttr } },
                         {
                             $sort: {
-                                [args.sort === model.TRecordingSort.created
-                                    ? "created"
-                                    : args.sort === model.TRecordingSort.fullName
-                                        ? "fullName"
-                                        : "rating"]: args.sortOrder === mongodb_graphql_1.TSortDirection.Ascending ? +1 : -1,
+                                _sort_: args.sortOrder === mongodb_graphql_1.TSortDirection.Ascending ? +1 : -1,
                             },
                         },
                         { $skip: args.firstPage * args.pageSize },

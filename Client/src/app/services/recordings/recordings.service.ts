@@ -55,7 +55,7 @@ const queryRecordings = `
 
 const initialFilter: api.IRecordingQueryRequest = {
   correlationId: '',
-  deleteType: undefined,
+  deleteType: api.recordingDeleteType.None,
   firstPage: 0,
   forExport: false,
   fullName: '',
@@ -307,7 +307,7 @@ export class RecordingsService implements OnDestroy {
       ).concat(this._rootSeries);
     }
 
-    if (filter.deleteType)
+    if (filter.deleteType != null)
       filter.deleteType = api.recordingDeleteType[
         filter.deleteType
       ] as unknown as api.recordingDeleteType;

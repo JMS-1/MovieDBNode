@@ -262,7 +262,10 @@ export const RecordingCollection = MongoConnection.createCollection(
 
         if (args.rating != null) filter.rating = { $gte: args.rating };
 
-        if (args.deleteType != null) filter.deleteType = args.deleteType;
+        if (args.deleteType != null)
+          filter.deleteType = args.deleteType
+            ? args.deleteType
+            : { $in: [0, null] };
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const query: any[] = [{ $match: filter }];
@@ -304,8 +307,6 @@ export const RecordingCollection = MongoConnection.createCollection(
             ],
           },
         });
-
-        console.log(JSON.stringify(query));
 
         const self = await this.collection;
         const result = await self

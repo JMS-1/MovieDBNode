@@ -1,0 +1,10 @@
+import{b as a,c as y}from"./chunk-DOCEZV4F.js";import{a as n,b as s}from"./chunk-3ZZA57JK.js";import{a as c,b as l,f,h as t,ja as p,sa as h,ta as g,ua as _}from"./chunk-CJ2PPRXS.js";var u=`
+  query ($id: ID!) {
+    recordings {
+      findById(_id: $id) {
+        ${a}
+      }
+    }
+  }
+`,q=(()=>{let i=class i extends _{get id(){return this._id}set id(e){this._id=e,this.load()}constructor(e,r,d,v){super(e,"Recording","recordings",a,d,v),this._recodings=r,this.ignoredFields=new Set(["__typename","_id","created","fullName"]),this._cloneAfterAddOrSave=!1,this._id="",this.load()}fromServer(e){return e.containerType=n[e.containerType??n.Undefined],e.deleteType=e.deleteType==null?void 0:s[e.deleteType],e}toServer(e){return e.containerType=n[e.containerType],e.deleteType=e.deleteType==null?void 0:s[e.deleteType],e}createNew(){let e=this._cloneAfterAddOrSave;return typeof e=="object"?(this._cloneAfterAddOrSave=!1,l(c({},this.fromServer(e)),{name:`Kopie von ${e.name}`})):{containerType:n.Undefined,genres:[],languages:[],links:[]}}load(){this._id?this._gql.call(u,{id:this._id},e=>{let r=e.recordings.findById;this._query.next({[r._id]:this.fromServer(r)}),this.refresh()}):this._query.next({})}save(e,r,d){this._cloneAfterAddOrSave=d,super.addOrUpdate(e,r)}clone(e){this._cloneAfterAddOrSave=this.toServer(JSON.parse(JSON.stringify(e))),this._router.navigate(["/recordings","NEW","NEW"])}afterAdd(e){this._recodings.reload(this._recodings.page),this._cloneAfterAddOrSave=this._cloneAfterAddOrSave&&e,this._cloneAfterAddOrSave?this._router.navigate(["/recordings","NEW",e._id]):this._router.navigateByUrl("/")}afterUpdate(e){this._recodings.reload(this._recodings.page),this._cloneAfterAddOrSave=this._cloneAfterAddOrSave&&e,this._cloneAfterAddOrSave?this._router.navigate(["/recordings","NEW",e._id]):this._router.navigateByUrl("/")}afterDelete(e){this._recodings.reload(this._recodings.page),this._router.navigateByUrl("/")}};i.\u0275fac=function(r){return new(r||i)(t(h),t(y),t(g),t(p))},i.\u0275prov=f({token:i,factory:i.\u0275fac});let o=i;return o})();export{q as a};
+/**i18n:08c1d4d8c08a2162d727ca9e0c346dc3cd29b4127d277ac11485a3d27068df66*/
