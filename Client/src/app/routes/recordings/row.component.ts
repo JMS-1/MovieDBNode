@@ -3,8 +3,10 @@ import { Subscription } from 'rxjs';
 import { GenreService } from 'src/app/services/genre/genre.service';
 import { LanguageService } from 'src/app/services/languages/language.service';
 
-import { IRecording } from '../../../api';
+import { IRecording, recordingDeleteType } from '../../../api';
 import { CommonModule } from '@angular/common';
+
+const deleted = recordingDeleteType[recordingDeleteType.Deleted] as unknown;
 
 @Component({
   selector: '[recording]',
@@ -32,6 +34,14 @@ export class RecordingRowComponent implements OnInit, OnDestroy {
 
   get rent(): string {
     return this.item.rentTo || '';
+  }
+
+  get hasDelete() {
+    return this.item.deleteType;
+  }
+
+  get deleteColor() {
+    return this.item.deleteType === deleted ? 'red' : 'green';
   }
 
   ngOnInit(): void {

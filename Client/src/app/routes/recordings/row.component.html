@@ -2,6 +2,11 @@
   <div>
     <div>{{ item.fullName }}</div>
     <i *ngIf="!!rent" class="ui icon user outline" [title]="rent"></i>
+    <i
+      *ngIf="hasDelete"
+      class="ui icon trash"
+      [ngStyle]="{ color: deleteColor }"
+    ></i>
   </div>
 </td>
 <td>
