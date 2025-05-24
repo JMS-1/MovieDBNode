@@ -37,7 +37,7 @@ export class RecordingRowComponent implements OnInit, OnDestroy {
   }
 
   get hasDelete() {
-    return this.item.deleteType;
+    return this.item.deleteType != null;
   }
 
   get deleteColor() {
