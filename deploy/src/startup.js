@@ -43,7 +43,7 @@ async function startup() {
         }
     });
     app.use(express_1.default.static((0, path_1.join)(__dirname, "../dist/browser")));
-    app.get("/export", (_request, response) => {
+    app.get("/:lang?/export", (_request, response) => {
         response.setHeader("Content-disposition", "attachment; filename=export.csv");
         response.setHeader("Content-Type", "text/csv; charset=utf-8");
         response.status(200);
