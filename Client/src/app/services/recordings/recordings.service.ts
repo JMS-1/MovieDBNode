@@ -307,6 +307,11 @@ export class RecordingsService implements OnDestroy {
       ).concat(this._rootSeries);
     }
 
+    if (filter.deleteType)
+      filter.deleteType = api.recordingDeleteType[
+        filter.deleteType
+      ] as unknown as api.recordingDeleteType;
+
     return filter;
   }
 

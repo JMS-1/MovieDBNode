@@ -180,6 +180,33 @@
         <target>Please Check your Data</target>
       </segment>
     </unit>
+    <unit id="filter.delete">
+      <notes>
+        <note category="location">src/app/filters/delete/delete-filter.component.html:4,5</note>
+      </notes>
+      <segment state="final">
+        <source>(Sichtbarkeit egal)</source>
+        <target>(any Visibility)</target>
+      </segment>
+    </unit>
+    <unit id="filter.delete.deletable">
+      <notes>
+        <note category="location">src/app/filters/delete/delete-filter.component.ts:18</note>
+      </notes>
+      <segment state="final">
+        <source>kann gelöscht werden</source>
+        <target>can be deleted</target>
+      </segment>
+    </unit>
+    <unit id="filter.delete.deleted">
+      <notes>
+        <note category="location">src/app/filters/delete/delete-filter.component.ts:15</note>
+      </notes>
+      <segment state="final">
+        <source>gelöscht</source>
+        <target>deleted</target>
+      </segment>
+    </unit>
     <unit id="filter.genre" datatype="html">
       <notes>
         <note category="location">src/app/filters/genre/genre.component.html:4,5</note>

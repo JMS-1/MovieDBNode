@@ -161,6 +161,30 @@
         <source>Bitte Eingaben kontrollieren</source>
       </segment>
     </unit>
+    <unit id="filter.delete">
+      <notes>
+        <note category="location">src/app/filters/delete/delete-filter.component.html:4,5</note>
+      </notes>
+      <segment>
+        <source>(Sichtbarkeit egal)</source>
+      </segment>
+    </unit>
+    <unit id="filter.delete.deletable">
+      <notes>
+        <note category="location">src/app/filters/delete/delete-filter.component.ts:18</note>
+      </notes>
+      <segment>
+        <source>kann gelöscht werden</source>
+      </segment>
+    </unit>
+    <unit id="filter.delete.deleted">
+      <notes>
+        <note category="location">src/app/filters/delete/delete-filter.component.ts:15</note>
+      </notes>
+      <segment>
+        <source>gelöscht</source>
+      </segment>
+    </unit>
     <unit id="filter.genre">
       <notes>
         <note category="location">src/app/filters/genre/genre.component.html:4,5</note>
