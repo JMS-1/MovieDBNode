@@ -2,10 +2,6 @@
 
 export THISHOST=`hostname`
 
-docker compose down
-
 git pull && \
 docker build . -t movie-db && \
-echo "wait 15 seconds for stack to shut down" && \
-sleep 15 && \
-docker compose up -d
+docker compose up -d --force-recreate
