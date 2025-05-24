@@ -7,6 +7,7 @@ import { IRecording, recordingDeleteType } from '../../../api';
 import { CommonModule } from '@angular/common';
 
 const deleted = recordingDeleteType[recordingDeleteType.Deleted] as unknown;
+const deletable = recordingDeleteType[recordingDeleteType.Deletable] as unknown;
 
 @Component({
   selector: '[recording]',
@@ -37,7 +38,9 @@ export class RecordingRowComponent implements OnInit, OnDestroy {
   }
 
   get hasDelete() {
-    return this.item.deleteType != null;
+    return (
+      this.item.deleteType === deleted || this.item.deleteType === deletable
+    );
   }
 
   get deleteColor() {
