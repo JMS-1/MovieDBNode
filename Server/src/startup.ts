@@ -44,7 +44,7 @@ async function startup(): Promise<void> {
 
   app.use(express.static(join(__dirname, "../dist/browser")));
 
-  app.get("/:lang?/export", (_request, response) => {
+  app.get("/:lang/export", (_request, response) => {
     response.setHeader(
       "Content-disposition",
       "attachment; filename=export.csv"
