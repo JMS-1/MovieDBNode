@@ -8,6 +8,14 @@
         class="ui icon close"
         [ngStyle]="{ color: deleteColor }"
       ></i>
+      <a
+        *ngFor="let link of item.links"
+        [title]="link.name"
+        [href]="link.url"
+        target="_blank"
+        (click)="$event.stopPropagation()"
+        ><i class="ui icon external alternate"></i
+      ></a>
     </div>
   </div>
 </td>
