@@ -6,77 +6,87 @@
       [ngClass]="{ edit: !expanded, eye: expanded }"
       (click)="expanded = !expanded"
     ></i>
-    <i *ngIf="expanded" class="ui link add icon" (click)="addLink()"></i>
+    @if (expanded) {
+      <i class="ui link add icon" (click)="addLink()"></i>
+    }
   </label>
-  <div *ngIf="!expanded" class="links">
-    <a
-      *ngFor="let link of links"
-      [href]="link.url"
-      [title]="link.description"
-      target="_blank"
-      class="ui button"
-      >&nbsp;{{ link.name }}&nbsp;</a
-    >
-  </div>
-  <div *ngIf="expanded" class="links">
-    <div
-      *ngFor="let link of links"
-      class="ui button"
-      [ngClass]="{ active: link === active }"
-      (click)="active = link"
-    >
-      &nbsp;{{ link.name }}&nbsp;
+  @if (!expanded) {
+    <div class="links">
+      @for (link of links; track $index) {
+        <a
+          [href]="link.url"
+          [title]="link.description"
+          target="_blank"
+          class="ui button"
+          >&nbsp;{{ link.name }}&nbsp;</a
+        >
+      }
     </div>
-  </div>
-  <div *ngIf="expanded && current >= 0" class="ui form edit">
-    <div
-      class="required field"
-      [ngClass]="{
-        error: edit.validationErrors?.['links[' + current + '].name'],
-      }"
-    >
-      <label i18n="@@recording.links.name">Name</label>
-      <div class="ui input">
-        <input type="text" [(ngModel)]="name" />
+  }
+  @if (expanded) {
+    <div class="links">
+      @for (link of links; track $index) {
+        <div
+          class="ui button"
+          [ngClass]="{ active: link === active }"
+          (click)="active = link"
+        >
+          &nbsp;{{ link.name }}&nbsp;
+        </div>
+      }
+    </div>
+  }
+  @if (expanded && current >= 0) {
+    <div class="ui form edit">
+      <div
+        class="required field"
+        [ngClass]="{
+          error: edit.validationErrors?.['links[' + current + '].name'],
+        }"
+      >
+        <label i18n="@@recording.links.name">Name</label>
+        <div class="ui input">
+          <input type="text" [(ngModel)]="name" />
+        </div>
       </div>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['links[' + current + '].name']"
-    ></app-validation-errors>
-    <div
-      class="required field"
-      [ngClass]="{
-        error: edit.validationErrors?.['links[' + current + '].url'],
-      }"
-    >
-      <label i18n="@@recording.url">Verweis</label>
-      <div class="ui input">
-        <input type="text" [(ngModel)]="url" />
+      <app-validation-errors
+        [list]="edit.validationErrors?.['links[' + current + '].name']"
+      ></app-validation-errors>
+      <div
+        class="required field"
+        [ngClass]="{
+          error: edit.validationErrors?.['links[' + current + '].url'],
+        }"
+      >
+        <label i18n="@@recording.url">Verweis</label>
+        <div class="ui input">
+          <input type="text" [(ngModel)]="url" />
+        </div>
       </div>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['links[' + current + '].url']"
-    ></app-validation-errors>
-    <div
-      class="field"
-      [ngClass]="{
-        error: edit.validationErrors?.['links[' + current + '].description'],
-      }"
-    >
-      <label i18n="@@recording.description">Beschreibung</label>
-      <div class="ui input">
-        <textarea [(ngModel)]="description" row="5"></textarea>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['links[' + current + '].url']"
+      ></app-validation-errors>
+      <div
+        class="field"
+        [ngClass]="{
+          error: edit.validationErrors?.['links[' + current + '].description'],
+        }"
+      >
+        <label i18n="@@recording.description">Beschreibung</label>
+        <div class="ui input">
+          <textarea [(ngModel)]="description" row="5"></textarea>
+        </div>
       </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['links[' + current + '].description']"
+      ></app-validation-errors>
+      <button
+        class="ui negative button"
+        (click)="delLink()"
+        i18n="@@recording.links.delete"
+      >
+        Löschen
+      </button>
     </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['links[' + current + '].description']"
-    ></app-validation-errors>
-    <button
-      class="ui negative button"
-      (click)="delLink()"
-      i18n="@@recording.links.delete"
-    >
-      Löschen
-    </button>
-  </div>
+  }
 </div>

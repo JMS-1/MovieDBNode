@@ -480,7 +480,6 @@
   color: rgba(40, 40, 40, 0.3);
   pointer-events: none;
   -webkit-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 
@@ -493,7 +492,6 @@
   cursor: default;
   pointer-events: none;
   -webkit-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   transition: all 0s linear;
   min-height: 4.5em;
@@ -868,8 +866,7 @@
     --------------- */
 .ui.scrolling.segment {
   overflow: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 @media only screen and (max-width: 1048.98px) {
   .ui.scrolling.segment.short {

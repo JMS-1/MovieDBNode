@@ -1,3 +1,5 @@
 <div class="ui menu">
-    <a *ngFor="let item of items" [ngClass]="item.className" (click)="item.onClick()">{{ item.count }}</a>
+  @for (item of items; track $index) {
+    <a [ngClass]="item.className" (click)="item.onClick()">{{ item.count }}</a>
+  }
 </div>

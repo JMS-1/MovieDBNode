@@ -35,7 +35,6 @@
   border-radius: 0.30769231em;
   box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.05) inset, 0 0 0 1px rgba(0, 0, 0, 0.13) inset, 0 1px 3px rgba(0, 0, 0, 0.05);
   -webkit-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
   will-change: auto;

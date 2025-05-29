@@ -2,31 +2,36 @@
   <div>
     <div>{{ item.fullName }}</div>
     <div class="icons">
-      <i *ngIf="!!rent" class="ui icon user outline" [title]="rent"></i>
-      <i
-        *ngIf="hasDelete"
-        class="ui icon close"
-        [ngStyle]="{ color: deleteColor }"
-      ></i>
-      <a
-        *ngFor="let link of item.links"
-        [title]="link.name"
-        [href]="link.url"
-        target="_blank"
-        (click)="$event.stopPropagation()"
-        ><i class="ui icon external alternate"></i
-      ></a>
+      @if (!!rent) {
+        <i class="ui icon user outline" [title]="rent"></i>
+      }
+      @if (hasDelete) {
+        <i class="ui icon close" [ngStyle]="{ color: deleteColor }"></i>
+      }
+      @for (link of item.links; track $index) {
+        <a
+          [title]="link.name"
+          [href]="link.url"
+          target="_blank"
+          (click)="$event.stopPropagation()"
+          ><i class="ui icon external alternate"></i
+        ></a>
+      }
     </div>
   </div>
 </td>
 <td>
   @if (item.rating) {
     <div class="rating">
-      <i
-        *ngFor="let star of stars"
-        class="ui icon star"
-        [ngClass]="{ visible: item.rating >= star, half: item.rating == star }"
-      ></i>
+      @for (star of stars; track star) {
+        <i
+          class="ui icon star"
+          [ngClass]="{
+            visible: item.rating >= star,
+            half: item.rating == star,
+          }"
+        ></i>
+      }
     </div>
   } @else {
     &nbsp;

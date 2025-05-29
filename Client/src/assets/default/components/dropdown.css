@@ -21,7 +21,6 @@
   text-align: left;
   transition: box-shadow 0.1s ease, width 0.1s ease;
   -webkit-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -413,10 +412,8 @@ select.ui.dropdown {
 .ui.selection.dropdown:not(.unlimited) .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  overscroll-behavior: none;
+  backface-visibility: hidden;
 }
 .ui.selection.dropdown .menu {
   outline: none;
@@ -723,10 +720,8 @@ select.ui.dropdown {
 .ui.search.dropdown:not(.unlimited) .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  overscroll-behavior: none;
+  backface-visibility: hidden;
 }
 @media only screen and (max-width: 767.98px) {
   .ui.search.dropdown:not(.unlimited) .menu {
@@ -1339,10 +1334,8 @@ select.ui.dropdown {
 .ui.dropdown .scrolling.menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  overscroll-behavior: none;
+  backface-visibility: hidden;
   min-width: 100% !important;
   width: auto !important;
 }
@@ -1520,8 +1513,7 @@ select.ui.dropdown {
 .ui.simple.selection.dropdown > .menu > .item:active > .menu,
 .ui.simple.selection.dropdown .menu .item:hover > .menu {
   overflow: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 .ui.simple.dropdown > .menu > .item:active > .left.menu,
 .ui.simple.dropdown .menu .item:hover > .left.menu,
@@ -1547,8 +1539,7 @@ select.ui.dropdown {
 .ui.simple.scrolling.dropdown:hover > .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 
 /* --------------
@@ -2037,8 +2028,7 @@ select.ui.dropdown {
   line-height: 1;
   height: 1em;
   width: 1.23em;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   font-weight: normal;
   font-style: normal;
   text-align: center;

@@ -1,78 +1,81 @@
-<div *ngIf="edit">
-  <div class="actions">
-    <div
-      class="ui button"
-      [ngClass]="{ disabled: !edit.isDirty }"
-      (click)="reload()"
-      i18n="@@series.cancel"
-    >
+@if (edit) {
+  <div>
+    <div class="actions">
+      <div
+        class="ui button"
+        [ngClass]="{ disabled: !edit.isDirty }"
+        (click)="reload()"
+        i18n="@@series.cancel"
+        >
       Verwerfen
     </div>
-    <div
-      class="ui primary button"
-      [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
-      (click)="onSave()"
-      i18n="@@series.save"
-    >
+      <div
+        class="ui primary button"
+        [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
+        (click)="onSave()"
+        i18n="@@series.save"
+        >
       Speichern
     </div>
-    <div
-      *ngIf="editId"
-      class="ui negative button"
-      (click)="onRemove()"
-      i18n="@@series.delete"
-    >
+      @if (editId) {
+        <div
+          class="ui negative button"
+          (click)="onRemove()"
+          i18n="@@series.delete"
+          >
       Löschen
     </div>
-  </div>
-  <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
-    <div
-      class="field"
-      [ngClass]="{ error: edit.validationErrors?.['parentId'] }"
-    >
-      <label i18n="@@series.parent">Übergeordnete Serie</label>
-      <semantic-single-select
-        [items]="parentAsItems"
-        [(selected)]="parentId"
-        hint="(keine)"
-        i18n-hint="@@series.parent.hint"
-      ></semantic-single-select>
+      }
     </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['parentId']"
-    ></app-validation-errors>
-    <div
-      class="required field"
-      [ngClass]="{ error: edit.validationErrors?.['name'] }"
-    >
-      <label i18n="@@series.name">Name</label>
-      <div class="ui input">
-        <input type="text" [(ngModel)]="name" />
+    <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+      <div
+        class="field"
+        [ngClass]="{ error: edit.validationErrors?.['parentId'] }"
+        >
+        <label i18n="@@series.parent">Übergeordnete Serie</label>
+        <semantic-single-select
+          [items]="parentAsItems"
+          [(selected)]="parentId"
+          hint="(keine)"
+          i18n-hint="@@series.parent.hint"
+        ></semantic-single-select>
       </div>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['name']"
-    ></app-validation-errors>
-    <div
-      class="field"
-      [ngClass]="{ error: edit.validationErrors?.['description'] }"
-    >
-      <label i18n="@@series.description">Beschreibung</label>
-      <div class="ui input">
-        <textarea [(ngModel)]="description" rows="5"></textarea>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['parentId']"
+      ></app-validation-errors>
+      <div
+        class="required field"
+        [ngClass]="{ error: edit.validationErrors?.['name'] }"
+        >
+        <label i18n="@@series.name">Name</label>
+        <div class="ui input">
+          <input type="text" [(ngModel)]="name" />
+        </div>
       </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['name']"
+      ></app-validation-errors>
+      <div
+        class="field"
+        [ngClass]="{ error: edit.validationErrors?.['description'] }"
+        >
+        <label i18n="@@series.description">Beschreibung</label>
+        <div class="ui input">
+          <textarea [(ngModel)]="description" rows="5"></textarea>
+        </div>
+      </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['description']"
+      ></app-validation-errors>
     </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['description']"
-    ></app-validation-errors>
-  </div>
-  <app-semantic-modal
-    [show]="confirm"
-    (closed)="confirm = false"
-    (confirm)="onConfirm()"
-    i18n="@@series.confirm"
-  >
+    <app-semantic-modal
+      [show]="confirm"
+      (closed)="confirm = false"
+      (confirm)="onConfirm()"
+      i18n="@@series.confirm"
+      >
     Das Löschen einer Serie kann nicht rückgängig gemacht werden. Soll die Serie
     wirklich endgültig entfernt werden?
   </app-semantic-modal>
-</div>
+  </div>
+}

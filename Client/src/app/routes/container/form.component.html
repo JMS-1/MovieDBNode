@@ -1,122 +1,127 @@
-<div *ngIf="edit">
-  <div class="actions">
-    <div
-      class="ui button"
-      [ngClass]="{ disabled: !edit.isDirty }"
-      (click)="reload()"
-      i18n="@@container.cancel"
-    >
-      Verwerfen
-    </div>
-    <div
-      class="ui primary button"
-      [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
-      (click)="onSave()"
-      i18n="@@container.save"
-    >
-      Speichern
-    </div>
-    <div
-      *ngIf="editId"
-      class="ui negative button"
-      (click)="onRemove()"
-      i18n="@@container.delete"
-    >
-      Löschen
-    </div>
-  </div>
-  <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
-    <div
-      class="field"
-      [ngClass]="{ error: edit.validationErrors?.['parentId'] }"
-    >
-      <label i18n="@@container.parent">Übergeordnete Ablage</label>
-      <semantic-single-select
-        [items]="parentAsItems"
-        [(selected)]="parentId"
-        hint="(keine)"
-        i18n-hint="@@container.parent.hint"
-      ></semantic-single-select>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['parentId']"
-    ></app-validation-errors>
-    <div
-      class="required field"
-      [ngClass]="{ error: edit.validationErrors?.['name'] }"
-    >
-      <label i18n="@@container.name">Name</label>
-      <div class="ui input">
-        <input type="text" [(ngModel)]="name" />
-      </div>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['name']"
-    ></app-validation-errors>
-    <div
-      class="required field"
-      [ngClass]="{ error: edit.validationErrors?.['type'] }"
-    >
-      <label i18n="@@container.type">Art der Ablage</label>
-      <app-component-type [(selected)]="type"></app-component-type>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['type']"
-    ></app-validation-errors>
-    <div
-      class="field"
-      [ngClass]="{ error: edit.validationErrors?.['description'] }"
-    >
-      <label i18n="@@container.description">Beschreibung</label>
-      <div class="ui input">
-        <textarea [(ngModel)]="description" rows="5"></textarea>
-      </div>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['description']"
-    ></app-validation-errors>
-    <div
-      class="field"
-      [ngClass]="{ error: edit.validationErrors?.['parentLocation'] }"
-    >
-      <label i18n="@@container.position"
-        >Position in der übergeordneten Ablage</label
+@if (edit) {
+  <div>
+    <div class="actions">
+      <div
+        class="ui button"
+        [ngClass]="{ disabled: !edit.isDirty }"
+        (click)="reload()"
+        i18n="@@container.cancel"
       >
-      <div class="ui input">
-        <input type="text" [(ngModel)]="parentLocation" />
+        Verwerfen
       </div>
-    </div>
-    <app-validation-errors
-      [list]="edit.validationErrors?.['parentLocation']"
-    ></app-validation-errors>
-  </div>
-  <table
-    *ngIf="contents.length > 0"
-    class="ui celled collapsing fixed striped unstackable compact table contents"
-  >
-    <thead>
-      <tr>
-        <th i18n="@@container.recording">Aufzeichnung</th>
-        <th i18n="@@container.recordingPosition">Position</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let content of contents"
-        [routerLink]="['/recordings', content._id, 'EDIT']"
+      <div
+        class="ui primary button"
+        [ngClass]="{ disabled: !edit.isDirty || edit.validationErrors }"
+        (click)="onSave()"
+        i18n="@@container.save"
       >
-        <td>{{ content.fullName }}</td>
-        <td style="text-align: center">{{ content.containerPosition }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <app-semantic-modal
-    [show]="confirm"
-    (closed)="confirm = false"
-    (confirm)="onConfirm()"
-    i18n="@@container.confirm"
-  >
-    Das Löschen einer Ablage kann nicht rückgängig gemacht werden. Soll die
-    Ablage wirklich endgültig entfernt werden?
-  </app-semantic-modal>
-</div>
+        Speichern
+      </div>
+      @if (editId) {
+        <div
+          class="ui negative button"
+          (click)="onRemove()"
+          i18n="@@container.delete"
+        >
+          Löschen
+        </div>
+      }
+    </div>
+    <div class="ui form" [ngClass]="{ errors: edit.validationErrors }">
+      <div
+        class="field"
+        [ngClass]="{ error: edit.validationErrors?.['parentId'] }"
+      >
+        <label i18n="@@container.parent">Übergeordnete Ablage</label>
+        <semantic-single-select
+          [items]="parentAsItems"
+          [(selected)]="parentId"
+          hint="(keine)"
+          i18n-hint="@@container.parent.hint"
+        ></semantic-single-select>
+      </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['parentId']"
+      ></app-validation-errors>
+      <div
+        class="required field"
+        [ngClass]="{ error: edit.validationErrors?.['name'] }"
+      >
+        <label i18n="@@container.name">Name</label>
+        <div class="ui input">
+          <input type="text" [(ngModel)]="name" />
+        </div>
+      </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['name']"
+      ></app-validation-errors>
+      <div
+        class="required field"
+        [ngClass]="{ error: edit.validationErrors?.['type'] }"
+      >
+        <label i18n="@@container.type">Art der Ablage</label>
+        <app-component-type [(selected)]="type"></app-component-type>
+      </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['type']"
+      ></app-validation-errors>
+      <div
+        class="field"
+        [ngClass]="{ error: edit.validationErrors?.['description'] }"
+      >
+        <label i18n="@@container.description">Beschreibung</label>
+        <div class="ui input">
+          <textarea [(ngModel)]="description" rows="5"></textarea>
+        </div>
+      </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['description']"
+      ></app-validation-errors>
+      <div
+        class="field"
+        [ngClass]="{ error: edit.validationErrors?.['parentLocation'] }"
+      >
+        <label i18n="@@container.position"
+          >Position in der übergeordneten Ablage</label
+        >
+        <div class="ui input">
+          <input type="text" [(ngModel)]="parentLocation" />
+        </div>
+      </div>
+      <app-validation-errors
+        [list]="edit.validationErrors?.['parentLocation']"
+      ></app-validation-errors>
+    </div>
+    @if (contents.length > 0) {
+      <table
+        class="ui celled collapsing fixed striped unstackable compact table contents"
+      >
+        <thead>
+          <tr>
+            <th i18n="@@container.recording">Aufzeichnung</th>
+            <th i18n="@@container.recordingPosition">Position</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (content of contents; track content._id) {
+            <tr [routerLink]="['/recordings', content._id, 'EDIT']">
+              <td>{{ content.fullName }}</td>
+              <td style="text-align: center">
+                {{ content.containerPosition }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+    <app-semantic-modal
+      [show]="confirm"
+      (closed)="confirm = false"
+      (confirm)="onConfirm()"
+      i18n="@@container.confirm"
+    >
+      Das Löschen einer Ablage kann nicht rückgängig gemacht werden. Soll die
+      Ablage wirklich endgültig entfernt werden?
+    </app-semantic-modal>
+  </div>
+}

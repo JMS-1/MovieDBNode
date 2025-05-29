@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 import { ValidationError } from 'fastest-validator';
 
@@ -6,7 +6,7 @@ import { ValidationError } from 'fastest-validator';
   selector: 'app-validation-errors',
   styleUrls: ['./errors.component.scss'],
   templateUrl: './errors.component.html',
-  imports: [CommonModule],
+  imports: [],
 })
 export class ErrorsComponent {
   @Input() list?: ValidationError[] = undefined;

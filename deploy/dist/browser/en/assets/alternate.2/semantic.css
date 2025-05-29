@@ -398,7 +398,6 @@
 .ui.accordion .accordion .title > .dropdown.icon {
   font-family: Accordion;
   line-height: 1;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   font-weight: normal;
   font-style: normal;
@@ -884,7 +883,6 @@
   border-radius: 0.30769231em;
   box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.05) inset, 0 0 0 1px rgba(0, 0, 0, 0.13) inset, 0 1px 3px rgba(0, 0, 0, 0.05);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
   will-change: auto;
@@ -7731,7 +7729,6 @@ a.inverted.ui.card:hover,
 .ui.checkbox {
   position: relative;
   display: inline-block;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   outline: none;
   vertical-align: baseline;
@@ -7975,7 +7972,6 @@ a.inverted.ui.card:hover,
 .ui.checkbox input.hidden + label {
   cursor: pointer;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -9094,8 +9090,6 @@ a.inverted.ui.card:hover,
 
 .ui.justified.container {
   text-align: justify;
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
   hyphens: auto;
 }
 
@@ -9105,7 +9099,6 @@ a.inverted.ui.card:hover,
 
 .ui.scrolling.container {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -9323,7 +9316,6 @@ a.inverted.ui.card:hover,
   align-items: center;
   justify-content: center;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   will-change: opacity;
   z-index: 1000;
@@ -9333,7 +9325,6 @@ a.inverted.ui.card:hover,
 
 .ui.dimmer > .content {
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
   color: #fff;
 }
@@ -9719,7 +9710,6 @@ body.dimmable > .dimmer {
   letter-spacing: 0.05em;
   color: rgba(0, 0, 0, 0.85);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -10036,7 +10026,6 @@ body.dimmable > .dimmer {
   text-align: left;
   transition: width 0.1s ease;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -10470,9 +10459,7 @@ select.ui.dropdown {
 .ui.selection.dropdown:not(.unlimited) .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -10839,9 +10826,7 @@ select.ui.dropdown {
 .ui.search.dropdown:not(.unlimited) .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -11561,9 +11546,7 @@ select.ui.dropdown {
 .ui.dropdown .scrolling.menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   min-width: 100% !important;
   width: auto !important;
@@ -11772,7 +11755,6 @@ select.ui.dropdown {
 .ui.simple.selection.dropdown > .menu > .item:active > .menu,
 .ui.simple.selection.dropdown .menu .item:hover > .menu {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -11803,7 +11785,6 @@ select.ui.dropdown {
 .ui.simple.scrolling.dropdown:hover > .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -12373,7 +12354,6 @@ select.ui.dropdown {
   line-height: 1;
   height: 1em;
   width: 1.23em;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   font-weight: normal;
   font-style: normal;
@@ -12446,7 +12426,6 @@ select.ui.dropdown {
   line-height: 1;
   height: 1em;
   width: 1.23em;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   font-weight: normal;
   font-style: normal;
@@ -13609,7 +13588,6 @@ select.ui.dropdown {
 
 i.flag:not(.icon) {
   speak: none;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -15419,28 +15397,8 @@ i.flag.united.nations::before {
 
 /* browsers require these rules separate */
 
-.ui.form :-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
-.ui.form ::-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
 .ui.form ::placeholder {
   color: rgba(191, 191, 191, 0.87);
-}
-
-.ui.form :-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87) !important;
-}
-
-.ui.form :focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
-.ui.form :focus::-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
 }
 
 .ui.form :focus::placeholder {
@@ -15699,29 +15657,9 @@ i.flag.united.nations::before {
 
 /* Placeholder */
 
-.ui.form .error :-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
-.ui.form .error ::-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
 .ui.form .error .ui.dropdown > .default.text,
 .ui.form .error ::placeholder {
   color: #e7bdbc;
-}
-
-.ui.form .error :-ms-input-placeholder {
-  color: #e7bdbc !important;
-}
-
-.ui.form .error :focus:-ms-input-placeholder {
-  color: #da9796;
-}
-
-.ui.form .error :focus::-ms-input-placeholder {
-  color: #da9796;
 }
 
 .ui.form .error .ui.dropdown > input:focus ~ .default.text,
@@ -15974,29 +15912,9 @@ i.flag.united.nations::before {
 
 /* Placeholder */
 
-.ui.form .info :-ms-input-placeholder {
-  color: #b5bdc0;
-}
-
-.ui.form .info ::-ms-input-placeholder {
-  color: #b5bdc0;
-}
-
 .ui.form .info .ui.dropdown > .default.text,
 .ui.form .info ::placeholder {
   color: #b5bdc0;
-}
-
-.ui.form .info :-ms-input-placeholder {
-  color: #b5bdc0 !important;
-}
-
-.ui.form .info :focus:-ms-input-placeholder {
-  color: #9aa4a8;
-}
-
-.ui.form .info :focus::-ms-input-placeholder {
-  color: #9aa4a8;
 }
 
 .ui.form .info .ui.dropdown > input:focus ~ .default.text,
@@ -16249,29 +16167,9 @@ i.flag.united.nations::before {
 
 /* Placeholder */
 
-.ui.form .success :-ms-input-placeholder {
-  color: #8fcf90;
-}
-
-.ui.form .success ::-ms-input-placeholder {
-  color: #8fcf90;
-}
-
 .ui.form .success .ui.dropdown > .default.text,
 .ui.form .success ::placeholder {
   color: #8fcf90;
-}
-
-.ui.form .success :-ms-input-placeholder {
-  color: #8fcf90 !important;
-}
-
-.ui.form .success :focus:-ms-input-placeholder {
-  color: #6cbf6d;
-}
-
-.ui.form .success :focus::-ms-input-placeholder {
-  color: #6cbf6d;
 }
 
 .ui.form .success .ui.dropdown > input:focus ~ .default.text,
@@ -16524,29 +16422,9 @@ i.flag.united.nations::before {
 
 /* Placeholder */
 
-.ui.form .warning :-ms-input-placeholder {
-  color: #ffab2e;
-}
-
-.ui.form .warning ::-ms-input-placeholder {
-  color: #ffab2e;
-}
-
 .ui.form .warning .ui.dropdown > .default.text,
 .ui.form .warning ::placeholder {
   color: #ffab2e;
-}
-
-.ui.form .warning :-ms-input-placeholder {
-  color: #ffab2e !important;
-}
-
-.ui.form .warning :focus:-ms-input-placeholder {
-  color: #fa9500;
-}
-
-.ui.form .warning :focus::-ms-input-placeholder {
-  color: #fa9500;
 }
 
 .ui.form .warning .ui.dropdown > input:focus ~ .default.text,
@@ -18597,8 +18475,6 @@ i.flag.united.nations::before {
 .ui.ui.grid > .justified.column,
 .ui.ui.grid > .row > .justified.column {
   text-align: justify;
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
   hyphens: auto;
 }
 
@@ -20446,7 +20322,6 @@ i.icon {
   speak: none;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -31005,14 +30880,6 @@ img.ui.bordered.image {
 
 /* browsers require these rules separate */
 
-.ui.input > input:-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
-.ui.input > input::-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
 .ui.input > input::placeholder {
   color: rgba(191, 191, 191, 0.87);
 }
@@ -31104,16 +30971,6 @@ img.ui.bordered.image {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(81, 167, 232, 0.5);
 }
 
-.ui.input.focus > input:-ms-input-placeholder,
-.ui.input > input:focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
-.ui.input.focus > input::-ms-input-placeholder,
-.ui.input > input:focus::-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
 .ui.input.focus > input::placeholder,
 .ui.input > input:focus::placeholder {
   color: rgba(115, 115, 115, 0.87);
@@ -31137,14 +30994,6 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.error > input:-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
-.ui.input.error > input::-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
 .ui.input.error > input::placeholder {
   color: #e7bdbc;
 }
@@ -31154,14 +31003,6 @@ img.ui.bordered.image {
 }
 
 /* Focused Placeholder */
-
-.ui.input.error > input:focus:-ms-input-placeholder {
-  color: #da9796;
-}
-
-.ui.input.error > input:focus::-ms-input-placeholder {
-  color: #da9796;
-}
 
 .ui.input.error > input:focus::placeholder {
   color: #da9796;
@@ -31180,14 +31021,6 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.info > input:-ms-input-placeholder {
-  color: #b5bdc0;
-}
-
-.ui.input.info > input::-ms-input-placeholder {
-  color: #b5bdc0;
-}
-
 .ui.input.info > input::placeholder {
   color: #b5bdc0;
 }
@@ -31197,14 +31030,6 @@ img.ui.bordered.image {
 }
 
 /* Focused Placeholder */
-
-.ui.input.info > input:focus:-ms-input-placeholder {
-  color: #9aa4a8;
-}
-
-.ui.input.info > input:focus::-ms-input-placeholder {
-  color: #9aa4a8;
-}
 
 .ui.input.info > input:focus::placeholder {
   color: #9aa4a8;
@@ -31223,14 +31048,6 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.success > input:-ms-input-placeholder {
-  color: #8fcf90;
-}
-
-.ui.input.success > input::-ms-input-placeholder {
-  color: #8fcf90;
-}
-
 .ui.input.success > input::placeholder {
   color: #8fcf90;
 }
@@ -31240,14 +31057,6 @@ img.ui.bordered.image {
 }
 
 /* Focused Placeholder */
-
-.ui.input.success > input:focus:-ms-input-placeholder {
-  color: #6cbf6d;
-}
-
-.ui.input.success > input:focus::-ms-input-placeholder {
-  color: #6cbf6d;
-}
 
 .ui.input.success > input:focus::placeholder {
   color: #6cbf6d;
@@ -31266,14 +31075,6 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.warning > input:-ms-input-placeholder {
-  color: #ffab2e;
-}
-
-.ui.input.warning > input::-ms-input-placeholder {
-  color: #ffab2e;
-}
-
 .ui.input.warning > input::placeholder {
   color: #ffab2e;
 }
@@ -31283,14 +31084,6 @@ img.ui.bordered.image {
 }
 
 /* Focused Placeholder */
-
-.ui.input.warning > input:focus:-ms-input-placeholder {
-  color: #fa9500;
-}
-
-.ui.input.warning > input:focus::-ms-input-placeholder {
-  color: #fa9500;
-}
 
 .ui.input.warning > input:focus::placeholder {
   color: #fa9500;
@@ -31346,14 +31139,6 @@ img.ui.bordered.image {
 .ui.ui.transparent.inverted.input > textarea,
 .ui.ui.transparent.inverted.input > input {
   color: inherit;
-}
-
-.ui.transparent.inverted.input > input:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.ui.transparent.inverted.input > input::-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5);
 }
 
 .ui.transparent.inverted.input > input::placeholder {
@@ -36562,7 +36347,6 @@ ul.ui.list li::before,
 .ui.bulleted.list .list > .item::before,
 .ui.bulleted.list > .item::before {
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   pointer-events: none;
   position: absolute;
@@ -36641,7 +36425,6 @@ ol.ui.list li::before,
   top: auto;
   left: auto;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   pointer-events: none;
   margin-left: -1.25rem;
@@ -37973,7 +37756,6 @@ ol.ui.suffixed.list li::before,
   -webkit-tap-highlight-color: transparent;
   flex: 0 0 auto;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   background: none;
   padding: 1em 1.25em;
@@ -38007,7 +37789,6 @@ ol.ui.suffixed.list li::before,
 .ui.menu .item > a:not(.ui),
 .ui.menu .item > p:only-child {
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
   line-height: 1.3;
 }
@@ -41191,7 +40972,6 @@ Floated Menu / Item
   flex: 0 0 auto;
   border-radius: 0.2307em;
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
   will-change: top, left, margin, transform, opacity;
   outline: none;
@@ -41643,7 +41423,6 @@ Floated Menu / Item
 
 .scrolling.dimmable.dimmed > .dimmer {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -41668,7 +41447,6 @@ Floated Menu / Item
 
 .scrolling.undetached.dimmable.dimmed {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -41686,7 +41464,6 @@ Floated Menu / Item
 .ui.modal > .scrolling.content {
   max-height: calc(80vh - 10rem);
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -43349,7 +43126,6 @@ a.ui.nag {
   cursor: default;
   pointer-events: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -43386,7 +43162,6 @@ a.ui.nag {
 
 .ui.visible.popup {
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -45117,7 +44892,6 @@ a.ui.nag {
   height: auto;
   transition: opacity 0.1s ease, background 0.1s ease, text-shadow 0.1s ease, color 0.1s ease;
   line-height: 1;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -46590,10 +46364,6 @@ template {
   display: none;
 }
 
-.ui.search > .icon.input > input:-ms-input-placeholder ~ .remove.icon {
-  display: none;
-}
-
 .ui.search > .icon.input > input:placeholder-shown ~ .remove.icon,
 .ui.search.loading > .icon.input > .remove.icon {
   display: none;
@@ -46696,9 +46466,7 @@ template {
 .ui.search.short > .results {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -47440,7 +47208,6 @@ template {
   color: rgba(40, 40, 40, 0.3);
   pointer-events: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -47454,7 +47221,6 @@ template {
   cursor: default;
   pointer-events: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   transition: all 0s linear;
   min-height: 4.5em;
@@ -47905,7 +47671,6 @@ template {
 
 .ui.scrolling.segment {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -48169,12 +47934,10 @@ template {
   opacity: 1;
   width: 100%;
   margin: 0 !important;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
 .ui.shape .side * {
-  -webkit-backface-visibility: visible !important;
   backface-visibility: visible !important;
 }
 
@@ -48197,7 +47960,6 @@ template {
   display: table;
   text-align: center;
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
 }
 
@@ -48306,7 +48068,6 @@ template {
   position: fixed;
   top: 0;
   left: 0;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transition: none;
   will-change: transform;
@@ -48317,7 +48078,6 @@ template {
   border-radius: 0 !important;
   margin: 0 !important;
   overflow-y: auto !important;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
   z-index: 102;
 }
@@ -48325,7 +48085,6 @@ template {
 /* GPU Layers for Child Elements */
 
 .ui.sidebar > * {
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -48407,7 +48166,6 @@ body.pushable.dimmed {
 
 .pushable > .fixed {
   position: fixed;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transition: transform 500ms ease;
   will-change: transform;
@@ -48420,7 +48178,6 @@ body.pushable.dimmed {
 
 .pushable > .pusher {
   position: relative;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   min-height: 100%;
   transition: transform 500ms ease;
@@ -51849,88 +51606,6 @@ body {
          Site Overrides
 *******************************/
 /*!
- * # Fomantic-UI 2.9.0 - Tab
- * https://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * https://opensource.org/licenses/MIT
- *
- */
-
-/*******************************
-           UI Tabs
-*******************************/
-
-.ui.tab {
-  display: none;
-}
-
-/*******************************
-             States
-*******************************/
-
-/* --------------------
-       Active
---------------------- */
-
-.ui.tab.active,
-.ui.tab.open {
-  display: block;
-}
-
-/* --------------------
-           Loading
-    --------------------- */
-
-.ui.tab.loading {
-  position: relative;
-  overflow: hidden;
-  display: block;
-  min-height: 250px;
-}
-
-.ui.tab.loading * {
-  position: relative !important;
-  left: -10000px !important;
-}
-
-.ui.tab.loading::before,
-.ui.tab.loading.segment::before {
-  position: absolute;
-  content: "";
-  top: 50%;
-  left: 50%;
-  margin: -1.25em 0 0 -1.25em;
-  width: 2.5em;
-  height: 2.5em;
-  border-radius: 500rem;
-  border: 0.2em solid rgba(0, 0, 0, 0.1);
-}
-
-.ui.tab.loading::after,
-.ui.tab.loading.segment::after {
-  position: absolute;
-  content: "";
-  top: 50%;
-  left: 50%;
-  margin: -1.25em 0 0 -1.25em;
-  width: 2.5em;
-  height: 2.5em;
-  animation: loader 0.6s infinite linear;
-  border: 0.2em solid #767676;
-  border-radius: 500rem;
-  box-shadow: 0 0 0 1px transparent;
-}
-
-/*******************************
-         Tab Overrides
-*******************************/
-
-/*******************************
-        User Overrides
-*******************************/
-/*!
  * # Fomantic-UI 2.9.0 - Table
  * https://github.com/fomantic/Fomantic-UI/
  *
@@ -52626,7 +52301,6 @@ body {
 .ui.scrolling.table > tbody {
   display: block;
   overflow-y: scroll;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -52754,7 +52428,6 @@ body {
 .ui.overflowing.table {
   display: block;
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -55524,7 +55197,6 @@ body {
 .ui.sortable.table thead th.sorted,
 .ui.sortable.table thead th.sorted:hover {
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -56040,6 +55712,88 @@ body {
 
 /*******************************
          Site Overrides
+*******************************/
+/*!
+ * # Fomantic-UI 2.9.0 - Tab
+ * https://github.com/fomantic/Fomantic-UI/
+ *
+ *
+ * Released under the MIT license
+ * https://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+           UI Tabs
+*******************************/
+
+.ui.tab {
+  display: none;
+}
+
+/*******************************
+             States
+*******************************/
+
+/* --------------------
+       Active
+--------------------- */
+
+.ui.tab.active,
+.ui.tab.open {
+  display: block;
+}
+
+/* --------------------
+           Loading
+    --------------------- */
+
+.ui.tab.loading {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  min-height: 250px;
+}
+
+.ui.tab.loading * {
+  position: relative !important;
+  left: -10000px !important;
+}
+
+.ui.tab.loading::before,
+.ui.tab.loading.segment::before {
+  position: absolute;
+  content: "";
+  top: 50%;
+  left: 50%;
+  margin: -1.25em 0 0 -1.25em;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 500rem;
+  border: 0.2em solid rgba(0, 0, 0, 0.1);
+}
+
+.ui.tab.loading::after,
+.ui.tab.loading.segment::after {
+  position: absolute;
+  content: "";
+  top: 50%;
+  left: 50%;
+  margin: -1.25em 0 0 -1.25em;
+  width: 2.5em;
+  height: 2.5em;
+  animation: loader 0.6s infinite linear;
+  border: 0.2em solid #767676;
+  border-radius: 500rem;
+  box-shadow: 0 0 0 1px transparent;
+}
+
+/*******************************
+         Tab Overrides
+*******************************/
+
+/*******************************
+        User Overrides
 *******************************/
 /*!
  * # Fomantic-UI 2.9.0 - Toast
@@ -56998,7 +56752,6 @@ body {
 /* Animating */
 
 .animating.transition {
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   visibility: visible !important;
 }

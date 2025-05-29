@@ -25,7 +25,6 @@
   flex: 0 0 auto;
   border-radius: 0.28571429rem;
   -webkit-user-select: text;
-      -ms-user-select: text;
           user-select: text;
   will-change: top, left, margin, transform, opacity;
   outline: none;
@@ -418,8 +417,7 @@
 }
 .scrolling.dimmable.dimmed > .dimmer {
   overflow: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 .modals.dimmer .ui.scrolling.modal.fullscreen {
   top: 0;
@@ -439,8 +437,7 @@
 /* Undetached Scrolling */
 .scrolling.undetached.dimmable.dimmed {
   overflow: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 .scrolling.undetached.dimmable.dimmed > .dimmer {
   overflow: hidden;
@@ -454,8 +451,7 @@
 .ui.modal > .scrolling.content {
   max-height: calc(80vh - 10rem);
   overflow: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 .ui.modal > .resizable.scrolling.content {
   resize: vertical;

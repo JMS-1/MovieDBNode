@@ -36,7 +36,6 @@
   align-items: center;
   justify-content: center;
   -webkit-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   will-change: opacity;
   z-index: 1000;
@@ -45,7 +44,6 @@
 /* Dimmer Content */
 .ui.dimmer > .content {
   -webkit-user-select: text;
-      -ms-user-select: text;
           user-select: text;
   color: #fff;
 }

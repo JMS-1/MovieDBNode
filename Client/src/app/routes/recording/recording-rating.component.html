@@ -1,12 +1,13 @@
 <div class="field" [ngClass]="{ error: edit.validationErrors?.['rating'] }">
   <label i18n="@@recording.rating">Bewertung</label>
   <div class="stars">
-    <i
-      *ngFor="let star of stars"
-      class="ui icon star link"
-      (click)="rating = star + 1"
-      [ngClass]="{ outline: rating <= star }"
-    ></i>
+    @for (star of stars; track star) {
+      <i
+        class="ui icon star link"
+        (click)="rating = star + 1"
+        [ngClass]="{ outline: rating <= star }"
+      ></i>
+    }
     <span class="rating" [ngClass]="{ visible: rating }">
       &nbsp;({{ rating }})
       <i class="ui icon trash link" (click)="rating = 0"></i>

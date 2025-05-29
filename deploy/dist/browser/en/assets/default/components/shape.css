@@ -29,12 +29,10 @@
   opacity: 1;
   width: 100%;
   margin: 0 !important;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .ui.shape .side * {
-  -webkit-backface-visibility: visible !important;
-          backface-visibility: visible !important;
+  backface-visibility: visible !important;
 }
 
 
@@ -56,7 +54,6 @@
   display: table;
   text-align: center;
   -webkit-user-select: text;
-      -ms-user-select: text;
           user-select: text;
 }
 .ui.cube.shape .side > .content > div {

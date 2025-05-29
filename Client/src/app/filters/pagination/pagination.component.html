@@ -5,13 +5,14 @@
   <a class="item" (click)="setPage(curPage - 1)"
     ><i class="ui icon angle left"></i
   ></a>
-  <a
-    *ngFor="let item of pages"
-    (click)="item.page && setPage(item.page)"
-    class="item"
-    [ngClass]="{ active: item.page === curPage, disabled: !item.page }"
-    >{{ item.page || "..." }}</a
-  >
+  @for (item of pages; track item.page) {
+    <a
+      (click)="item.page && setPage(item.page)"
+      class="item"
+      [ngClass]="{ active: item.page === curPage, disabled: !item.page }"
+      >{{ item.page || "..." }}</a
+    >
+  }
   <a class="item" (click)="setPage(curPage + 1)"
     ><i class="ui icon angle right"></i
   ></a>

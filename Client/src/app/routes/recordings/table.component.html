@@ -41,11 +41,12 @@
     </tr>
   </thead>
   <tbody>
-    <tr
-      recording
-      *ngFor="let recording of items"
-      [item]="recording"
-      [routerLink]="['/recordings', recording._id, 'EDIT']"
-    ></tr>
+    @for (recording of items; track recording._id) {
+      <tr
+        recording
+        [item]="recording"
+        [routerLink]="['/recordings', recording._id, 'EDIT']"
+      ></tr>
+    }
   </tbody>
 </table>

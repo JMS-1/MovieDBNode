@@ -15,8 +15,7 @@
 
 i.flag:not(.icon) {
   speak: none;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 i.flag:not(.icon)::before {
   content: "\00A0\00A0\00A0\00A0\00A0\00A0\00A0";

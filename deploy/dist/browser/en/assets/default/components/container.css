@@ -144,9 +144,7 @@
 }
 .ui.justified.container {
   text-align: justify;
-  -webkit-hyphens: auto;
-      -ms-hyphens: auto;
-          hyphens: auto;
+  hyphens: auto;
 }
 
 /* --------------
@@ -154,8 +152,7 @@
     --------------- */
 .ui.scrolling.container {
   overflow: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 @media only screen and (max-width: 767.98px) {
   .ui.scrolling.container.short {

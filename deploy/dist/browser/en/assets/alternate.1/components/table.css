@@ -557,8 +557,7 @@
 .ui.scrolling.table > tbody {
   display: block;
   overflow-y: scroll;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 .ui.scrolling.table > thead > tr,
 .ui.scrolling.table > tfoot > tr,
@@ -666,8 +665,7 @@
 .ui.overflowing.table {
   display: block;
   overflow: auto;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
 }
 @media only screen and (min-width: 1049px) {
   .ui.overflowing.table.short {
@@ -3033,7 +3031,6 @@
 .ui.sortable.table thead th.sorted,
 .ui.sortable.table thead th.sorted:hover {
   -webkit-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 .ui.sortable.table > thead > tr > th::after {

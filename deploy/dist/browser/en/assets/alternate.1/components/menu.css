@@ -67,7 +67,6 @@
   -webkit-tap-highlight-color: transparent;
   flex: 0 0 auto;
   -webkit-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   background: none;
   padding: 0.92307692em 1.15384615em;
@@ -98,7 +97,6 @@
 .ui.menu .item > a:not(.ui),
 .ui.menu .item > p:only-child {
   -webkit-user-select: text;
-      -ms-user-select: text;
           user-select: text;
   line-height: 1.3;
 }

@@ -19,8 +19,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   transition: none;
   will-change: transform;
   transform: translate3d(0, 0, 0);
@@ -30,15 +29,13 @@
   border-radius: 0 !important;
   margin: 0 !important;
   overflow-y: auto !important;
-  -ms-scroll-chaining: none;
-      overscroll-behavior: none;
+  overscroll-behavior: none;
   z-index: 102;
 }
 
 /* GPU Layers for Child Elements */
 .ui.sidebar > * {
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* --------------
@@ -107,8 +104,7 @@ body.pushable.dimmed {
 --------------- */
 .pushable > .fixed {
   position: fixed;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   transition: transform 500ms ease;
   will-change: transform;
   z-index: 101;
@@ -119,8 +115,7 @@ body.pushable.dimmed {
 --------------- */
 .pushable > .pusher {
   position: relative;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   min-height: 100%;
   transition: transform 500ms ease;
   z-index: 2;

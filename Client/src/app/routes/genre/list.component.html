@@ -1,8 +1,9 @@
 <div class="ui selection list">
+  @for (item of items; track item._id) {
     <app-genre-item
-        *ngFor="let item of items"
-        class="item"
-        [ngClass]="{ active: item._id === selected }"
-        [genre]="item"
+      class="item"
+      [ngClass]="{ active: item._id === selected }"
+      [genre]="item"
     ></app-genre-item>
+  }
 </div>

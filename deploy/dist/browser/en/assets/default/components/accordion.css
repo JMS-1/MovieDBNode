@@ -349,8 +349,7 @@
 .ui.accordion .accordion .title > .dropdown.icon {
   font-family: Accordion;
   line-height: 1;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   font-weight: normal;
   font-style: normal;
   text-align: center;

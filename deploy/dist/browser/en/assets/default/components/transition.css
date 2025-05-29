@@ -28,8 +28,7 @@
 
 /* Animating */
 .animating.transition {
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   visibility: visible !important;
 }
 
