@@ -2,7 +2,7 @@
   <file id="ngi18n" original="ng.template">
     <unit id="container.cancel" datatype="html">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:10,13</note>
+        <note category="location">src/app/routes/container/form.component.html:10,12</note>
       </notes>
       <segment>
         <source>Verwerfen</source>
@@ -11,7 +11,7 @@
     </unit>
     <unit id="container.confirm" datatype="html">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:123,126</note>
+        <note category="location">src/app/routes/container/form.component.html:123,125</note>
       </notes>
       <segment state="final">
         <source>Das Löschen einer Ablage kann nicht rückgängig gemacht werden. Soll die Ablage wirklich endgültig entfernt werden?</source>
@@ -20,7 +20,7 @@
     </unit>
     <unit id="container.delete" datatype="html">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:26,29</note>
+        <note category="location">src/app/routes/container/form.component.html:26,28</note>
       </notes>
       <segment>
         <source>Löschen</source>
@@ -83,7 +83,7 @@
     </unit>
     <unit id="container.recordingPosition" datatype="html">
       <notes>
-        <note category="location">src/app/routes/container/form.component.html:102,104</note>
+        <note category="location">src/app/routes/container/form.component.html:102,105</note>
       </notes>
       <segment>
         <source>Position</source>
@@ -173,7 +173,7 @@
     </unit>
     <unit id="errors.header" datatype="html">
       <notes>
-        <note category="location">src/app/routes/errors/errors.component.html:3,4</note>
+        <note category="location">src/app/routes/errors/errors.component.html:4,6</note>
       </notes>
       <segment>
         <source>Bitte Eingaben kontrollieren</source>
