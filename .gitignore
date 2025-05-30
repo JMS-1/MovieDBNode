@@ -6,6 +6,7 @@
 
 .vscode/chrome
 
+Client/dist/test-out
 
 Server/src/**/*.js
 Server/src/**/*.js.map

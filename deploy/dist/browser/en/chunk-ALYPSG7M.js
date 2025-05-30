@@ -1,2 +1,0 @@
-import{Ba as c,Fa as n,Ga as s,Ha as m,i as a,l as t}from"./chunk-H3AGR35F.js";var h=(()=>{let i=class i extends m{constructor(o,e,f){super(o,"Language","languages","_id name",e,f),this.load()}};i.\u0275fac=function(e){return new(e||i)(t(n),t(s),t(c))},i.\u0275prov=a({token:i,factory:i.\u0275fac});let r=i;return r})();export{h as a};
-/**i18n:a81502aaa6c235164e05e21a700811bd0f875766fa20fd8a698be98cd7fa9431*/
