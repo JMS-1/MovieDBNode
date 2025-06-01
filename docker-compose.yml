@@ -4,6 +4,7 @@ services:
         environment:
             - DEBUG=startup,api,database
         image: movie-db
+        restart: always
         ports:
             - 80:29099
     nginx:
