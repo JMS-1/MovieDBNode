@@ -1,6 +1,8 @@
 <div class="page">
   <div class="headline">
-    <div class="ui compact segment counts">{{ count }}{{ of }}{{ total }}</div>
+    <div class="ui compact segment counts">
+      {{ count }}&nbsp;{{ of }}&nbsp;{{ total }}
+    </div>
     <button class="ui button" (click)="onExport()" i18n="@@recordings.export">
       Exportieren
     </button>
