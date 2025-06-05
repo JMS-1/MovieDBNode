@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@apollo/server": "^4.12.1",
+    "@apollo/server": "^4.12.2",
     "@as-integrations/express5": "^1.0.0",
     "@jms-1/mongodb-graphql": "^3.0.0",
     "body-parser": "^2.2.0",
@@ -9,7 +9,7 @@
     "express": "^5.1.0",
     "fastest-validator": "^1.19.1",
     "graphql": "^16.11.0",
-    "mongodb": "^6.16.0",
+    "mongodb": "^6.17.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -17,20 +17,20 @@
     "@types/cors": "^2.8.18",
     "@types/debug": "^4.1.12",
     "@types/express": "^5.0.2",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.29",
     "@types/uuid": "^10.0.0",
     "better-console": "^1.0.1",
     "del": "^8.0.0",
-    "eslint": "^9.27.0",
-    "gulp": "^5.0.0",
+    "eslint": "^9.28.0",
+    "gulp": "^5.0.1",
     "gulp-concat-css": "^3.1.0",
     "gulp-dedupe": "^0.0.2",
     "gulp-header": "^2.0.9",
     "gulp-plumber": "^1.2.1",
     "gulp-shell": "^0.8.0",
     "prettier": "^3.5.3",
-    "sass": "^1.89.0",
-    "stylelint": "^16.19.1",
+    "sass": "^1.89.1",
+    "stylelint": "^16.20.0",
     "typescript": "^5.8.3"
   },
   "license": "MIT",

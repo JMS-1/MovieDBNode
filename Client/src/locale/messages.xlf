@@ -852,7 +852,7 @@
     </unit>
     <unit id="recordings.export">
       <notes>
-        <note category="location">src/app/routes/recordings/recordings.component.html:5,8</note>
+        <note category="location">src/app/routes/recordings/recordings.component.html:7,10</note>
       </notes>
       <segment>
         <source>Exportieren</source>
@@ -884,7 +884,7 @@
     </unit>
     <unit id="recordings.new">
       <notes>
-        <note category="location">src/app/routes/recordings/recordings.component.html:12,14</note>
+        <note category="location">src/app/routes/recordings/recordings.component.html:14,16</note>
       </notes>
       <segment>
         <source>Neue Suche</source>
