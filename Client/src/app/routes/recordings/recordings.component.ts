@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-
 import { IRecordingQueryResult } from '../../../api';
 import { RecordingsService } from '../../services/recordings/recordings.service';
 import { RecordingTableComponent } from './table.component';
@@ -13,12 +12,14 @@ import { PageSizeFilterComponent } from 'src/app/filters/pagesize/pagesize.compo
 import { PaginationFilterComponent } from 'src/app/filters/pagination/pagination.component';
 import { RatingFilterComponent } from 'src/app/filters/rating/rating-filter.component';
 import { DeleteFilterComponent } from 'src/app/filters/delete/delete-filter.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-recordings',
   styleUrls: ['./recordings.component.scss'],
   templateUrl: './recordings.component.html',
   imports: [
+    CommonModule,
     DeleteFilterComponent,
     GenreFilterComponent,
     LanguageFilterComponent,
@@ -44,6 +45,8 @@ export class RecordingsRouteComponent implements OnInit, OnDestroy {
   };
 
   readonly of = $localize`:@@recordings.count:von`;
+
+  hideFilter = false;
 
   constructor(private readonly _service: RecordingsService) {}
 

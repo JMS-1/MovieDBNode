@@ -3,11 +3,15 @@
     <div class="ui compact segment counts">
       {{ count }}&nbsp;{{ of }}&nbsp;{{ total }}
     </div>
+    <i class="ui icons" (click)="hideFilter = !hideFilter">
+      <i class="filter icon"></i>
+      <i class="corner icon" [ngClass]="hideFilter ? 'plus' : 'minus'"></i>
+    </i>
     <button class="ui button" (click)="onExport()" i18n="@@recordings.export">
       Exportieren
     </button>
   </div>
-  <div class="ui segment filter">
+  <div class="ui segment filter" [ngClass]="{ hideFilter }">
     <div class="search">
       <app-text-filter></app-text-filter>
       <div class="ui button" (click)="clear()" i18n="@@recordings.new">

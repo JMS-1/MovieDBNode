@@ -19,12 +19,20 @@
 
   > .headline {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
-    justify-content: space-between;
+    column-gap: 0.5em;
+
+    > .ui.icons {
+      text-align: left;
+    }
 
     > .ui.segment {
       margin: 0;
+    }
+
+    > button {
+      justify-self: flex-end;
     }
   }
 
@@ -48,6 +56,10 @@
       align-items: center;
       column-gap: 1em;
     }
+
+    &.hideFilter {
+      display: none;
+    }
   }
 
   > .sizer {
@@ -61,6 +73,6 @@
   > .results {
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
   }
 }

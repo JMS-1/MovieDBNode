@@ -79,22 +79,6 @@
             }
           },
           "defaultConfiguration": "development"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "assets": ["src/favicon.ico", "src/assets"],
-            "inlineStyleLanguage": "scss",
-            "karmaConfig": "karma.conf.js",
-            "main": "src/test.ts",
-            "polyfills": ["src/polyfills.ts"],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "src/assets/default/semantic.js"
-            ],
-            "styles": ["src/styles.scss"],
-            "tsConfig": "tsconfig.spec.json"
-          }
         }
       },
       "i18n": {
