@@ -158,7 +158,7 @@ body.dimmable > .dimmer {
 /* --------------
         Blurring
     --------------- */
-@supports (not (-webkit-backdrop-filter: none)) and (not ((-webkit-backdrop-filter: none) or (backdrop-filter: none))) {
+@supports (not (-webkit-backdrop-filter: none)) and (not (backdrop-filter: none)) {
   .blurring.dimmable > :not(.dimmer) {
     filter: initial;
     transition: 800ms filter ease;
@@ -171,7 +171,6 @@ body.dimmable > .dimmer {
 /* Dimmer Color */
 .blurring.dimmable > .dimmer {
   background: rgba(0, 0, 0, 0.6);
-  -webkit-backdrop-filter: blur(5px) grayscale(0.7);
   backdrop-filter: blur(5px) grayscale(0.7);
 }
 .blurring.dimmable > .inverted.dimmer {
