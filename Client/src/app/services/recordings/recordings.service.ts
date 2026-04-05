@@ -55,7 +55,7 @@ const queryRecordings = `
 
 const initialFilter: api.IRecordingQueryRequest = {
   correlationId: '',
-  deleteType: api.recordingDeleteType.None,
+  deleteType: undefined,
   firstPage: 0,
   forExport: false,
   fullName: '',
