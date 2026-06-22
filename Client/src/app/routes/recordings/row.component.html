@@ -1,6 +1,7 @@
+@let i = item();
 <td>
   <div>
-    <div>{{ item.fullName }}</div>
+    <div>{{ i.fullName }}</div>
     <div class="icons">
       @if (!!rent) {
         <i class="ui icon user outline" [title]="rent"></i>
@@ -8,7 +9,7 @@
       @if (hasDelete) {
         <i class="ui icon close" [ngStyle]="{ color: deleteColor }"></i>
       }
-      @for (link of item.links; track $index) {
+      @for (link of i.links; track $index) {
         <a
           [title]="link.name"
           [href]="link.url"
@@ -21,14 +22,14 @@
   </div>
 </td>
 <td>
-  @if (item.rating) {
+  @if (i.rating) {
     <div class="rating">
       @for (star of stars; track star) {
         <i
           class="ui icon star"
           [ngClass]="{
-            visible: item.rating >= star,
-            half: item.rating == star,
+            visible: i.rating >= star,
+            half: i.rating == star,
           }"
         ></i>
       }
@@ -38,7 +39,7 @@
   }
 </td>
 <td>
-  <div>{{ item.created | date: "dd.MM.yyyy HH:mm:ss" }}</div>
+  <div>{{ i.created | date: "dd.MM.yyyy HH:mm:ss" }}</div>
 </td>
 <td>
   <div>{{ languages }}</div>

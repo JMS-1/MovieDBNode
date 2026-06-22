@@ -12,22 +12,22 @@ declare let $: any;
   imports: [CommonModule, FormsModule],
 })
 export class SearchComponent {
-  @core.ViewChild('search') search?: core.ElementRef<HTMLDivElement>;
+  readonly search = core.viewChild<core.ElementRef<HTMLDivElement>>('search');
 
-  @core.Input() hint = $localize`:@@search.hint:Suche...`;
+  readonly hint = core.input($localize`:@@search.hint:Suche...`);
 
-  @core.Input() text = '';
+  readonly text = core.input('');
 
-  @core.Input() clearable = false;
+  readonly clearable = core.input(false);
 
-  @core.Output() textChange = new core.EventEmitter<string>();
+  readonly textChange = core.output<string>();
 
   onChange(text: string): void {
     this.textChange.emit(text);
   }
 
   clear(): void {
-    if (this.clearable) {
+    if (this.clearable()) {
       this.onChange('');
     }
   }

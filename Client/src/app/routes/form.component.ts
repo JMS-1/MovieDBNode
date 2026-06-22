@@ -12,7 +12,7 @@ export abstract class FormComponent<T extends { _id: string }>
 {
   private _query?: Subscription;
 
-  @core.Input() selected = '';
+  readonly selected = core.input('');
 
   editId = '';
 

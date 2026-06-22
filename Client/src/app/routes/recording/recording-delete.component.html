@@ -1,4 +1,7 @@
-<div class="field" [ngClass]="{ error: edit.validationErrors?.['deleteType'] }">
+<div
+  class="field"
+  [ngClass]="{ error: edit().validationErrors?.['deleteType'] }"
+>
   <label i18n="@@recording.deleteType">Sichtbarkeit</label>
   <div class="ui selection fluid dropdown" #selector style="visibility: hidden">
     <i class="dropdown icon"></i>
@@ -13,5 +16,5 @@
   </div>
 </div>
 <app-validation-errors
-  [list]="edit.validationErrors?.['deleteType']"
+  [list]="edit().validationErrors?.['deleteType']"
 ></app-validation-errors>

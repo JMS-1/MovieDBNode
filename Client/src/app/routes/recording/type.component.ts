@@ -17,22 +17,23 @@ declare let $: any;
 export class RecordingTypeComponent
   implements angular.AfterViewInit, angular.OnDestroy
 {
-  @angular.ViewChild('selector') selector?: angular.ElementRef<HTMLDivElement>;
+  readonly selector =
+    angular.viewChild<angular.ElementRef<HTMLDivElement>>('selector');
 
-  @angular.Input({ required: true }) edit!: IRecording & IWorkingCopy;
+  readonly edit = angular.input.required<IRecording & IWorkingCopy>();
 
   ngAfterViewInit(): void {
-    const elem = $(this.selector?.nativeElement);
+    const elem = $(this.selector()?.nativeElement);
 
     elem.dropdown({
       forceSelection: false,
-      onChange: (s: string) => (this.edit.containerType = parseInt(s, 10)),
+      onChange: (s: string) => (this.edit().containerType = parseInt(s, 10)),
     });
 
     setTimeout(() => {
       elem.dropdown(
         'set exactly',
-        `${this.edit.containerType ?? recordingContainerType.Undefined}`,
+        `${this.edit().containerType ?? recordingContainerType.Undefined}`,
       );
 
       elem.css('visibility', '');
@@ -40,6 +41,6 @@ export class RecordingTypeComponent
   }
 
   ngOnDestroy(): void {
-    $(this.selector?.nativeElement)?.dropdown('destroy');
+    $(this.selector()?.nativeElement)?.dropdown('destroy');
   }
 }

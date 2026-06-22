@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IGenre } from '../../../api';
@@ -17,7 +17,7 @@ export class GenreListComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _service: GenreService) {}
 
-  @Input() selected = '';
+  readonly selected = input('');
 
   items: IGenre[] = [];
 

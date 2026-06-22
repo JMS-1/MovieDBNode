@@ -12,18 +12,19 @@ declare let $: any;
 export class ModalComponent
   implements angular.OnChanges, angular.AfterViewInit, angular.OnDestroy
 {
-  @angular.ViewChild('dialog') dialog?: angular.ElementRef<HTMLDivElement>;
+  readonly dialog =
+    angular.viewChild<angular.ElementRef<HTMLDivElement>>('dialog');
 
-  @angular.Input() title = 'Bestätigung erforderlich';
+  readonly title = angular.input('Bestätigung erforderlich');
 
-  @angular.Input() show = false;
+  readonly show = angular.input(false);
 
-  @angular.Output() closed = new angular.EventEmitter<void>();
+  readonly closed = angular.output<void>();
 
-  @angular.Output() confirm = new angular.EventEmitter<void>();
+  readonly confirm = angular.output<void>();
 
   onClose(): void {
-    $(this.dialog?.nativeElement)?.modal('hide');
+    $(this.dialog()?.nativeElement)?.modal('hide');
   }
 
   onConfirm(): void {
@@ -31,7 +32,7 @@ export class ModalComponent
   }
 
   ngAfterViewInit(): void {
-    $(this.dialog?.nativeElement).modal({
+    $(this.dialog()?.nativeElement).modal({
       onHidden: () => this.closed.emit(),
     });
   }
@@ -43,10 +44,10 @@ export class ModalComponent
       return;
     }
 
-    $(this.dialog?.nativeElement)?.modal(show.currentValue ? 'show' : 'hide');
+    $(this.dialog()?.nativeElement)?.modal(show.currentValue ? 'show' : 'hide');
   }
 
   ngOnDestroy(): void {
-    $(this.dialog?.nativeElement)?.modal('destroy');
+    $(this.dialog()?.nativeElement)?.modal('destroy');
   }
 }

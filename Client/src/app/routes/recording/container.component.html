@@ -1,6 +1,6 @@
 <div
   class="field"
-  [ngClass]="{ error: edit.validationErrors?.['containerId'] }"
+  [ngClass]="{ error: edit().validationErrors?.['containerId'] }"
 >
   <label i18n="@@recording.container">Ablage</label>
   <semantic-single-select
@@ -11,11 +11,11 @@
   ></semantic-single-select>
 </div>
 <app-validation-errors
-  [list]="edit.validationErrors?.['containerId']"
+  [list]="edit().validationErrors?.['containerId']"
 ></app-validation-errors>
 <div
   class="field"
-  [ngClass]="{ error: edit.validationErrors?.['containerPosition'] }"
+  [ngClass]="{ error: edit().validationErrors?.['containerPosition'] }"
 >
   <label i18n="@@recording.position">Standort</label>
   <div class="ui input">
@@ -23,5 +23,5 @@
   </div>
 </div>
 <app-validation-errors
-  [list]="edit.validationErrors?.['containerPosition']"
+  [list]="edit().validationErrors?.['containerPosition']"
 ></app-validation-errors>

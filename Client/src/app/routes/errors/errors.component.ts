@@ -1,5 +1,4 @@
-
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ValidationError } from 'fastest-validator';
 
 @Component({
@@ -9,5 +8,5 @@ import { ValidationError } from 'fastest-validator';
   imports: [],
 })
 export class ErrorsComponent {
-  @Input() list?: ValidationError[] = undefined;
+  readonly list = input<ValidationError[]>();
 }

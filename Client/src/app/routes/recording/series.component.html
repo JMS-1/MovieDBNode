@@ -1,4 +1,4 @@
-<div class="field" [ngClass]="{ error: edit.validationErrors?.['series'] }">
+<div class="field" [ngClass]="{ error: edit().validationErrors?.['series'] }">
   <label i18n="@@recording.series">Serie</label>
   <semantic-single-select
     [items]="ordered"
@@ -8,5 +8,5 @@
   ></semantic-single-select>
 </div>
 <app-validation-errors
-  [list]="edit.validationErrors?.['series']"
+  [list]="edit().validationErrors?.['series']"
 ></app-validation-errors>

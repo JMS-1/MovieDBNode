@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LanguageService } from 'src/app/services/languages/language.service';
 
@@ -17,7 +17,7 @@ export class LanguageListComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _service: LanguageService) {}
 
-  @Input() selected = '';
+  readonly selected = input('');
 
   items: ILanguage[] = [];
 

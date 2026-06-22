@@ -1,4 +1,4 @@
-<div class="field" [ngClass]="{ error: edit.validationErrors?.['rating'] }">
+<div class="field" [ngClass]="{ error: edit().validationErrors?.['rating'] }">
   <label i18n="@@recording.rating">Bewertung</label>
   <div class="stars">
     @for (star of stars; track star) {
@@ -15,5 +15,5 @@
   </div>
 </div>
 <app-validation-errors
-  [list]="edit.validationErrors?.['rating']"
+  [list]="edit().validationErrors?.['rating']"
 ></app-validation-errors>

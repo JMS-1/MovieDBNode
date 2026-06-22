@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { ISeriesNode } from '../../services/series/series.service';
 import { RouterLink } from '@angular/router';
@@ -10,5 +10,5 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
 })
 export class SeriesItemComponent {
-  @Input() series: ISeriesNode = undefined as unknown as ISeriesNode;
+  readonly series = input<ISeriesNode>(undefined as unknown as ISeriesNode);
 }

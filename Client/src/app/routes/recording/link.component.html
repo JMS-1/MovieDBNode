@@ -1,4 +1,4 @@
-<div class="field" [ngClass]="{ error: edit.validationErrors?.['series'] }">
+<div class="field" [ngClass]="{ error: edit().validationErrors?.['series'] }">
   <label class="label">
     <div i18n="@@recording.links">Verweise</div>
     <i
@@ -41,7 +41,7 @@
       <div
         class="required field"
         [ngClass]="{
-          error: edit.validationErrors?.['links[' + current + '].name'],
+          error: edit().validationErrors?.['links[' + current + '].name'],
         }"
       >
         <label i18n="@@recording.links.name">Name</label>
@@ -50,12 +50,12 @@
         </div>
       </div>
       <app-validation-errors
-        [list]="edit.validationErrors?.['links[' + current + '].name']"
+        [list]="edit().validationErrors?.['links[' + current + '].name']"
       ></app-validation-errors>
       <div
         class="required field"
         [ngClass]="{
-          error: edit.validationErrors?.['links[' + current + '].url'],
+          error: edit().validationErrors?.['links[' + current + '].url'],
         }"
       >
         <label i18n="@@recording.url">Verweis</label>
@@ -64,12 +64,13 @@
         </div>
       </div>
       <app-validation-errors
-        [list]="edit.validationErrors?.['links[' + current + '].url']"
+        [list]="edit().validationErrors?.['links[' + current + '].url']"
       ></app-validation-errors>
       <div
         class="field"
         [ngClass]="{
-          error: edit.validationErrors?.['links[' + current + '].description'],
+          error:
+            edit().validationErrors?.['links[' + current + '].description'],
         }"
       >
         <label i18n="@@recording.description">Beschreibung</label>
@@ -78,7 +79,7 @@
         </div>
       </div>
       <app-validation-errors
-        [list]="edit.validationErrors?.['links[' + current + '].description']"
+        [list]="edit().validationErrors?.['links[' + current + '].description']"
       ></app-validation-errors>
       <button
         class="ui negative button"

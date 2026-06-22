@@ -1,9 +1,13 @@
-<div class="ui clearable search multiple selection fluid dropdown" #multiSelect style="visibility: hidden">
-    <i class="dropdown icon"></i>
-    <div class="default text">{{ hint }}</div>
-    <div class="menu">
-        <div class="item" *ngFor="let item of items" [attr.data-value]="item.key">
-            {{ item.text }}
-        </div>
+<div
+  class="ui clearable search multiple selection fluid dropdown"
+  #multiSelect
+  style="visibility: hidden"
+>
+  <i class="dropdown icon"></i>
+  <div class="default text">{{ hint() }}</div>
+  <div class="menu">
+    <div class="item" *ngFor="let item of items()" [attr.data-value]="item.key">
+      {{ item.text }}
     </div>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IRecording } from '../../../api';
@@ -18,7 +18,7 @@ import { ErrorsComponent } from '../errors/errors.component';
 export class RecordingLanguageComponent implements OnInit, OnDestroy {
   private _query?: Subscription;
 
-  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
+  readonly edit = input.required<IRecording & IWorkingCopy>();
 
   ordered: ISelectItem[] = [];
 
@@ -42,10 +42,10 @@ export class RecordingLanguageComponent implements OnInit, OnDestroy {
   }
 
   get languages(): string[] {
-    return this.edit.languages || [];
+    return this.edit().languages || [];
   }
 
   set languages(languages: string[]) {
-    this.edit.languages = languages;
+    this.edit().languages = languages;
   }
 }

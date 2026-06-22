@@ -17,16 +17,18 @@ declare let $: any;
 export class SelectComponent
   implements angular.AfterViewInit, angular.OnChanges, angular.OnDestroy
 {
-  @angular.ViewChild('singleSelect')
-  dropdown?: angular.ElementRef<HTMLDivElement>;
+  readonly dropdown =
+    angular.viewChild<angular.ElementRef<HTMLDivElement>>('singleSelect');
 
-  @angular.Input() hint = $localize`:@@singleselect.hint:(bitte auswählen)`;
+  readonly hint = angular.input(
+    $localize`:@@singleselect.hint:(bitte auswählen)`,
+  );
 
-  @angular.Input() selected = '';
+  readonly selected = angular.input('');
 
-  @angular.Output() selectedChange = new angular.EventEmitter<string>();
+  readonly selectedChange = angular.output<string>();
 
-  @angular.Input() items: ISelectItem[] = [];
+  readonly items = angular.input<ISelectItem[]>([]);
 
   private _events = true;
 
@@ -34,14 +36,17 @@ export class SelectComponent
     this._events = false;
 
     try {
-      $(this.dropdown?.nativeElement)?.dropdown('set exactly', selected || []);
+      $(this.dropdown()?.nativeElement)?.dropdown(
+        'set exactly',
+        selected || [],
+      );
     } finally {
       this._events = true;
     }
   }
 
   ngAfterViewInit(): void {
-    const elem = $(this.dropdown?.nativeElement);
+    const elem = $(this.dropdown()?.nativeElement);
 
     elem.dropdown({
       forceSelection: false,
@@ -52,7 +57,7 @@ export class SelectComponent
     });
 
     setTimeout(() => {
-      this.setSelected(this.selected);
+      this.setSelected(this.selected());
 
       elem.css('visibility', '');
     }, 100);
@@ -68,11 +73,11 @@ export class SelectComponent
     }
 
     if (changes['items']) {
-      setTimeout(() => this.setSelected(this.selected), 100);
+      setTimeout(() => this.setSelected(this.selected()), 100);
     }
   }
 
   ngOnDestroy(): void {
-    $(this.dropdown?.nativeElement)?.dropdown('destroy');
+    $(this.dropdown()?.nativeElement)?.dropdown('destroy');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { ILink, IRecording } from '../../../api';
 import { IWorkingCopy } from '../../services/edit.service';
@@ -13,41 +13,41 @@ import { ErrorsComponent } from '../errors/errors.component';
   imports: [CommonModule, FormsModule, ErrorsComponent],
 })
 export class RecordingLinkComponent {
-  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
+  readonly edit = input.required<IRecording & IWorkingCopy>();
 
   active?: ILink = undefined;
 
   expanded = false;
 
   get links(): ILink[] {
-    return this.edit.links || [];
+    return this.edit().links || [];
   }
 
   addLink(): void {
     const added: ILink = { name: '', url: '' };
 
-    this.edit.links = [...(this.edit.links || []), added];
+    this.edit().links = [...(this.edit().links || []), added];
 
     this.active = added;
   }
 
   delLink(): void {
-    const links = this.edit.links || [];
+    const links = this.edit().links || [];
     const index = links.findIndex((l) => l === this.active);
 
     if (index >= 0) {
       links.splice(index, 1);
 
-      this.edit.links = links;
+      this.edit().links = links;
     }
   }
 
   get current(): number {
-    return this.edit.links?.findIndex((l) => l === this.active) ?? -1;
+    return this.edit().links?.findIndex((l) => l === this.active) ?? -1;
   }
 
   private validate(): void {
-    this.edit.links = this.edit.links || [];
+    this.edit().links = this.edit().links || [];
   }
 
   get name(): string {

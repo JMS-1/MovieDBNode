@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IRecording } from '../../../api';
@@ -18,7 +18,7 @@ import { ErrorsComponent } from '../errors/errors.component';
 export class RecordingSeriesComponent implements OnInit, OnDestroy {
   private _series?: Subscription;
 
-  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
+  readonly edit = input.required<IRecording & IWorkingCopy>();
 
   ordered: ISelectItem[] = [];
 
@@ -42,10 +42,10 @@ export class RecordingSeriesComponent implements OnInit, OnDestroy {
   }
 
   get series(): string {
-    return this.edit.series || '';
+    return this.edit().series || '';
   }
 
   set series(series: string) {
-    this.edit.series = series || undefined;
+    this.edit().series = series || undefined;
   }
 }

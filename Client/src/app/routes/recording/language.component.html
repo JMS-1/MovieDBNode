@@ -1,4 +1,7 @@
-<div class="field" [ngClass]="{ error: edit.validationErrors?.['languages'] }">
+<div
+  class="field"
+  [ngClass]="{ error: edit().validationErrors?.['languages'] }"
+>
   <label i18n="@@recording.language">Sprachen</label>
   <semantic-multi-select
     [items]="ordered"
@@ -8,5 +11,5 @@
   ></semantic-multi-select>
 </div>
 <app-validation-errors
-  [list]="edit.validationErrors?.['languages']"
+  [list]="edit().validationErrors?.['languages']"
 ></app-validation-errors>

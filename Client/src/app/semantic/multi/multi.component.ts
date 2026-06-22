@@ -15,16 +15,18 @@ declare let $: any;
 export class MultiSelectComponent
   implements angular.OnChanges, angular.AfterViewInit, angular.OnDestroy
 {
-  @angular.ViewChild('multiSelect')
-  dropdown?: angular.ElementRef<HTMLDivElement>;
+  readonly dropdown =
+    angular.viewChild<angular.ElementRef<HTMLDivElement>>('multiSelect');
 
-  @angular.Input() hint = $localize`:@@multiselect.hint:(bitte auswählen)`;
+  readonly hint = angular.input(
+    $localize`:@@multiselect.hint:(bitte auswählen)`,
+  );
 
-  @angular.Input() selected = [] as string[];
+  readonly selected = angular.input([] as string[]);
 
-  @angular.Output() selectedChange = new angular.EventEmitter<string[]>();
+  readonly selectedChange = angular.output<string[]>();
 
-  @angular.Input() items: ISelectItem[] = [];
+  readonly items = angular.input<ISelectItem[]>([]);
 
   private _events = true;
 
@@ -32,14 +34,17 @@ export class MultiSelectComponent
     this._events = false;
 
     try {
-      $(this.dropdown?.nativeElement)?.dropdown('set exactly', selected || []);
+      $(this.dropdown()?.nativeElement)?.dropdown(
+        'set exactly',
+        selected || [],
+      );
     } finally {
       this._events = true;
     }
   }
 
   ngAfterViewInit(): void {
-    const elem = $(this.dropdown?.nativeElement);
+    const elem = $(this.dropdown()?.nativeElement);
 
     elem.dropdown({
       forceSelection: false,
@@ -57,7 +62,7 @@ export class MultiSelectComponent
     });
 
     setTimeout(() => {
-      this.setSelected(this.selected);
+      this.setSelected(this.selected());
 
       elem.css('visibility', '');
     }, 100);
@@ -73,11 +78,11 @@ export class MultiSelectComponent
     }
 
     if (changes['items']) {
-      setTimeout(() => this.setSelected(this.selected), 100);
+      setTimeout(() => this.setSelected(this.selected()), 100);
     }
   }
 
   ngOnDestroy(): void {
-    $(this.dropdown?.nativeElement)?.dropdown('destroy');
+    $(this.dropdown()?.nativeElement)?.dropdown('destroy');
   }
 }

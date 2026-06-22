@@ -1,10 +1,10 @@
-@if (list) {
+@if (list(); as all) {
   <div class="ui error message">
     <div class="ui header" i18n="@@errors.header">
       Bitte Eingaben kontrollieren
     </div>
     <ul class="list">
-      @for (error of list; track $index) {
+      @for (error of all; track $index) {
         <li class="content">{{ error.message || error.field }}</li>
       }
     </ul>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SearchComponent } from 'src/app/semantic/search/search.component';
 import * as seriesService from 'src/app/services/series/series.service';
@@ -16,7 +16,7 @@ export class SeriesListComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _service: seriesService.SeriesService) {}
 
-  @Input() selected = '';
+  readonly selected = input('');
 
   items: seriesService.ISeriesNode[] = [];
 

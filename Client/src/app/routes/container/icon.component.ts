@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { containerType } from 'src/api';
 
 const typeMap: Record<containerType, string> = {
@@ -18,9 +18,9 @@ const typeMap: Record<containerType, string> = {
   imports: [CommonModule],
 })
 export class ContainerIconComponent {
-  @Input() type: containerType = containerType.Undefined;
+  readonly type = input<containerType>(containerType.Undefined);
 
   get iconType(): string {
-    return typeMap[this.type] || 'help';
+    return typeMap[this.type()] || 'help';
   }
 }

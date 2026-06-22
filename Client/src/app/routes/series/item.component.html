@@ -1,1 +1,3 @@
-<div class="item" [routerLink]="['/series', series._id]">{{ series.name }}</div>
+<div class="item" [routerLink]="['/series', series()._id]">
+  {{ series().name }}
+</div>

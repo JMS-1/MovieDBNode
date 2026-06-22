@@ -15,21 +15,22 @@ declare let $: any;
 export class ContainerTypeComponent
   implements angular.AfterViewInit, angular.OnChanges, angular.OnDestroy
 {
-  @angular.ViewChild('selector') selector?: angular.ElementRef<HTMLDivElement>;
+  readonly selector =
+    angular.viewChild<angular.ElementRef<HTMLDivElement>>('selector');
 
-  @angular.Input() selected = containerType.Undefined;
+  readonly selected = angular.input(containerType.Undefined);
 
-  @angular.Output() selectedChange = new angular.EventEmitter<containerType>();
+  readonly selectedChange = angular.output<containerType>();
 
   private setSelected(selected: containerType): void {
-    $(this.selector?.nativeElement)?.dropdown(
+    $(this.selector()?.nativeElement)?.dropdown(
       'set exactly',
       typeof selected === 'number' ? `${selected}` : [],
     );
   }
 
   ngAfterViewInit(): void {
-    const elem = $(this.selector?.nativeElement);
+    const elem = $(this.selector()?.nativeElement);
 
     elem.dropdown({
       forceSelection: false,
@@ -37,7 +38,7 @@ export class ContainerTypeComponent
     });
 
     setTimeout(() => {
-      this.setSelected(this.selected);
+      this.setSelected(this.selected());
 
       elem.css('visibility', '');
     }, 100);
@@ -52,6 +53,6 @@ export class ContainerTypeComponent
   }
 
   ngOnDestroy(): void {
-    $(this.selector?.nativeElement)?.dropdown('destroy');
+    $(this.selector()?.nativeElement)?.dropdown('destroy');
   }
 }

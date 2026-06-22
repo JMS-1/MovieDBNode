@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import * as containerService from '../../services/containers/container.service';
@@ -17,7 +17,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _service: containerService.ContainerService) {}
 
-  @Input() selected = '';
+  readonly selected = input('');
 
   items: containerService.IContainer[] = [];
 

@@ -17,22 +17,22 @@ export interface IMenuItem {
   imports: [CommonModule],
 })
 export class SubMenuComponent implements core.AfterViewInit, core.OnDestroy {
-  @core.ViewChild('menu') menu?: core.ElementRef<HTMLDivElement>;
+  readonly menu = core.viewChild<core.ElementRef<HTMLDivElement>>('menu');
 
-  @core.Input() title = '';
+  readonly title = core.input('');
 
-  @core.Input() icon = 'help';
+  readonly icon = core.input('help');
 
-  @core.Input() items: IMenuItem[] = [];
+  readonly items = core.input<IMenuItem[]>([]);
 
-  @core.Output() onSelect = new core.EventEmitter<string>();
+  readonly onSelect = core.output<string>();
 
   select(route: string): void {
     this.onSelect.emit(route);
   }
 
   ngAfterViewInit(): void {
-    const elem = $(this.menu?.nativeElement);
+    const elem = $(this.menu()?.nativeElement);
 
     elem.dropdown();
 
@@ -40,6 +40,6 @@ export class SubMenuComponent implements core.AfterViewInit, core.OnDestroy {
   }
 
   ngOnDestroy(): void {
-    $(this.menu?.nativeElement)?.dropdown('destroy');
+    $(this.menu()?.nativeElement)?.dropdown('destroy');
   }
 }

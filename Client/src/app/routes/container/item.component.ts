@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { IContainer } from '../../services/containers/container.service';
 import { RouterLink } from '@angular/router';
@@ -11,5 +11,5 @@ import { ContainerIconComponent } from './icon.component';
   imports: [RouterLink, ContainerIconComponent],
 })
 export class ContainerItemComponent {
-  @Input() container: IContainer = undefined as unknown as IContainer;
+  readonly container = input<IContainer>(undefined as unknown as IContainer);
 }

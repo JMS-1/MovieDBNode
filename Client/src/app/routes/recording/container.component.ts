@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IRecording } from '../../../api';
@@ -19,7 +19,7 @@ import { SelectComponent } from 'src/app/semantic/select/select.component';
 export class RecordingContainerComponent implements OnInit, OnDestroy {
   private _container?: Subscription;
 
-  @Input({ required: true }) edit!: IRecording & IWorkingCopy;
+  readonly edit = input.required<IRecording & IWorkingCopy>();
 
   ordered: ISelectItem[] = [];
 
@@ -43,18 +43,18 @@ export class RecordingContainerComponent implements OnInit, OnDestroy {
   }
 
   get container(): string {
-    return this.edit.containerId || '';
+    return this.edit().containerId || '';
   }
 
   set container(containerId: string) {
-    this.edit.containerId = containerId || undefined;
+    this.edit().containerId = containerId || undefined;
   }
 
   get position(): string {
-    return this.edit.containerPosition || '';
+    return this.edit().containerPosition || '';
   }
 
   set position(containerPosition: string) {
-    this.edit.containerPosition = containerPosition;
+    this.edit().containerPosition = containerPosition;
   }
 }
