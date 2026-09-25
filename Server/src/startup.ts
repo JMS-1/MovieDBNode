@@ -22,6 +22,10 @@ async function startup(): Promise<void> {
   const app = express();
   const httpServer = createServer(app);
 
+  const muiRoot = join(__dirname, "../dist/browser");
+
+  app.use(express.static(muiRoot));
+
   app.use((req, res, next) => {
     const { originalUrl } = req;
 
@@ -36,18 +40,22 @@ async function startup(): Promise<void> {
     } else if (originalUrl.startsWith("/graphql")) {
       next();
     } else if (hasLanguage) {
-      next();
+      res.sendFile(
+        join(
+          muiRoot,
+          originalUrl.startsWith("/en") ? "en" : "de",
+          "index.html",
+        ),
+      );
     } else {
       res.redirect(`/de${originalUrl}`);
     }
   });
 
-  app.use(express.static(join(__dirname, "../dist/browser")));
-
   app.get("/:lang/export", (_request, response) => {
     response.setHeader(
       "Content-disposition",
-      "attachment; filename=export.csv"
+      "attachment; filename=export.csv",
     );
     response.setHeader("Content-Type", "text/csv; charset=utf-8");
     response.status(200);
@@ -64,7 +72,7 @@ async function startup(): Promise<void> {
         languages: LanguageCollection,
         recordings: RecordingCollection,
         series: SeriesCollection,
-      })
+      }),
     ),
   });
 
@@ -74,11 +82,11 @@ async function startup(): Promise<void> {
     "/graphql",
     cors<cors.CorsRequest>(),
     express.json(),
-    expressMiddleware(server)
+    expressMiddleware(server),
   );
 
   await new Promise<void>((resolve) =>
-    httpServer.listen({ port: Config.port }, resolve)
+    httpServer.listen({ port: Config.port }, resolve),
   );
 }
 
