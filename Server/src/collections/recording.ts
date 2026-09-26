@@ -46,7 +46,7 @@ export const RecordingCollection = MongoConnection.createCollection(
 
       await self.createIndex(
         { containerId: 1 },
-        { name: "recording_container" }
+        { name: "recording_container" },
       );
       await self.createIndex({ created: 1 }, { name: "recording_date" });
       await self.createIndex({ genres: 1 }, { name: "recording_genres" });
@@ -59,7 +59,7 @@ export const RecordingCollection = MongoConnection.createCollection(
     async validateForeignKeys(
       collectionName: string,
       scope: string,
-      ids?: string | string[]
+      ids?: string | string[],
     ): Promise<void> {
       if (!ids) {
         return;
@@ -84,29 +84,29 @@ export const RecordingCollection = MongoConnection.createCollection(
       await this.validateForeignKeys(
         collectionNames.containers,
         "Ablage",
-        item.containerId
+        item.containerId,
       );
       await this.validateForeignKeys(
         collectionNames.genres,
         "Kategorie",
-        item.genres
+        item.genres,
       );
       await this.validateForeignKeys(
         collectionNames.languages,
         "Sprache",
-        item.languages
+        item.languages,
       );
       await this.validateForeignKeys(
         collectionNames.series,
         "Serie",
-        item.series
+        item.series,
       );
     }
 
     async setFullName(item: model.IRecording): Promise<void> {
       const names = await refreshRecordingNames(
         { _id: item._id },
-        await this.collection
+        await this.collection,
       );
 
       if (names[0]?._id === item._id) {
@@ -144,25 +144,28 @@ export const RecordingCollection = MongoConnection.createCollection(
         }),
       },
       types.GqlArray(this.model),
-      "Alle Aufzeichnungen in einer Ablage ermitteln.",
+      "Alle nicht gelöschten Aufzeichnungen in einer Ablage ermitteln.",
       async (args) => {
         const self = await this.collection;
         const recordings = await self
-          .find({ containerId: args.containerId })
+          .find({
+            containerId: args.containerId,
+            deleteType: { $ne: model.TRecordingDeleteType["Deleted"] },
+          })
           .sort({ fullName: 1 })
           .toArray();
 
         return Promise.all(
-          recordings.map(async (r) => await this.toGraphQL(r))
+          recordings.map(async (r) => await this.toGraphQL(r)),
         );
-      }
+      },
     );
 
     readonly query = this.queries.register(
       "query",
       {
         correlationId: types.GqlNullable(
-          types.GqlId({ description: "Eindeutige Kennung für diesen Aufruf." })
+          types.GqlId({ description: "Eindeutige Kennung für diesen Aufruf." }),
         ),
         deleteType: types.GqlNullable(entities.RecordingDeleteType),
         firstPage: types.GqlInt({
@@ -172,13 +175,13 @@ export const RecordingCollection = MongoConnection.createCollection(
         forExport: types.GqlNullable(
           types.GqlBoolean({
             description: "Erlaubt den Abruf des Ergebnisses als CSV Inhalt.",
-          })
+          }),
         ),
         fullName: types.GqlNullable(
           types.GqlString({
             description:
               "Optional ein Suchmuster für den vollständigen Namen einer Aufzeichnung.",
-          })
+          }),
         ),
         genres: types.GqlNullable(
           types.GqlArray(
@@ -191,14 +194,14 @@ export const RecordingCollection = MongoConnection.createCollection(
             {
               description:
                 "Optional eine Liste von Kategorien, die Aufzeichnungen alle haben müssen.",
-            }
-          )
+            },
+          ),
         ),
         language: types.GqlNullable(
           types.GqlString({
             description:
               "Optional die Sprache die eine Aufzeichnung haben muss.",
-          })
+          }),
         ),
         pageSize: types.GqlInt({
           description: "Die Größe einer Ergebnisseite.",
@@ -207,13 +210,13 @@ export const RecordingCollection = MongoConnection.createCollection(
         rating: types.GqlNullable(
           types.GqlInt({
             description: "Optionale Bewertung auf iMDb.",
-          })
+          }),
         ),
         rent: types.GqlNullable(
           types.GqlBoolean({
             description:
               "Optional gesetzt um nur verliehene Aufzeichnungen zu erhalten.",
-          })
+          }),
         ),
         series: types.GqlNullable(
           types.GqlArray(
@@ -226,8 +229,8 @@ export const RecordingCollection = MongoConnection.createCollection(
             {
               description:
                 "Optional eine Liste von Serien, von denen eine Aufzeichnung eine haben muss.",
-            }
-          )
+            },
+          ),
         ),
         sort: entities.RecordingSort,
         sortOrder: types.SortDirection,
@@ -326,7 +329,7 @@ export const RecordingCollection = MongoConnection.createCollection(
               { $unwind: "$languages" },
               { $group: { _id: "$languages", count: { $sum: 1 } } },
             ],
-            { collation }
+            { collation },
           )
           .toArray();
 
@@ -344,7 +347,7 @@ export const RecordingCollection = MongoConnection.createCollection(
         }
 
         const languageCollection = await this.connection.getCollection(
-          collectionNames.languages
+          collectionNames.languages,
         );
         const languages = await languageCollection
           .find<model.ILanguage>({})
@@ -354,7 +357,7 @@ export const RecordingCollection = MongoConnection.createCollection(
         languages.forEach((l) => (languageMap[l._id] = l.name));
 
         const genreCollection = await this.connection.getCollection(
-          collectionNames.genres
+          collectionNames.genres,
         );
         const genres = await genreCollection.find<model.IGenre>({}).toArray();
 
@@ -368,10 +371,10 @@ export const RecordingCollection = MongoConnection.createCollection(
           const languages = escape(
             (recording.languages || [])
               .map((l) => languageMap[l] || l)
-              .join("; ")
+              .join("; "),
           );
           const genres = escape(
-            (recording.genres || []).map((l) => genreMap[l] || l).join("; ")
+            (recording.genres || []).map((l) => genreMap[l] || l).join("; "),
           );
 
           csvData += `${name};${languages};${genres}\r\n`;
@@ -385,7 +388,7 @@ export const RecordingCollection = MongoConnection.createCollection(
           total: 0,
           view: [],
         };
-      }
+      },
     );
-  }
+  },
 );

@@ -62,10 +62,13 @@ exports.RecordingCollection = connection_1.MongoConnection.createCollection(enti
                     type: "string",
                 },
             }),
-        }, types.GqlArray(this.model), "Alle Aufzeichnungen in einer Ablage ermitteln.", async (args) => {
+        }, types.GqlArray(this.model), "Alle nicht gelöschten Aufzeichnungen in einer Ablage ermitteln.", async (args) => {
             const self = await this.collection;
             const recordings = await self
-                .find({ containerId: args.containerId })
+                .find({
+                containerId: args.containerId,
+                deleteType: { $ne: model.TRecordingDeleteType["Deleted"] },
+            })
                 .sort({ fullName: 1 })
                 .toArray();
             return Promise.all(recordings.map(async (r) => await this.toGraphQL(r)));

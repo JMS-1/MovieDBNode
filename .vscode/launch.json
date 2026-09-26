@@ -13,7 +13,7 @@
       "runtimeArgs": ["--remote-debugging-port=29501", "--new-window"],
       "sourceMaps": true,
       "type": "chrome",
-      "url": "http://localhost:29500",
+      "url": "http://localhost:29502/",
       "userDataDir": "${workspaceFolder}/.vscode/chrome",
       "webRoot": "${workspaceFolder}/Client"
     },
